@@ -1,0 +1,27 @@
+@import url("./header.css");
+@import url("./hero.css");
+@import url("./features.css");
+@import url("./footer.css");
+@import url("./responsive.css");
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#f8fafc;
+    color:#222;
+    line-height:1.6;
+}
+
+
