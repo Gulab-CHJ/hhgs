@@ -1,15 +1,3 @@
-// const express = require("express");
-
-// const app = express();
-// const PORT = process.env.PORT || 3000;
-
-// app.get("/", (req, res) => {
-//   res.send("Server Running");
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`Server running on port ${PORT}`);
-// });
 const express = require("express");
 const path = require("path");
 
@@ -20,37 +8,41 @@ const Footer = require("./component/footer");
 const app = express();
 const PORT = 3000;
 
+// Static Folder
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
 
     res.send(`
-    <!DOCTYPE html>
-    <html>
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
+<head>
 
-        <title>HHGS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <link rel="stylesheet" href="/css/style.css">
+<title>HHGS</title>
 
-    </head>
+<link rel="stylesheet" href="/css/style.css">
 
-    <body>
+</head>
 
-        ${Header()}
+<body>
 
-        ${Hero()}
+${Header()}
 
-        ${Footer()}
+${Hero()}
 
-    </body>
+${Footer()}
 
-    </html>
-    `);
+</body>
+
+</html>
+`);
 
 });
 
 app.listen(PORT, () => {
-    console.log(`Server Running on http://localhost:${PORT}`);
+    console.log(`🚀 Server Running http://localhost:${PORT}`);
 });

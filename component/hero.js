@@ -1,28 +1,47 @@
-function Hero() {
-    return `
-    <section class="hero">
+function Hero(){
 
-        <div class="hero-content">
+return `
 
-            <h1>Modern Website</h1>
+<section class="hero">
 
-            <p>
-                Welcome to HHGS Website
-            </p>
+<div class="hero-content">
 
-            <div class="hero-btns">
-                <button class="btn-primary">Get Started</button>
-                <button class="btn-secondary">Learn More</button>
-            </div>
+<h1>Modern Website</h1>
 
-        </div>
+<p>
 
-        <div class="hero-image">
-            <img src="/images/hero.png" alt="Hero">
-        </div>
+Create Amazing Responsive Websites using HTML CSS JavaScript and Node.js
 
-    </section>
-    `;
+</p>
+
+<div class="hero-btns">
+
+<button class="btn-primary">
+
+Get Started
+
+</button>
+
+<button class="btn-secondary">
+
+Learn More
+
+</button>
+
+</div>
+
+</div>
+
+<div class="hero-image">
+
+<img src="/images/hero.png" alt="Hero">
+
+</div>
+
+</section>
+
+`;
+
 }
 
 module.exports = Hero;

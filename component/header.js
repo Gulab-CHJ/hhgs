@@ -1,15 +1,37 @@
-function Header() {
-    return `
-        <header>
-            <h1>Welcome to HHGS</h1>
+function Header(){
 
-            <nav>
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/contact">Contact</a>
-            </nav>
-        </header>
-    `;
+return `
+
+<header class="header">
+
+<div class="logo">
+
+<h2>HHGS</h2>
+
+</div>
+
+<nav class="navbar">
+
+<a href="/">Home</a>
+
+<a href="#">About</a>
+
+<a href="#">Services</a>
+
+<a href="#">Contact</a>
+
+</nav>
+
+<button class="menu-btn">
+
+☰
+
+</button>
+
+</header>
+
+`;
+
 }
 
 module.exports = Header;
