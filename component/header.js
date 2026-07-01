@@ -6,7 +6,7 @@ return `
 
 <div class="logo">
 
-<h2>HHGS</h2>
+<img src="/images/GS LOGO.png" alt="HHGS Logo">
 
 </div>
 

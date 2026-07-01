@@ -26,21 +26,16 @@
 
 /* Logo */
 
-.logo h2{
-    font-size:34px;
-    font-weight:800;
-    letter-spacing:1px;
-
-    background:linear-gradient(90deg,#2563eb,#06b6d4,#8b5cf6);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-
+.logo img{
+    width:55px;      /* Logo Width */
+    height:55px;     /* Logo Height */
+    object-fit:contain;
     cursor:pointer;
-    transition:.4s;
+    transition:.3s ease;
 }
 
-.logo h2:hover{
-    transform:scale(1.05);
+.logo img:hover{
+    transform:scale(1.08);
 }
 
 /* Navigation */
