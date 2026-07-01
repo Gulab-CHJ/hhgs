@@ -10,22 +10,40 @@
 // app.listen(PORT, () => {
 //   console.log(`Server running on port ${PORT}`);
 // });
-
 const express = require("express");
-const path = require("path");
+
+const Header = require("./component/header");
+const Footer = require("./component/footer");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
-// Static files
-app.use(express.static(path.join(__dirname, "public")));
-
-// Home page
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "index.html"));
+
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>HHGS</title>
+    </head>
+    <body>
+
+        ${Header()}
+
+        <main>
+            <h2>Home Page</h2>
+            <p>This content comes from app.js.</p>
+        </main>
+
+        ${Footer()}
+
+    </body>
+    </html>
+    `;
+
+    res.send(html);
 });
 
-// Server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
