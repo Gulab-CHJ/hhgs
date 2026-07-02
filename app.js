@@ -1,9 +1,9 @@
 const express = require("express");
 const path = require("path");
 
-const Header = require("./component/header");
-const Hero = require("./component/hero");
-const Footer = require("./component/footer");
+const Header = require("./views/component/header");
+const Hero = require("./views/component/hero");
+const Footer = require("./views/component/footer");
 
 const app = express();
 const PORT = 3000;

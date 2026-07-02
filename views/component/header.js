@@ -18,6 +18,8 @@ return `
 
         <a href="#">Contact</a>
 
+        <a href="#">Admin</a>
+
     </nav>
 
     <button class="menu-btn" id="menuBtn">
