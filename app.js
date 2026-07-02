@@ -11,6 +11,23 @@ const PORT = 3000;
 // Static Folder
 app.use(express.static(path.join(__dirname, "public")));
 
+
+
+const cards = [
+    {
+        title: "PAN Card",
+        description: "Apply for a new PAN Card."
+    },
+    {
+        title: "Aadhaar",
+        description: "Update Aadhaar services."
+    },
+    {
+        title: "Passport",
+        description: "Passport application support."
+    }
+];
+
 app.get("/", (req, res) => {
 
     res.send(`
@@ -32,16 +49,18 @@ app.get("/", (req, res) => {
 
 ${Header()}
 
-${Hero()}
+${Hero(cards)}
 
 ${Footer()}
+
+<script src="/js/main.js"></script>
 
 </body>
 
 </html>
 `);
-
 });
+
 
 app.listen(PORT, () => {
     console.log(`🚀 Server Running http://localhost:${PORT}`);

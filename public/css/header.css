@@ -27,8 +27,8 @@
 /* Logo */
 
 .logo img{
-    width:55px;      /* Logo Width */
-    height:55px;     /* Logo Height */
+    width:70px;      /* Logo Width */
+    height:70px;     /* Logo Height */
     object-fit:contain;
     cursor:pointer;
     transition:.3s ease;
@@ -106,15 +106,33 @@
 }
 
 /* Responsive */
-
 @media(max-width:768px){
 
     .header{
         padding:15px 20px;
+        position:relative;
     }
 
     .navbar{
+        position:absolute;
+        top:100%;
+        left:0;
+
+        width:100%;
+        background:#fff;
+
         display:none;
+        flex-direction:column;
+        align-items:center;
+        gap:20px;
+
+        padding:20px 0;
+
+        box-shadow:0 10px 20px rgba(0,0,0,.1);
+    }
+
+    .navbar.active{
+        display:flex;
     }
 
     .menu-btn{
@@ -123,7 +141,4 @@
         align-items:center;
     }
 
-    .logo h2{
-        font-size:28px;
-    }
 }

@@ -1,47 +1,38 @@
-function Hero(){
+// function Hero(){
 
-return `
+// return `
 
-<section class="hero">
+// <section class="hero">
 
-<div class="hero-content">
 
-<h1>Modern Website</h1>
 
-<p>
+// <div class="card">
+//     <h2>Hero Card</h2>
+//     <p>This is a simple hero card component.</p>
+// </div>
 
-Create Amazing Responsive Websites using HTML CSS JavaScript and Node.js
+// </section>
 
-</p>
+// `;
 
-<div class="hero-btns">
+// }
 
-<button class="btn-primary">
+// module.exports = Hero;
 
-Get Started
+function Hero(cards){
 
-</button>
+    return `
+    <section class="hero">
 
-<button class="btn-secondary">
+        ${cards.map(card => `
+            <div class="card">
+                <h2>${card.title}</h2>
+                <p>${card.description}</p>
+            </div>
+        `).join("")}
 
-Learn More
-
-</button>
-
-</div>
-
-</div>
-
-<div class="hero-image">
-
-<img src="/images/hero.png" alt="Hero">
-
-</div>
-
-</section>
-
-`;
-
+    </section>
+    `;
 }
 
 module.exports = Hero;

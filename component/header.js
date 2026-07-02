@@ -4,29 +4,25 @@ return `
 
 <header class="header">
 
-<div class="logo">
+    <div class="logo">
+        <img src="/images/GS LOGO.png" alt="HHGS Logo">
+    </div>
 
-<img src="/images/GS LOGO.png" alt="HHGS Logo">
+    <nav class="navbar" id="navbar">
 
-</div>
+        <a href="/">Home</a>
 
-<nav class="navbar">
+        <a href="#">About</a>
 
-<a href="/">Home</a>
+        <a href="#">Services</a>
 
-<a href="#">About</a>
+        <a href="#">Contact</a>
 
-<a href="#">Services</a>
+    </nav>
 
-<a href="#">Contact</a>
-
-</nav>
-
-<button class="menu-btn">
-
-☰
-
-</button>
+    <button class="menu-btn" id="menuBtn">
+        ☰
+    </button>
 
 </header>
 
