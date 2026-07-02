@@ -18,7 +18,7 @@ return `
 
         <a href="#">Contact</a>
 
-        <a href="#">Admin</a>
+        <a href="/admin">Admin</a>
 
     </nav>
 
