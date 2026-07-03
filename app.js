@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 const express = require("express");
 const path = require("path");
 
@@ -21,95 +21,95 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// const adminRoutes = require("./routes/admin");
-// app.use("/admin", adminRoutes);
+const adminRoutes = require("./routes/admin");
+app.use("/admin", adminRoutes);
 
 
-// app.get("/admin", (req, res) => {
-//     res.send(AdminLogin(req.query.error || ""));
-// });
+app.get("/admin", (req, res) => {
+    res.send(AdminLogin(req.query.error || ""));
+});
 
-// app.post("/admin/login", async (req, res) => {
+app.post("/admin/login", async (req, res) => {
 
-//     try {
+    try {
 
-//         const { username, password } = req.body;
+        const { username, password } = req.body;
 
-//         const admin = await Admin.findOne({ username });
+        const admin = await Admin.findOne({ username });
 
-//         if (!admin) {
-//             return res.redirect("/admin?error=Username Not Found");
-//         }
+        if (!admin) {
+            return res.redirect("/admin?error=Username Not Found");
+        }
 
-//         const match = await bcrypt.compare(password, admin.password);
+        const match = await bcrypt.compare(password, admin.password);
 
-//         if (!match) {
-//             return res.redirect("/admin?error=Wrong Password");
-//         }
+        if (!match) {
+            return res.redirect("/admin?error=Wrong Password");
+        }
 
-//         res.send(AdminDashboard());
+        res.send(AdminDashboard());
 
-//     } catch (error) {
+    } catch (error) {
 
-//         console.log(error);
-//         res.status(500).send("Server Error");
+        console.log(error);
+        res.status(500).send("Server Error");
 
-//     }
+    }
 
-// });
+});
 
-// // Static Folder
-// app.use(express.static(path.join(__dirname, "public")));
+// Static Folder
+app.use(express.static(path.join(__dirname, "public")));
 
 
 
-// const cards = [
-//     {
-//         title: "PAN Card",
-//         description: "Apply for a new PAN Card."
-//     },
-//     {
-//         title: "Aadhaar",
-//         description: "Update Aadhaar services."
-//     },
-//     {
-//         title: "Passport",
-//         description: "Passport application support."
-//     }
-// ];
+const cards = [
+    {
+        title: "PAN Card",
+        description: "Apply for a new PAN Card."
+    },
+    {
+        title: "Aadhaar",
+        description: "Update Aadhaar services."
+    },
+    {
+        title: "Passport",
+        description: "Passport application support."
+    }
+];
 
-// app.get("/", (req, res) => {
+app.get("/", (req, res) => {
 
-//     res.send(`
-// <!DOCTYPE html>
-// <html lang="en">
+    res.send(`
+<!DOCTYPE html>
+<html lang="en">
 
-// <head>
+<head>
 
-// <meta charset="UTF-8">
-// <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-// <title>HHGS</title>
+<title>HHGS</title>
 
-// <link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 
-// </head>
+</head>
 
-// <body>
+<body>
 
-// ${Header()}
+${Header()}
 
-// ${Hero(cards)}
+${Hero(cards)}
 
-// ${Footer()}
+${Footer()}
 
-// <script src="/js/main.js"></script>
+<script src="/js/main.js"></script>
 
-// </body>
+</body>
 
-// </html>
-// `);
-// });
+</html>
+`);
+});
 
 
 app.listen(PORT, () => {
