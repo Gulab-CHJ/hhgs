@@ -125,6 +125,8 @@ app.get("/", async (req, res) => {
     min-height:100px;  /* जरूरत हो तो 90px भी कर सकते हैं */
     transition:.3s;
     box-shadow:0 2px 6px rgba(0,0,0,.08);
+    text-decoration: none;
+    color: inherit;
 }
 
 .card:hover{
@@ -185,8 +187,9 @@ app.get("/", async (req, res) => {
     .card{
         padding:4px;
         min-height:80px;
+        text-decoration: none;
+        color: inherit;
     }
-
     .card img{
         width:40px;
         height:40px;
