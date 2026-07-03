@@ -399,7 +399,7 @@ app.get("/", async (req, res) => {
     }
 
     .card img{
-        height:90px;
+        height:300px;
     }
 
     .card h2{
