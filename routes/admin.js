@@ -67,23 +67,126 @@
 
 // module.exports = router;
 
-const Service = require("../models/Service");
-const AddService = require("../pages/AddService");
+// const Service = require("../models/Service");
+// const AddService = require("../pages/AddService");
+// const express = require("express");
+// const bcrypt = require("bcrypt");
+// const Admin = require("../models/Admin");
+// const ChangePassword = require("../views/ChangePassword");
+
+// const router = express.Router();
+
+// // Change Password Page
+// router.get("/change-password", (req, res) => {
+//     res.send(ChangePassword());
+// });
+
+// // Change Password
+// router.post("/change-password", async (req, res) => {
+//     try {
+//         const { oldPassword, newPassword, confirmPassword } = req.body;
+
+//         if (!oldPassword || !newPassword || !confirmPassword) {
+//             return res.send("All fields are required.");
+//         }
+
+//         if (newPassword !== confirmPassword) {
+//             return res.send("New Password and Confirm Password do not match.");
+//         }
+
+//         const admin = await Admin.findOne({ username: "admin" });
+
+//         if (!admin) {
+//             return res.send("Admin not found.");
+//         }
+
+//         const match = await bcrypt.compare(oldPassword, admin.password);
+
+//         if (!match) {
+//             return res.send("Old Password is incorrect.");
+//         }
+
+//         admin.password = await bcrypt.hash(newPassword, 10);
+//         await admin.save();
+
+//         res.send(`
+//             <script>
+//                 alert("✅ Password Changed Successfully");
+//                 window.location="/admin";
+//             </script>
+//         `);
+
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).send("Server Error");
+
+//     }
+// });
+
+// router.get("/add-service",(req,res)=>{
+
+// res.send(AddService());
+
+// });
+
+// router.post("/add-service",async(req,res)=>{
+
+// try{
+
+// const {title,description,image}=req.body;
+
+// await Service.create({
+
+// title,
+// description,
+// image
+
+// });
+
+// res.redirect("/");
+
+// }catch(err){
+
+// console.log(err);
+
+// res.send("Error");
+
+// }
+
+// });
+
+// module.exports = router;
+
+
 const express = require("express");
 const bcrypt = require("bcrypt");
+
 const Admin = require("../models/Admin");
+const Service = require("../models/Service");
+
 const ChangePassword = require("../views/ChangePassword");
+const AddService = require("../pages/AddService");
+
+const upload = require("../config/multer");
 
 const router = express.Router();
 
+
+// ===============================
 // Change Password Page
+// ===============================
 router.get("/change-password", (req, res) => {
     res.send(ChangePassword());
 });
 
+
+// ===============================
 // Change Password
+// ===============================
 router.post("/change-password", async (req, res) => {
+
     try {
+
         const { oldPassword, newPassword, confirmPassword } = req.body;
 
         if (!oldPassword || !newPassword || !confirmPassword) {
@@ -107,6 +210,7 @@ router.post("/change-password", async (req, res) => {
         }
 
         admin.password = await bcrypt.hash(newPassword, 10);
+
         await admin.save();
 
         res.send(`
@@ -117,42 +221,62 @@ router.post("/change-password", async (req, res) => {
         `);
 
     } catch (err) {
+
         console.error(err);
+
         res.status(500).send("Server Error");
 
     }
-});
-
-router.get("/add-service",(req,res)=>{
-
-res.send(AddService());
 
 });
 
-router.post("/add-service",async(req,res)=>{
 
-try{
+// ===============================
+// Add Service Page
+// ===============================
+router.get("/add-service", (req, res) => {
 
-const {title,description,image}=req.body;
-
-await Service.create({
-
-title,
-description,
-image
+    res.send(AddService());
 
 });
 
-res.redirect("/");
 
-}catch(err){
+// ===============================
+// Save Service
+// ===============================
+router.post(
+    "/add-service",
+    upload.single("image"),
+    async (req, res) => {
 
-console.log(err);
+        try {
 
-res.send("Error");
+            await Service.create({
 
-}
+                title: req.body.title,
 
-});
+                description: req.body.description,
+
+                image: "/uploads/" + req.file.filename
+
+            });
+
+            res.send(`
+                <script>
+                    alert("✅ Service Added Successfully");
+                    window.location="/";
+                </script>
+            `);
+
+        } catch (err) {
+
+            console.error(err);
+
+            res.status(500).send("Error Saving Service");
+
+        }
+
+    }
+);
 
 module.exports = router;
