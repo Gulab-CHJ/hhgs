@@ -1,24 +1,3 @@
-// function Hero(){
-
-// return `
-
-// <section class="hero">
-
-
-
-// <div class="card">
-//     <h2>Hero Card</h2>
-//     <p>This is a simple hero card component.</p>
-// </div>
-
-// </section>
-
-// `;
-
-// }
-
-// module.exports = Hero;
-
 function Hero(cards){
 
     return `
