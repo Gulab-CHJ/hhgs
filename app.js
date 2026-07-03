@@ -314,11 +314,11 @@ app.get("/", async (req, res) => {
 .card{
     width:100%;
     background:#fff;
-    border-radius:10px;
-    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
     padding:15px;
     text-align:center;
-    transition:.3s;
+    transition:0.3s;
 }
 
 .card:hover{
@@ -329,13 +329,14 @@ app.get("/", async (req, res) => {
     width:100%;
     height:220px;
     object-fit:contain;
+    border-radius:10px;
     background:#fff;
-    border-radius:8px;
 }
 
 .card h2{
     margin:12px 0;
     font-size:22px;
+    color:#222;
 }
 
 .card p{
@@ -344,67 +345,66 @@ app.get("/", async (req, res) => {
     line-height:1.5;
 }
 
-
 /* Laptop */
 @media (max-width:1200px){
 
-.services{
-grid-template-columns:repeat(3,1fr);
-}
+    .services{
+        grid-template-columns:repeat(3,1fr);
+    }
 
 }
-
 
 /* Tablet */
 @media (max-width:768px){
 
-.services{
-grid-template-columns:repeat(2,1fr);
-gap:15px;
-}
+    .services{
+        grid-template-columns:repeat(2,1fr);
+        gap:15px;
+    }
 
-.card img{
-height:160px;
-}
+    .card img{
+        height:180px;
+    }
 
-.card h2{
-font-size:18px;
-}
+    .card h2{
+        font-size:18px;
+    }
 
-.card p{
-font-size:14px;
-}
+    .card p{
+        font-size:14px;
+    }
 
 }
-
 
 /* Mobile */
 @media (max-width:480px){
 
-.services{
-grid-template-columns:repeat(3,1fr);
-gap:8px;
-padding:8px;
-}
+    .services{
+        grid-template-columns:repeat(2,1fr);
+        gap:10px;
+        padding:10px;
+    }
 
-.card{
-padding:8px;
-border-radius:8px;
-}
+    .card{
+        padding:10px;
+        border-radius:10px;
+    }
 
-.card img{
-height:70px;
-}
+    .card img{
+        width:100%;
+        height:130px;
+        object-fit:contain;
+    }
 
-.card h2{
-font-size:11px;
-margin:6px 0;
-}
+    .card h2{
+        font-size:14px;
+        margin:8px 0;
+    }
 
-.card p{
-font-size:9px;
-line-height:1.3;
-}
+    .card p{
+        font-size:11px;
+        line-height:1.4;
+    }
 
 }
 
