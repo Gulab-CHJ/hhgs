@@ -89,6 +89,7 @@ onkeyup="searchMenu()"
 <a href="/admin/change-password">Change Password</a>
 
 <a href="/">Home</a>
+<a href="/admin/students">👨‍🎓 Students</a>
 
 </div>
 
