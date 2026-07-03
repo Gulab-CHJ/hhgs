@@ -163,4 +163,121 @@ router.get("/delete-service/:id", async (req, res) => {
     }
 });
 
+router.get("/edit-service", async (req, res) => {
+    try {
+        const services = await Service.find();
+
+        let html = "<h2>Edit Services</h2><hr>";
+
+        services.forEach(service => {
+            html += `
+                <div style="margin:10px 0;">
+                    <b>${service.title}</b>
+
+                    <a href="/admin/edit-service/${service._id}">
+                        Edit
+                    </a>
+                </div>
+            `;
+        });
+
+        res.send(html);
+
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
+router.get("/edit-service/:id", async (req, res) => {
+    try {
+        const service = await Service.findById(req.params.id);
+
+        if (!service) {
+            return res.send("Service not found");
+        }
+
+        res.send(`
+<h2>Edit Service</h2>
+
+<form
+    action="/admin/edit-service/${service._id}"
+    method="POST"
+    enctype="multipart/form-data"
+>
+
+    <input
+        type="text"
+        name="title"
+        value="${service.title}"
+        required
+    >
+
+    <br><br>
+
+    <textarea
+        name="description"
+        required
+    >${service.description}</textarea>
+
+    <br><br>
+
+    <img
+        src="${service.image}"
+        width="120"
+    >
+
+    <br><br>
+
+    <input
+        type="file"
+        name="image"
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Update
+    </button>
+
+</form>
+`);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
+router.post(
+    "/edit-service/:id",
+    upload.single("image"),
+    async (req, res) => {
+
+        try {
+
+            const service = await Service.findById(req.params.id);
+
+            if (!service) {
+                return res.send("Service not found");
+            }
+
+            let image = service.image;
+
+            if (req.file) {
+                image = "/uploads/" + req.file.filename;
+            }
+
+            await Service.findByIdAndUpdate(req.params.id, {
+                title: req.body.title,
+                description: req.body.description,
+                image: image
+            });
+
+            res.redirect("/");
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+
+    }
+);
 module.exports = router;
