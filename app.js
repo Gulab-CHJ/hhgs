@@ -52,11 +52,12 @@ app.post("/admin/login", async (req, res) => {
         res.send(AdminDashboard());
 
     } catch (error) {
-
-        console.log(error);
-        res.status(500).send("Server Error");
-
-    }
+    console.error(error);
+    res.status(500).send(`
+        <h2>Server Error</h2>
+        <pre>${error.stack}</pre>
+    `);
+}
 
 });
 
