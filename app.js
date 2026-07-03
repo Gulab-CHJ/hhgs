@@ -304,9 +304,9 @@ app.get("/", async (req, res) => {
 <style>
 .services{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
-    padding:20px;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:15px;
+    padding:15px;
     max-width:1400px;
     margin:auto;
 }
@@ -314,35 +314,39 @@ app.get("/", async (req, res) => {
 .card{
     width:100%;
     background:#fff;
-    border-radius:12px;
-    box-shadow:0 4px 12px rgba(0,0,0,.15);
-    padding:15px;
+    border:1px solid #e5e5e5;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    padding:10px;
     text-align:center;
-    transition:0.3s;
+    transition:.25s;
 }
 
 .card:hover{
-    transform:translateY(-5px);
+    transform:translateY(-3px);
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
 }
 
 .card img{
     width:100%;
-    height:220px;
+    height:170px;
     object-fit:contain;
-    border-radius:10px;
+    border-radius:8px;
     background:#fff;
 }
 
 .card h2{
-    margin:12px 0;
-    font-size:22px;
+    margin:8px 0 5px;
+    font-size:18px;
     color:#222;
+    font-weight:600;
 }
 
 .card p{
-    color:#555;
-    font-size:15px;
-    line-height:1.5;
+    color:#666;
+    font-size:13px;
+    line-height:1.4;
+    margin:0;
 }
 
 /* Laptop */
@@ -359,19 +363,23 @@ app.get("/", async (req, res) => {
 
     .services{
         grid-template-columns:repeat(2,1fr);
-        gap:15px;
+        gap:12px;
+    }
+
+    .card{
+        padding:8px;
     }
 
     .card img{
-        height:180px;
+        height:130px;
     }
 
     .card h2{
-        font-size:18px;
+        font-size:15px;
     }
 
     .card p{
-        font-size:14px;
+        font-size:12px;
     }
 
 }
@@ -381,34 +389,35 @@ app.get("/", async (req, res) => {
 
     .services{
         grid-template-columns:repeat(2,1fr);
-        gap:10px;
-        padding:10px;
+        gap:8px;
+        padding:8px;
     }
 
     .card{
-        padding:8px;
+        padding:6px;
         border-radius:8px;
     }
 
     .card img{
-        width:100%;
-        height:90px;   /* पहले 130px था */
-        object-fit:contain;
+        height:90px;
     }
 
     .card h2{
-        font-size:13px;
-        margin:6px 0;
+        font-size:12px;
+        margin:5px 0 3px;
+        line-height:1.2;
     }
 
     .card p{
         font-size:10px;
         line-height:1.2;
-        margin:0;
+        display:-webkit-box;
+        -webkit-line-clamp:2;
+        -webkit-box-orient:vertical;
+        overflow:hidden;
     }
 
 }
-
 </style>
 
 </head>
