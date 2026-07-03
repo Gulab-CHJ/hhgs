@@ -117,21 +117,7 @@
 // });
 
 
-require("dotenv").config();
-
 const express = require("express");
-
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.get("/", (req, res) => {
-    res.send("<h1>✅ HHGS Server Running Successfully</h1>");
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-});
+app.get("/", (req, res) => res.send("HHGS Server Running"));
+app.listen(process.env.PORT || 3000);
