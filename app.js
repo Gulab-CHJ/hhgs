@@ -137,10 +137,11 @@ vertical-align:top;
 }
 
 .card img{
-
-height:180px;
-
-object-fit:cover;
+    width:100%;
+    height:250px;
+    object-fit:contain;
+    background:#fff;
+}
 
 }
 
