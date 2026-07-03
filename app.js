@@ -386,24 +386,25 @@ app.get("/", async (req, res) => {
     }
 
     .card{
-        padding:10px;
-        border-radius:10px;
+        padding:8px;
+        border-radius:8px;
     }
 
     .card img{
         width:100%;
-        height:130px;
+        height:90px;   /* पहले 130px था */
         object-fit:contain;
     }
 
     .card h2{
-        font-size:14px;
-        margin:8px 0;
+        font-size:13px;
+        margin:6px 0;
     }
 
     .card p{
-        font-size:11px;
-        line-height:1.4;
+        font-size:10px;
+        line-height:1.2;
+        margin:0;
     }
 
 }
