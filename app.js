@@ -302,38 +302,110 @@ app.get("/", async (req, res) => {
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
-
 .services{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:20px;
-padding:20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    padding:20px;
+    max-width:1400px;
+    margin:auto;
 }
 
 .card{
-width:300px;
-background:#fff;
-padding:15px;
-border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,.15);
-text-align:center;
+    width:100%;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+    padding:15px;
+    text-align:center;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
 }
 
 .card img{
-width:100%;
-height:250px;
-object-fit:contain;
-background:#fff;
-border-radius:8px;
+    width:100%;
+    height:220px;
+    object-fit:contain;
+    background:#fff;
+    border-radius:8px;
 }
 
 .card h2{
-margin:15px 0 10px;
+    margin:12px 0;
+    font-size:22px;
 }
 
 .card p{
-color:#555;
+    color:#555;
+    font-size:15px;
+    line-height:1.5;
+}
+
+
+/* Laptop */
+@media (max-width:1200px){
+
+.services{
+grid-template-columns:repeat(3,1fr);
+}
+
+}
+
+
+/* Tablet */
+@media (max-width:768px){
+
+.services{
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
+.card img{
+height:160px;
+}
+
+.card h2{
+font-size:18px;
+}
+
+.card p{
+font-size:14px;
+}
+
+}
+
+
+/* Mobile */
+@media (max-width:480px){
+
+.services{
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+padding:8px;
+}
+
+.card{
+padding:8px;
+border-radius:8px;
+}
+
+.card img{
+height:70px;
+}
+
+.card h2{
+font-size:11px;
+margin:6px 0;
+}
+
+.card p{
+font-size:9px;
+line-height:1.3;
+}
+
 }
 
 </style>
