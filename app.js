@@ -1,25 +1,25 @@
-// require("dotenv").config();
-// const express = require("express");
-// const path = require("path");
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
 
-// const Header = require("./views/component/header");
-// const Hero = require("./views/component/hero");
-// const Footer = require("./views/component/footer");
-// const AdminLogin = require("./pages/adminLogin");
-// const AdminDashboard = require("./pages/adminDashboard");
-// const bcrypt = require("bcrypt");
-// const Admin = require("./models/Admin");
-// require("./config/database");
+const Header = require("./views/component/header");
+const Hero = require("./views/component/hero");
+const Footer = require("./views/component/footer");
+const AdminLogin = require("./pages/adminLogin");
+const AdminDashboard = require("./pages/adminDashboard");
+const bcrypt = require("bcrypt");
+const Admin = require("./models/Admin");
+require("./config/database");
 
-// const app = express();
-// const PORT = process.env.PORT || 3000;
-
-
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 
 
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // const adminRoutes = require("./routes/admin");
 // app.use("/admin", adminRoutes);
@@ -112,12 +112,12 @@
 // });
 
 
-// app.listen(PORT, () => {
-//     console.log(`🚀 Server Running http://localhost:${PORT}`);
-// });
+app.listen(PORT, () => {
+    console.log(`🚀 Server Running http://localhost:${PORT}`);
+});
 
 
-const express = require("express");
-const app = express();
-app.get("/", (req, res) => res.send("HHGS Server Running"));
-app.listen(process.env.PORT || 3000);
+// const express = require("express");
+// const app = express();
+// app.get("/", (req, res) => res.send("HHGS Server Running"));
+// app.listen(process.env.PORT || 3000);
