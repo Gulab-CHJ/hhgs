@@ -11,6 +11,7 @@ const AdminLogin = require("./pages/adminLogin");
 const AdminDashboard = require("./pages/adminDashboard");
 const bcrypt = require("bcrypt");
 const Admin = require("./models/Admin");
+const Service = require("./models/Service");
 
 
 const app = express();
@@ -81,20 +82,69 @@ const cards = [
     }
 ];
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
 
-    res.send(`
+const services = await Service.find();
+
+let html = "";
+
+services.forEach(service=>{
+
+html += `
+
+<div class="card">
+
+<img src="${service.image}" width="100%">
+
+<h2>${service.title}</h2>
+
+<p>${service.description}</p>
+
+</div>
+
+`;
+
+});
+
+res.send(`
+
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HHGS</title>
-
 <link rel="stylesheet" href="/css/style.css">
+
+<style>
+
+.card{
+
+width:300px;
+
+padding:15px;
+
+margin:15px;
+
+display:inline-block;
+
+border:1px solid #ddd;
+
+border-radius:10px;
+
+vertical-align:top;
+
+}
+
+.card img{
+
+height:180px;
+
+object-fit:cover;
+
+}
+
+</style>
 
 </head>
 
@@ -102,16 +152,18 @@ app.get("/", (req, res) => {
 
 ${Header()}
 
-${Hero(cards)}
+<h1 align="center">Our Services</h1>
+
+${html}
 
 ${Footer()}
-
-<script src="/js/main.js"></script>
 
 </body>
 
 </html>
+
 `);
+
 });
 
 

@@ -67,6 +67,8 @@
 
 // module.exports = router;
 
+const Service = require("../models/Service");
+const AddService = require("../pages/AddService");
 const express = require("express");
 const bcrypt = require("bcrypt");
 const Admin = require("../models/Admin");
@@ -117,7 +119,40 @@ router.post("/change-password", async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send("Server Error");
+
     }
+});
+
+router.get("/add-service",(req,res)=>{
+
+res.send(AddService());
+
+});
+
+router.post("/add-service",async(req,res)=>{
+
+try{
+
+const {title,description,image}=req.body;
+
+await Service.create({
+
+title,
+description,
+image
+
+});
+
+res.redirect("/");
+
+}catch(err){
+
+console.log(err);
+
+res.send("Error");
+
+}
+
 });
 
 module.exports = router;
