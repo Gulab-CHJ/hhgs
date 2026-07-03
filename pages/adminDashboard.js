@@ -75,7 +75,12 @@ onkeyup="searchMenu()"
 
 <a href="/admin/edit-service">Edit Service</a>
 
+
+
 <a href="/admin/delete-service">Delete Service</a>
+
+
+
 
 <a href="/admin/categories">Categories</a>
 

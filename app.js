@@ -71,22 +71,24 @@ app.get("/", async (req, res) => {
     try {
 
         const services = await Service.find();
+         console.log("ALL SERVICE IDS:");
+        services.forEach(service => console.log(service._id));
 
         let html = "";
 
         services.forEach(service => {
 
           html += `
-<a href="/service/${service._id}" class="card">
+               <a href="/service/${service._id}" class="card">
 
-    <img src="${service.image}" alt="${service.title}">
+                <img src="${service.image}" alt="${service.title}">
 
-    <h2>${service.title}</h2>
+                   <h2>${service.title}</h2>
 
-    <p>${service.description}</p>
+                 <p>${service.description}</p>
 
-</a>
-`;
+                </a>
+                `;
 
         });
 
@@ -233,6 +235,7 @@ ${Footer()}
     }
 
 });
+
 
 // Start Server
 app.listen(PORT, () => {
