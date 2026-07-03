@@ -2,28 +2,29 @@
   "name": "hhgs",
   "version": "1.0.0",
   "description": "good",
-  "main": "app.js",
-  "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "keywords": [],
+  "homepage": "https://github.com/Gulab-CHJ/hhgs#readme",
+  "bugs": {
+    "url": "https://github.com/Gulab-CHJ/hhgs/issues"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Gulab-CHJ/hhgs.git"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
+  "author": "",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Gulab-CHJ/hhgs/issues"
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "homepage": "https://github.com/Gulab-CHJ/hhgs#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "mongodb": "^7.4.0",
     "mongoose": "^9.7.3"
-  }
+  },
+  "devDependencies": {}
 }
