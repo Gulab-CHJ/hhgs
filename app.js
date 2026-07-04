@@ -90,43 +90,49 @@ app.get("/", async (req, res) => {
     try {
 
         const services = await Service.find();
-         console.log("ALL SERVICE IDS:");
-        services.forEach(service => console.log(service._id));
+        const students = await Student.find();
 
+        // ✅ MUST DEFINE HERE
         let html = "";
+        let studentHtml = "";
 
         services.forEach(service => {
-
-          html += `
-               <a href="/service/${service._id}" class="card">
-
-                <img src="${service.image}" alt="${service.title}">
-
-                   <h2>${service.title}</h2>
-
-                 <p>${service.description}</p>
-
-                </a>
-                `;
-
+            html += `
+            <a href="/service/${service._id}" class="card">
+                <img src="${service.image}">
+                <h2>${service.title}</h2>
+            </a>
+            `;
         });
 
-        res.send(`
+        students.forEach(student => {
+            studentHtml += `
+            <a href="/student/${student._id}" class="card">
+                <img src="${student.image}">
+                <h2>${student.name}</h2>
+            </a>
+            `;
+        
+       }); 
 
+ res.send(`
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>HHGS</title>
 
 <link rel="stylesheet" href="/css/style.css">
 
 <style>
-.services{
+
+/* Services & Students Grid */
+
+.services,
+.students{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
     gap:10px;
@@ -140,16 +146,17 @@ app.get("/", async (req, res) => {
     border:1px solid #e5e5e5;
     border-radius:8px;
     text-align:center;
-    padding:6px 5px;   /* Height कम */
-    min-height:100px;  /* जरूरत हो तो 90px भी कर सकते हैं */
-    transition:.3s;
+    padding:8px;
+    min-height:100px;
     box-shadow:0 2px 6px rgba(0,0,0,.08);
-    text-decoration: none;
-    color: inherit;
+    transition:.3s;
+    text-decoration:none;
+    color:inherit;
+    display:block;
 }
 
 .card:hover{
-    transform:translateY(-2px);
+    transform:translateY(-3px);
     box-shadow:0 5px 12px rgba(0,0,0,.15);
 }
 
@@ -158,15 +165,13 @@ app.get("/", async (req, res) => {
     height:55px;
     object-fit:contain;
     display:block;
-    margin:0 auto 5px;
+    margin:0 auto 8px;
 }
 
 .card h2{
     font-size:13px;
-    font-weight:600;
-    color:#222;
     margin:0;
-    line-height:1.2;
+    color:#222;
 }
 
 .card p{
@@ -174,52 +179,57 @@ app.get("/", async (req, res) => {
 }
 
 /* Tablet */
-@media (max-width:768px){
-    .services{
-        grid-template-columns:repeat(3,1fr);
-        gap:8px;
-    }
 
-    .card{
-        padding:5px;
-        min-height:90px;
-    }
+@media(max-width:768px){
 
-    .card img{
-        width:48px;
-        height:48px;
-    }
+.services,
+.students{
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
 
-    .card h2{
-        font-size:12px;
-    }
+.card{
+    min-height:90px;
+}
+
+.card img{
+    width:48px;
+    height:48px;
+}
+
+.card h2{
+    font-size:12px;
+}
+
 }
 
 /* Mobile */
-@media (max-width:480px){
-    .services{
-        grid-template-columns:repeat(3,1fr);
-        gap:6px;
-        padding:8px;
-    }
 
-    .card{
-        padding:4px;
-        min-height:80px;
-        text-decoration: none;
-        color: inherit;
-    }
-    .card img{
-        width:40px;
-        height:40px;
-        margin-bottom:4px;
-    }
+@media(max-width:480px){
 
-    .card h2{
-        font-size:10px;
-        line-height:1.1;
-    }
+.services,
+.students{
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    padding:8px;
 }
+
+.card{
+    min-height:80px;
+    padding:6px;
+}
+
+.card img{
+    width:40px;
+    height:40px;
+}
+
+.card h2{
+    font-size:10px;
+}
+
+}
+
 </style>
 
 </head>
@@ -233,9 +243,15 @@ Our Services
 </h1>
 
 <div class="services">
-
 ${html}
+</div>
 
+<h1 style="text-align:center;margin:40px 0 20px;">
+Our Students
+</h1>
+
+<div class="students">
+${studentHtml}
 </div>
 
 ${Footer()}
@@ -245,17 +261,12 @@ ${Footer()}
 </body>
 
 </html>
-
 `);
 
-    } catch (err) {
-
-        console.error(err);
-
+  } catch (err) {
+        console.log(err);
         res.status(500).send("Server Error");
-
     }
-
 });
 // Service Details Page
 app.get("/service/:id", async (req, res) => {
@@ -647,6 +658,7 @@ app.post("/admin/student/add", upload.single("image"), async (req, res) => {
 
 });
 app.get("/admin/students", async (req, res) => {
+
     try {
 
         const students = await Student.find().sort({ createdAt: -1 });
@@ -657,32 +669,28 @@ app.get("/admin/students", async (req, res) => {
 
             rows += `
             <tr>
-
                 <td>${index + 1}</td>
 
                 <td>
                     <img src="${student.image}" width="50">
                 </td>
 
-                <td>${student.name}</td>
+                <td>
+                    <a href="/student/${student._id}">
+                        ${student.name}
+                    </a>
+                </td>
 
                 <td>${student.course}</td>
 
                 <td>${student.mobile}</td>
 
                 <td>
-
-                    <a href="/admin/student/edit/${student._id}">
-                        ✏ Edit
-                    </a>
-
-                    |
-
+                    <a href="/admin/student/edit/${student._id}">✏ Edit</a> |
                     <a href="/admin/student/delete/${student._id}"
                     onclick="return confirm('Delete Student?')">
-                        🗑 Delete
+                    🗑 Delete
                     </a>
-
                 </td>
 
             </tr>
@@ -691,88 +699,26 @@ app.get("/admin/students", async (req, res) => {
         });
 
         res.send(`
-
 <!DOCTYPE html>
-
 <html>
 
 <head>
-
 <title>Students</title>
-
-<style>
-
-body{
-font-family:Arial;
-background:#f5f5f5;
-padding:20px;
-}
-
-table{
-
-width:100%;
-border-collapse:collapse;
-background:#fff;
-
-}
-
-th,td{
-
-padding:12px;
-border:1px solid #ddd;
-text-align:center;
-
-}
-
-img{
-
-border-radius:8px;
-
-}
-
-a{
-
-text-decoration:none;
-
-}
-
-.add{
-
-display:inline-block;
-margin-bottom:20px;
-padding:10px 20px;
-background:#0d6efd;
-color:white;
-border-radius:6px;
-
-}
-
-</style>
-
 </head>
 
 <body>
 
-<a class="add" href="/admin/student/add">
-➕ Add Student
-</a>
+<a href="/admin/student/add">➕ Add Student</a>
 
-<table>
+<table border="1" cellpadding="10">
 
 <tr>
-
 <th>#</th>
-
 <th>Photo</th>
-
 <th>Name</th>
-
 <th>Course</th>
-
 <th>Mobile</th>
-
 <th>Action</th>
-
 </tr>
 
 ${rows}
@@ -780,20 +726,19 @@ ${rows}
 </table>
 
 </body>
-
 </html>
-
-`);
+        `);
 
     } catch (err) {
 
         console.log(err);
-
         res.send("Server Error");
 
     }
 
 });
+
+  
 app.get("/admin/student/delete/:id", async (req, res) => {
 
     try{
