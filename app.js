@@ -6,7 +6,7 @@ const Footer = require("./views/component/footer");
 
 const AdminLogin = require("./pages/adminLogin");
 const AdminDashboard = require("./pages/adminDashboard");
-
+const studentRoutes = require("./routes/student");
 const bcrypt = require("bcrypt");
 const Admin = require("./models/Admin");
 const adminRoutes = require("./routes/admin");
@@ -51,6 +51,7 @@ const upload = multer({ storage });
 
 // Admin Routes
 app.use("/admin", adminRoutes);
+app.use("/student", studentRoutes);
 
 // Admin Login Page
 app.get("/admin", (req, res) => {
