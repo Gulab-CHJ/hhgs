@@ -280,4 +280,8 @@ router.post(
 
     }
 );
+console.log("DIR:", __dirname);
+console.log("UPLOAD PATH:", uploadPath);
+
+console.log(req.file);
 module.exports = router;
