@@ -599,7 +599,6 @@ color:#fff;
 .top img{
 width:140px;
 height:140px;
-border-radius:50%;
 object-fit:cover;
 border:5px solid #fff;
 background:#fff;
