@@ -89,6 +89,7 @@ app.post("/admin/login", async (req, res) => {
 });
 
 // Home Page
+// Home Page
 app.get("/", async (req, res) => {
 
     try {
@@ -96,19 +97,20 @@ app.get("/", async (req, res) => {
         const services = await Service.find();
         const students = await Student.find();
 
-        // ✅ MUST DEFINE HERE
         let html = "";
         let studentHtml = "";
 
+        // Services
         services.forEach(service => {
             html += `
-            <a href="/student/${student._id}" class="card">
+            <a href="/service/${service._id}" class="card">
                 <img src="${service.image}">
                 <h2>${service.title}</h2>
             </a>
             `;
         });
 
+        // Students
         students.forEach(student => {
             studentHtml += `
             <a href="/student/${student._id}" class="card">
@@ -116,9 +118,7 @@ app.get("/", async (req, res) => {
                 <h2>${student.name}</h2>
             </a>
             `;
-        
-       }); 
-
+        });
  res.send(`
 <!DOCTYPE html>
 <html lang="en">
