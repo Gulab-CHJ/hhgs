@@ -542,6 +542,262 @@ ol li::before{
     }
 });
 
+// ===============================
+// Student Details Page
+// ===============================
+app.get("/student/:id", async (req, res) => {
+
+    try {
+
+        const student = await Student.findById(req.params.id);
+
+        if (!student) {
+            return res.status(404).send("Student Not Found");
+        }
+
+        res.send(`
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>${student.name}</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f3f5f9;
+padding:20px;
+}
+
+.container{
+max-width:850px;
+margin:auto;
+background:#fff;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+.top{
+background:linear-gradient(135deg,#0d6efd,#0047ab);
+padding:35px;
+text-align:center;
+color:#fff;
+}
+
+.top img{
+width:140px;
+height:140px;
+border-radius:50%;
+object-fit:cover;
+border:5px solid #fff;
+background:#fff;
+}
+
+.top h1{
+margin-top:15px;
+font-size:30px;
+}
+
+.top p{
+margin-top:8px;
+font-size:17px;
+opacity:.9;
+}
+
+.info{
+padding:30px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+table tr{
+border-bottom:1px solid #eee;
+}
+
+table td{
+padding:15px;
+font-size:16px;
+}
+
+table td:first-child{
+font-weight:bold;
+width:220px;
+color:#444;
+}
+
+.desc{
+margin-top:30px;
+}
+
+.desc h2{
+margin-bottom:10px;
+color:#0d6efd;
+}
+
+.desc p{
+line-height:1.8;
+color:#555;
+}
+
+.back{
+
+display:inline-block;
+margin-top:30px;
+padding:12px 30px;
+background:#0d6efd;
+color:#fff;
+text-decoration:none;
+border-radius:6px;
+
+}
+
+.back:hover{
+
+background:#003f9e;
+
+}
+
+@media(max-width:700px){
+
+body{
+padding:10px;
+}
+
+.top{
+padding:25px;
+}
+
+.top img{
+width:110px;
+height:110px;
+}
+
+.top h1{
+font-size:24px;
+}
+
+table td{
+display:block;
+width:100%;
+padding:10px;
+}
+
+table tr{
+display:block;
+margin-bottom:10px;
+}
+
+table td:first-child{
+background:#f5f5f5;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="top">
+
+<img src="${student.image}" alt="${student.name}">
+
+<h1>${student.name}</h1>
+
+<p>${student.course || ""}</p>
+
+</div>
+
+<div class="info">
+
+<table>
+
+<tr>
+<td>Student Name</td>
+<td>${student.name}</td>
+</tr>
+
+<tr>
+<td>Father Name</td>
+<td>${student.fatherName || "-"}</td>
+</tr>
+
+<tr>
+<td>Course</td>
+<td>${student.course || "-"}</td>
+</tr>
+
+<tr>
+<td>Mobile</td>
+<td>${student.mobile || "-"}</td>
+</tr>
+
+<tr>
+<td>Email</td>
+<td>${student.email || "-"}</td>
+</tr>
+
+<tr>
+<td>Address</td>
+<td>${student.address || "-"}</td>
+</tr>
+
+<tr>
+<td>Student ID</td>
+<td>${student._id}</td>
+</tr>
+
+</table>
+
+<div class="desc">
+
+<h2>Description</h2>
+
+<p>
+${student.description || "No Description Available"}
+</p>
+
+</div>
+
+<a href="/" class="back">⬅ Back Home</a>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
+
+`);
+
+    } catch (err) {
+
+        console.log(err);
+        res.status(500).send("Server Error");
+
+    }
+
+});
+
 app.get("/admin/student/add", (req, res) => {
 
     res.send(`
