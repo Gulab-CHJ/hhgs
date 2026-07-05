@@ -102,7 +102,7 @@ app.get("/", async (req, res) => {
 
         services.forEach(service => {
             html += `
-            <a href="/service/${service._id}" class="card">
+            <a href="/student/${student._id}" class="card">
                 <img src="${service.image}">
                 <h2>${service.title}</h2>
             </a>
