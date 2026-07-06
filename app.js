@@ -9,7 +9,7 @@ const Header = require("./views/component/header");
 
 const Footer = require("./views/component/footer");
 
-// const servicesRoutes = require("./routes/services");
+const servicesRoutes = require("./routes/services");
 
 // const AdminLogin = require("./pages/adminLogin");
 
