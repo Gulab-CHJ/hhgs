@@ -21,7 +21,7 @@ const Footer = require("./views/component/footer");
 
 // const Admin = require("./models/Admin");
 
-const adminRoutes = require("./routes/admin");
+// const adminRoutes = require("./routes/admin");
 
 const Service = require("./models/Service");
 
@@ -53,7 +53,7 @@ const PORT = process.env.PORT || 3000;
 // const upload = require("./config/multer");
 
 // // Admin Routes
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 // app.use("/student", studentRoutes);
 
 // // Admin Login Page
