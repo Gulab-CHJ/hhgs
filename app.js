@@ -19,9 +19,9 @@ const Footer = require("./views/component/footer");
 
 // const bcrypt = require("bcrypt");
 
-// const Admin = require("./models/Admin");
+// const admin = require("./models/admin");
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 
 const Service = require("./models/Service");
 
@@ -53,44 +53,44 @@ const PORT = process.env.PORT || 3000;
 // const upload = require("./config/multer");
 
 // // Admin Routes
-// app.use("/admin", adminRoutes);
-// app.use("/student", studentRoutes);
+app.use("/admin", adminRoutes);
+app.use("/student", studentRoutes);
 
-// // Admin Login Page
-// app.get("/admin", (req, res) => {
-//     res.send(AdminLogin(req.query.error || ""));
-// });
+// Admin Login Page
+app.get("/admin", (req, res) => {
+    res.send(AdminLogin(req.query.error || ""));
+});
 
-// // Admin Login
-// app.post("/admin/login", async (req, res) => {
+// Admin Login
+app.post("/admin/login", async (req, res) => {
 
-//     try {
+    try {
 
-//         const { username, password } = req.body;
+        const { username, password } = req.body;
 
-//         const admin = await Admin.findOne({ username });
+        const admin = await admin.findOne({ username });
 
-//         if (!admin) {
-//             return res.redirect("/admin?error=Username Not Found");
-//         }
+        if (!admin) {
+            return res.redirect("/admin?error=Username Not Found");
+        }
 
-//         const match = await bcrypt.compare(password, admin.password);
+        const match = await bcrypt.compare(password, admin.password);
 
-//         if (!match) {
-//             return res.redirect("/admin?error=Wrong Password");
-//         }
+        if (!match) {
+            return res.redirect("/admin?error=Wrong Password");
+        }
 
-//         res.send(AdminDashboard());
+        res.send(AdminDashboard());
 
-//     } catch (error) {
+    } catch (error) {
 
-//         console.error(error);
+        console.error(error);
 
-//         res.status(500).send("Server Error");
+        res.status(500).send("Server Error");
 
-//     }
+    }
 
-// });
+});
 
 // // Home Page
 app.get("/", async (req, res) => {
