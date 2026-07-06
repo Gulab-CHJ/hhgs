@@ -23,9 +23,9 @@ const Footer = require("./views/component/footer");
 
 // const adminRoutes = require("./routes/admin");
 
-// const Service = require("./models/Service");
+const Service = require("./models/Service");
 
-// const Student = require("./models/Student");
+const Student = require("./models/Student");
 
 
 
@@ -272,7 +272,7 @@ ${Footer()}
 
   } catch (err) {
         console.log(err);
-        res.status(500).send("Server Erroa");
+        res.status(500).send("Server Errok");
     }
 });
 // // Service Details Page
