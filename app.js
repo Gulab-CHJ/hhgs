@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 const path = require("path");
-
+app.use("/services", servicesRoutes);
 
 app.use(express.static(path.join(__dirname, "public")));
 
