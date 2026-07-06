@@ -21,7 +21,7 @@ const Footer = require("./views/component/footer");
 
 // const admin = require("./models/admin");
 
-const adminRoutes = require("./routes/admin");
+// const adminRoutes = require("./routes/admin");
 
 const Service = require("./models/Service");
 
