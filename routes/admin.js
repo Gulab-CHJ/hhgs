@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-
+const AdminLogin = require("../pages/adminLogin");
 const Admin = require("../models/Admin");
 const Service = require("../models/Service");
 const ChangePassword = require("../views/ChangePassword");
