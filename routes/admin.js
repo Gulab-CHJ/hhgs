@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 
 const Admin = require("../models/Admin");
 const Service = require("../models/Service");
-const AdminLogin = require("../pages/AdminLogin");
 const ChangePassword = require("../views/ChangePassword");
 const AddService = require("../pages/AddService");
 const AdminDashboard = require("../pages/AdminDashboard");
