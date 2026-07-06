@@ -641,6 +641,13 @@ app.post("/admin/student/edit/:id", upload.single("image"), async (req, res) => 
     }
 
 });
+app.use((err, req, res, next) => {
+    console.error("Global Error:");
+    console.error(req.method, req.url);
+    console.error(err.stack);
+
+    res.status(500).send("Server Error");
+});
 
 
 // Start Server
