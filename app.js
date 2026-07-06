@@ -29,12 +29,13 @@ const express = require("express");
 
 
 
-// const app = express();
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // const serviceRoutes = require("./routes/service");
 
 // app.use("/service", serviceRoutes);
-// const PORT = process.env.PORT || 3000;
+
 
 // // Middleware
 // app.use(express.urlencoded({ extended: true }));
@@ -657,11 +658,6 @@ const express = require("express");
 
 // });
 
-
-const express = require("express");
-
-const app = express();
-const PORT = 3000;
 
 app.get("/", (req, res) => {
     res.send("Hello Express!");
