@@ -3,13 +3,19 @@ const bcrypt = require("bcrypt");
 
 const Admin = require("../models/Admin");
 const Service = require("../models/Service");
-
+const AdminLogin = require("../pages/AdminLogin");
 const ChangePassword = require("../views/ChangePassword");
 const AddService = require("../pages/AddService");
+const AdminDashboard = require("../pages/AdminDashboard");
+
+
 
 const upload = require("../config/multer");
 
 const router = express.Router();
+router.get("/admindashboard", (req, res) => {
+    res.send(AdminDashboard());
+});
 
 
 // ===============================
@@ -70,6 +76,9 @@ router.post("/change-password", async (req, res) => {
 
 });
 
+router.get("/login", (req, res) => {
+    res.send(AdminLogin(req.query.error || ""));
+});
 
 // ===============================
 // Add Service Page
@@ -104,7 +113,7 @@ router.post(
                 image: "/uploads/" + req.file.filename
             });
 
-            res.redirect("/admin");
+            res.redirect("/admin/admindashboard");
 
         } catch (err) {
 
@@ -155,7 +164,7 @@ router.get("/delete-service/:id", async (req, res) => {
 
         await Service.findByIdAndDelete(req.params.id);
 
-        res.redirect("/admin");
+        res.redirect("/admin/delete-service");
 
     } catch (err) {
         console.error(err);
@@ -271,7 +280,7 @@ router.post(
                 image: image
             });
 
-            res.redirect("/admin");
+            res.redirect("/admin/login");
 
         } catch (err) {
             console.error(err);

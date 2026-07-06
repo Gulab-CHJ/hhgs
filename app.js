@@ -369,7 +369,7 @@ app.post("/admin/student/add", upload.single("image"), async (req, res) => {
 
         });
 
-        res.redirect("/admin");
+        res.redirect("/admin/login");
 
     }catch(err){
 
@@ -468,7 +468,7 @@ app.get("/admin/student/delete/:id", async (req, res) => {
 
         await Student.findByIdAndDelete(req.params.id);
 
-        res.redirect("/admin/students");
+        res.redirect("/admin/login");
 
     }catch(err){
 
@@ -614,7 +614,7 @@ app.post("/admin/student/edit/:id", upload.single("image"), async (req, res) => 
 
         });
 
-        res.redirect("/admin");
+        res.redirect("/admin/login");
 
     } catch (err) {
 
