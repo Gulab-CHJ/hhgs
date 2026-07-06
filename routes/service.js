@@ -12,7 +12,7 @@ router.get("/:id", async (req, res) => {
         if (!service) {
             return res.status(404).send("Service Not Found");
         }
-        const descriptionList = service.description
+    const descriptionList = (service.description || "")
     .split("\n")
     .filter(item => item.trim() !== "")
     .map(item => `<li>${item}</li>`)

@@ -1,5 +1,4 @@
-require("dotenv").config();
-require("./config/database");
+
 const express = require("express");
 const Header = require("./views/component/header");
 const Footer = require("./views/component/footer");

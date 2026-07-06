@@ -156,7 +156,7 @@ Add Service
 
 </form>
 
-<a class="back" href="/admin">
+<a class="back" href="/admin/admindashboard">
 ← Back to Dashboard
 </a>
 
