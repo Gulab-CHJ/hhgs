@@ -104,7 +104,7 @@ router.post(
                 image: "/uploads/" + req.file.filename
             });
 
-            res.redirect("/");
+            res.redirect("/admin");
 
         } catch (err) {
 
@@ -155,7 +155,7 @@ router.get("/delete-service/:id", async (req, res) => {
 
         await Service.findByIdAndDelete(req.params.id);
 
-        res.redirect("/admin/delete-service");
+        res.redirect("/admin");
 
     } catch (err) {
         console.error(err);
@@ -271,7 +271,7 @@ router.post(
                 image: image
             });
 
-            res.redirect("/");
+            res.redirect("/admin");
 
         } catch (err) {
             console.error(err);
