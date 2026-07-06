@@ -272,7 +272,7 @@ ${Footer()}
 
   } catch (err) {
         console.log(err);
-        res.status(500).send("Server Error");
+        res.status(500).send("Server Erroa");
     }
 });
 // // Service Details Page
