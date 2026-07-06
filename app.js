@@ -1,7 +1,7 @@
 
-// require("dotenv").config();
+require("dotenv").config();
 
-// require("./config/database");
+require("./config/database");
 
 const express = require("express");
 
@@ -272,7 +272,7 @@ ${Footer()}
 
   } catch (err) {
         console.log(err);
-        res.status(500).send("Server Errok");
+        res.status(500).send("Server Erroy");
     }
 });
 // // Service Details Page
