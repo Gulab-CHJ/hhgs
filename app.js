@@ -53,7 +53,7 @@ const PORT = process.env.PORT || 3000;
 // const upload = require("./config/multer");
 
 // // Admin Routes
-app.use("/admin", adminRoutes);
+// app.use("/admin", adminRoutes);
 // app.use("/student", studentRoutes);
 
 // // Admin Login Page
