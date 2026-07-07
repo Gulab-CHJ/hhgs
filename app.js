@@ -27,6 +27,8 @@ const Student = require("./models/Student");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 const adminRoutes = require("./routes/admin");
 
@@ -38,8 +40,7 @@ app.use("/admin", adminRoutes);
 
 
 // // Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+
 
 // // const path = require("path");
 // // app.use("/services", servicesRoutes);
