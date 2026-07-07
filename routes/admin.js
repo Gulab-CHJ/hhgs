@@ -5,7 +5,7 @@ const AdminLogin = require("../pages/adminLogin");
 const Admin = require("../models/Admin");
 // const Service = require("../models/Service");
 // const ChangePassword = require("../views/ChangePassword");
-const AddService = require("../pages/addservice");
+const a = require("../pages/addservice");
 const AdminDashboard = require("../pages/adminDashboard");
 
 
@@ -85,7 +85,7 @@ const AdminDashboard = require("../pages/adminDashboard");
 
 router.get("/add-service", (req, res) => {
     try {
-        res.send(AddService());
+        res.send(a());
     } catch (err) {
         console.error("Add Service Error:", err);
         res.status(500).send(err.message);
