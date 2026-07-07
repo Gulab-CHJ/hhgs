@@ -1,7 +1,7 @@
 
-require("dotenv").config();
+// require("dotenv").config();
 
-require("./config/database");
+// require("./config/database");
 
 const express = require("express");
 
@@ -9,7 +9,7 @@ const Header = require("./views/component/header");
 
 const Footer = require("./views/component/footer");
 
-const servicesRoutes = require("./routes/services");
+// const servicesRoutes = require("./routes/services");
 
 // const AdminLogin = require("./pages/AdminLogin");
 
@@ -20,11 +20,11 @@ const servicesRoutes = require("./routes/services");
 
 // const admin = require("./models/admin");
 
-const adminRoutes = require("./routes/admin");
+// const adminRoutes = require("./routes/admin");
 
-const Service = require("./models/Service");
+// const Service = require("./models/Service");
 
-const Student = require("./models/Student");
+// const Student = require("./models/Student");
 
 
 
@@ -274,7 +274,7 @@ ${Footer()}
         res.status(500).send("Server Erroy");
     }
 });
-// // Service Details Page
+// // // Service Details Page
 
 
 // app.get("/admin/student/add", (req, res) => {
@@ -651,17 +651,17 @@ ${Footer()}
 
 
 // // Start Server
-// app.listen(PORT, () => {
+app.listen(PORT, () => {
 
-//     console.log(`🚀 Server Running http://localhost:${PORT}`);
+    console.log(`🚀 Server Running http://localhost:${PORT}`);
 
-// });
+});
 
 
 // app.get("/", (req, res) => {
 //     res.send("Hello Express!");
 // });
 
-app.listen(PORT, () => {
-    console.log(`Server Running: http://localhost:${PORT}`);
-});
+// app.listen(PORT, () => {
+//     console.log(`Server Running: http://localhost:${PORT}`);
+// });
