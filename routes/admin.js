@@ -1,6 +1,6 @@
-// const express = require("express");
-// const router = express.Router();
-// const bcrypt = require("bcrypt");
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
 // const AdminLogin = require("../pages/adminLogin");
 // const Admin = require("../models/Admin");
 // // const Service = require("../models/Service");
@@ -78,9 +78,9 @@
 
 // // });
 
-// // router.get("/login", (req, res) => {
-// //     res.send(AdminLogin(req.query.error || ""));
-// // });
+router.get("/login", (req, res) => {
+    res.send(AdminLogin(req.query.error || ""));
+});
 // // // ===============================
 // // // Add Service Page
 // // // ===============================
