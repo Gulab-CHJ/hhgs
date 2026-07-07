@@ -64,35 +64,35 @@ app.use("/admin", adminRoutes);
 // });
 
 // // Admin Login
-// app.post("/admin/login", async (req, res) => {
+app.post("/admin/login", async (req, res) => {
 
-//     try {
+    try {
 
-//         const { username, password } = req.body;
+        const { username, password } = req.body;
 
-//         const admin = await admin.findOne({ username });
+        const admin = await admin.findOne({ username });
 
-//         if (!admin) {
-//             return res.redirect("/admin?error=Username Not Found");
-//         }
+        if (!admin) {
+            return res.redirect("/admin?error=Username Not Found");
+        }
 
-//         const match = await bcrypt.compare(password, admin.password);
+        const match = await bcrypt.compare(password, admin.password);
 
-//         if (!match) {
-//             return res.redirect("/admin?error=Wrong Password");
-//         }
+        if (!match) {
+            return res.redirect("/admin?error=Wrong Password");
+        }
 
-//         res.send(AdminDashboard());
+        res.send(AdminDashboard());
 
-//     } catch (error) {
+    } catch (error) {
 
-//         console.error(error);
+        console.error(error);
 
-//         res.status(500).send("Server Error");
+        res.status(500).send("Server Error");
 
-//     }
+    }
 
-// });
+});
 
 // // // Home Page
 app.get("/", async (req, res) => {
