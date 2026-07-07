@@ -8,7 +8,7 @@ const Admin = require("../models/Admin");
 
 const AdminDashboard = require("../pages/adminDashboard");
 
-const AddService = require("../pages/addservice");
+// const AddService = require("../pages/addservice");
 
 
 // const upload = require("../config/multer");
