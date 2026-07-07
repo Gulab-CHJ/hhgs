@@ -295,7 +295,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-    res.send("Admin Page Working");
+    res.send("Admin Page Working gulab");
 });
 
 module.exports = router;
