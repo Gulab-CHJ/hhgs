@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // const bcrypt = require("bcrypt");
-// const AdminLogin = require("../pages/AdminLogin");
+const AdminLogin = require("../pages/AdminLogin");
 // const Admin = require("../models/Admin");
 // const Service = require("../models/Service");
 // const ChangePassword = require("../views/ChangePassword");

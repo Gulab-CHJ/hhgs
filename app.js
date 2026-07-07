@@ -62,34 +62,34 @@ app.use(express.json());
 //     res.send(AdminLogin(req.query.error || ""));
 // });
 
-// // Admin Login
-app.post("/admin/login", async (req, res) => {
+// // // Admin Login
+// app.post("/admin/login", async (req, res) => {
 
-    try {
+//     try {
 
-        const { username, password } = req.body;
-        const admin = await Admin.findOne({ username });
+//         const { username, password } = req.body;
+//         const admin = await Admin.findOne({ username });
 
-if (!admin) {
-    return res.redirect("/admin?error=Username Not Found");
-}
+// if (!admin) {
+//     return res.redirect("/admin?error=Username Not Found");
+// }
 
-const match = await bcrypt.compare(password, admin.password);
+// const match = await bcrypt.compare(password, admin.password);
 
-if (!match) {
-    return res.redirect("/admin?error=Wrong Password");
-}
+// if (!match) {
+//     return res.redirect("/admin?error=Wrong Password");
+// }
 
-res.send(AdminDashboard());
+// res.send(AdminDashboard());
 
-        // const Admin = await Admin.findOne({ username });
+//         // const Admin = await Admin.findOne({ username });
 
-    } catch (err) {
-    console.error(err);
-    res.status(500).send(err.message);
-}
+//     } catch (err) {
+//     console.error(err);
+//     res.status(500).send(err.message);
+// }
 
-});
+// });
 
 // // // Home Page
 app.get("/", async (req, res) => {
