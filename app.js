@@ -41,19 +41,19 @@ app.use("/service", serviceRoutes);
 
 
 // Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
 
-const path = require("path");
-app.use("/services", servicesRoutes);
+// const path = require("path");
+// app.use("/services", servicesRoutes);
 
- app.use(express.static(path.join(__dirname, "public")));
+//  app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-    "/uploads",
-    express.static(path.join(process.cwd(), "storage", "uploads"))
-);
-const upload = require("./config/multer");
+// app.use(
+//     "/uploads",
+//     express.static(path.join(process.cwd(), "storage", "uploads"))
+// );
+// const upload = require("./config/multer");
 
 // Admin Routes
 
