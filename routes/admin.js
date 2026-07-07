@@ -294,8 +294,17 @@ const router = express.Router();
 // const express = require("express");
 // const router = express.Router();
 
+
+const AdminLogin = require("../pages/AdminLogin");
+
 router.get("/", (req, res) => {
-    res.send("Admin Page Working gulab");
+    res.send(AdminLogin(req.query.error || ""));
 });
+
+module.exports = router;
+
+// router.get("/", (req, res) => {
+//     res.send("Admin Page Working gulab");
+// });
 
 module.exports = router;

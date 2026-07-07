@@ -56,7 +56,8 @@ app.use("/admin", adminRoutes);
 // const upload = require("./config/multer");
 
 // // Admin Routes
-app.use("/admin", adminRoutes);
+
+
 // app.use("/student", studentRoutes);
 
 // // Admin Login Page
