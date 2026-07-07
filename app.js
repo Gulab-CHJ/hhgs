@@ -68,21 +68,21 @@ app.post("/admin/login", async (req, res) => {
     try {
 
         const { username, password } = req.body;
+        const admin = await Admin.findOne({ username });
+
+if (!admin) {
+    return res.redirect("/admin?error=Username Not Found");
+}
+
+const match = await bcrypt.compare(password, admin.password);
+
+if (!match) {
+    return res.redirect("/admin?error=Wrong Password");
+}
+
+res.send(AdminDashboard());
 
         // const Admin = await Admin.findOne({ username });
-        const Admin = await admin.findOne({ username });
-
-        if (!Admin) {
-            return res.redirect("/admin?error=Username Not Found");
-        }
-
-        const match = await bcrypt.compare(password, Admin.password);
-
-        if (!match) {
-            return res.redirect("/admin?error=Wrong Password");
-        }
-
-        res.send(AdminDashboard());
 
     } catch (err) {
     console.error(err);
