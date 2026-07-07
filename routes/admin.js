@@ -83,7 +83,7 @@ const AdminDashboard = require("../pages/adminDashboard");
 // // Add Service Page
 // // ===============================
 
-router.get("/add-service", (req, res) => {
+router.get("/AddService", (req, res) => {
     try {
         res.send(AddService());
     } catch (err) {
