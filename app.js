@@ -9,22 +9,22 @@ const Header = require("./views/component/header");
 
 const Footer = require("./views/component/footer");
 
-const servicesRoutes = require("./routes/services");
+// const servicesRoutes = require("./routes/services");
 
 // const AdminLogin = require("./pages/AdminLogin");
 
 // const AdminDashboard = require("./pages/AdminDashboard");
 
-const studentRoutes = require("./routes/student");
+// const studentRoutes = require("./routes/student");
 // const bcrypt = require("bcrypt");
 
 // const admin = require("./models/admin");
 
 // const adminRoutes = require("./routes/admin");
 
-// const Service = require("./models/Service");
+const Service = require("./models/Service");
 
-// const Student = require("./models/Student");
+const Student = require("./models/Student");
 
 
 
