@@ -29,9 +29,9 @@ const Student = require("./models/Student");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 
-// app.use("/admin", adminRoutes);
+app.use("/admin", adminRoutes);
 
 // const serviceRoutes = require("./routes/service");
 
