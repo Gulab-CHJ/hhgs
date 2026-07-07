@@ -11,16 +11,16 @@ const Footer = require("./views/component/footer");
 
 const servicesRoutes = require("./routes/services");
 
-// const AdminLogin = require("./pages/AdminLogin");
+const AdminLogin = require("./pages/AdminLogin");
 
-// const AdminDashboard = require("./pages/AdminDashboard");
+const AdminDashboard = require("./pages/AdminDashboard");
 
 const studentRoutes = require("./routes/student");
 const bcrypt = require("bcrypt");
 
-// const admin = require("./models/admin");
+const admin = require("./models/admin");
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 
 const Service = require("./models/Service");
 
@@ -35,66 +35,66 @@ const adminRoutes = require("./routes/admin");
 
 app.use("/admin", adminRoutes);
 
-// const serviceRoutes = require("./routes/service");
+const serviceRoutes = require("./routes/service");
 
-// app.use("/service", serviceRoutes);
-
-
-// // Middleware
-// app.use(express.urlencoded({ extended: true }));
-// app.use(express.json());
-
-// const path = require("path");
-// app.use("/services", servicesRoutes);
-
-//  app.use(express.static(path.join(__dirname, "public")));
-
-// app.use(
-//     "/uploads",
-//     express.static(path.join(process.cwd(), "storage", "uploads"))
-// );
-// const upload = require("./config/multer");
-
-// // Admin Routes
+app.use("/service", serviceRoutes);
 
 
-// app.use("/student", studentRoutes);
+// Middleware
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-// // Admin Login Page
-// app.get("/admin", (req, res) => {
-//     res.send(AdminLogin(req.query.error || ""));
-// });
+const path = require("path");
+app.use("/services", servicesRoutes);
 
-// // Admin Login
-// app.post("/admin/login", async (req, res) => {
+ app.use(express.static(path.join(__dirname, "public")));
 
-//     try {
+app.use(
+    "/uploads",
+    express.static(path.join(process.cwd(), "storage", "uploads"))
+);
+const upload = require("./config/multer");
 
-//         const { username, password } = req.body;
+// Admin Routes
 
-//         const admin = await admin.findOne({ username });
 
-//         if (!admin) {
-//             return res.redirect("/admin?error=Username Not Found");
-//         }
+app.use("/student", studentRoutes);
 
-//         const match = await bcrypt.compare(password, admin.password);
+// Admin Login Page
+app.get("/admin", (req, res) => {
+    res.send(AdminLogin(req.query.error || ""));
+});
 
-//         if (!match) {
-//             return res.redirect("/admin?error=Wrong Password");
-//         }
+// Admin Login
+app.post("/admin/login", async (req, res) => {
 
-//         res.send(AdminDashboard());
+    try {
 
-//     } catch (error) {
+        const { username, password } = req.body;
 
-//         console.error(error);
+        const admin = await admin.findOne({ username });
 
-//         res.status(500).send("Server Error");
+        if (!admin) {
+            return res.redirect("/admin?error=Username Not Found");
+        }
 
-//     }
+        const match = await bcrypt.compare(password, admin.password);
 
-// });
+        if (!match) {
+            return res.redirect("/admin?error=Wrong Password");
+        }
+
+        res.send(AdminDashboard());
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).send("Server Error");
+
+    }
+
+});
 
 // // Home Page
 app.get("/", async (req, res) => {
@@ -282,377 +282,377 @@ ${Footer()}
 // // // Service Details Page
 
 
-// app.get("/admin/student/add", (req, res) => {
+app.get("/admin/student/add", (req, res) => {
 
-//     res.send(`
+    res.send(`
 
-// <!DOCTYPE html>
+<!DOCTYPE html>
 
-// <html>
+<html>
 
-// <head>
+<head>
 
-// <title>Add Student</title>
+<title>Add Student</title>
 
-// <style>
+<style>
 
-// body{
-// font-family:Arial;
-// background:#f5f5f5;
-// padding:30px;
-// }
+body{
+font-family:Arial;
+background:#f5f5f5;
+padding:30px;
+}
 
-// form{
-// max-width:600px;
-// margin:auto;
-// background:#fff;
-// padding:20px;
-// border-radius:10px;
-// }
+form{
+max-width:600px;
+margin:auto;
+background:#fff;
+padding:20px;
+border-radius:10px;
+}
 
-// input,textarea{
+input,textarea{
 
-// width:100%;
-// padding:12px;
-// margin:10px 0;
+width:100%;
+padding:12px;
+margin:10px 0;
 
-// }
+}
 
-// button{
+button{
 
-// width:100%;
-// padding:12px;
-// background:#007bff;
-// color:#fff;
-// border:none;
-// cursor:pointer;
+width:100%;
+padding:12px;
+background:#007bff;
+color:#fff;
+border:none;
+cursor:pointer;
 
-// }
+}
 
-// </style>
+</style>
 
-// </head>
+</head>
 
-// <body>
+<body>
 
-// <form action="/admin/student/add" method="POST" enctype="multipart/form-data">
+<form action="/admin/student/add" method="POST" enctype="multipart/form-data">
 
-// <h2>Add Student</h2>
+<h2>Add Student</h2>
 
-// <input type="text" name="name" placeholder="Student Name" required>
+<input type="text" name="name" placeholder="Student Name" required>
 
-// <input type="text" name="fatherName" placeholder="Father Name">
+<input type="text" name="fatherName" placeholder="Father Name">
 
-// <input type="text" name="course" placeholder="Course">
+<input type="text" name="course" placeholder="Course">
 
-// <input type="text" name="mobile" placeholder="Mobile">
+<input type="text" name="mobile" placeholder="Mobile">
 
-// <input type="email" name="email" placeholder="Email">
+<input type="email" name="email" placeholder="Email">
 
-// <input type="text" name="address" placeholder="Address">
+<input type="text" name="address" placeholder="Address">
 
-// <textarea name="description" placeholder="Description"></textarea>
+<textarea name="description" placeholder="Description"></textarea>
 
-// <input type="file" name="image">
+<input type="file" name="image">
 
-// <button>Add Student</button>
+<button>Add Student</button>
 
-// </form>
+</form>
 
-// </body>
+</body>
 
-// </html>
+</html>
 
-// `);
+`);
 
-// });
-// app.post("/admin/student/add", upload.single("image"), async (req, res) => {
+});
+app.post("/admin/student/add", upload.single("image"), async (req, res) => {
 
-//     try{
+    try{
 
-//         await Student.create({
+        await Student.create({
 
-//             name:req.body.name,
+            name:req.body.name,
 
-//             fatherName:req.body.fatherName,
+            fatherName:req.body.fatherName,
 
-//             course:req.body.course,
+            course:req.body.course,
 
-//             mobile:req.body.mobile,
+            mobile:req.body.mobile,
 
-//             email:req.body.email,
+            email:req.body.email,
 
-//             address:req.body.address,
+            address:req.body.address,
 
-//             description:req.body.description,
+            description:req.body.description,
 
-//             image:req.file ? "/uploads/" + req.file.filename : ""
+            image:req.file ? "/uploads/" + req.file.filename : ""
 
-//         });
+        });
 
-//         res.redirect("/admin/login");
+        res.redirect("/admin/login");
 
-//     }catch(err){
+    }catch(err){
 
-//         console.log(err);
+        console.log(err);
 
-//         res.send("Error");
+        res.send("Error");
 
-//     }
+    }
 
-// });
-// app.get("/admin/students", async (req, res) => {
+});
+app.get("/admin/students", async (req, res) => {
 
-//     try {
+    try {
 
-//         const students = await Student.find().sort({ createdAt: -1 });
+        const students = await Student.find().sort({ createdAt: -1 });
 
-//         let rows = "";
+        let rows = "";
 
-//         students.forEach((student, index) => {
+        students.forEach((student, index) => {
 
-//             rows += `
-//             <tr>
-//                 <td>${index + 1}</td>
+            rows += `
+            <tr>
+                <td>${index + 1}</td>
 
-//                 <td>
-//                     <img src="${student.image}" width="50">
-//                 </td>
+                <td>
+                    <img src="${student.image}" width="50">
+                </td>
 
-//                 <td>
-//                     <a href="/student/${student._id}">
-//                         ${student.name}
-//                     </a>
-//                 </td>
+                <td>
+                    <a href="/student/${student._id}">
+                        ${student.name}
+                    </a>
+                </td>
 
-//                 <td>${student.course}</td>
+                <td>${student.course}</td>
 
-//                 <td>${student.mobile}</td>
+                <td>${student.mobile}</td>
 
-//                 <td>
-//                     <a href="/admin/student/edit/${student._id}">✏ Edit</a> |
-//                     <a href="/admin/student/delete/${student._id}"
-//                     onclick="return confirm('Delete Student?')">
-//                     🗑 Delete
-//                     </a>
-//                 </td>
+                <td>
+                    <a href="/admin/student/edit/${student._id}">✏ Edit</a> |
+                    <a href="/admin/student/delete/${student._id}"
+                    onclick="return confirm('Delete Student?')">
+                    🗑 Delete
+                    </a>
+                </td>
 
-//             </tr>
-//             `;
+            </tr>
+            `;
 
-//         });
+        });
 
-//         res.send(`
-// <!DOCTYPE html>
-// <html>
+        res.send(`
+<!DOCTYPE html>
+<html>
 
-// <head>
-// <title>Students</title>
-// </head>
+<head>
+<title>Students</title>
+</head>
 
-// <body>
+<body>
 
-// <a href="/admin/student/add">➕ Add Student</a>
+<a href="/admin/student/add">➕ Add Student</a>
 
-// <table border="1" cellpadding="10">
+<table border="1" cellpadding="10">
 
-// <tr>
-// <th>#</th>
-// <th>Photo</th>
-// <th>Name</th>
-// <th>Course</th>
-// <th>Mobile</th>
-// <th>Action</th>
-// </tr>
+<tr>
+<th>#</th>
+<th>Photo</th>
+<th>Name</th>
+<th>Course</th>
+<th>Mobile</th>
+<th>Action</th>
+</tr>
 
-// ${rows}
+${rows}
 
-// </table>
+</table>
 
-// </body>
-// </html>
-//         `);
+</body>
+</html>
+        `);
 
-//     } catch (err) {
+    } catch (err) {
 
-//         console.log(err);
-//         res.send("Server Error");
+        console.log(err);
+        res.send("Server Error");
 
-//     }
+    }
 
-// });
+});
 
   
-// app.get("/admin/student/delete/:id", async (req, res) => {
+app.get("/admin/student/delete/:id", async (req, res) => {
 
-//     try{
+    try{
 
-//         await Student.findByIdAndDelete(req.params.id);
+        await Student.findByIdAndDelete(req.params.id);
 
-//         res.redirect("/admin/login");
+        res.redirect("/admin/login");
 
-//     }catch(err){
+    }catch(err){
 
-//         console.log(err);
+        console.log(err);
 
-//         res.send("Delete Error");
+        res.send("Delete Error");
 
-//     }
+    }
 
-// });
-// app.get("/admin/student/edit/:id", async (req, res) => {
+});
+app.get("/admin/student/edit/:id", async (req, res) => {
 
-//     try {
+    try {
 
-//         const student = await Student.findById(req.params.id);
+        const student = await Student.findById(req.params.id);
 
-//         if (!student) {
-//             return res.send("Student Not Found");
-//         }
+        if (!student) {
+            return res.send("Student Not Found");
+        }
 
-//         res.send(`
+        res.send(`
 
-// <!DOCTYPE html>
-// <html>
-// <head>
+<!DOCTYPE html>
+<html>
+<head>
 
-// <title>Edit Student</title>
+<title>Edit Student</title>
 
-// <style>
+<style>
 
-// body{
-//     font-family:Arial;
-//     background:#f5f5f5;
-//     padding:30px;
-// }
+body{
+    font-family:Arial;
+    background:#f5f5f5;
+    padding:30px;
+}
 
-// form{
-//     max-width:700px;
-//     margin:auto;
-//     background:#fff;
-//     padding:20px;
-//     border-radius:10px;
-//     box-shadow:0 5px 15px rgba(0,0,0,.1);
-// }
+form{
+    max-width:700px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
 
-// input,textarea{
-//     width:100%;
-//     padding:12px;
-//     margin:10px 0;
-// }
+input,textarea{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+}
 
-// img{
-//     width:100px;
-//     display:block;
-//     margin:auto;
-//     margin-bottom:15px;
-// }
+img{
+    width:100px;
+    display:block;
+    margin:auto;
+    margin-bottom:15px;
+}
 
-// button{
-//     width:100%;
-//     padding:12px;
-//     background:#0d6efd;
-//     color:#fff;
-//     border:none;
-//     cursor:pointer;
-// }
+button{
+    width:100%;
+    padding:12px;
+    background:#0d6efd;
+    color:#fff;
+    border:none;
+    cursor:pointer;
+}
 
-// </style>
+</style>
 
-// </head>
+</head>
 
-// <body>
+<body>
 
-// <form action="/admin/student/edit/${student._id}" method="POST" enctype="multipart/form-data">
+<form action="/admin/student/edit/${student._id}" method="POST" enctype="multipart/form-data">
 
-// <h2>Edit Student</h2>
+<h2>Edit Student</h2>
 
-// <img src="${student.image}">
+<img src="${student.image}">
 
-// <input type="text" name="name" value="${student.name}" required>
+<input type="text" name="name" value="${student.name}" required>
 
-// <input type="text" name="fatherName" value="${student.fatherName}">
+<input type="text" name="fatherName" value="${student.fatherName}">
 
-// <input type="text" name="course" value="${student.course}">
+<input type="text" name="course" value="${student.course}">
 
-// <input type="text" name="mobile" value="${student.mobile}">
+<input type="text" name="mobile" value="${student.mobile}">
 
-// <input type="email" name="email" value="${student.email}">
+<input type="email" name="email" value="${student.email}">
 
-// <input type="text" name="address" value="${student.address}">
+<input type="text" name="address" value="${student.address}">
 
-// <textarea name="description">${student.description}</textarea>
+<textarea name="description">${student.description}</textarea>
 
-// <input type="file" name="image">
+<input type="file" name="image">
 
-// <button>Update Student</button>
+<button>Update Student</button>
 
-// </form>
+</form>
 
-// </body>
-// </html>
+</body>
+</html>
 
-// `);
+`);
 
-//     } catch (err) {
+    } catch (err) {
 
-//         console.log(err);
+        console.log(err);
 
-//         res.send("Error");
+        res.send("Error");
 
-//     }
+    }
 
-// });
-// app.post("/admin/student/edit/:id", upload.single("image"), async (req, res) => {
+});
+app.post("/admin/student/edit/:id", upload.single("image"), async (req, res) => {
 
-//     try {
+    try {
 
-//         const student = await Student.findById(req.params.id);
+        const student = await Student.findById(req.params.id);
 
-//         let image = student.image;
+        let image = student.image;
 
-//         if (req.file) {
-//             image = "/uploads/" + req.file.filename;
-//         }
+        if (req.file) {
+            image = "/uploads/" + req.file.filename;
+        }
 
-//         await Student.findByIdAndUpdate(req.params.id, {
+        await Student.findByIdAndUpdate(req.params.id, {
 
-//             name: req.body.name,
+            name: req.body.name,
 
-//             fatherName: req.body.fatherName,
+            fatherName: req.body.fatherName,
 
-//             course: req.body.course,
+            course: req.body.course,
 
-//             mobile: req.body.mobile,
+            mobile: req.body.mobile,
 
-//             email: req.body.email,
+            email: req.body.email,
 
-//             address: req.body.address,
+            address: req.body.address,
 
-//             description: req.body.description,
+            description: req.body.description,
 
-//             image
+            image
 
-//         });
+        });
 
-//         res.redirect("/admin/login");
+        res.redirect("/admin/login");
 
-//     } catch (err) {
+    } catch (err) {
 
-//         console.log(err);
+        console.log(err);
 
-//         res.send("Update Error");
+        res.send("Update Error");
 
-//     }
+    }
 
-// });
-// app.use((err, req, res, next) => {
-//     console.error("Global Error:");
-//     console.error(req.method, req.url);
-//     console.error(err.stack);
+});
+app.use((err, req, res, next) => {
+    console.error("Global Error:");
+    console.error(req.method, req.url);
+    console.error(err.stack);
 
-//     res.status(500).send("Server Error");
-// });
+    res.status(500).send("Server Error");
+});
 
 
 // // Start Server
