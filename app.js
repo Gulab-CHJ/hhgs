@@ -30,9 +30,10 @@ const Student = require("./models/Student");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-app.get("/admin", (req, res) => {
-    res.send("Admin Page Working");
-});
+
+const adminRoutes = require("./routes/admin");
+
+app.use("/admin", adminRoutes);
 
 // const serviceRoutes = require("./routes/service");
 
