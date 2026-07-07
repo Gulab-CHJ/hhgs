@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // const bcrypt = require("bcrypt");
-const AdminLogin = require("../pages/AdminLogin");
+// const AdminLogin = require("../pages/AdminLogin");
 // const Admin = require("../models/Admin");
 // const Service = require("../models/Service");
 // const ChangePassword = require("../views/ChangePassword");
@@ -76,9 +76,9 @@ const AdminLogin = require("../pages/AdminLogin");
 
 // });
 
-router.get("/login", (req, res) => {
-    res.send(AdminLogin(req.query.error || ""));
-});
+// router.get("/login", (req, res) => {
+//     res.send(AdminLogin(req.query.error || ""));
+// });
 // // ===============================
 // // Add Service Page
 // // ===============================
@@ -294,8 +294,8 @@ router.get("/login", (req, res) => {
 // const express = require("express");
 // const router = express.Router();
 
-// router.get("/", (req, res) => {
-//     res.send("Admin Page Working gulab");
-// });
+router.get("/", (req, res) => {
+    res.send("Admin Page Working gulab");
+});
 
 module.exports = router;
