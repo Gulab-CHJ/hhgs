@@ -5,9 +5,9 @@
 
 const express = require("express");
 
-// const Header = require("./views/component/header");
+const Header = require("./views/component/header");
 
-// const Footer = require("./views/component/footer");
+const Footer = require("./views/component/footer");
 
 // // const servicesRoutes = require("./routes/services");
 
@@ -20,9 +20,9 @@ const express = require("express");
 
 // const admin = require("./models/admin");
 
-// const Service = require("./models/Service");
+const Service = require("./models/Service");
 
-// const Student = require("./models/Student");
+const Student = require("./models/Student");
 
 
 
