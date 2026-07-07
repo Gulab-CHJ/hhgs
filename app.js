@@ -11,7 +11,7 @@ const Footer = require("./views/component/footer");
 
 const servicesRoutes = require("./routes/services");
 
-const AdminLogin = require("./pages/AdminLogin");
+// const AdminLogin = require("./pages/AdminLogin");
 
 // const AdminDashboard = require("./pages/AdminDashboard");
 
