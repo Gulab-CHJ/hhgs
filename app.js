@@ -69,7 +69,8 @@ app.post("/admin/login", async (req, res) => {
 
         const { username, password } = req.body;
 
-        const Admin = await Admin.findOne({ username });
+        // const Admin = await Admin.findOne({ username });
+        const Admin = await admin.findOne({ username });
 
         if (!Admin) {
             return res.redirect("/admin?error=Username Not Found");
