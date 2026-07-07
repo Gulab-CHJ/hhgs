@@ -3,6 +3,10 @@ require("dotenv").config();
 
 require("./config/database");
 
+const AdminDashboard = require("./pages/adminDashboard");
+const bcrypt = require("bcrypt");
+const Admin = require("./models/admin");
+
 const express = require("express");
 
 const Header = require("./views/component/header");
@@ -13,12 +17,7 @@ const Footer = require("./views/component/footer");
 
 const AdminLogin = require("./pages/adminLogin");
 
-// const AdminDashboard = require("./pages/AdminDashboard");
-
 // // const studentRoutes = require("./routes/student");
-// // const bcrypt = require("bcrypt");
-
-// const admin = require("./models/admin");
 
 const Service = require("./models/Service");
 
@@ -70,7 +69,7 @@ app.post("/admin/login", async (req, res) => {
 
         const { username, password } = req.body;
 
-        const Admin = await admin.findOne({ username });
+        const Admin = await Admin.findOne({ username });
 
         if (!Admin) {
             return res.redirect("/admin?error=Username Not Found");
