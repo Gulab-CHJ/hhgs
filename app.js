@@ -70,13 +70,13 @@ app.post("/admin/login", async (req, res) => {
 
         const { username, password } = req.body;
 
-        const admin = await admin.findOne({ username });
+        const Admin = await admin.findOne({ username });
 
-        if (!admin) {
+        if (!Admin) {
             return res.redirect("/admin?error=Username Not Found");
         }
 
-        const match = await bcrypt.compare(password, admin.password);
+        const match = await bcrypt.compare(password, Admin.password);
 
         if (!match) {
             return res.redirect("/admin?error=Wrong Password");
