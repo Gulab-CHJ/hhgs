@@ -78,9 +78,6 @@ router.post("/change-password", async (req, res) => {
 router.get("/login", (req, res) => {
     res.send(AdminLogin(req.query.error || ""));
 });
-router.get("/", (req, res) => {
-    res.send(AdminLogin(req.query.error || ""));
-});
 
 // ===============================
 // Add Service Page
