@@ -5,7 +5,7 @@ const AdminLogin = require("../pages/adminLogin");
 const Admin = require("../models/Admin");
 // const Service = require("../models/Service");
 // const ChangePassword = require("../views/ChangePassword");
-// const AddService = require("../pages/addservice");
+const AddService = require("../pages/addservice");
 const AdminDashboard = require("../pages/adminDashboard");
 
 
