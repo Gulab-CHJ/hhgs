@@ -304,5 +304,30 @@ router.get("/", (req, res) => {
     res.send(AdminLogin());
 });
 
+router.post("/login", async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        const admin = await Admin.findOne({ username });
+
+        if (!admin) {
+            return res.redirect("/admin?error=Username Not Found");
+        }
+
+        const match = await bcrypt.compare(password, admin.password);
+
+        if (!match) {
+            return res.redirect("/admin?error=Wrong Password");
+        }
+
+        res.send(AdminDashboard());
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
+
+
 
 module.exports = router;
