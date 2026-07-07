@@ -84,13 +84,10 @@ app.post("/admin/login", async (req, res) => {
 
         res.send(AdminDashboard());
 
-    } catch (error) {
-
-        console.error(error);
-
-        res.status(500).send("Server Error");
-
-    }
+    } catch (err) {
+    console.error(err);
+    res.status(500).send(err.message);
+}
 
 });
 
