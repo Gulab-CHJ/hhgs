@@ -82,12 +82,15 @@ const AdminDashboard = require("../pages/adminDashboard");
 // // ===============================
 // // Add Service Page
 // // ===============================
+
 router.get("/add-service", (req, res) => {
-
-    res.send(AddService());
-
+    try {
+        res.send(AddService());
+    } catch (err) {
+        console.error("Add Service Error:", err);
+        res.status(500).send(err.message);
+    }
 });
-
 
 // // ===============================
 // // Save Service
