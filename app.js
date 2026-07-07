@@ -19,9 +19,12 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // app.use("/admin", adminRoutes);
 
 // Home Route
-app.get("/", (req, res) => {
-    res.send("Server Running...");
-});
+// app.get("/", (req, res) => {
+//     res.send("Server Running...");
+// });
+const homeRoutes = require("./routes/home");
+
+app.use("/", homeRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 3000;
