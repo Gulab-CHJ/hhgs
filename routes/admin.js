@@ -302,7 +302,7 @@ const router = express.Router();
 
 
 
-const AdminLogin = require("../pages/AdminLogin");
+const AdminLogin = require("../pages/adminLogin");
 
 router.get("/", (req, res) => {
     res.send(AdminLogin());
