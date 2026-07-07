@@ -19,9 +19,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // app.use("/admin", adminRoutes);
 
 // Home Route
-// app.get("/", (req, res) => {
-//     res.send("Server Running...");
-// });
 const homeRoutes = require("./routes/home");
 
 app.use("/", homeRoutes);
