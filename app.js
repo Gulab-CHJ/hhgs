@@ -18,7 +18,7 @@ const AdminLogin = require("./pages/adminLogin");
 // // const studentRoutes = require("./routes/student");
 // // const bcrypt = require("bcrypt");
 
-const Admin = require("./models/admin");
+const admin = require("./models/admin");
 
 const Service = require("./models/Service");
 
