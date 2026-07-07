@@ -8,7 +8,7 @@ const Admin = require("../models/Admin");
 
 const AdminDashboard = require("../pages/adminDashboard");
 console.log("Before require");
- const AddService = require("../pages/addservice");
+//  const AddService = require("../pages/addservice");
 console.log("After require");
 
 
