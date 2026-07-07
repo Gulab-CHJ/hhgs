@@ -7,8 +7,9 @@ const Admin = require("../models/Admin");
 // const ChangePassword = require("../views/ChangePassword");
 
 const AdminDashboard = require("../pages/adminDashboard");
+console.log("Before require");
  const AddService = require("../pages/addservice");
-
+console.log("After require");
 
 
 // const upload = require("../config/multer");
@@ -25,6 +26,14 @@ const AdminDashboard = require("../pages/adminDashboard");
 // router.get("/change-password", (req, res) => {
 //     res.send(ChangePassword());
 // });
+router.get("/add-service", (req, res) => {
+    try {
+        res.send(AddService());
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 
 
 // // ===============================
