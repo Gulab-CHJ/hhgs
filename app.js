@@ -16,12 +16,11 @@ const servicesRoutes = require("./routes/services");
 // const AdminDashboard = require("./pages/adminDashboard");
 
 // const studentRoutes = require("./routes/student");
-
 // const bcrypt = require("bcrypt");
 
 // const admin = require("./models/admin");
 
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 
 const Service = require("./models/Service");
 
