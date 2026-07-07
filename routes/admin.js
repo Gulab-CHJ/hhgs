@@ -291,9 +291,6 @@ const router = express.Router();
 
 // module.exports = router;
 
-// const express = require("express");
-// const router = express.Router();
-
 
 // const AdminLogin = require("../pages/AdminLogin");
 
@@ -302,16 +299,14 @@ const router = express.Router();
 //     res.send(AdminLogin(req.query.error || ""));
 // });
 
-module.exports = router;
-
-// router.get("/", (req, res) => {
-//     res.send("Admin Page Working gulab");
-// });
 
 
+
+const AdminLogin = require("../pages/AdminLogin");
 
 router.get("/", (req, res) => {
-    res.send("Admin OK");
+    res.send(AdminLogin());
 });
+
 
 module.exports = router;
