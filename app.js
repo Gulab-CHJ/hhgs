@@ -96,8 +96,8 @@ app.get("/", async (req, res) => {
 
     try {
 
-        const services = await Service.find();
-        const students = await Student.find();
+        // const services = await Service.find();
+        // const students = await Student.find();
 
         let html = "";
         let studentHtml = "";
