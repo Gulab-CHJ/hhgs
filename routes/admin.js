@@ -298,8 +298,8 @@ const router = express.Router();
 const AdminLogin = require("../pages/AdminLogin");
 
 router.get("/", (req, res) => {
-     res.send("Admin Page Working gulab");
-    // res.send(AdminLogin(req.query.error || ""));
+     
+    res.send(AdminLogin(req.query.error || ""));
 });
 
 module.exports = router;
