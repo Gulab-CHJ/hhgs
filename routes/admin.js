@@ -295,17 +295,23 @@ const router = express.Router();
 // const router = express.Router();
 
 
-const AdminLogin = require("../pages/AdminLogin");
+// const AdminLogin = require("../pages/AdminLogin");
 
-router.get("/", (req, res) => {
+// router.get("/", (req, res) => {
      
-    res.send(AdminLogin(req.query.error || ""));
-});
+//     res.send(AdminLogin(req.query.error || ""));
+// });
 
 module.exports = router;
 
 // router.get("/", (req, res) => {
 //     res.send("Admin Page Working gulab");
 // });
+
+
+
+router.get("/", (req, res) => {
+    res.send("Admin OK");
+});
 
 module.exports = router;
