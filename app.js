@@ -13,14 +13,12 @@ const Footer = require("./views/component/footer");
 
 const AdminLogin = require("./pages/AdminLogin");
 
-// const AdminDashboard = require("./pages/AdminDashboard");
+const AdminDashboard = require("./pages/AdminDashboard");
 
 // const studentRoutes = require("./routes/student");
 // const bcrypt = require("bcrypt");
 
 const admin = require("./models/admin");
-
-// const adminRoutes = require("./routes/admin");
 
 const Service = require("./models/Service");
 
@@ -58,7 +56,7 @@ app.use("/service", serviceRoutes);
 // Admin Routes
 
 
-app.use("/student", studentRoutes);
+// app.use("/student", studentRoutes);
 
 // Admin Login Page
 app.get("/admin", (req, res) => {
