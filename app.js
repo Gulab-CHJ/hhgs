@@ -1,7 +1,7 @@
 
-// require("dotenv").config();
+require("dotenv").config();
 
-// require("./config/database");
+require("./config/database");
 
 const express = require("express");
 
@@ -96,8 +96,8 @@ app.get("/", async (req, res) => {
 
     try {
 
-        // const services = await Service.find();
-        // const students = await Student.find();
+        const services = await Service.find();
+        const students = await Student.find();
 
         let html = "";
         let studentHtml = "";
@@ -271,7 +271,7 @@ ${Footer()}
 
   } catch (err) {
         console.log(err);
-        res.status(500).send("Server Erroy");
+        res.status(500).send("Server Errok");
     }
 });
 // // // Service Details Page
