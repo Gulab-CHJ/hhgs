@@ -82,11 +82,11 @@ const AdminDashboard = require("../pages/adminDashboard");
 // // ===============================
 // // Add Service Page
 // // ===============================
-// router.get("/add-service", (req, res) => {
+router.get("/add-service", (req, res) => {
 
-//     res.send(AddService());
+    res.send(AddService());
 
-// });
+});
 
 
 // // ===============================
