@@ -23,6 +23,13 @@ const homeRoutes = require("./routes/home");
 
 app.use("/", homeRoutes);
 
+//===============================
+//  Change Password Page
+// ===============================
+const changePasswordRoutes = require("./routes/changePassword");
+
+app.use("/admin/change-password", changePasswordRoutes);
+
 // Start Server
 const PORT = process.env.PORT || 3000;
 
