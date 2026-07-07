@@ -133,33 +133,33 @@ router.get("/add-service", (req, res) => {
 // // Delete Service
 // // ===============================
 // // List all services
-// router.get("/delete-service", async (req, res) => {
-//     try {
-//         const services = await Service.find();
+router.get("/delete-service", async (req, res) => {
+    try {
+        const services = await Service.find();
 
-//         let html = "<h2>Delete Services</h2><hr>";
+        let html = "<h2>Delete Services</h2><hr>";
 
-//         services.forEach(service => {
-//             html += `
-//                 <div style="margin:10px 0;">
-//                     <b>${service.title}</b>
+        services.forEach(service => {
+            html += `
+                <div style="margin:10px 0;">
+                    <b>${service.title}</b>
 
-//                     <a href="/admin/delete-service/${service._id}"
-//                        onclick="return confirm('Delete this service?')"
-//                        style="color:red;margin-left:20px;">
-//                         Delete
-//                     </a>
-//                 </div>
-//             `;
-//         });
+                    <a href="/admin/delete-service/${service._id}"
+                       onclick="return confirm('Delete this service?')"
+                       style="color:red;margin-left:20px;">
+                        Delete
+                    </a>
+                </div>
+            `;
+        });
 
-//         res.send(html);
+        res.send(html);
 
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send(err.message);
-//     }
-// });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 
 // // Delete one service
 // router.get("/delete-service/:id", async (req, res) => {
