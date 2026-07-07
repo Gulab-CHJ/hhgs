@@ -20,7 +20,7 @@ const AdminLogin = require("./pages/AdminLogin");
 
 const admin = require("./models/admin");
 
-const adminRoutes = require("./routes/admin");
+// const adminRoutes = require("./routes/admin");
 
 const Service = require("./models/Service");
 
