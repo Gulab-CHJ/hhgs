@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 // const bcrypt = require("bcrypt");
-// const AdminLogin = require("../pages/AdminLogin");
+const AdminLogin = require("../pages/adminLogin");
 // const Admin = require("../models/Admin");
 // const Service = require("../models/Service");
 // const ChangePassword = require("../views/ChangePassword");
@@ -299,10 +299,6 @@ const router = express.Router();
 //     res.send(AdminLogin(req.query.error || ""));
 // });
 
-
-
-
-const AdminLogin = require("../pages/adminLogin");
 
 router.get("/", (req, res) => {
     res.send(AdminLogin());
