@@ -7,9 +7,8 @@ const Admin = require("../models/Admin");
 // const ChangePassword = require("../views/ChangePassword");
 
 const AdminDashboard = require("../pages/adminDashboard");
-console.log("Before require");
+
 const AddService = require("../pages/addservice");
-console.log("After require");
 
 
 // const upload = require("../config/multer");
