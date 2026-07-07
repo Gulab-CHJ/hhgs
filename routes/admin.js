@@ -92,37 +92,37 @@ const AdminDashboard = require("../pages/adminDashboard");
 // // ===============================
 // // Save Service
 // // ===============================
-router.post(
-    "/add-service",
-    upload.single("image"),
-    async (req, res) => {
+// router.post(
+//     "/add-service",
+//     upload.single("image"),
+//     async (req, res) => {
 
-        console.log(req.file);
-        console.log(req.body);
+//         console.log(req.file);
+//         console.log(req.body);
 
-        try {
+//         try {
 
-            if (!req.file) {
-                return res.send("Image not uploaded");
-            }
+//             if (!req.file) {
+//                 return res.send("Image not uploaded");
+//             }
 
-            await Service.create({
-                title: req.body.title,
-                description: req.body.description,
-                image: "/uploads/" + req.file.filename
-            });
+//             await Service.create({
+//                 title: req.body.title,
+//                 description: req.body.description,
+//                 image: "/uploads/" + req.file.filename
+//             });
 
-            res.redirect("/admin/admindashboard");
+//             res.redirect("/admin/admindashboard");
 
-        } catch (err) {
+//         } catch (err) {
 
-            console.error(err);
-            res.status(500).send(err.message);
+//             console.error(err);
+//             res.status(500).send(err.message);
 
-        }
+//         }
 
-    }
-);
+//     }
+// );
 
 // // ===============================
 // // Delete Service
