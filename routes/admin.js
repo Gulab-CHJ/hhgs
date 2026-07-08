@@ -11,11 +11,8 @@ const AddService = require("../views/addservice");
 
 const upload = require("../config/multer");
 
-res.redirect("/admin/admindashboard");
 
-router.get("/admindashboard", (req, res) => {
-    res.send(AdminDashboard());
-});
+
 // =========================
 // Login Page
 // =========================
@@ -42,7 +39,7 @@ router.post("/login", async (req, res) => {
             return res.redirect("/admin?error=Wrong Password");
         }
 
-        res.send(AdminDashboard());
+        return res.redirect("/admin/admindashboard");
 
     } catch (err) {
         console.error(err);
