@@ -1,126 +1,126 @@
-function AdminDashboard() {
+// function AdminDashboard() {
 
-return `
+// return `
 
-<!DOCTYPE html>
-<html>
+// <!DOCTYPE html>
+// <html>
 
-<head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
+// <head>
+// <meta charset="UTF-8">
+// <title>Dashboard</title>
 
-<link rel="stylesheet" href="/css/admin.css">
+// <link rel="stylesheet" href="/css/admin.css">
 
-<style>
-body{
-    font-family:Arial,sans-serif;
-    background:#f5f5f5;
-}
+// <style>
+// body{
+//     font-family:Arial,sans-serif;
+//     background:#f5f5f5;
+// }
 
-.dashboard{
-    width:500px;
-    margin:40px auto;
-    background:#fff;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.1);
-}
+// .dashboard{
+//     width:500px;
+//     margin:40px auto;
+//     background:#fff;
+//     padding:20px;
+//     border-radius:10px;
+//     box-shadow:0 0 10px rgba(0,0,0,.1);
+// }
 
-h1{
-    text-align:center;
-}
+// h1{
+//     text-align:center;
+// }
 
-#search{
-    width:100%;
-    padding:10px;
-    margin:20px 0;
-    font-size:16px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    box-sizing:border-box;
-}
+// #search{
+//     width:100%;
+//     padding:10px;
+//     margin:20px 0;
+//     font-size:16px;
+//     border:1px solid #ccc;
+//     border-radius:6px;
+//     box-sizing:border-box;
+// }
 
-.menu a{
-    display:block;
-    padding:10px 0;
-    color:#000;
-    text-decoration:none;
-    border-bottom:1px solid #ddd;
-    font-size:18px;
-}
+// .menu a{
+//     display:block;
+//     padding:10px 0;
+//     color:#000;
+//     text-decoration:none;
+//     border-bottom:1px solid #ddd;
+//     font-size:18px;
+// }
 
-.menu a:hover{
-    color:blue;
-}
-</style>
+// .menu a:hover{
+//     color:blue;
+// }
+// </style>
 
-</head>
+// </head>
 
-<body>
+// <body>
 
-<div class="dashboard">
+// <div class="dashboard">
 
-<h1>Welcome Admin 👋</h1>
+// <h1>Welcome Admin 👋</h1>
 
-<input
-type="text"
-id="search"
-placeholder="Search..."
-onkeyup="searchMenu()"
->
+// <input
+// type="text"
+// id="search"
+// placeholder="Search..."
+// onkeyup="searchMenu()"
+// >
 
-<div class="menu" id="menu">
+// <div class="menu" id="menu">
 
-<a href="/admin/add-service">Add Service</a>
+// <a href="/admin/add-service">Add Service</a>
 
-<a href="/admin/edit-service">Edit Service</a>
-
-
-
-<a href="/admin/delete-service">Delete Service</a>
+// <a href="/admin/edit-service">Edit Service</a>
 
 
 
+// <a href="/admin/delete-service">Delete Service</a>
 
-<a href="/admin/categories">Categories</a>
 
-<a href="/admin/users">Users</a>
 
-<a href="/admin/change-password">Change Password</a>
 
-<a href="/">Home</a>
-<a href="/admin/students">👨‍🎓 Students</a>
+// <a href="/admin/categories">Categories</a>
 
-</div>
+// <a href="/admin/users">Users</a>
 
-</div>
+// <a href="/admin/change-password">Change Password</a>
 
-<script>
-function searchMenu(){
+// <a href="/">Home</a>
+// <a href="/admin/students">👨‍🎓 Students</a>
 
-let input=document.getElementById("search").value.toLowerCase();
+// </div>
 
-let links=document.querySelectorAll("#menu a");
+// </div>
 
-links.forEach(link=>{
+// <script>
+// function searchMenu(){
 
-if(link.textContent.toLowerCase().includes(input)){
-link.style.display="block";
-}else{
-link.style.display="none";
-}
+// let input=document.getElementById("search").value.toLowerCase();
 
-});
+// let links=document.querySelectorAll("#menu a");
 
-}
-</script>
+// links.forEach(link=>{
 
-</body>
+// if(link.textContent.toLowerCase().includes(input)){
+// link.style.display="block";
+// }else{
+// link.style.display="none";
+// }
 
-</html>
+// });
 
-`;
+// }
+// </script>
 
-}
+// </body>
 
-module.exports = AdminDashboard;
+// </html>
+
+// `;
+
+// }
+
+// module.exports = AdminDashboard;
