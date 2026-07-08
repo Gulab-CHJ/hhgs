@@ -242,6 +242,21 @@ router.post("/add-student", upload.single("image"), async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+const Student = require("../models/Student");
+
+router.get("/delete-student/:id", async (req, res) => {
+    try {
+
+        await Student.findByIdAndDelete(req.params.id);
+
+        res.redirect("/admin/students");
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 // =========================
 // Dashboard
 // =========================
