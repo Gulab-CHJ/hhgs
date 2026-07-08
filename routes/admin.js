@@ -128,6 +128,39 @@ router.get("/edit-service/:id", async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+router.post(
+    "/edit-service/:id",
+    upload.single("image"),
+    async (req, res) => {
+        try {
+
+            const service = await Service.findById(req.params.id);
+
+            if (!service) {
+                return res.send("Service not found");
+            }
+
+            let image = service.image;
+
+            if (req.file) {
+                image = "/uploads/" + req.file.filename;
+            }
+
+            await Service.findByIdAndUpdate(req.params.id, {
+                title: req.body.title,
+                description: req.body.description,
+                image: image
+            });
+
+            return res.redirect("/admin/edit-service");
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    }
+);
 // =========================
 // Dashboard
 // =========================
