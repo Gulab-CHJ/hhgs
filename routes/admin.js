@@ -9,6 +9,7 @@ const AdminLogin = require("../pages/adminLogin");
 const AdminDashboard = require("../pages/adminDashboard");
 const AddService = require("../views/addservice");
 
+const upload = require("../config/multer");
 // =========================
 // Login Page
 // =========================
