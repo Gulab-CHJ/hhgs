@@ -76,6 +76,58 @@ router.get("/edit-service", async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+router.get("/edit-service/:id", async (req, res) => {
+    try {
+        const service = await Service.findById(req.params.id);
+
+        if (!service) {
+            return res.send("Service not found");
+        }
+
+        res.send(`
+            <h2>Edit Service</h2>
+
+            <form action="/admin/edit-service/${service._id}"
+                  method="POST"
+                  enctype="multipart/form-data">
+
+                <input
+                    type="text"
+                    name="title"
+                    value="${service.title}"
+                    required
+                >
+
+                <br><br>
+
+                <textarea
+                    name="description"
+                    required
+                >${service.description}</textarea>
+
+                <br><br>
+
+                <img src="${service.image}" width="120">
+
+                <br><br>
+
+                <input type="file" name="image">
+
+                <br><br>
+
+                <button type="submit">
+                    Update
+                </button>
+
+            </form>
+        `);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 // =========================
 // Dashboard
 // =========================
