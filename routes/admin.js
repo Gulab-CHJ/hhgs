@@ -243,7 +243,6 @@ router.post("/add-student", upload.single("image"), async (req, res) => {
     }
 });
 
-const Student = require("../models/Student");
 
 router.get("/delete-student/:id", async (req, res) => {
     try {
@@ -257,6 +256,112 @@ router.get("/delete-student/:id", async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+router.get("/edit-student/:id", async (req, res) => {
+    try {
+        const student = await Student.findById(req.params.id);
+
+        if (!student) {
+            return res.send("Student not found");
+        }
+
+        res.send(`
+            <h2>Edit Student</h2>
+
+            <form action="/admin/edit-student/${student._id}"
+                  method="POST"
+                  enctype="multipart/form-data">
+
+                <input
+                    type="text"
+                    name="name"
+                    value="${student.name}"
+                    required
+                >
+
+                <br><br>
+
+                <input
+                    type="text"
+                    name="father"
+                    value="${student.father || ""}"
+                >
+
+                <br><br>
+
+                <input
+                    type="email"
+                    name="email"
+                    value="${student.email || ""}"
+                >
+
+                <br><br>
+
+                <input
+                    type="text"
+                    name="phone"
+                    value="${student.phone || ""}"
+                >
+
+                <br><br>
+
+                <textarea name="address">${student.address || ""}</textarea>
+
+                <br><br>
+
+                <img src="${student.image}" width="120">
+
+                <br><br>
+
+                <input type="file" name="image">
+
+                <br><br>
+
+                <button type="submit">Update Student</button>
+
+            </form>
+        `);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
+
+router.post(
+    "/edit-student/:id",
+    upload.single("image"),
+    async (req, res) => {
+        try {
+            const student = await Student.findById(req.params.id);
+
+            if (!student) {
+                return res.send("Student not found");
+            }
+
+            let image = student.image;
+
+            if (req.file) {
+                image = "/uploads/" + req.file.filename;
+            }
+
+            await Student.findByIdAndUpdate(req.params.id, {
+                name: req.body.name,
+                father: req.body.father,
+                email: req.body.email,
+                phone: req.body.phone,
+                address: req.body.address,
+                image
+            });
+
+            res.redirect("/admin/students");
+
+        } catch (err) {
+            console.error(err);
+            res.status(500).send(err.message);
+        }
+    }
+);
 // =========================
 // Dashboard
 // =========================
