@@ -161,6 +161,40 @@ router.post(
         }
     }
 );
+
+const Student = require("../models/Student");
+
+router.get("/students", async (req, res) => {
+    try {
+        const students = await Student.find();
+
+        let html = "<h2>Students</h2><hr>";
+
+        students.forEach(student => {
+            html += `
+                <div style="margin-bottom:15px;">
+                    <img src="${student.image}" width="60">
+                    <b>${student.name}</b>
+
+                    <a href="/admin/edit-student/${student._id}">
+                        Edit
+                    </a>
+
+                    <a href="/admin/delete-student/${student._id}"
+                       onclick="return confirm('Delete student?')">
+                        Delete
+                    </a>
+                </div>
+            `;
+        });
+
+        res.send(html);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 // =========================
 // Dashboard
 // =========================
