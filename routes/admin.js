@@ -10,6 +10,12 @@ const AdminDashboard = require("../pages/adminDashboard");
 const AddService = require("../views/addservice");
 
 const upload = require("../config/multer");
+
+res.redirect("/admin/admindashboard");
+
+router.get("/admindashboard", (req, res) => {
+    res.send(AdminDashboard());
+});
 // =========================
 // Login Page
 // =========================
