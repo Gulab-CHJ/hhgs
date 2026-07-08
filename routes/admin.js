@@ -222,6 +222,26 @@ router.get("/students", async (req, res) => {
 router.get("/add-student", (req, res) => {
     res.send(AddStudent());
 });
+
+router.post("/add-student", upload.single("image"), async (req, res) => {
+    try {
+
+        await Student.create({
+            name: req.body.name,
+            father: req.body.father,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            image: "/uploads/" + req.file.filename
+        });
+
+        res.redirect("/admin/students");
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 // =========================
 // Dashboard
 // =========================
