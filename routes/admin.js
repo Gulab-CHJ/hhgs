@@ -39,7 +39,7 @@ router.post("/login", async (req, res) => {
             return res.redirect("/admin?error=Wrong Password");
         }
 
-        return res.redirect("/admin/admindashboard");
+        return res.send(AdminDashboard());
 
     } catch (err) {
         console.error(err);
