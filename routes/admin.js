@@ -56,6 +56,37 @@ router.get("/dashboard", (req, res) => {
 router.get("/add-service", (req, res) => {
     res.send(AddService());
 });
+ router.post(
+    "/add-service",
+    upload.single("image"),
+    async (req, res) => {
+
+        console.log(req.file);
+        console.log(req.body);
+
+        try {
+
+            if (!req.file) {
+                return res.send("Image not uploaded");
+            }
+
+            await Service.create({
+                title: req.body.title,
+                description: req.body.description,
+                image: "/uploads/" + req.file.filename
+            });
+
+            res.redirect("/admin/admindashboard");
+
+        } catch (err) {
+
+            console.error(err);
+            res.status(500).send(err.message);
+
+        }
+
+    }
+);
 
 // =========================
 // Delete Service Page
