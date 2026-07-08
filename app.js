@@ -12,7 +12,10 @@ app.use(express.json());
 
 // Static files
 app.use(express.static("public"));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "storage", "uploads"))
+);
 
 // Routes
 // const adminRoutes = require("./routes/adminLoginpage");
