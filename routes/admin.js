@@ -46,6 +46,9 @@ router.post("/login", async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+router.get("/admindashboard", (req, res) => {
+    res.send(AdminDashboard());
+});
 
 // =========================
 // Dashboard
