@@ -506,6 +506,76 @@ router.post("/edit-student/:id", upload.single("image"), async (req, res) => {
     }
 
 });
+router.get("/service/:id", async (req, res) => {
+    try {
+
+        const service = await Service.findById(req.params.id);
+
+        if (!service) {
+            return res.send("Service not found");
+        }
+
+        res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+    <title>${service.title}</title>
+
+    <style>
+        body{
+            font-family:Arial;
+            background:#f5f5f5;
+            padding:30px;
+        }
+
+        .container{
+            max-width:700px;
+            margin:auto;
+            background:#fff;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 3px 10px rgba(0,0,0,.15);
+        }
+
+        img{
+            width:120px;
+            display:block;
+            margin:auto;
+        }
+
+        h2{
+            text-align:center;
+        }
+
+        p{
+            margin-top:20px;
+            line-height:1.7;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<img src="${service.image}">
+
+<h2>${service.title}</h2>
+
+<p>${service.description}</p>
+
+</div>
+
+</body>
+</html>
+`);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 // =========================
 // Dashboard
 // =========================
