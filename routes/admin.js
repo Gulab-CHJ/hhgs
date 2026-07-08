@@ -50,6 +50,32 @@ router.get("/admindashboard", (req, res) => {
     res.send(AdminDashboard());
 });
 
+
+router.get("/edit-service", async (req, res) => {
+    try {
+        const services = await Service.find();
+
+        let html = "<h2>Edit Services</h2><hr>";
+
+        services.forEach(service => {
+            html += `
+                <div style="margin:10px 0;">
+                    <b>${service.title}</b>
+
+                    <a href="/admin/edit-service/${service._id}">
+                        Edit
+                    </a>
+                </div>
+            `;
+        });
+
+        res.send(html);
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 // =========================
 // Dashboard
 // =========================
