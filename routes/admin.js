@@ -11,6 +11,8 @@ const AddService = require("../views/addservice");
 
 const upload = require("../config/multer");
 
+const AddStudent = require("../pages/addStudent");
+
 
 
 // =========================
@@ -168,22 +170,44 @@ router.get("/students", async (req, res) => {
     try {
         const students = await Student.find();
 
-        let html = "<h2>Students</h2><hr>";
+        let html = `
+            <h2>Students</h2>
+
+            <a href="/admin/add-student"
+               style="
+                    display:inline-block;
+                    padding:10px 18px;
+                    background:#28a745;
+                    color:#fff;
+                    text-decoration:none;
+                    border-radius:5px;
+                    margin-bottom:20px;
+               ">
+                + Add Student
+            </a>
+
+            <hr>
+        `;
 
         students.forEach(student => {
             html += `
-                <div style="margin-bottom:15px;">
+                <div style="margin-bottom:15px; border:1px solid #ddd; padding:10px;">
+
                     <img src="${student.image}" width="60">
+
                     <b>${student.name}</b>
 
-                    <a href="/admin/edit-student/${student._id}">
-                        Edit
+                    <a href="/admin/edit-student/${student._id}"
+                       style="margin-left:20px;">
+                        ✏️ Edit
                     </a>
 
                     <a href="/admin/delete-student/${student._id}"
-                       onclick="return confirm('Delete student?')">
-                        Delete
+                       onclick="return confirm('Delete student?')"
+                       style="margin-left:15px;color:red;">
+                        🗑 Delete
                     </a>
+
                 </div>
             `;
         });
@@ -194,6 +218,9 @@ router.get("/students", async (req, res) => {
         console.error(err);
         res.status(500).send(err.message);
     }
+});
+router.get("/add-student", (req, res) => {
+    res.send(AddStudent());
 });
 // =========================
 // Dashboard
