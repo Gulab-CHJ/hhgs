@@ -3,57 +3,78 @@ function AddStudent() {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Student</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body{
-            font-family:Arial,sans-serif;
-            background:#f5f5f5;
-            margin:0;
-            padding:30px;
-        }
+<title>Add Student</title>
 
-        .container{
-            max-width:600px;
-            margin:auto;
-            background:#fff;
-            padding:25px;
-            border-radius:10px;
-            box-shadow:0 5px 15px rgba(0,0,0,.1);
-        }
+<style>
 
-        h2{
-            text-align:center;
-            margin-bottom:20px;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        input,
-        textarea{
-            width:100%;
-            padding:10px;
-            margin-bottom:15px;
-            border:1px solid #ccc;
-            border-radius:5px;
-            box-sizing:border-box;
-        }
+body{
+    background:#f4f6f9;
+    padding:30px;
+}
 
-        button{
-            width:100%;
-            padding:12px;
-            border:none;
-            background:#007bff;
-            color:#fff;
-            font-size:16px;
-            border-radius:5px;
-            cursor:pointer;
-        }
+.container{
+    max-width:650px;
+    margin:auto;
+    background:#fff;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
 
-        button:hover{
-            background:#0056b3;
-        }
-    </style>
+h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:#333;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+    color:#444;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-bottom:18px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:15px;
+}
+
+textarea{
+    resize:vertical;
+    min-height:100px;
+}
+
+button{
+    width:100%;
+    padding:14px;
+    border:none;
+    background:#0d6efd;
+    color:#fff;
+    font-size:16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0b5ed7;
+}
+
+</style>
 
 </head>
 
@@ -64,50 +85,73 @@ function AddStudent() {
 <h2>Add Student</h2>
 
 <form
-    action="/admin/add-student"
-    method="POST"
-    enctype="multipart/form-data"
+action="/admin/add-student"
+method="POST"
+enctype="multipart/form-data"
 >
 
-<input
-    type="text"
-    name="name"
-    placeholder="Student Name"
-    required
->
+<label>Student Name</label>
 
 <input
-    type="text"
-    name="father"
-    placeholder="Father Name"
+type="text"
+name="name"
+required
 >
 
-<input
-    type="email"
-    name="email"
-    placeholder="Email"
->
+<label>Father Name</label>
 
 <input
-    type="text"
-    name="phone"
-    placeholder="Phone Number"
+type="text"
+name="father"
+required
 >
+
+<label>Class</label>
+
+<input
+type="text"
+name="class"
+required
+>
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+>
+
+<label>Phone</label>
+
+<input
+type="text"
+name="phone"
+>
+
+<label>Address</label>
 
 <textarea
-    name="address"
-    placeholder="Address"
+name="address"
 ></textarea>
 
+<label>Description</label>
+
+<textarea
+name="description"
+placeholder="Write about student..."
+></textarea>
+
+<label>Student Photo</label>
+
 <input
-    type="file"
-    name="image"
-    accept="image/*"
-    required
+type="file"
+name="image"
+accept="image/*"
+required
 >
 
 <button type="submit">
-    Add Student
+Add Student
 </button>
 
 </form>

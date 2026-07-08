@@ -224,23 +224,31 @@ router.get("/add-student", (req, res) => {
 });
 
 router.post("/add-student", upload.single("image"), async (req, res) => {
-    try {
+
+    try{
 
         await Student.create({
-            name: req.body.name,
-            father: req.body.father,
-            email: req.body.email,
-            phone: req.body.phone,
-            address: req.body.address,
-            image: "/uploads/" + req.file.filename
+
+            name:req.body.name,
+            father:req.body.father,
+            class:req.body.class,
+            email:req.body.email,
+            phone:req.body.phone,
+            address:req.body.address,
+            description:req.body.description,
+            image:"/uploads/"+req.file.filename
+
         });
 
         res.redirect("/admin/students");
 
-    } catch (err) {
+    }catch(err){
+
         console.error(err);
         res.status(500).send(err.message);
+
     }
+
 });
 
 
@@ -259,6 +267,7 @@ router.get("/delete-student/:id", async (req, res) => {
 
 router.get("/edit-student/:id", async (req, res) => {
     try {
+
         const student = await Student.findById(req.params.id);
 
         if (!student) {
@@ -266,102 +275,237 @@ router.get("/edit-student/:id", async (req, res) => {
         }
 
         res.send(`
-            <h2>Edit Student</h2>
+<!DOCTYPE html>
+<html lang="en">
 
-            <form action="/admin/edit-student/${student._id}"
-                  method="POST"
-                  enctype="multipart/form-data">
+<head>
 
-                <input
-                    type="text"
-                    name="name"
-                    value="${student.name}"
-                    required
-                >
+<meta charset="UTF-8">
 
-                <br><br>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-                <input
-                    type="text"
-                    name="father"
-                    value="${student.father || ""}"
-                >
+<title>Edit Student</title>
 
-                <br><br>
+<style>
 
-                <input
-                    type="email"
-                    name="email"
-                    value="${student.email || ""}"
-                >
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-                <br><br>
+body{
+    background:#f5f5f5;
+    padding:30px;
+}
 
-                <input
-                    type="text"
-                    name="phone"
-                    value="${student.phone || ""}"
-                >
+.container{
+    max-width:650px;
+    margin:auto;
+    background:#fff;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
 
-                <br><br>
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
 
-                <textarea name="address">${student.address || ""}</textarea>
+label{
+    display:block;
+    margin-bottom:5px;
+    font-weight:bold;
+}
 
-                <br><br>
+input,
+textarea{
+    width:100%;
+    padding:10px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
 
-                <img src="${student.image}" width="120">
+textarea{
+    resize:vertical;
+    min-height:90px;
+}
 
-                <br><br>
+img{
+    width:120px;
+    height:120px;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid #ddd;
+    margin-bottom:15px;
+}
 
-                <input type="file" name="image">
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#007bff;
+    color:#fff;
+    font-size:16px;
+    border-radius:5px;
+    cursor:pointer;
+}
 
-                <br><br>
+button:hover{
+    background:#0056b3;
+}
 
-                <button type="submit">Update Student</button>
+</style>
 
-            </form>
-        `);
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Edit Student</h2>
+
+<form
+action="/admin/edit-student/${student._id}"
+method="POST"
+enctype="multipart/form-data"
+>
+
+<label>Student Name</label>
+
+<input
+type="text"
+name="name"
+value="${student.name || ""}"
+required
+>
+
+<label>Father Name</label>
+
+<input
+type="text"
+name="father"
+value="${student.father || ""}"
+>
+
+<label>Class</label>
+
+<input
+type="text"
+name="class"
+value="${student.class || ""}"
+>
+
+<label>Email</label>
+
+<input
+type="email"
+name="email"
+value="${student.email || ""}"
+>
+
+<label>Phone</label>
+
+<input
+type="text"
+name="phone"
+value="${student.phone || ""}"
+>
+
+<label>Address</label>
+
+<textarea
+name="address"
+>${student.address || ""}</textarea>
+
+<label>Description</label>
+
+<textarea
+name="description"
+>${student.description || ""}</textarea>
+
+<label>Current Photo</label>
+
+<br>
+
+<img src="${student.image}">
+
+<br><br>
+
+<label>Change Photo</label>
+
+<input
+type="file"
+name="image"
+accept="image/*"
+>
+
+<button type="submit">
+
+Update Student
+
+</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>
+`);
 
     } catch (err) {
+
         console.error(err);
         res.status(500).send(err.message);
+
     }
 });
 
-router.post(
-    "/edit-student/:id",
-    upload.single("image"),
-    async (req, res) => {
-        try {
-            const student = await Student.findById(req.params.id);
+router.post("/edit-student/:id", upload.single("image"), async (req, res) => {
 
-            if (!student) {
-                return res.send("Student not found");
-            }
+    try {
 
-            let image = student.image;
+        const student = await Student.findById(req.params.id);
 
-            if (req.file) {
-                image = "/uploads/" + req.file.filename;
-            }
-
-            await Student.findByIdAndUpdate(req.params.id, {
-                name: req.body.name,
-                father: req.body.father,
-                email: req.body.email,
-                phone: req.body.phone,
-                address: req.body.address,
-                image
-            });
-
-            res.redirect("/admin/students");
-
-        } catch (err) {
-            console.error(err);
-            res.status(500).send(err.message);
+        if (!student) {
+            return res.send("Student not found");
         }
+
+        let image = student.image;
+
+        if (req.file) {
+            image = "/uploads/" + req.file.filename;
+        }
+
+        await Student.findByIdAndUpdate(req.params.id, {
+
+            name: req.body.name,
+            father: req.body.father,
+            class: req.body.class,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            description: req.body.description,
+            image: image
+
+        });
+
+        res.redirect("/admin/students");
+
+    } catch (err) {
+
+        console.error(err);
+        res.status(500).send(err.message);
+
     }
-);
+
+});
 // =========================
 // Dashboard
 // =========================
