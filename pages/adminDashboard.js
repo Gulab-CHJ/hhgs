@@ -79,7 +79,17 @@ onkeyup="searchMenu()"
 
 <a href="/admin/delete-service">Delete Service</a>
 
+<hr>
 
+<a href="/admin/add-doctor">👨‍⚕️ Add Doctor</a>
+
+<a href="/admin/doctors">👨‍⚕️ Manage Doctors</a>
+
+<a href="/admin/edit-doctor">✏️ Edit Doctor</a>
+
+<a href="/admin/delete-doctor">🗑 Delete Doctor</a>
+
+<hr>
 
 
 <a href="/admin/categories">Categories</a>

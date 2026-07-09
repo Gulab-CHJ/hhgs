@@ -7,6 +7,7 @@ const Student = require("../models/Student");
 const Header = require("../views/component/header");
 const Footer = require("../views/component/footer");
 
+const Doctor = require("../models/Doctor");
 
 router.get("/", async (req, res) => {
 
@@ -14,9 +15,21 @@ router.get("/", async (req, res) => {
 
         const services = await Service.find();
         const students = await Student.find();
+        const doctors = await Doctor.find();
 
         let html = "";
         let studentHtml = "";
+        let doctorHtml = "";
+
+        //Dr information
+        doctors.forEach((doctor) => {
+            doctorHtml += `
+            <a href="/doctor/${doctor._id}" class="card">
+            <img src="${doctor.image}">
+            <h2>${doctor.name}</h2>
+            </a>
+           `;
+        });
 
         // Services
         services.forEach(service => {
@@ -159,6 +172,14 @@ router.get("/", async (req, res) => {
 <body>
 
 ${Header()}
+
+<h1 style="text-align:center;margin:40px 0 20px;">
+Our Doctors
+</h1>
+
+<div class="students">
+    ${doctorHtml}
+</div>
 
 <h1 style="text-align:center;margin:30px 0;">
 Our Services

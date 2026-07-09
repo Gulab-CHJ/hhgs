@@ -10,6 +10,8 @@ const AdminDashboard = require("../pages/adminDashboard");
 const AddService = require("../views/addservice");
 
 const upload = require("../config/multer");
+const AddDoctor = require("../pages/AddDoctor");
+const Doctor = require("../models/Doctor");
 
 const AddStudent = require("../pages/addStudent");
 
@@ -575,6 +577,52 @@ router.get("/service/:id", async (req, res) => {
         console.error(err);
         res.status(500).send(err.message);
     }
+});
+
+router.get("/add-doctor", (req, res) => {
+    res.send(AddDoctor());
+});
+
+router.get("/doctors", async (req, res) => {
+    const doctors = await Doctor.find();
+    res.send(DoctorList(doctors));
+});
+
+router.get("/edit-doctor", async (req, res) => {
+    const doctors = await Doctor.find();
+    res.send(EditDoctor(doctors));
+});
+
+router.get("/delete-doctor", async (req, res) => {
+    const doctors = await Doctor.find();
+    res.send(DeleteDoctor(doctors));
+});
+router.post("/add-doctor", upload.single("image"), async (req, res) => {
+
+    try {
+
+        const doctor = new Doctor({
+            name: req.body.name,
+            degree: req.body.degree,
+            specialization: req.body.specialization,
+            experience: req.body.experience,
+            hospital: req.body.hospital,
+            phone: req.body.phone,
+            email: req.body.email,
+            address: req.body.address,
+            image: "/uploads/" + req.file.filename,
+            description: req.body.description
+        });
+
+        await doctor.save();
+
+        res.redirect("/admin/dashboard");
+
+    } catch (err) {
+        console.log(err);
+        res.send(err.message);
+    }
+
 });
 // =========================
 // Dashboard

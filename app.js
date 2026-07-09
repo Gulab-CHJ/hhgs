@@ -16,10 +16,11 @@ app.use(
     "/uploads",
     express.static(path.join(__dirname, "storage", "uploads"))
 );
+const doctorRoutes = require("./routes/doctor");
 
-// Routes
-// const adminRoutes = require("./routes/adminLoginpage");
-// app.use("/admin", adminRoutes);
+app.use("/doctor", doctorRoutes);
+
+
 
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
