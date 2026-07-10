@@ -41,7 +41,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
         <a href="/store">
             <i class="fa-solid fa-store"></i>
-            HumanHealthy Store
+            HumanHealth Store
         </a>
 
         <a href="/contact">
