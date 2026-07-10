@@ -190,12 +190,12 @@ width:100%;
 
 <tr>
 <td>👨 Father Name</td>
-<td>${student.father || "-"}</td>
+<td>${student.fatherName || "-"}</td>
 </tr>
 
 <tr>
 <td>🎓 Class</td>
-<td>${student.class || "-"}</td>
+<td>${student.course || "-"}</td>
 </tr>
 
 <tr>
@@ -205,7 +205,7 @@ width:100%;
 
 <tr>
 <td>📱 Phone</td>
-<td>${student.phone || "-"}</td>
+<td>${student.mobile || "-"}</td>
 </tr>
 
 <tr>

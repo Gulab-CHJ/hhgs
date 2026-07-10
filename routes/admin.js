@@ -454,19 +454,18 @@ required
 >
 
 <label>Father Name</label>
-
 <input
 type="text"
-name="father"
-value="${student.father || ""}"
+name="fatherName"
+value="${student.fatherName || ""}"
 >
 
 <label>Class</label>
 
 <input
 type="text"
-name="class"
-value="${student.class || ""}"
+name="course"
+value="${student.course || ""}"
 >
 
 <label>Email</label>
@@ -477,12 +476,11 @@ name="email"
 value="${student.email || ""}"
 >
 
-<label>Phone</label>
-
+<label>Mobile</label>
 <input
 type="text"
-name="phone"
-value="${student.phone || ""}"
+name="mobile"
+value="${student.mobile || ""}"
 >
 
 <label>Address</label>
