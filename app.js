@@ -1,4 +1,8 @@
+require("dotenv").config();
+require("./config/database");
+
 const express = require("express");
+const path = require("path");
 
 const app = express();
 
@@ -6,16 +10,21 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Home Route
-app.get("/", (req, res) => {
-    res.send("Welcome to Express Server");
-});
+// Static folders
+app.use(express.static("public"));
+app.use("/uploads", express.static(path.join(__dirname, "storage/uploads")));
+
+// Routes
+app.use("/", require("./routes/home"));
+app.use("/admin", require("./routes/admin"));
+app.use("/doctor", require("./routes/doctor"));
+app.use("/admin/change-password", require("./routes/changePassword"));
 
 // Server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Server Running: http://localhost:${PORT}`);
+    console.log(`✅ Server Running: http://localhost:${PORT}`);
 });
 
 
