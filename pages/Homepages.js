@@ -1,4 +1,12 @@
-function Home() {
+const Header = require("../views/component/headercomponent");
+const Footer = require("../views/component/footercomponent");
+
+const Banner = require("../views/component/bannercomponent");
+const DoctorSection = require("../views/component/doctorcomponent");
+const ServiceSection = require("../views/component/servicecomponent");
+const StudentSection = require("../views/component/studentcomponent");
+
+function Home({ banner, doctors, services, students }) {
     return `
 <!DOCTYPE html>
 <html>
@@ -7,8 +15,20 @@ function Home() {
 </head>
 <body>
 
-<h1>Welcome to My Website</h1>
-<p>Hello World</p>
+${Header()}
+
+${Banner(banner)}
+
+<h1>Our Doctors</h1>
+${DoctorSection(doctors)}
+
+<h1>Our Services</h1>
+${ServiceSection(services)}
+
+<h1>Our Students</h1>
+${StudentSection(students)}
+
+${Footer()}
 
 </body>
 </html>

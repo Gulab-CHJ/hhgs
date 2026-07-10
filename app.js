@@ -1,14 +1,51 @@
+// const express = require("express");
+// const Home = require("./pages/Homepages");
+
+// const app = express();
+
+// app.get("/", (req, res) => {
+//     res.send(Home());
+
+// });
+
+// app.listen(3000, () => {
+//     console.log("Server Running");
+// });
+
 const express = require("express");
-const Home = require("./pages/Home");
+const path = require("path");
+
+require("./config/database"); // agar database file hai
 
 const app = express();
 
-app.get("/", (req, res) => {
-    res.send(Home());
-});
+// Body Parser
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.listen(3000, () => {
-    console.log("Server Running");
+// Static Folder
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "storage/uploads")));
+
+// Routes
+const homeRoutes = require("./routes/homeroutes");
+// const adminRoutes = require("./routes/admin");
+// const doctorRoutes = require("./routes/doctor");
+// const studentRoutes = require("./routes/student");
+// const serviceRoutes = require("./routes/service");
+
+// Use Routes
+app.use("/", homeRoutes);
+// app.use("/", adminRoutes);
+// app.use("/", doctorRoutes);
+// app.use("/", studentRoutes);
+// app.use("/", serviceRoutes);
+
+// Server
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`✅ Server Running: http://localhost:${PORT}`);
 });
 
 
