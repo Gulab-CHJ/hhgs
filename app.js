@@ -1,32 +1,9 @@
-require("dotenv").config();
-require("./config/database");
-
 const express = require("express");
-const path = require("path");
-
 const app = express();
 
-// Middleware
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.get("/", (req, res) => res.send("Hello World"));
 
-// Static folders
-app.use(express.static("public"));
-app.use("/uploads", express.static(path.join(__dirname, "storage/uploads")));
-
-// Routes
-app.use("/", require("./routes/home"));
-app.use("/admin", require("./routes/admin"));
-app.use("/doctor", require("./routes/doctor"));
-app.use("/admin/change-password", require("./routes/changePassword"));
-
-// Server
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log(`✅ Server Running: http://localhost:${PORT}`);
-});
-
+app.listen(3000, () => console.log("Server Running"));
 
 
 
