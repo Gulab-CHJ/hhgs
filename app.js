@@ -1,8 +1,4 @@
-// require("dotenv").config();
-// require("./config/database");
-
 const express = require("express");
-const path = require("path");
 
 const app = express();
 
@@ -10,39 +6,75 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Static files
-app.use(express.static("public"));
-app.use(
-    "/uploads",
-    express.static(path.join(__dirname, "storage", "uploads"))
-);
-const doctorRoutes = require("./routes/doctor");
-
-app.use("/doctor", doctorRoutes);
-
-
-
-// const adminRoutes = require("./routes/admin");
-// app.use("/admin", adminRoutes);
-
 // Home Route
-const homeRoutes = require("./routes/home");
+app.get("/", (req, res) => {
+    res.send("Welcome to Express Server");
+});
 
-app.use("/", homeRoutes);
-
-//===============================
-//  Change Password Page
-// ===============================
-const changePasswordRoutes = require("./routes/changePassword");
-
-app.use("/admin/change-password", changePasswordRoutes);
-
-// Start Server
-const PORT = process.env.PORT || 3000;
+// Server
+const PORT = 3000;
 
 app.listen(PORT, () => {
-    console.log(`✅ Server Running: http://localhost:${PORT}`);
+    console.log(`Server Running: http://localhost:${PORT}`);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // require("dotenv").config();
+// // require("./config/database");
+
+// const express = require("express");
+// const path = require("path");
+
+// const app = express();
+
+// // Middleware
+// app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+
+// // Static files
+// app.use(express.static("public"));
+// app.use(
+//     "/uploads",
+//     express.static(path.join(__dirname, "storage", "uploads"))
+// );
+// const doctorRoutes = require("./routes/doctor");
+
+// app.use("/doctor", doctorRoutes);
+
+
+
+// // const adminRoutes = require("./routes/admin");
+// // app.use("/admin", adminRoutes);
+
+// // Home Route
+// const homeRoutes = require("./routes/home");
+
+// app.use("/", homeRoutes);
+
+// //===============================
+// //  Change Password Page
+// // ===============================
+// const changePasswordRoutes = require("./routes/changePassword");
+
+// app.use("/admin/change-password", changePasswordRoutes);
+
+// // Start Server
+// const PORT = process.env.PORT || 3000;
+
+// app.listen(PORT, () => {
+//     console.log(`✅ Server Running: http://localhost:${PORT}`);
+// });
 
 
 
