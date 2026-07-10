@@ -233,13 +233,13 @@ router.post("/add-student", upload.single("image"), async (req, res) => {
 
         const student = new Student({
             name: req.body.name,
-            father: req.body.father,
-            class: req.body.class,
+            fatherName: req.body.fatherName,
+            course: req.body.course,
+            mobile: req.body.mobile,
             email: req.body.email,
-            phone: req.body.phone,
             address: req.body.address,
             description: req.body.description,
-            image: "/uploads/" + req.file.filename
+            image: req.file ? "/uploads/" + req.file.filename : ""
         });
 
         await student.save();
