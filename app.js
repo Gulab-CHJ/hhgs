@@ -1,7 +1,5 @@
-
-
 const express = require("express");
-const Home = require("./pages/home");
+const Home = require("./pages/Home");
 
 const app = express();
 
