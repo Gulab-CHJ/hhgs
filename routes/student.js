@@ -176,48 +176,6 @@ width:100%;
 
 <div class="container">
 
-<img src="${student.image}" alt="${student.name}">
-
-<h2>${student.name}</h2>
-
-<table>
-
-<tr>
-<td><b>Father Name</b></td>
-<td>${student.fatherName}</td>
-</tr>
-
-<tr>
-<td><b>Course</b></td>
-<td>${student.course}</td>
-</tr>
-
-<tr>
-<td><b>Mobile</b></td>
-<td>${student.mobile}</td>
-</tr>
-
-<tr>
-<td><b>Email</b></td>
-<td>${student.email}</td>
-</tr>
-
-<tr>
-<td><b>Address</b></td>
-<td>${student.address}</td>
-</tr>
-
-<tr>
-<td><b>Description</b></td>
-<td>${student.description}</td>
-</tr>
-
-</table>
-
-<a href="/" class="back">⬅ Back</a>
-
-</div><div class="container">
-
 <div class="profile">
 
 <img src="${student.image}" alt="${student.name}">
@@ -231,32 +189,32 @@ width:100%;
 <table>
 
 <tr>
-<td>Father Name</td>
-<td>${student.fatherName || "-"}</td>
+<td>👨 Father Name</td>
+<td>${student.father || "-"}</td>
 </tr>
 
 <tr>
-<td>Course</td>
-<td>${student.course || "-"}</td>
+<td>🎓 Class</td>
+<td>${student.class || "-"}</td>
 </tr>
 
 <tr>
-<td>Mobile</td>
-<td>${student.mobile || "-"}</td>
-</tr>
-
-<tr>
-<td>Email</td>
+<td>📧 Email</td>
 <td>${student.email || "-"}</td>
 </tr>
 
 <tr>
-<td>Address</td>
+<td>📱 Phone</td>
+<td>${student.phone || "-"}</td>
+</tr>
+
+<tr>
+<td>📍 Address</td>
 <td>${student.address || "-"}</td>
 </tr>
 
 <tr>
-<td>Description</td>
+<td>📝 Description</td>
 <td>${student.description || "-"}</td>
 </tr>
 

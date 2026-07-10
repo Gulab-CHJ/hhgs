@@ -1219,30 +1219,123 @@ router.get("/student/:id", async (req, res) => {
 
 <style>
 
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
 body{
-    font-family:Arial;
-    background:#f5f5f5;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     padding:30px;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
 }
 
 .box{
-    max-width:700px;
-    margin:auto;
-    background:#fff;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 2px 10px rgba(0,0,0,.15);
+    width:100%;
+    max-width:800px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:25px;
+    padding:40px;
     text-align:center;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
+    animation:fadeIn .5s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
 img{
-    width:150px;
-    border-radius:8px;
-    margin-bottom:20px;
+    width:220px;
+    height:220px;
+    object-fit:cover;
+    border-radius:20px;
+    border:5px solid rgba(255,255,255,.9);
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
+    margin-bottom:25px;
+    transition:.35s;
+}
+
+img:hover{
+    transform:scale(1.05);
+}
+
+h2{
+    color:#fff;
+    font-size:34px;
+    margin-bottom:25px;
 }
 
 p{
-    margin:10px 0;
+    color:#e5e7eb;
+    font-size:17px;
+    line-height:1.8;
+    background:rgba(255,255,255,.08);
+    padding:18px 22px;
+    border-radius:15px;
+    margin:15px 0;
+    text-align:left;
+}
+
+strong{
+    color:#93c5fd;
+}
+
+a{
+    display:inline-block;
+    margin-top:30px;
+    padding:14px 35px;
+    border-radius:50px;
+    text-decoration:none;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:#fff;
+    font-weight:700;
+    transition:.3s;
+    box-shadow:0 10px 25px rgba(37,99,235,.45);
+}
+
+a:hover{
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(37,99,235,.6);
+}
+
+@media(max-width:768px){
+
+body{
+    padding:20px;
+}
+
+.box{
+    padding:25px;
+}
+
+img{
+    width:170px;
+    height:170px;
+}
+
+h2{
+    font-size:28px;
+}
+
+p{
+    font-size:15px;
+}
+
 }
 
 </style>

@@ -14,64 +14,131 @@ function AddStudent() {
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
 }
 
 body{
-    background:#f4f6f9;
-    padding:30px;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+    background:linear-gradient(135deg,#1e3c72,#2a5298,#4facfe);
 }
 
 .container{
-    max-width:650px;
-    margin:auto;
-    background:#fff;
-    padding:25px;
-    border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,.15);
+    width:100%;
+    max-width:700px;
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:35px;
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.25),
+        inset 0 1px 1px rgba(255,255,255,.5);
+    animation:fadeIn .5s ease;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
 h2{
     text-align:center;
-    margin-bottom:25px;
-    color:#333;
+    margin-bottom:30px;
+    font-size:30px;
+    color:#1d3557;
+    font-weight:700;
 }
 
 label{
     display:block;
-    margin-bottom:6px;
-    font-weight:bold;
-    color:#444;
+    margin-bottom:8px;
+    color:#333;
+    font-size:15px;
+    font-weight:600;
 }
 
 input,
 textarea{
     width:100%;
-    padding:12px;
-    margin-bottom:18px;
-    border:1px solid #ccc;
-    border-radius:6px;
+    padding:14px 16px;
+    margin-bottom:20px;
+    border:2px solid #e6e6e6;
+    border-radius:12px;
     font-size:15px;
+    outline:none;
+    transition:.3s;
+    background:#fafafa;
 }
 
 textarea{
+    min-height:110px;
     resize:vertical;
-    min-height:100px;
+}
+
+input:focus,
+textarea:focus{
+    border-color:#4facfe;
+    background:#fff;
+    box-shadow:0 0 15px rgba(79,172,254,.25);
+}
+
+input[type=file]{
+    padding:12px;
+    background:#fff;
+    cursor:pointer;
 }
 
 button{
     width:100%;
-    padding:14px;
+    padding:16px;
     border:none;
-    background:#0d6efd;
+    border-radius:14px;
+    background:linear-gradient(135deg,#4facfe,#0066ff);
     color:#fff;
-    font-size:16px;
-    border-radius:6px;
+    font-size:17px;
+    font-weight:700;
     cursor:pointer;
+    transition:.3s;
+    letter-spacing:.5px;
+    box-shadow:0 10px 25px rgba(0,102,255,.35);
 }
 
 button:hover{
-    background:#0b5ed7;
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(0,102,255,.45);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+::placeholder{
+    color:#999;
+}
+
+@media(max-width:768px){
+
+body{
+    padding:20px;
+}
+
+.container{
+    padding:25px;
+}
+
+h2{
+    font-size:25px;
+}
+
 }
 
 </style>

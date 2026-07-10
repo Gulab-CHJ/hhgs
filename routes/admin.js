@@ -18,6 +18,7 @@ const AddBanner = require("../pages/AddBanner");
 const Banner = require("../models/Banner");
 
 const ManageBanner = require("../pages/ManageBanner");
+const StudentCardClick = require("../pages/scardclick");
 
 // =========================
 // Login Page
@@ -228,31 +229,27 @@ router.get("/add-student", (req, res) => {
 });
 
 router.post("/add-student", upload.single("image"), async (req, res) => {
+    try {
 
-    try{
-
-        await Student.create({
-
-            name:req.body.name,
-            father:req.body.father,
-            class:req.body.class,
-            email:req.body.email,
-            phone:req.body.phone,
-            address:req.body.address,
-            description:req.body.description,
-            image:"/uploads/"+req.file.filename
-
+        const student = new Student({
+            name: req.body.name,
+            father: req.body.father,
+            class: req.body.class,
+            email: req.body.email,
+            phone: req.body.phone,
+            address: req.body.address,
+            description: req.body.description,
+            image: "/uploads/" + req.file.filename
         });
+
+        await student.save();
 
         res.redirect("/admin/students");
 
-    }catch(err){
-
+    } catch (err) {
         console.error(err);
         res.status(500).send(err.message);
-
     }
-
 });
 
 
@@ -297,70 +294,138 @@ content="width=device-width, initial-scale=1.0">
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:"Segoe UI",sans-serif;
 }
 
 body{
-    background:#f5f5f5;
-    padding:30px;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
 }
 
 .container{
-    max-width:650px;
-    margin:auto;
-    background:#fff;
-    padding:25px;
-    border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    width:100%;
+    max-width:760px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:25px;
+    padding:35px;
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
 }
 
 h2{
     text-align:center;
-    margin-bottom:20px;
+    color:#fff;
+    font-size:32px;
+    margin-bottom:30px;
+    font-weight:700;
 }
 
 label{
     display:block;
-    margin-bottom:5px;
-    font-weight:bold;
+    color:#fff;
+    margin-bottom:8px;
+    font-size:15px;
+    font-weight:600;
 }
 
 input,
 textarea{
     width:100%;
-    padding:10px;
-    margin-bottom:15px;
-    border:1px solid #ccc;
-    border-radius:5px;
+    padding:15px;
+    margin-bottom:20px;
+    border:none;
+    outline:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.15);
+    color:#fff;
+    font-size:15px;
+    transition:.3s;
+}
+
+input::placeholder,
+textarea::placeholder{
+    color:#ddd;
+}
+
+input:focus,
+textarea:focus{
+    background:rgba(255,255,255,.22);
+    box-shadow:0 0 15px rgba(37,99,235,.5);
 }
 
 textarea{
     resize:vertical;
-    min-height:90px;
+    min-height:120px;
+}
+
+input[type=file]{
+    padding:12px;
+    cursor:pointer;
 }
 
 img{
-    width:120px;
-    height:120px;
+    display:block;
+    width:170px;
+    height:170px;
+    margin:15px auto;
     object-fit:cover;
-    border-radius:8px;
-    border:1px solid #ddd;
-    margin-bottom:15px;
+    border-radius:50%;
+    border:5px solid #fff;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);
+    transition:.3s;
+}
+
+img:hover{
+    transform:scale(1.05);
 }
 
 button{
     width:100%;
-    padding:12px;
+    padding:16px;
     border:none;
-    background:#007bff;
+    border-radius:50px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
     color:#fff;
-    font-size:16px;
-    border-radius:5px;
+    font-size:17px;
+    font-weight:700;
     cursor:pointer;
+    transition:.3s;
+    box-shadow:0 10px 25px rgba(37,99,235,.45);
 }
 
 button:hover{
-    background:#0056b3;
+    transform:translateY(-3px);
+    box-shadow:0 15px 35px rgba(37,99,235,.6);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+@media(max-width:768px){
+
+body{
+    padding:20px;
+}
+
+.container{
+    padding:25px;
+}
+
+h2{
+    font-size:26px;
+}
+
+img{
+    width:130px;
+    height:130px;
+}
+
 }
 
 </style>
@@ -716,6 +781,8 @@ router.get("/manage-banner", async (req, res) => {
     }
 
 });
+
+
 // =========================
 // Dashboard
 // =========================
