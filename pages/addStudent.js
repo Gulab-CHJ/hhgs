@@ -36,18 +36,6 @@ body{
     box-shadow:
         0 20px 50px rgba(0,0,0,.25),
         inset 0 1px 1px rgba(255,255,255,.5);
-    animation:fadeIn .5s ease;
-}
-
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(25px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
 }
 
 h2{
@@ -107,22 +95,10 @@ button{
     font-size:17px;
     font-weight:700;
     cursor:pointer;
-    transition:.3s;
-    letter-spacing:.5px;
-    box-shadow:0 10px 25px rgba(0,102,255,.35);
 }
 
 button:hover{
-    transform:translateY(-3px);
-    box-shadow:0 15px 35px rgba(0,102,255,.45);
-}
-
-button:active{
-    transform:scale(.98);
-}
-
-::placeholder{
-    color:#999;
+    opacity:.9;
 }
 
 @media(max-width:768px){
@@ -133,10 +109,6 @@ body{
 
 .container{
     padding:25px;
-}
-
-h2{
-    font-size:25px;
 }
 
 }
@@ -158,58 +130,56 @@ enctype="multipart/form-data"
 >
 
 <label>Student Name</label>
-
 <input
 type="text"
 name="name"
+placeholder="Enter Student Name"
 required
 >
 
 <label>Father Name</label>
-
 <input
 type="text"
-name="father"
+name="fatherName"
+placeholder="Enter Father Name"
 required
 >
 
-<label>Class</label>
-
+<label>Course</label>
 <input
 type="text"
-name="class"
+name="course"
+placeholder="Enter Course"
 required
 >
 
 <label>Email</label>
-
 <input
 type="email"
 name="email"
+placeholder="Enter Email"
 >
 
-<label>Phone</label>
-
+<label>Mobile</label>
 <input
 type="text"
-name="phone"
+name="mobile"
+placeholder="Enter Mobile Number"
 >
 
 <label>Address</label>
-
 <textarea
 name="address"
+placeholder="Enter Address"
 ></textarea>
 
 <label>Description</label>
-
 <textarea
 name="description"
 placeholder="Write about student..."
 ></textarea>
 
 <label>Student Photo</label>
-
 <input
 type="file"
 name="image"
