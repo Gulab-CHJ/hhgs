@@ -22,8 +22,8 @@ app.use("/doctor", doctorRoutes);
 
 
 
-const adminRoutes = require("./routes/admin");
-app.use("/admin", adminRoutes);
+// const adminRoutes = require("./routes/admin");
+// app.use("/admin", adminRoutes);
 
 // Home Route
 const homeRoutes = require("./routes/home");
