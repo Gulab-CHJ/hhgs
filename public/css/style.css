@@ -1,5 +1,6 @@
 /* Import CSS Files */
 @import url("./headercomponent.css");
+@import url("./servicecomponent.css");
 @import url("./hero.css");
 @import url("./features.css");
 @import url("./footer.css");
