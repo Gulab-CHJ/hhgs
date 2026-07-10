@@ -22,6 +22,11 @@ const StudentCardClick = require("../pages/scardclick");
 
 const EditStudent = require("../pages/EditStudent");
 
+const DoctorList = require("../pages/DoctorList");
+const EditDoctor = require("../pages/EditDoctor");
+const DeleteDoctor = require("../pages/DeleteDoctor");
+const EditBanner = require("../pages/EditBanner");
+
 // =========================
 // Login Page
 // =========================
