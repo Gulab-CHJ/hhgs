@@ -1,3 +1,28 @@
+function Home() {
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+
+<h1>Welcome to My Website</h1>
+<p>Hello World</p>
+
+</body>
+</html>
+`;
+}
+
+module.exports = Home;
+
+
+
+
+
+
+
 // const express = require("express");
 // const router = express.Router();
 // const BannerModel = require("../models/Banner");
