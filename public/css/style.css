@@ -1,16 +1,16 @@
-
-/* Import Files */
-@import url("./header.css");
+/* Import CSS Files */
+@import url("./headercomponent.css");
 @import url("./hero.css");
 @import url("./features.css");
 @import url("./footer.css");
 @import url("./responsive.css");
 @import url("./admin.css");
-@import url("./banner.css");   /* Banner CSS */
+@import url("./banner.css");
 
 /* Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
+/* Reset */
 *{
     margin:0;
     padding:0;
@@ -20,4 +20,55 @@
 
 html{
     scroll-behavior:smooth;
+}
+
+body{
+    background:#f8fafc;
+    color:#1e293b;
+    overflow-x:hidden;
+    line-height:1.6;
+}
+
+/* Common Container */
+.container{
+    width:90%;
+    max-width:1400px;
+    margin:auto;
+}
+
+/* Common Button */
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 24px;
+    border:none;
+    border-radius:10px;
+    background:#2563eb;
+    color:#fff;
+    text-decoration:none;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn:hover{
+    background:#1d4ed8;
+    transform:translateY(-2px);
+}
+
+/* Images */
+img{
+    max-width:100%;
+    display:block;
+}
+
+/* Links */
+a{
+    text-decoration:none;
+}
+
+/* Lists */
+ul{
+    list-style:none;
 }
