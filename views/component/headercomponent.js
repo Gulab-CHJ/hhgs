@@ -26,12 +26,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
         <a href="/student-login">
             <i class="fa-solid fa-user-graduate"></i>
-            Student Login
+            Student
         </a>
 
         <a href="/doctor-login">
             <i class="fa-solid fa-user-doctor"></i>
-            Doctor Login
+            Doctor
         </a>
 
         <a href="/services">
@@ -41,7 +41,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
         <a href="/store">
             <i class="fa-solid fa-store"></i>
-            HumanHealth Store
+            HumanHealth
         </a>
 
         <a href="/contact">
