@@ -537,7 +537,6 @@ Update Student
 });
 
 router.post("/edit-student/:id", upload.single("image"), async (req, res) => {
-
     try {
 
         const student = await Student.findById(req.params.id);
@@ -553,27 +552,22 @@ router.post("/edit-student/:id", upload.single("image"), async (req, res) => {
         }
 
         await Student.findByIdAndUpdate(req.params.id, {
-
             name: req.body.name,
-            father: req.body.father,
-            class: req.body.class,
+            fatherName: req.body.fatherName,
+            course: req.body.course,
+            mobile: req.body.mobile,
             email: req.body.email,
-            phone: req.body.phone,
             address: req.body.address,
             description: req.body.description,
             image: image
-
         });
 
         res.redirect("/admin/students");
 
     } catch (err) {
-
         console.error(err);
         res.status(500).send(err.message);
-
     }
-
 });
 router.get("/service/:id", async (req, res) => {
     try {

@@ -1350,13 +1350,13 @@ p{
 
 <h2>${student.name}</h2>
 
-<p><b>Father:</b> ${student.father || ""}</p>
+<p><b>Father Name:</b> ${student.fatherName || ""}</p>
 
-<p><b>Class:</b> ${student.class || ""}</p>
+<p><b>Course:</b> ${student.course || ""}</p>
 
 <p><b>Email:</b> ${student.email || ""}</p>
 
-<p><b>Phone:</b> ${student.phone || ""}</p>
+<p><b>Mobile:</b> ${student.mobile || ""}</p>
 
 <p><b>Address:</b> ${student.address || ""}</p>
 
