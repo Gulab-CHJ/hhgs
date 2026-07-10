@@ -536,13 +536,23 @@ router.get("/delete-student/:id", async (req, res) => {
 //     }
 // });
 
-const student = await Student.findById(req.params.id);
 
-if (!student) {
-    return res.send("Student not found");
-}
+router.get("/edit-student/:id", async (req, res) => {
+    try {
 
-res.send(EditStudent(student));
+        const student = await Student.findById(req.params.id);
+
+        if (!student) {
+            return res.send("Student not found");
+        }
+
+        res.send(EditStudent(student));
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
 
 router.post("/edit-student/:id", upload.single("image"), async (req, res) => {
     try {
