@@ -14,8 +14,10 @@ const AddDoctor = require("../pages/AddDoctor");
 const Doctor = require("../models/Doctor");
 
 const AddStudent = require("../pages/addStudent");
+const AddBanner = require("../pages/AddBanner");
+const Banner = require("../models/Banner");
 
-
+const ManageBanner = require("../pages/ManageBanner");
 
 // =========================
 // Login Page
@@ -621,6 +623,96 @@ router.post("/add-doctor", upload.single("image"), async (req, res) => {
     } catch (err) {
         console.log(err);
         res.send(err.message);
+    }
+
+});
+router.get("/banners", async (req, res) => {
+
+    const banners = await Banner.find();
+
+    res.send(ManageBanner(banners));
+
+});
+
+router.get("/add-banner", (req, res) => {
+    res.send(AddBanner());
+});
+
+router.post("/add-banner", upload.single("image"), async (req, res) => {
+
+    const banner = new Banner({
+        title: req.body.title,
+        image: "/uploads/" + req.file.filename,
+        link: req.body.link
+    });
+
+    await banner.save();
+
+    res.redirect("/admin/dashboard");
+});
+
+router.get("/delete-banner/:id", async (req,res)=>{
+
+await Banner.findByIdAndDelete(req.params.id);
+
+res.redirect("/admin/manage-banner");
+
+});
+
+router.get("/activate-banner/:id", async (req,res)=>{
+
+await Banner.findByIdAndUpdate(req.params.id,{
+active:true
+});
+
+res.redirect("/admin/manage-banner");
+
+});
+router.get("/deactivate-banner/:id", async (req,res)=>{
+
+await Banner.findByIdAndUpdate(req.params.id,{
+active:false
+});
+
+res.redirect("/admin/manage-banner");
+
+});
+router.get("/edit-banner/:id", async(req,res)=>{
+
+const banner=await Banner.findById(req.params.id);
+
+res.send(EditBanner(banner));
+
+});
+router.post("/edit-banner/:id",upload.single("image"),async(req,res)=>{
+
+let data={
+title:req.body.title,
+link:req.body.link
+};
+
+if(req.file){
+data.image="/uploads/"+req.file.filename;
+}
+
+await Banner.findByIdAndUpdate(req.params.id,data);
+
+res.redirect("/admin/manage-banner");
+
+});
+router.get("/manage-banner", async (req, res) => {
+
+    try {
+
+        const banners = await Banner.find();
+
+        res.send(ManageBanner(banners));
+
+    } catch (err) {
+
+        console.log(err);
+        res.send(err.message);
+
     }
 
 });

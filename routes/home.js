@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-
+const BannerModel = require("../models/Banner");
+const BannerComponent = require("../views/component/bannerHtml");
 const Service = require("../models/Service");
 const Student = require("../models/Student");
-
 const Header = require("../views/component/header");
 const Footer = require("../views/component/footer");
 
@@ -16,10 +16,23 @@ router.get("/", async (req, res) => {
         const services = await Service.find();
         const students = await Student.find();
         const doctors = await Doctor.find();
+        const banner = await BannerModel.findOne();
 
         let html = "";
         let studentHtml = "";
         let doctorHtml = "";
+
+        let bannerHtml = "";
+
+if (banner) {
+    bannerHtml = `
+    <div class="banner">
+        <a href="${banner.link}" target="_blank">
+            <img src="${banner.image}" alt="${banner.title}">
+        </a>
+    </div>
+    `;
+}
 
         //Dr information
         doctors.forEach((doctor) => {
@@ -172,6 +185,8 @@ router.get("/", async (req, res) => {
 <body>
 
 ${Header()}
+
+${bannerHtml}
 
 <h1 style="text-align:center;margin:40px 0 20px;">
 Our Doctors

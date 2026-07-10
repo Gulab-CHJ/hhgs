@@ -92,6 +92,7 @@ onkeyup="searchMenu()"
 <hr>
 
 
+
 <a href="/admin/categories">Categories</a>
 
 <a href="/admin/users">Users</a>
@@ -100,6 +101,8 @@ onkeyup="searchMenu()"
 
 <a href="/">Home</a>
 <a href="/admin/students">👨‍🎓 Students</a>
+<a href="/admin/add-banner">🖼️ Add Banner</a>
+<a href="/admin/banners">🖼️ Manage Banner</a>
 
 </div>
 
