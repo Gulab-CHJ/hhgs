@@ -22,54 +22,151 @@ router.get("/:id", async (req, res) => {
 <title>${student.name}</title>
 
 <style>
-body{
-    font-family:Arial,sans-serif;
-    background:#f5f5f5;
+*{
     margin:0;
-    padding:20px;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:30px;
 }
 
 .container{
-    max-width:700px;
-    margin:auto;
-    background:#fff;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
+    width:100%;
+    max-width:900px;
+    background:rgba(255,255,255,.12);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:25px;
+    padding:40px;
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
 }
 
-img{
-    width:150px;
-    height:150px;
-    object-fit:cover;
-    border-radius:10px;
-    display:block;
-    margin:auto;
-}
-
-h2{
+.profile{
     text-align:center;
+    margin-bottom:30px;
+}
+
+.profile img{
+    width:170px;
+    height:170px;
+    object-fit:cover;
+    border-radius:50%;
+    border:6px solid #fff;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+    transition:.4s;
+}
+
+.profile img:hover{
+    transform:scale(1.05);
+}
+
+.profile h2{
+    color:#fff;
+    margin-top:20px;
+    font-size:34px;
+}
+
+.verify{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 18px;
+    background:#22c55e;
+    color:#fff;
+    border-radius:30px;
+    font-size:14px;
 }
 
 table{
     width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
+    border-collapse:separate;
+    border-spacing:0 15px;
+}
+
+tr{
+    background:rgba(255,255,255,.08);
+    transition:.3s;
+}
+
+tr:hover{
+    transform:translateY(-5px);
+    background:rgba(255,255,255,.14);
 }
 
 td{
-    padding:10px;
-    border-bottom:1px solid #ddd;
+    padding:18px;
+    color:#fff;
+}
+
+td:first-child{
+    width:230px;
+    color:#93c5fd;
+    font-weight:bold;
 }
 
 .back{
-    display:inline-block;
-    margin-top:20px;
+    display:block;
+    width:220px;
+    margin:35px auto 0;
+    text-align:center;
     text-decoration:none;
-    background:#007bff;
     color:#fff;
-    padding:10px 20px;
-    border-radius:5px;
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    padding:15px;
+    border-radius:50px;
+    font-weight:bold;
+    transition:.35s;
+}
+
+.back:hover{
+    transform:translateY(-4px);
+    box-shadow:0 15px 35px rgba(37,99,235,.45);
+}
+
+@media(max-width:768px){
+
+.container{
+padding:25px;
+}
+
+.profile img{
+width:130px;
+height:130px;
+}
+
+.profile h2{
+font-size:28px;
+}
+
+table,
+tbody,
+tr,
+td{
+display:block;
+width:100%;
+}
+
+tr{
+margin-bottom:15px;
+border-radius:15px;
+overflow:hidden;
+}
+
+td:first-child{
+background:rgba(255,255,255,.08);
+}
+
+.back{
+width:100%;
+}
+
 }
 </style>
 
@@ -113,6 +210,54 @@ td{
 <tr>
 <td><b>Description</b></td>
 <td>${student.description}</td>
+</tr>
+
+</table>
+
+<a href="/" class="back">⬅ Back</a>
+
+</div><div class="container">
+
+<div class="profile">
+
+<img src="${student.image}" alt="${student.name}">
+
+<h2>${student.name}</h2>
+
+<div class="verify">✔ Verified Student</div>
+
+</div>
+
+<table>
+
+<tr>
+<td>Father Name</td>
+<td>${student.fatherName || "-"}</td>
+</tr>
+
+<tr>
+<td>Course</td>
+<td>${student.course || "-"}</td>
+</tr>
+
+<tr>
+<td>Mobile</td>
+<td>${student.mobile || "-"}</td>
+</tr>
+
+<tr>
+<td>Email</td>
+<td>${student.email || "-"}</td>
+</tr>
+
+<tr>
+<td>Address</td>
+<td>${student.address || "-"}</td>
+</tr>
+
+<tr>
+<td>Description</td>
+<td>${student.description || "-"}</td>
 </tr>
 
 </table>
