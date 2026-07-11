@@ -36,7 +36,7 @@ const doctorRoutes = require("./routes/doctorroutes");
 
 // Use Routes
 app.use("/", homeRoutes);
-app.use("/", adminRoutes);
+app.use("/admin", adminRoutes);
 app.use("/", doctorRoutes);
 // app.use("/", studentRoutes);
 // app.use("/", serviceRoutes);

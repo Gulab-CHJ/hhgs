@@ -1,11 +1,37 @@
+// const express = require("express");
+// const router = express.Router();
+
+// const AdminLogin = require("../pages/adminLoginpages");
+
+// router.get("/admin", (req, res) => {
+//     res.send(AdminLogin());
+// });
+
+// module.exports = router;
+
+// router.post("/admin/login", async (req, res) => {
+
+//     const { email, password } = req.body;
+
+//     console.log(email, password);
+
+//     // Login logic
+//     res.send("Login Success");
+
+// });
+
+// module.exports = router;
+
+
 const express = require("express");
 const router = express.Router();
 
-const AdminLogin = require("../pages/adminLoginpages");
-
-router.get("/admin", (req, res) => {
-    res.send(AdminLogin());
-});
+router.use("/", require("./admin/login"));
+// router.use("/", require("./admin/dashboard"));
+// router.use("/", require("./admin/students"));
+// router.use("/", require("./admin/doctors"));
+// router.use("/", require("./admin/services"));
+// router.use("/", require("./admin/banners"));
 
 module.exports = router;
 
