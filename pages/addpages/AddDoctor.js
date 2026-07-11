@@ -175,8 +175,8 @@
 // module.exports = AddDoctor;
 
 
-const Header = require("../views/component/headercomponent");
-const Footer = require("../views/component/footercomponent");
+const Header = require("../../views/component/headercomponent");
+const Footer = require("../../views/component/footercomponent");
 
 function AddDoctor() {
 
