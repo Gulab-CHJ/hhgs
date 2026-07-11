@@ -29,14 +29,14 @@ app.use("/uploads", express.static(path.join(__dirname, "storage/uploads")));
 
 // Routes
 const homeRoutes = require("./routes/homeroutes");
-// const adminRoutes = require("./routes/admin");
+const adminRoutes = require("./routes/admin");
 const doctorRoutes = require("./routes/doctorroutes");
 // const studentRoutes = require("./routes/student");
 // const serviceRoutes = require("./routes/service");
 
 // Use Routes
 app.use("/", homeRoutes);
-// app.use("/", adminRoutes);
+app.use("/", adminRoutes);
 app.use("/", doctorRoutes);
 // app.use("/", studentRoutes);
 // app.use("/", serviceRoutes);

@@ -1,3 +1,17 @@
+const express = require("express");
+const router = express.Router();
+
+const AdminLogin = require("../pages/adminLoginpages");
+
+router.get("/admin", (req, res) => {
+    res.send(AdminLogin());
+});
+
+module.exports = router;
+
+
+
+
 // const express = require("express");
 // const router = express.Router();
 // const bcrypt = require("bcrypt");
