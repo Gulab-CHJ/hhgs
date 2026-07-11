@@ -1092,35 +1092,3 @@ border-left:4px solid #2563eb;
 
 }
 
-
-.menu-btn,
-.logo,
-.logo img,
-.navbar a{
-
-    -webkit-tap-highlight-color: transparent;
-
-    outline: none;
-
-    user-select: none;
-
-    -webkit-user-select: none;
-
-    -webkit-touch-callout: none;
-
-}
-
-.menu-btn:focus,
-.menu-btn:focus-visible,
-.logo:focus,
-.logo:focus-visible,
-.logo img:focus,
-.logo img:focus-visible,
-.navbar a:focus,
-.navbar a:focus-visible{
-
-    outline: none !important;
-
-    box-shadow: none !important;
-
-}
