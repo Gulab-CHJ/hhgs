@@ -1,12 +1,14 @@
 const Header = require("../views/component/headercomponent");
 const Footer = require("../views/component/footercomponent");
 
-const Banner = require("../views/component/bannercomponent");
+const PosterSlider = require("../views/component/posterSlidercomponent");
+
+
 const DoctorSection = require("../views/component/doctorcomponent");
 const ServiceSection = require("../views/component/servicecomponent");
 const StudentSection = require("../views/component/studentcomponent");
 
-function Home({ banner, doctors, services, students }) {
+function Home({  posters, doctors, services, students }) {
     return `
 <!DOCTYPE html>
 <html>
@@ -18,15 +20,16 @@ function Home({ banner, doctors, services, students }) {
 
 ${Header()}
 
-${Banner(banner)}
+${PosterSlider(posters)}
 
-<h1>Our Doctors</h1>
+
+
 ${DoctorSection(doctors)}
 
-<h1>Our Services</h1>
+
 ${ServiceSection(services)}
 
-<h1>Our Students</h1>
+
 ${StudentSection(students)}
 
 ${Footer()}

@@ -31,6 +31,9 @@ const BannerModel = require("../models/modelsBanner");
 const Service = require("../models/modelsService");
 const Student = require("../models/modelsStudent");
 const Doctor = require("../models/modelsDoctor");
+const Poster = require("../models/modelsPoster");
+
+
 
 router.get("/", async (req, res) => {
     try {
@@ -38,10 +41,12 @@ router.get("/", async (req, res) => {
         const students = await Student.find();
         const doctors = await Doctor.find();
         const banner = await BannerModel.findOne();
+        const posters = await Poster.find();
 
         res.send(
             Home({
                 banner,
+                posters,
                 doctors,
                 services,
                 students,
