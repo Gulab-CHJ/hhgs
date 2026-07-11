@@ -63,21 +63,40 @@ window.addEventListener("scroll", () => {
 
 // Active Menu
 
+// const links = document.querySelectorAll(".navbar a");
+
+// links.forEach(link => {
+
+//     link.addEventListener("click", () => {
+
+//         links.forEach(item => item.classList.remove("active"));
+
+//         link.classList.add("active");
+
+//         navbar.classList.remove("active");
+//         overlay.classList.remove("active");
+
+//         menuBtn.innerHTML = `
+//         <i class="fa-solid fa-bars"></i>
+//         `;
+
+//     });
+
+// });
+
+// Menu Links
+
 const links = document.querySelectorAll(".navbar a");
 
 links.forEach(link => {
 
     link.addEventListener("click", () => {
 
-        links.forEach(item => item.classList.remove("active"));
-
-        link.classList.add("active");
-
         navbar.classList.remove("active");
         overlay.classList.remove("active");
 
         menuBtn.innerHTML = `
-        <i class="fa-solid fa-bars"></i>
+            <i class="fa-solid fa-bars"></i>
         `;
 
     });
