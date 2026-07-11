@@ -17,8 +17,8 @@
 function StudentSection(students) {
 
 let html = `
-
 <link rel="stylesheet" href="/css/style.css">
+
 
 <section class="student-section">
 
