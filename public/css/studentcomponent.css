@@ -311,54 +311,51 @@
 /* ===========================
    Mobile
 =========================== */
-
 @media (max-width:480px){
 
-.student-grid{
+    .student-grid{
 
-    grid-template-columns:repeat(2,1fr);
+        display:grid;
+        grid-template-columns:repeat(auto-fit,160px);
+        justify-content:center;
+        gap:12px;
 
-    gap:12px;
+    }
 
-}
+    .student-card{
 
-.student-card{
+        width:160px;
+        min-height:370px;
+        height:auto;
 
-    width:160px;
-    min-height:370px;
-    height:auto;
+    }
 
-}
+    .student-image img{
 
-.student-image img{
+        width:80px;
+        height:80px;
 
-    width:80px;
-    height:80px;
+    }
 
-}
+    .student-content h2{
 
-.student-content h2{
+        font-size:15px;
 
-    font-size:15px;
+    }
 
-}
+    .student-info{
 
-.student-info{
+        font-size:11px;
+        padding:7px;
 
-    font-size:11px;
+    }
 
-    padding:7px;
+    .student-btn{
 
-}
+        margin-top:auto;
+        font-size:12px;
+        padding:9px;
 
-.student-btn{
-
-    margin-top:auto;
-
-    font-size:12px;
-
-    padding:9px;
-
-}
+    }
 
 }

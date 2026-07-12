@@ -2,7 +2,9 @@
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    grid-template-columns:repeat(auto-fit,160px);
+
+    justify-content:center;
 
     gap:16px;
 
@@ -139,7 +141,9 @@
 
 .service-grid{
 
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(auto-fit,150px);
+
+    justify-content:center;
 
     gap:12px;
 
@@ -185,9 +189,11 @@
 
 .service-grid{
 
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(auto-fit,150px);
 
-    gap:10px;
+    justify-content:center;
+
+    gap:12px;
 
 }
 

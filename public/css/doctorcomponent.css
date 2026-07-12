@@ -32,7 +32,9 @@
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    grid-template-columns:repeat(auto-fit,220px);
+
+    justify-content:center;
 
     gap:25px;
 
@@ -212,45 +214,103 @@
 
 .doctor-grid{
 
-grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(auto-fit,170px);
 
-gap:15px;
+    justify-content:center;
+
+    gap:15px;
 
 }
 
 .card{
 
-width:170px;
-
-height:285px;
+    width:170px;
+    height:285px;
 
 }
 
 .card img{
 
-width:85px;
-
-height:85px;
+    width:85px;
+    height:85px;
 
 }
 
 .card h2{
 
-font-size:16px;
+    font-size:16px;
 
 }
 
 .card .degree{
 
-font-size:12px;
+    font-size:12px;
+
+}
+
+.card .exp{
+
+    font-size:11px;
 
 }
 
 .card .view-btn{
 
-font-size:13px;
+    font-size:13px;
+    padding:8px;
 
-padding:8px;
+}
+
+}
+
+@media(max-width:480px){
+
+.doctor-grid{
+
+    grid-template-columns:repeat(auto-fit,160px);
+
+    justify-content:center;
+
+    gap:12px;
+
+}
+
+.card{
+
+    width:160px;
+    height:275px;
+
+}
+
+.card img{
+
+    width:80px;
+    height:80px;
+
+}
+
+.card h2{
+
+    font-size:15px;
+
+}
+
+.card .degree{
+
+    font-size:11px;
+
+}
+
+.card .exp{
+
+    font-size:10px;
+
+}
+
+.card .view-btn{
+
+    font-size:12px;
+    padding:8px;
 
 }
 
