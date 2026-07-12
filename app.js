@@ -41,12 +41,14 @@ app.use("/", doctorRoutes);
 
 // 404 Handler
 app.use((req, res, next) => {
-    const error = new Error("Page Not Found");
+    console.log("404 URL:", req.method, req.originalUrl);
+
+    const error = new Error(`Page Not Found: ${req.originalUrl}`);
     error.statusCode = 404;
     next(error);
 });
 
-// Global Error Handler (Always Last)
+// Global Error Handler
 app.use(errorHandler);
 
 // Server
