@@ -1,19 +1,19 @@
-// function Footer(){
+function Footer(){
 
-// return `
+return `
 
-// <footer>
+<footer>
 
-// <p>
+<p>
 
-// © 2026 HHGS. All Rights Reserved.
+© 2026 HHGS. All Rights Reserved.
 
-// </p>
+</p>
 
-// </footer>
+</footer>
 
-// `;
+`;
 
-// }
+}
 
-// module.exports = Footer;
+module.exports = Footer;
