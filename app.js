@@ -11,11 +11,10 @@
 // app.listen(3000, () => {
 //     console.log("Server Running");
 // });
-
 const express = require("express");
 const path = require("path");
 
-require("./config/database"); // agar database file hai
+require("./config/database");
 
 const app = express();
 
@@ -31,15 +30,24 @@ app.use("/uploads", express.static(path.join(__dirname, "storage/uploads")));
 const homeRoutes = require("./routes/homeroutes");
 const adminRoutes = require("./routes/admin");
 const doctorRoutes = require("./routes/doctorroutes");
-// const studentRoutes = require("./routes/student");
-// const serviceRoutes = require("./routes/service");
+
+// Global Error Handler
+const errorHandler = require("./middleware/errorHandler");
 
 // Use Routes
 app.use("/", homeRoutes);
 app.use("/admin", adminRoutes);
 app.use("/", doctorRoutes);
-// app.use("/", studentRoutes);
-// app.use("/", serviceRoutes);
+
+// 404 Handler
+app.use((req, res, next) => {
+    const error = new Error("Page Not Found");
+    error.statusCode = 404;
+    next(error);
+});
+
+// Global Error Handler (Always Last)
+app.use(errorHandler);
 
 // Server
 const PORT = process.env.PORT || 3000;
@@ -47,8 +55,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`✅ Server Running: http://localhost:${PORT}`);
 });
-
-
 
 
 
