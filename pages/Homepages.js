@@ -1,7 +1,7 @@
 const Header = require("../views/component/headercomponent");
 const Footer = require("../views/component/footercomponent");
 
-const PosterSlider = require("../views/component/posterSlidercomponent");
+// const PosterSlider = require("../views/component/posterSlidercomponent");
 
 
 const DoctorSection = require("../views/component/doctorcomponent");
@@ -20,8 +20,9 @@ function Home({  posters, doctors, services, students }) {
 
 ${Header()}
 
-${PosterSlider(posters)}
-
+${posters && posters.length > 0 ? `
+<div class="poster-slider">
+    ${posters.map(poster => `
 
 
 ${DoctorSection(doctors)}
