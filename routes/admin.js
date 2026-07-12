@@ -27,8 +27,8 @@ const express = require("express");
 const router = express.Router();
 
 router.use("/", require("./admin/login"));
-router.use(require("./admin/student"));
-router.use("/", require("./admin/dashboard"));
+// router.use(require("./admin/student"));
+// router.use("/", require("./admin/dashboard"));
 
 // router.use("/", require("./admin/students"));
 // router.use("/", require("./admin/doctors"));
