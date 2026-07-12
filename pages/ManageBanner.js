@@ -1,170 +1,170 @@
-function ManageBanner(banners) {
+// function ManageBanner(banners) {
 
-let html = "";
+// let html = "";
 
-banners.forEach((banner) => {
+// banners.forEach((banner) => {
 
-html += `
-<tr>
+// html += `
+// <tr>
 
-<td>
-<img src="${banner.image}" width="180" height="80" style="object-fit:cover;border-radius:8px;">
-</td>
+// <td>
+// <img src="${banner.image}" width="180" height="80" style="object-fit:cover;border-radius:8px;">
+// </td>
 
-<td>${banner.title}</td>
+// <td>${banner.title}</td>
 
-<td>
-<a href="${banner.link}" target="_blank">
-${banner.link}
-</a>
-</td>
+// <td>
+// <a href="${banner.link}" target="_blank">
+// ${banner.link}
+// </a>
+// </td>
 
-<td>
-${banner.active
-? '<span style="color:green;font-weight:bold;">Active</span>'
-: '<span style="color:red;font-weight:bold;">Inactive</span>'}
-</td>
+// <td>
+// ${banner.active
+// ? '<span style="color:green;font-weight:bold;">Active</span>'
+// : '<span style="color:red;font-weight:bold;">Inactive</span>'}
+// </td>
 
-<td>
+// <td>
 
-<a class="edit"
-href="/admin/edit-banner/${banner._id}">
-✏️ Edit
-</a>
+// <a class="edit"
+// href="/admin/edit-banner/${banner._id}">
+// ✏️ Edit
+// </a>
 
-<a class="delete"
-onclick="return confirm('Delete Banner?')"
-href="/admin/delete-banner/${banner._id}">
-🗑 Delete
-</a>
+// <a class="delete"
+// onclick="return confirm('Delete Banner?')"
+// href="/admin/delete-banner/${banner._id}">
+// 🗑 Delete
+// </a>
 
-${banner.active
-? `<a class="deactivate"
-href="/admin/deactivate-banner/${banner._id}">
-🚫 Deactivate
-</a>`
-: `<a class="activate"
-href="/admin/activate-banner/${banner._id}">
-✅ Activate
-</a>`}
+// ${banner.active
+// ? `<a class="deactivate"
+// href="/admin/deactivate-banner/${banner._id}">
+// 🚫 Deactivate
+// </a>`
+// : `<a class="activate"
+// href="/admin/activate-banner/${banner._id}">
+// ✅ Activate
+// </a>`}
 
-</td>
+// </td>
 
-</tr>
-`;
+// </tr>
+// `;
 
-});
+// });
 
-return `
-<!DOCTYPE html>
+// return `
+// <!DOCTYPE html>
 
-<html>
+// <html>
 
-<head>
+// <head>
 
-<title>Manage Banner</title>
+// <title>Manage Banner</title>
 
-<style>
+// <style>
 
-body{
-font-family:Arial;
-background:#f5f5f5;
-padding:30px;
-}
+// body{
+// font-family:Arial;
+// background:#f5f5f5;
+// padding:30px;
+// }
 
-.container{
-max-width:1200px;
-margin:auto;
-background:#fff;
-padding:20px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,.15);
-}
+// .container{
+// max-width:1200px;
+// margin:auto;
+// background:#fff;
+// padding:20px;
+// border-radius:10px;
+// box-shadow:0 5px 15px rgba(0,0,0,.15);
+// }
 
-h1{
-text-align:center;
-margin-bottom:20px;
-}
+// h1{
+// text-align:center;
+// margin-bottom:20px;
+// }
 
-table{
-width:100%;
-border-collapse:collapse;
-}
+// table{
+// width:100%;
+// border-collapse:collapse;
+// }
 
-th,td{
-border:1px solid #ddd;
-padding:12px;
-text-align:center;
-}
+// th,td{
+// border:1px solid #ddd;
+// padding:12px;
+// text-align:center;
+// }
 
-th{
-background:#2563eb;
-color:#fff;
-}
+// th{
+// background:#2563eb;
+// color:#fff;
+// }
 
-a{
-text-decoration:none;
-padding:8px 15px;
-border-radius:5px;
-color:#fff;
-margin:2px;
-display:inline-block;
-font-size:14px;
-}
+// a{
+// text-decoration:none;
+// padding:8px 15px;
+// border-radius:5px;
+// color:#fff;
+// margin:2px;
+// display:inline-block;
+// font-size:14px;
+// }
 
-.edit{
-background:#2563eb;
-}
+// .edit{
+// background:#2563eb;
+// }
 
-.delete{
-background:#dc2626;
-}
+// .delete{
+// background:#dc2626;
+// }
 
-.activate{
-background:#16a34a;
-}
+// .activate{
+// background:#16a34a;
+// }
 
-.deactivate{
-background:#f59e0b;
-}
+// .deactivate{
+// background:#f59e0b;
+// }
 
-img{
-max-width:180px;
-}
+// img{
+// max-width:180px;
+// }
 
-</style>
+// </style>
 
-</head>
+// </head>
 
-<body>
+// <body>
 
-<div class="container">
+// <div class="container">
 
-<h1>🖼 Manage Banner</h1>
+// <h1>🖼 Manage Banner</h1>
 
-<table>
+// <table>
 
-<tr>
+// <tr>
 
-<th>Banner</th>
-<th>Title</th>
-<th>Link</th>
-<th>Status</th>
-<th>Action</th>
+// <th>Banner</th>
+// <th>Title</th>
+// <th>Link</th>
+// <th>Status</th>
+// <th>Action</th>
 
-</tr>
+// </tr>
 
-${html}
+// ${html}
 
-</table>
+// </table>
 
-</div>
+// </div>
 
-</body>
+// </body>
 
-</html>
-`;
+// </html>
+// `;
 
-}
+// }
 
-module.exports = ManageBanner;
+// module.exports = ManageBanner;

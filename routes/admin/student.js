@@ -1,114 +1,114 @@
-const express = require("express");
-const router = express.Router();
+// const express = require("express");
+// const router = express.Router();
 
-const Student = require("../../models/modelsStudent.js");
+// const Student = require("../../models/modelsStudent.js");
 
-const AddStudent = require("../../pages/addpages/addStudent");
-const AllStudents = require("../../pages/allexelpage/allStudents.js");
-const EditStudent = require("../../pages/editpages/editStudent");
+// const AddStudent = require("../../pages/addpages/addStudent");
+// const AllStudents = require("../../pages/allexelpage/allStudents.js");
+// const EditStudent = require("../../pages/editpages/editStudent");
 
-// ==========================
-// Add Student Page
-// ==========================
+// // ==========================
+// // Add Student Page
+// // ==========================
 
-router.get("/admin/add-student", (req, res) => {
+// router.get("/admin/add-student", (req, res) => {
 
-    res.send(AddStudent());
+//     res.send(AddStudent());
 
-});
+// });
 
-// ==========================
-// Save Student
-// ==========================
+// // ==========================
+// // Save Student
+// // ==========================
 
-router.post("/admin/add-student", async (req, res) => {
+// router.post("/admin/add-student", async (req, res) => {
 
-    try {
+//     try {
 
-        const student = new Student({
+//         const student = new Student({
 
-            name: req.body.name,
-            fatherName: req.body.fatherName,
-            course: req.body.course,
-            mobile: req.body.mobile,
-            email: req.body.email,
-            address: req.body.address,
-            image: req.body.image,
-            description: req.body.description
+//             name: req.body.name,
+//             fatherName: req.body.fatherName,
+//             course: req.body.course,
+//             mobile: req.body.mobile,
+//             email: req.body.email,
+//             address: req.body.address,
+//             image: req.body.image,
+//             description: req.body.description
 
-        });
+//         });
 
-        await student.save();
+//         await student.save();
 
-        res.redirect("/admin/students");
+//         res.redirect("/admin/students");
 
-    } catch (err) {
+//     } catch (err) {
 
-        console.log(err);
+//         console.log(err);
 
-        res.status(500).send(err.message);
+//         res.status(500).send(err.message);
 
-    }
+//     }
 
-});
+// });
 
-// ==========================
-// All Students
-// ==========================
+// // ==========================
+// // All Students
+// // ==========================
 
-router.get("/admin/students", async (req, res) => {
+// router.get("/admin/students", async (req, res) => {
 
-    const students = await Student.find().sort({ createdAt: -1 });
+//     const students = await Student.find().sort({ createdAt: -1 });
 
-    res.send(AllStudents(students));
+//     res.send(AllStudents(students));
 
-});
+// });
 
-// ==========================
-// Edit Page
-// ==========================
+// // ==========================
+// // Edit Page
+// // ==========================
 
-router.get("/admin/edit-student/:id", async (req, res) => {
+// router.get("/admin/edit-student/:id", async (req, res) => {
 
-    const student = await Student.findById(req.params.id);
+//     const student = await Student.findById(req.params.id);
 
-    res.send(EditStudent(student));
+//     res.send(EditStudent(student));
 
-});
+// });
 
-// ==========================
-// Update Student
-// ==========================
+// // ==========================
+// // Update Student
+// // ==========================
 
-router.post("/admin/edit-student/:id", async (req, res) => {
+// router.post("/admin/edit-student/:id", async (req, res) => {
 
-    await Student.findByIdAndUpdate(req.params.id, {
+//     await Student.findByIdAndUpdate(req.params.id, {
 
-        name: req.body.name,
-        fatherName: req.body.fatherName,
-        course: req.body.course,
-        mobile: req.body.mobile,
-        email: req.body.email,
-        address: req.body.address,
-        image: req.body.image,
-        description: req.body.description
+//         name: req.body.name,
+//         fatherName: req.body.fatherName,
+//         course: req.body.course,
+//         mobile: req.body.mobile,
+//         email: req.body.email,
+//         address: req.body.address,
+//         image: req.body.image,
+//         description: req.body.description
 
-    });
+//     });
 
-    res.redirect("/admin/students");
+//     res.redirect("/admin/students");
 
-});
+// });
 
-// ==========================
-// Delete Student
-// ==========================
+// // ==========================
+// // Delete Student
+// // ==========================
 
-router.get("/admin/delete-student/:id", async (req, res) => {
+// router.get("/admin/delete-student/:id", async (req, res) => {
 
-    await Student.findByIdAndDelete(req.params.id);
+//     await Student.findByIdAndDelete(req.params.id);
 
-    res.redirect("/admin/students");
+//     res.redirect("/admin/students");
 
-});
+// });
 
-module.exports = router;
+// module.exports = router;

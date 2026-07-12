@@ -1,290 +1,290 @@
-function AllStudents(students) {
+// function AllStudents(students) {
 
-return `
+// return `
 
-<!DOCTYPE html>
+// <!DOCTYPE html>
 
-<html lang="en">
+// <html lang="en">
 
-<head>
+// <head>
 
-<meta charset="UTF-8">
+// <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+// <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manage Students</title>
+// <title>Manage Students</title>
 
-<link rel="stylesheet" href="/css/style.css">
+// <link rel="stylesheet" href="/css/style.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+// <link rel="stylesheet"
+// href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-<style>
+// <style>
 
-body{
+// body{
 
-    background:#f5f7fb;
+//     background:#f5f7fb;
 
-    font-family:Poppins,sans-serif;
+//     font-family:Poppins,sans-serif;
 
-}
+// }
 
-.container{
+// .container{
 
-    width:95%;
+//     width:95%;
 
-    max-width:1400px;
+//     max-width:1400px;
 
-    margin:40px auto;
+//     margin:40px auto;
 
-}
+// }
 
-.top{
+// .top{
 
-    display:flex;
+//     display:flex;
 
-    justify-content:space-between;
+//     justify-content:space-between;
 
-    align-items:center;
+//     align-items:center;
 
-    margin-bottom:25px;
+//     margin-bottom:25px;
 
-}
+// }
 
-.top h1{
+// .top h1{
 
-    color:#0f172a;
+//     color:#0f172a;
 
-}
+// }
 
-.add-btn{
+// .add-btn{
 
-    background:#2563eb;
+//     background:#2563eb;
 
-    color:#fff;
+//     color:#fff;
 
-    padding:12px 18px;
+//     padding:12px 18px;
 
-    border-radius:10px;
+//     border-radius:10px;
 
-    text-decoration:none;
+//     text-decoration:none;
 
-    font-weight:600;
+//     font-weight:600;
 
-}
+// }
 
-table{
+// table{
 
-    width:100%;
+//     width:100%;
 
-    border-collapse:collapse;
+//     border-collapse:collapse;
 
-    background:#fff;
+//     background:#fff;
 
-    border-radius:12px;
+//     border-radius:12px;
 
-    overflow:hidden;
+//     overflow:hidden;
 
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+//     box-shadow:0 10px 30px rgba(0,0,0,.08);
 
-}
+// }
 
-th{
+// th{
 
-    background:#2563eb;
+//     background:#2563eb;
 
-    color:#fff;
+//     color:#fff;
 
-    padding:15px;
+//     padding:15px;
 
-}
+// }
 
-td{
+// td{
 
-    padding:15px;
+//     padding:15px;
 
-    text-align:center;
+//     text-align:center;
 
-    border-bottom:1px solid #eee;
+//     border-bottom:1px solid #eee;
 
-}
+// }
 
-td img{
+// td img{
 
-    width:60px;
+//     width:60px;
 
-    height:60px;
+//     height:60px;
 
-    border-radius:50%;
+//     border-radius:50%;
 
-    object-fit:cover;
+//     object-fit:cover;
 
-}
+// }
 
-.action{
+// .action{
 
-    display:flex;
+//     display:flex;
 
-    justify-content:center;
+//     justify-content:center;
 
-    gap:8px;
+//     gap:8px;
 
-}
+// }
 
-.action a{
+// .action a{
 
-    padding:8px 12px;
+//     padding:8px 12px;
 
-    color:#fff;
+//     color:#fff;
 
-    border-radius:8px;
+//     border-radius:8px;
 
-    text-decoration:none;
+//     text-decoration:none;
 
-    font-size:14px;
+//     font-size:14px;
 
-}
+// }
 
-.view{
+// .view{
 
-    background:#2563eb;
+//     background:#2563eb;
 
-}
+// }
 
-.edit{
+// .edit{
 
-    background:#f59e0b;
+//     background:#f59e0b;
 
-}
+// }
 
-.delete{
+// .delete{
 
-    background:#dc2626;
+//     background:#dc2626;
 
-}
+// }
 
-@media(max-width:768px){
+// @media(max-width:768px){
 
-table{
+// table{
 
-display:block;
+// display:block;
 
-overflow-x:auto;
+// overflow-x:auto;
 
-}
+// }
 
-}
+// }
 
-</style>
+// </style>
 
-</head>
+// </head>
 
-<body>
+// <body>
 
-<div class="container">
+// <div class="container">
 
-<div class="top">
+// <div class="top">
 
-<h1>👨‍🎓 Manage Students</h1>
+// <h1>👨‍🎓 Manage Students</h1>
 
-<a href="/admin/add-student" class="add-btn">
+// <a href="/admin/add-student" class="add-btn">
 
-<i class="fa-solid fa-plus"></i>
+// <i class="fa-solid fa-plus"></i>
 
-Add Student
+// Add Student
 
-</a>
+// </a>
 
-</div>
+// </div>
 
-<table>
+// <table>
 
-<thead>
+// <thead>
 
-<tr>
+// <tr>
 
-<th>Photo</th>
+// <th>Photo</th>
 
-<th>Name</th>
+// <th>Name</th>
 
-<th>Course</th>
+// <th>Course</th>
 
-<th>Mobile</th>
+// <th>Mobile</th>
 
-<th>Email</th>
+// <th>Email</th>
 
-<th>Action</th>
+// <th>Action</th>
 
-</tr>
+// </tr>
 
-</thead>
+// </thead>
 
-<tbody>
+// <tbody>
 
-${
-students.map(student=>`
+// ${
+// students.map(student=>`
 
-<tr>
+// <tr>
 
-<td>
+// <td>
 
-<img src="${student.image}" alt="${student.name}">
+// <img src="${student.image}" alt="${student.name}">
 
-</td>
+// </td>
 
-<td>${student.name}</td>
+// <td>${student.name}</td>
 
-<td>${student.course}</td>
+// <td>${student.course}</td>
 
-<td>${student.mobile}</td>
+// <td>${student.mobile}</td>
 
-<td>${student.email}</td>
+// <td>${student.email}</td>
 
-<td>
+// <td>
 
-<div class="action">
+// <div class="action">
 
-<a href="/student/${student._id}" class="view">
+// <a href="/student/${student._id}" class="view">
 
-<i class="fa-solid fa-eye"></i>
+// <i class="fa-solid fa-eye"></i>
 
-</a>
+// </a>
 
-<a href="/admin/edit-student/${student._id}" class="edit">
+// <a href="/admin/edit-student/${student._id}" class="edit">
 
-<i class="fa-solid fa-pen"></i>
+// <i class="fa-solid fa-pen"></i>
 
-</a>
+// </a>
 
-<a href="/admin/delete-student/${student._id}" class="delete"
+// <a href="/admin/delete-student/${student._id}" class="delete"
 
-onclick="return confirm('Delete this student?')">
+// onclick="return confirm('Delete this student?')">
 
-<i class="fa-solid fa-trash"></i>
+// <i class="fa-solid fa-trash"></i>
 
-</a>
+// </a>
 
-</div>
+// </div>
 
-</td>
+// </td>
 
-</tr>
+// </tr>
 
-`).join("")
-}
+// `).join("")
+// }
 
-</tbody>
+// </tbody>
 
-</table>
+// </table>
 
-</div>
+// </div>
 
-</body>
+// </body>
 
-</html>
+// </html>
 
-`;
+// `;
 
-}
+// }
 
-module.exports = AllStudents;
+// module.exports = AllStudents;
