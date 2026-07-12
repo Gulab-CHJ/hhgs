@@ -1,45 +1,48 @@
-// const Header = require("../views/component/headercomponent");
-// const Footer = require("../views/component/footercomponent");
+const Header = require("../views/component/headercomponent");
+const Footer = require("../views/component/footercomponent");
 
-// const PosterSlider = require("../views/component/posterSlidercomponent");
+const PosterSlider = require("../views/component/posterSlidercomponent");
+const DoctorSection = require("../views/component/doctorcomponent");
+const ServiceSection = require("../views/component/servicecomponent");
+const StudentSection = require("../views/component/studentcomponent");
 
+function Home({ posters, doctors, services, students }) {
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
 
-// const DoctorSection = require("../views/component/doctorcomponent");
-// const ServiceSection = require("../views/component/servicecomponent");
-// const StudentSection = require("../views/component/studentcomponent");
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/headercomponent.css">
+    <link rel="stylesheet" href="/css/footer.css">
+    <link rel="stylesheet" href="/css/posterSlider.css">
+    <link rel="stylesheet" href="/css/doctorcomponent.css">
+    <link rel="stylesheet" href="/css/servicecomponent.css">
+    <link rel="stylesheet" href="/css/studentcomponent.css">
+</head>
+<body>
 
-// function Home({  posters, doctors, services, students }) {
-//     return `
-// <!DOCTYPE html>
-// <html>
-// <head>
-// <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//     <title>Home</title>
-// </head>
-// <body>
+${Header()}
 
-// ${Header()}
+${PosterSlider(posters)}
 
-// ${PosterSlider(posters)}
+${DoctorSection(doctors)}
 
+${ServiceSection(services)}
 
-// ${DoctorSection(doctors)}
+${StudentSection(students)}
 
+${Footer()}
 
-// ${ServiceSection(services)}
+</body>
+</html>
+`;
+}
 
-
-// ${StudentSection(students)}
-
-// ${Footer()}
-
-// </body>
-// </html>
-// `;
-// }
-
-// module.exports = Home;
-
+module.exports = Home;
 
 
 

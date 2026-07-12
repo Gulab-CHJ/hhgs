@@ -1,62 +1,31 @@
-// // const Home = require("../pages/Homepages");
+const express = require("express");
+const router = express.Router();
 
-// // router.get("/", async (req, res) => {
-// //     try {
-// //         const services = await Service.find();
-// //         const students = await Student.find();
-// //         const doctors = await Doctor.find();
-// //         const banner = await BannerModel.findOne();
+const Home = require("../pages/Homepages");
 
-// //         res.send(
-// //             Home({
-// //                 banner,
-// //                 doctors,
-// //                 services,
-// //                 students,
-// //             })
-// //         );
+const Poster = require("../models/modelsPoster");
+const Doctor = require("../models/modelsDoctor");
+const Service = require("../models/modelsService");
+const Student = require("../models/modelsStudent");
 
-// //     } catch (err) {
-// //         console.error(err);
-// //         res.status(500).send(err.message);
-// //     }
-// // });
+router.get("/", async (req, res) => {
+    try {
+        const posters = await Poster.find();
+        const doctors = await Doctor.find();
+        const services = await Service.find();
+        const students = await Student.find();
 
-// const express = require("express");
-// const router = express.Router();
+        res.send(
+            Home({
+                posters,
+                doctors,
+                services,
+                students,
+            })
+        );
+    } catch (err) {
+        res.status(500).send(err.message);
+    }
+});
 
-// const Home = require("../pages/Homepages");
-
-// const BannerModel = require("../models/modelsBanner");
-// const Service = require("../models/modelsService");
-// const Student = require("../models/modelsStudent");
-// const Doctor = require("../models/modelsDoctor");
-// const Poster = require("../models/modelsPoster");
-
-
-
-// router.get("/", async (req, res) => {
-//     try {
-//         const services = await Service.find();
-//         const students = await Student.find();
-//         const doctors = await Doctor.find();
-//         const banner = await BannerModel.findOne();
-//         const posters = await Poster.find();
-
-//         res.send(
-//             Home({
-//                 banner,
-//                 posters,
-//                 doctors,
-//                 services,
-//                 students,
-//             })
-//         );
-
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).send(err.message);
-//     }
-// });
-
-// module.exports = router;
+module.exports = router;

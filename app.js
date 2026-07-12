@@ -1,9 +1,23 @@
 const express = require("express");
+const path = require("path");
+
 const app = express();
 
-app.get("/", (req, res) => res.send("Hello World"));
-app.listen(3000);
+const Home = require("./pages/Homepages");
 
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "storage/uploads")));
+
+app.get("/", (req, res) => {
+    res.send(Home({
+        posters: [],
+        doctors: [],
+        services: [],
+        students: []
+    }));
+});
+
+app.listen(3000, () => console.log("Server Running"));
 
 
 
