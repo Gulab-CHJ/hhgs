@@ -1,12 +1,6 @@
 const Header = require("../views/component/headercomponent");
-const Footer = require("../views/component/footercomponent");
 
-const PosterSlider = require("../views/component/posterSlidercomponent");
-const DoctorSection = require("../views/component/doctorcomponent");
-const ServiceSection = require("../views/component/servicecomponent");
-const StudentSection = require("../views/component/studentcomponent");
-
-function Home({ posters, doctors, services, students }) {
+function Home() {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -15,27 +9,11 @@ function Home({ posters, doctors, services, students }) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 
-    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/headercomponent.css">
-    <link rel="stylesheet" href="/css/footer.css">
-    <link rel="stylesheet" href="/css/posterSlider.css">
-    <link rel="stylesheet" href="/css/doctorcomponent.css">
-    <link rel="stylesheet" href="/css/servicecomponent.css">
-    <link rel="stylesheet" href="/css/studentcomponent.css">
 </head>
 <body>
 
 ${Header()}
-
-${PosterSlider(posters)}
-
-${DoctorSection(doctors)}
-
-${ServiceSection(services)}
-
-${StudentSection(students)}
-
-${Footer()}
 
 </body>
 </html>
@@ -49,1382 +27,1434 @@ module.exports = Home;
 
 
 
-// // const express = require("express");
-// // const router = express.Router();
-// // const BannerModel = require("../models/Banner");
-// // const BannerComponent = require("../views/component/bannerHtml");
-// // const Service = require("../models/Service");
-// // const Student = require("../models/Student");
-// // const Header = require("../views/component/header");
-// // const Footer = require("../views/component/footer");
-
-// // const Doctor = require("../models/Doctor");
-
-// // router.get("/", async (req, res) => {
-
-// //     try {
-
-// //         const services = await Service.find();
-// //         const students = await Student.find();
-// //         const doctors = await Doctor.find();
-// //         const banner = await BannerModel.findOne();
-
-// //         let html = "";
-// //         let studentHtml = "";
-// //         let doctorHtml = "";
-
-// //         let bannerHtml = "";
-
-// // if (banner) {
-// //     bannerHtml = `
-// //     <div class="banner">
-// //         <a href="${banner.link}" target="_blank">
-// //             <img src="${banner.image}" alt="${banner.title}">
-// //         </a>
-// //     </div>
-// //     `;
-// // }
-
-// //         //Dr information
-// //         doctors.forEach((doctor) => {
-// //             doctorHtml += `
-// //             <a href="/doctor/${doctor._id}" class="card">
-// //             <img src="${doctor.image}">
-// //             <h2>${doctor.name}</h2>
-// //             </a>
-// //            `;
-// //         });
-
-// //         // Services
-// //         services.forEach(service => {
-// //             html += `
-// //             <a href="/service/${service._id}" class="card">
-// //                 <img src="${service.image}">
-// //                 <h2>${service.title}</h2>
-// //             </a>
-// //             `;
-// //         });
-
-// //         // Students
-// //         students.forEach(student => {
-// //             studentHtml += `
-// //             <a href="/student/${student._id}" class="card">
-// //                 <img src="${student.image}">
-// //                 <h2>${student.name}</h2>
-// //             </a>
-// //             `;
-// //         });
-// //  res.send(`
-// // <!DOCTYPE html>
-// // <html lang="en">
-
-// // <head>
-// // <meta charset="UTF-8">
-// // <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-// // <title>HHGS</title>
-
-// // <link rel="stylesheet" href="/css/style.css">
-
-// // <style>
-
-// // /* Services & Students Grid */
-
-// // .services,
-// // .students{
-// //     display:grid;
-// //     grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-// //     gap:10px;
-// //     padding:15px;
-// //     max-width:1400px;
-// //     margin:auto;
-// // }
-
-// // .card{
-// //     background:#fff;
-// //     border:1px solid #e5e5e5;
-// //     border-radius:8px;
-// //     text-align:center;
-// //     padding:8px;
-// //     min-height:100px;
-// //     box-shadow:0 2px 6px rgba(0,0,0,.08);
-// //     transition:.3s;
-// //     text-decoration:none;
-// //     color:inherit;
-// //     display:block;
-// // }
 
-// // .card:hover{
-// //     transform:translateY(-3px);
-// //     box-shadow:0 5px 12px rgba(0,0,0,.15);
-// // }
+// const Header = require("../views/component/headercomponent");
+// const Footer = require("../views/component/footercomponent");
 
-// // .card img{
-// //     width:55px;
-// //     height:55px;
-// //     object-fit:contain;
-// //     display:block;
-// //     margin:0 auto 8px;
-// // }
+// const PosterSlider = require("../views/component/posterSlidercomponent");
+// const DoctorSection = require("../views/component/doctorcomponent");
+// const ServiceSection = require("../views/component/servicecomponent");
+// const StudentSection = require("../views/component/studentcomponent");
 
-// // .card h2{
-// //     font-size:13px;
-// //     margin:0;
-// //     color:#222;
-// // }
+// function Home({ posters, doctors, services, students }) {
+//     return `
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//     <meta charset="UTF-8">
+//     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//     <title>Home</title>
+
+//     <link rel="stylesheet" href="/css/style.css">
+//     <link rel="stylesheet" href="/css/headercomponent.css">
+//     <link rel="stylesheet" href="/css/footer.css">
+//     <link rel="stylesheet" href="/css/posterSlider.css">
+//     <link rel="stylesheet" href="/css/doctorcomponent.css">
+//     <link rel="stylesheet" href="/css/servicecomponent.css">
+//     <link rel="stylesheet" href="/css/studentcomponent.css">
+// </head>
+// <body>
+
+// ${Header()}
+
+// ${PosterSlider(posters)}
 
-// // .card p{
-// //     display:none;
-// // }
+// ${DoctorSection(doctors)}
 
-// // /* Tablet */
+// ${ServiceSection(services)}
 
-// // @media(max-width:768px){
+// ${StudentSection(students)}
+
+// ${Footer()}
+
+// </body>
+// </html>
+// `;
+// }
+
+// module.exports = Home;
+
+
+
+
+
+
+// // // const express = require("express");
+// // // const router = express.Router();
+// // // const BannerModel = require("../models/Banner");
+// // // const BannerComponent = require("../views/component/bannerHtml");
+// // // const Service = require("../models/Service");
+// // // const Student = require("../models/Student");
+// // // const Header = require("../views/component/header");
+// // // const Footer = require("../views/component/footer");
+
+// // // const Doctor = require("../models/Doctor");
+
+// // // router.get("/", async (req, res) => {
+
+// // //     try {
+
+// // //         const services = await Service.find();
+// // //         const students = await Student.find();
+// // //         const doctors = await Doctor.find();
+// // //         const banner = await BannerModel.findOne();
+
+// // //         let html = "";
+// // //         let studentHtml = "";
+// // //         let doctorHtml = "";
+
+// // //         let bannerHtml = "";
+
+// // // if (banner) {
+// // //     bannerHtml = `
+// // //     <div class="banner">
+// // //         <a href="${banner.link}" target="_blank">
+// // //             <img src="${banner.image}" alt="${banner.title}">
+// // //         </a>
+// // //     </div>
+// // //     `;
+// // // }
+
+// // //         //Dr information
+// // //         doctors.forEach((doctor) => {
+// // //             doctorHtml += `
+// // //             <a href="/doctor/${doctor._id}" class="card">
+// // //             <img src="${doctor.image}">
+// // //             <h2>${doctor.name}</h2>
+// // //             </a>
+// // //            `;
+// // //         });
+
+// // //         // Services
+// // //         services.forEach(service => {
+// // //             html += `
+// // //             <a href="/service/${service._id}" class="card">
+// // //                 <img src="${service.image}">
+// // //                 <h2>${service.title}</h2>
+// // //             </a>
+// // //             `;
+// // //         });
+
+// // //         // Students
+// // //         students.forEach(student => {
+// // //             studentHtml += `
+// // //             <a href="/student/${student._id}" class="card">
+// // //                 <img src="${student.image}">
+// // //                 <h2>${student.name}</h2>
+// // //             </a>
+// // //             `;
+// // //         });
+// // //  res.send(`
+// // // <!DOCTYPE html>
+// // // <html lang="en">
+
+// // // <head>
+// // // <meta charset="UTF-8">
+// // // <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+// // // <title>HHGS</title>
+
+// // // <link rel="stylesheet" href="/css/style.css">
+
+// // // <style>
+
+// // // /* Services & Students Grid */
+
+// // // .services,
+// // // .students{
+// // //     display:grid;
+// // //     grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+// // //     gap:10px;
+// // //     padding:15px;
+// // //     max-width:1400px;
+// // //     margin:auto;
+// // // }
+
+// // // .card{
+// // //     background:#fff;
+// // //     border:1px solid #e5e5e5;
+// // //     border-radius:8px;
+// // //     text-align:center;
+// // //     padding:8px;
+// // //     min-height:100px;
+// // //     box-shadow:0 2px 6px rgba(0,0,0,.08);
+// // //     transition:.3s;
+// // //     text-decoration:none;
+// // //     color:inherit;
+// // //     display:block;
+// // // }
+
+// // // .card:hover{
+// // //     transform:translateY(-3px);
+// // //     box-shadow:0 5px 12px rgba(0,0,0,.15);
+// // // }
+
+// // // .card img{
+// // //     width:55px;
+// // //     height:55px;
+// // //     object-fit:contain;
+// // //     display:block;
+// // //     margin:0 auto 8px;
+// // // }
+
+// // // .card h2{
+// // //     font-size:13px;
+// // //     margin:0;
+// // //     color:#222;
+// // // }
+
+// // // .card p{
+// // //     display:none;
+// // // }
+
+// // // /* Tablet */
+
+// // // @media(max-width:768px){
+
+// // // .services,
+// // // .students{
+// // //     grid-template-columns:repeat(3,1fr);
+// // //     gap:8px;
+// // // }
+
+// // // .card{
+// // //     min-height:90px;
+// // // }
+
+// // // .card img{
+// // //     width:48px;
+// // //     height:48px;
+// // // }
+
+// // // .card h2{
+// // //     font-size:12px;
+// // // }
+
+// // // }
 
-// // .services,
-// // .students{
-// //     grid-template-columns:repeat(3,1fr);
-// //     gap:8px;
-// // }
+// // // /* Mobile */
 
-// // .card{
-// //     min-height:90px;
-// // }
+// // // @media(max-width:480px){
 
-// // .card img{
-// //     width:48px;
-// //     height:48px;
-// // }
+// // // .services,
+// // // .students{
+// // //     grid-template-columns:repeat(3,1fr);
+// // //     gap:6px;
+// // //     padding:8px;
+// // // }
 
-// // .card h2{
-// //     font-size:12px;
-// // }
+// // // .card{
+// // //     min-height:80px;
+// // //     padding:6px;
+// // // }
+
+// // // .card img{
+// // //     width:40px;
+// // //     height:40px;
+// // // }
+
+// // // .card h2{
+// // //     font-size:10px;
+// // // }
 
-// // }
+// // // }
 
-// // /* Mobile */
+// // // </style>
 
-// // @media(max-width:480px){
+// // // </head>
 
-// // .services,
-// // .students{
-// //     grid-template-columns:repeat(3,1fr);
-// //     gap:6px;
-// //     padding:8px;
-// // }
+// // // <body>
 
-// // .card{
-// //     min-height:80px;
-// //     padding:6px;
-// // }
+// // // ${Header()}
 
-// // .card img{
-// //     width:40px;
-// //     height:40px;
-// // }
+// // // ${bannerHtml}
 
-// // .card h2{
-// //     font-size:10px;
-// // }
+// // // <h1 style="text-align:center;margin:40px 0 20px;">
+// // // Our Doctors
+// // // </h1>
 
-// // }
+// // // <div class="students">
+// // //     ${doctorHtml}
+// // // </div>
 
-// // </style>
+// // // <h1 style="text-align:center;margin:30px 0;">
+// // // Our Services
+// // // </h1>
 
-// // </head>
+// // // <div class="services">
+// // // ${html}
+// // // </div>
 
-// // <body>
+// // // <h1 style="text-align:center;margin:40px 0 20px;">
+// // // Our Students
+// // // </h1>
 
-// // ${Header()}
+// // // <div class="students">
+// // // ${studentHtml}
+// // // </div>
 
-// // ${bannerHtml}
+// // // ${Footer()}
 
-// // <h1 style="text-align:center;margin:40px 0 20px;">
-// // Our Doctors
-// // </h1>
+// // // <script src="/js/main.js"></script>
 
-// // <div class="students">
-// //     ${doctorHtml}
-// // </div>
+// // // </body>
 
-// // <h1 style="text-align:center;margin:30px 0;">
-// // Our Services
-// // </h1>
+// // // </html>
+// // // `);
 
-// // <div class="services">
-// // ${html}
-// // </div>
+// // //   } catch (err) {
+// // //     console.error(err);
+// // //     res.status(500).send(err.message);
+// // // }
+// // // });
 
-// // <h1 style="text-align:center;margin:40px 0 20px;">
-// // Our Students
-// // </h1>
+// // // router.get("/service/:id", async (req, res) => {
+// // //     try {
 
-// // <div class="students">
-// // ${studentHtml}
-// // </div>
+// // //         const service = await Service.findById(req.params.id);
 
-// // ${Footer()}
+// // //         if (!service) {
+// // //             return res.send("Service not found");
+// // //         }
 
-// // <script src="/js/main.js"></script>
+// // //         res.send(`
+// // // <!DOCTYPE html>
+// // // <html lang="en">
 
-// // </body>
+// // // <head>
 
-// // </html>
-// // `);
+// // // <meta charset="UTF-8">
+// // // <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-// //   } catch (err) {
-// //     console.error(err);
-// //     res.status(500).send(err.message);
-// // }
-// // });
+// // // <title>${service.title}</title>
 
-// // router.get("/service/:id", async (req, res) => {
-// //     try {
+// // // <link rel="preconnect" href="https://fonts.googleapis.com">
+// // // <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-// //         const service = await Service.findById(req.params.id);
+// // // <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-// //         if (!service) {
-// //             return res.send("Service not found");
-// //         }
+// // // <link
+// // // rel="stylesheet"
+// // // href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+// // // />
 
-// //         res.send(`
-// // <!DOCTYPE html>
-// // <html lang="en">
+// // // <style>
 
-// // <head>
+// // // /* ===== CSS PART 2 ME AAYEGA ===== */
+// // // *{
+// // //     margin:0;
+// // //     padding:0;
+// // //     box-sizing:border-box;
+// // //     font-family:'Poppins',sans-serif;
+// // // }
 
-// // <meta charset="UTF-8">
-// // <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// // // html{
+// // //     scroll-behavior:smooth;
+// // // }
 
-// // <title>${service.title}</title>
+// // // body{
 
-// // <link rel="preconnect" href="https://fonts.googleapis.com">
-// // <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+// // //     background:#081420;
 
-// // <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+// // //     color:#fff;
 
-// // <link
-// // rel="stylesheet"
-// // href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-// // />
+// // //     overflow-x:hidden;
 
-// // <style>
+// // //     position:relative;
 
-// // /* ===== CSS PART 2 ME AAYEGA ===== */
-// // *{
-// //     margin:0;
-// //     padding:0;
-// //     box-sizing:border-box;
-// //     font-family:'Poppins',sans-serif;
-// // }
+// // //     min-height:100vh;
 
-// // html{
-// //     scroll-behavior:smooth;
-// // }
+// // // }
 
-// // body{
+// // // /* Background */
 
-// //     background:#081420;
+// // // .bg1,
+// // // .bg2{
 
-// //     color:#fff;
+// // //     position:fixed;
 
-// //     overflow-x:hidden;
+// // //     border-radius:50%;
 
-// //     position:relative;
+// // //     filter:blur(120px);
 
-// //     min-height:100vh;
+// // //     z-index:-1;
 
-// // }
+// // // }
 
-// // /* Background */
+// // // .bg1{
 
-// // .bg1,
-// // .bg2{
+// // //     width:350px;
+// // //     height:350px;
 
-// //     position:fixed;
+// // //     background:#2563eb;
 
-// //     border-radius:50%;
+// // //     top:-100px;
+// // //     left:-100px;
 
-// //     filter:blur(120px);
+// // // }
 
-// //     z-index:-1;
+// // // .bg2{
 
-// // }
+// // //     width:300px;
+// // //     height:300px;
 
-// // .bg1{
+// // //     background:#9333ea;
 
-// //     width:350px;
-// //     height:350px;
+// // //     bottom:-100px;
+// // //     right:-100px;
 
-// //     background:#2563eb;
+// // // }
 
-// //     top:-100px;
-// //     left:-100px;
+// // // /* Main Container */
 
-// // }
+// // // .container{
 
-// // .bg2{
+// // //     width:95%;
 
-// //     width:300px;
-// //     height:300px;
+// // //     max-width:1300px;
 
-// //     background:#9333ea;
+// // //     margin:auto;
 
-// //     bottom:-100px;
-// //     right:-100px;
+// // //     padding:40px 0;
 
-// // }
+// // // }
 
-// // /* Main Container */
+// // // /* Top */
 
-// // .container{
+// // // .top{
 
-// //     width:95%;
+// // //     display:flex;
 
-// //     max-width:1300px;
+// // //     justify-content:space-between;
 
-// //     margin:auto;
+// // //     align-items:center;
 
-// //     padding:40px 0;
+// // //     margin-bottom:40px;
 
-// // }
+// // // }
 
-// // /* Top */
+// // // .logo{
 
-// // .top{
+// // //     font-size:30px;
 
-// //     display:flex;
+// // //     font-weight:800;
 
-// //     justify-content:space-between;
+// // //     letter-spacing:2px;
 
-// //     align-items:center;
+// // // }
 
-// //     margin-bottom:40px;
+// // // .backBtn{
 
-// // }
+// // //     text-decoration:none;
 
-// // .logo{
+// // //     color:white;
 
-// //     font-size:30px;
+// // //     padding:12px 20px;
 
-// //     font-weight:800;
+// // //     border-radius:50px;
 
-// //     letter-spacing:2px;
+// // //     background:rgba(255,255,255,.08);
 
-// // }
+// // //     border:1px solid rgba(255,255,255,.2);
 
-// // .backBtn{
+// // //     transition:.3s;
 
-// //     text-decoration:none;
+// // // }
 
-// //     color:white;
+// // // .backBtn:hover{
 
-// //     padding:12px 20px;
+// // //     transform:translateY(-3px);
 
-// //     border-radius:50px;
+// // //     background:#2563eb;
 
-// //     background:rgba(255,255,255,.08);
+// // // }
 
-// //     border:1px solid rgba(255,255,255,.2);
+// // // /* Hero */
 
-// //     transition:.3s;
+// // // .hero{
 
-// // }
+// // //     display:grid;
 
-// // .backBtn:hover{
+// // //     grid-template-columns:1fr 420px;
 
-// //     transform:translateY(-3px);
+// // //     gap:50px;
 
-// //     background:#2563eb;
+// // //     align-items:center;
 
-// // }
+// // //     margin-bottom:60px;
 
-// // /* Hero */
+// // // }
 
-// // .hero{
+// // // .badge{
 
-// //     display:grid;
+// // //     display:inline-block;
 
-// //     grid-template-columns:1fr 420px;
+// // //     padding:8px 18px;
 
-// //     gap:50px;
+// // //     border-radius:30px;
 
-// //     align-items:center;
+// // //     background:rgba(37,99,235,.15);
 
-// //     margin-bottom:60px;
+// // //     border:1px solid rgba(255,255,255,.15);
 
-// // }
+// // //     margin-bottom:20px;
 
-// // .badge{
+// // // }
 
-// //     display:inline-block;
+// // // .hero h1{
 
-// //     padding:8px 18px;
+// // //     font-size:55px;
 
-// //     border-radius:30px;
+// // //     margin-bottom:20px;
 
-// //     background:rgba(37,99,235,.15);
+// // //     line-height:1.2;
 
-// //     border:1px solid rgba(255,255,255,.15);
+// // // }
 
-// //     margin-bottom:20px;
+// // // .hero p{
 
-// // }
+// // //     color:#d7d7d7;
 
-// // .hero h1{
+// // //     font-size:18px;
 
-// //     font-size:55px;
+// // //     line-height:1.8;
 
-// //     margin-bottom:20px;
+// // // }
 
-// //     line-height:1.2;
+// // // .heroButtons{
 
-// // }
+// // //     display:flex;
 
-// // .hero p{
+// // //     gap:15px;
 
-// //     color:#d7d7d7;
+// // //     margin-top:35px;
 
-// //     font-size:18px;
+// // // }
 
-// //     line-height:1.8;
+// // // .heroButtons a{
 
-// // }
+// // //     text-decoration:none;
 
-// // .heroButtons{
+// // //     padding:14px 30px;
 
-// //     display:flex;
+// // //     border-radius:40px;
 
-// //     gap:15px;
+// // //     transition:.3s;
 
-// //     margin-top:35px;
+// // // }
 
-// // }
+// // // .primary{
 
-// // .heroButtons a{
+// // //     background:#2563eb;
 
-// //     text-decoration:none;
+// // //     color:white;
 
-// //     padding:14px 30px;
+// // // }
 
-// //     border-radius:40px;
+// // // .primary:hover{
 
-// //     transition:.3s;
+// // //     transform:translateY(-3px);
 
-// // }
+// // //     box-shadow:0 15px 30px rgba(37,99,235,.35);
 
-// // .primary{
+// // // }
 
-// //     background:#2563eb;
+// // // .secondary{
 
-// //     color:white;
+// // //     background:transparent;
 
-// // }
+// // //     color:white;
 
-// // .primary:hover{
+// // //     border:1px solid rgba(255,255,255,.25);
 
-// //     transform:translateY(-3px);
+// // // }
 
-// //     box-shadow:0 15px 30px rgba(37,99,235,.35);
+// // // .secondary:hover{
 
-// // }
+// // //     background:rgba(255,255,255,.08);
 
-// // .secondary{
+// // // }
 
-// //     background:transparent;
+// // // /* Image */
 
-// //     color:white;
+// // // .imageCard{
 
-// //     border:1px solid rgba(255,255,255,.25);
+// // //     background:rgba(255,255,255,.08);
 
-// // }
+// // //     border:1px solid rgba(255,255,255,.18);
 
-// // .secondary:hover{
+// // //     backdrop-filter:blur(18px);
 
-// //     background:rgba(255,255,255,.08);
+// // //     border-radius:25px;
 
-// // }
+// // //     padding:35px;
 
-// // /* Image */
+// // //     text-align:center;
 
-// // .imageCard{
+// // //     transition:.4s;
 
-// //     background:rgba(255,255,255,.08);
+// // // }
 
-// //     border:1px solid rgba(255,255,255,.18);
+// // // .imageCard:hover{
 
-// //     backdrop-filter:blur(18px);
+// // //     transform:translateY(-8px);
 
-// //     border-radius:25px;
+// // // }
 
-// //     padding:35px;
+// // // .imageCard img{
 
-// //     text-align:center;
+// // //     width:100%;
 
-// //     transition:.4s;
+// // //     max-width:250px;
 
-// // }
+// // //     object-fit:contain;
 
-// // .imageCard:hover{
+// // // }
 
-// //     transform:translateY(-8px);
+// // // /* Glass */
 
-// // }
+// // // .glass{
 
-// // .imageCard img{
+// // //     background:rgba(255,255,255,.08);
 
-// //     width:100%;
+// // //     border:1px solid rgba(255,255,255,.15);
 
-// //     max-width:250px;
+// // //     backdrop-filter:blur(18px);
 
-// //     object-fit:contain;
+// // //     border-radius:25px;
 
-// // }
+// // //     padding:35px;
 
-// // /* Glass */
+// // //     margin-bottom:35px;
 
-// // .glass{
+// // // }
 
-// //     background:rgba(255,255,255,.08);
+// // // .glass h2{
 
-// //     border:1px solid rgba(255,255,255,.15);
+// // //     font-size:30px;
 
-// //     backdrop-filter:blur(18px);
+// // //     margin-bottom:25px;
 
-// //     border-radius:25px;
+// // // }
 
-// //     padding:35px;
+// // // .description{
 
-// //     margin-bottom:35px;
+// // //     white-space:pre-line;
 
-// // }
+// // //     line-height:2;
 
-// // .glass h2{
+// // //     color:#eee;
 
-// //     font-size:30px;
+// // // }
 
-// //     margin-bottom:25px;
+// // // /* Grid */
 
-// // }
+// // // .grid{
 
-// // .description{
+// // //     display:grid;
 
-// //     white-space:pre-line;
+// // //     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 
-// //     line-height:2;
+// // //     gap:25px;
 
-// //     color:#eee;
+// // // }
 
-// // }
+// // // .feature{
 
-// // /* Grid */
+// // //     background:rgba(255,255,255,.05);
 
-// // .grid{
+// // //     border-radius:18px;
 
-// //     display:grid;
+// // //     padding:25px;
 
-// //     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+// // //     text-align:center;
 
-// //     gap:25px;
+// // //     transition:.35s;
 
-// // }
+// // // }
 
-// // .feature{
+// // // .feature:hover{
 
-// //     background:rgba(255,255,255,.05);
+// // //     transform:translateY(-10px);
 
-// //     border-radius:18px;
+// // //     background:#2563eb;
 
-// //     padding:25px;
+// // // }
 
-// //     text-align:center;
+// // // .icon{
 
-// //     transition:.35s;
+// // //     font-size:40px;
 
-// // }
+// // //     margin-bottom:20px;
 
-// // .feature:hover{
+// // // }
 
-// //     transform:translateY(-10px);
+// // // /* Documents */
 
-// //     background:#2563eb;
+// // // .documentList{
 
-// // }
+// // //     display:grid;
 
-// // .icon{
+// // //     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 
-// //     font-size:40px;
+// // //     gap:20px;
 
-// //     margin-bottom:20px;
+// // // }
 
-// // }
+// // // .doc{
 
-// // /* Documents */
+// // //     background:rgba(255,255,255,.06);
 
-// // .documentList{
+// // //     padding:18px;
 
-// //     display:grid;
+// // //     border-radius:15px;
 
-// //     grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+// // //     transition:.3s;
 
-// //     gap:20px;
+// // // }
 
-// // }
+// // // .doc:hover{
 
-// // .doc{
+// // //     background:#2563eb;
 
-// //     background:rgba(255,255,255,.06);
+// // // }
 
-// //     padding:18px;
+// // // /* Info Cards */
 
-// //     border-radius:15px;
+// // // .info{
 
-// //     transition:.3s;
+// // //     display:grid;
 
-// // }
+// // //     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 
-// // .doc:hover{
+// // //     gap:25px;
 
-// //     background:#2563eb;
+// // //     margin:40px 0;
 
-// // }
+// // // }
 
-// // /* Info Cards */
+// // // .infoCard{
 
-// // .info{
+// // //     background:rgba(255,255,255,.08);
 
-// //     display:grid;
+// // //     border-radius:20px;
 
-// //     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+// // //     padding:30px;
 
-// //     gap:25px;
+// // //     text-align:center;
 
-// //     margin:40px 0;
+// // // }
 
-// // }
+// // // .infoCard i{
 
-// // .infoCard{
+// // //     font-size:45px;
 
-// //     background:rgba(255,255,255,.08);
+// // //     margin-bottom:20px;
 
-// //     border-radius:20px;
+// // //     color:#60a5fa;
 
-// //     padding:30px;
+// // // }
 
-// //     text-align:center;
+// // // /* Buttons */
 
-// // }
+// // // .buttons{
 
-// // .infoCard i{
+// // //     display:flex;
 
-// //     font-size:45px;
+// // //     justify-content:center;
 
-// //     margin-bottom:20px;
+// // //     gap:20px;
 
-// //     color:#60a5fa;
+// // //     flex-wrap:wrap;
 
-// // }
+// // //     margin-top:30px;
 
-// // /* Buttons */
+// // // }
 
-// // .buttons{
+// // // .buttons a{
 
-// //     display:flex;
+// // //     text-decoration:none;
 
-// //     justify-content:center;
+// // //     padding:15px 35px;
 
-// //     gap:20px;
+// // //     border-radius:50px;
 
-// //     flex-wrap:wrap;
+// // //     color:white;
 
-// //     margin-top:30px;
+// // //     transition:.3s;
 
-// // }
+// // // }
 
-// // .buttons a{
+// // // .whatsapp{
 
-// //     text-decoration:none;
+// // //     background:#22c55e;
 
-// //     padding:15px 35px;
+// // // }
 
-// //     border-radius:50px;
+// // // .call{
 
-// //     color:white;
+// // //     background:#2563eb;
 
-// //     transition:.3s;
+// // // }
 
-// // }
+// // // .home{
 
-// // .whatsapp{
+// // //     background:#374151;
 
-// //     background:#22c55e;
+// // // }
 
-// // }
+// // // .buttons a:hover{
 
-// // .call{
+// // //     transform:translateY(-5px);
 
-// //     background:#2563eb;
+// // // }
 
-// // }
+// // // /* Footer */
 
-// // .home{
+// // // footer{
 
-// //     background:#374151;
+// // //     text-align:center;
 
-// // }
+// // //     margin-top:60px;
 
-// // .buttons a:hover{
+// // //     color:#aaa;
 
-// //     transform:translateY(-5px);
+// // // }
 
-// // }
+// // // /* Mobile */
 
-// // /* Footer */
+// // // @media(max-width:900px){
 
-// // footer{
+// // // .hero{
 
-// //     text-align:center;
+// // // grid-template-columns:1fr;
 
-// //     margin-top:60px;
+// // // text-align:center;
 
-// //     color:#aaa;
+// // // }
 
-// // }
+// // // .heroButtons{
 
-// // /* Mobile */
+// // // justify-content:center;
 
-// // @media(max-width:900px){
+// // // flex-wrap:wrap;
 
-// // .hero{
+// // // }
 
-// // grid-template-columns:1fr;
+// // // .top{
 
-// // text-align:center;
+// // // flex-direction:column;
 
-// // }
+// // // gap:20px;
 
-// // .heroButtons{
+// // // }
 
-// // justify-content:center;
+// // // .hero h1{
 
-// // flex-wrap:wrap;
+// // // font-size:36px;
 
-// // }
+// // // }
 
-// // .top{
+// // // .glass{
 
-// // flex-direction:column;
+// // // padding:25px;
 
-// // gap:20px;
+// // // }
 
-// // }
+// // // }
 
-// // .hero h1{
+// // // </style>
 
-// // font-size:36px;
+// // // </head>
 
-// // }
+// // // <body>
 
-// // .glass{
+// // // <!-- Background -->
 
-// // padding:25px;
+// // // <div class="bg1"></div>
+// // // <div class="bg2"></div>
 
-// // }
+// // // <!-- Container -->
 
-// // }
+// // // <div class="container">
 
-// // </style>
+// // // <!-- Header -->
 
-// // </head>
+// // // <div class="top">
 
-// // <body>
+// // // <a href="/" class="backBtn">
 
-// // <!-- Background -->
+// // // <i class="fa-solid fa-arrow-left"></i>
 
-// // <div class="bg1"></div>
-// // <div class="bg2"></div>
+// // // Back
 
-// // <!-- Container -->
+// // // </a>
 
-// // <div class="container">
+// // // <div class="logo">
 
-// // <!-- Header -->
+// // // HHGS
 
-// // <div class="top">
+// // // </div>
 
-// // <a href="/" class="backBtn">
+// // // </div>
 
-// // <i class="fa-solid fa-arrow-left"></i>
+// // // <!-- Hero -->
 
-// // Back
+// // // <section class="hero">
 
-// // </a>
+// // // <div class="left">
 
-// // <div class="logo">
+// // // <div class="badge">
 
-// // HHGS
+// // // <i class="fa-solid fa-shield-halved"></i>
 
-// // </div>
+// // // Trusted Service
 
-// // </div>
+// // // </div>
 
-// // <!-- Hero -->
+// // // <h1>
 
-// // <section class="hero">
+// // // ${service.title}
 
-// // <div class="left">
+// // // </h1>
 
-// // <div class="badge">
+// // // <p>
 
-// // <i class="fa-solid fa-shield-halved"></i>
+// // // Fast • Secure • Professional Digital Service
 
-// // Trusted Service
+// // // </p>
 
-// // </div>
+// // // <div class="heroButtons">
 
-// // <h1>
+// // // <a href="#apply" class="primary">
 
-// // ${service.title}
+// // // Apply Now
 
-// // </h1>
+// // // </a>
 
-// // <p>
+// // // <a href="#documents" class="secondary">
 
-// // Fast • Secure • Professional Digital Service
+// // // View Details
 
-// // </p>
+// // // </a>
 
-// // <div class="heroButtons">
+// // // </div>
 
-// // <a href="#apply" class="primary">
+// // // </div>
 
-// // Apply Now
+// // // <div class="right">
 
-// // </a>
+// // // <div class="imageCard">
 
-// // <a href="#documents" class="secondary">
+// // // <img
+// // // src="${service.image}"
+// // // alt="${service.title}"
+// // // >
 
-// // View Details
+// // // </div>
 
-// // </a>
+// // // </div>
 
-// // </div>
+// // // </section>
 
-// // </div>
+// // // <!-- Description -->
 
-// // <div class="right">
+// // // <section class="glass">
 
-// // <div class="imageCard">
+// // // <h2>
 
-// // <img
-// // src="${service.image}"
-// // alt="${service.title}"
-// // >
+// // // <i class="fa-solid fa-circle-info"></i>
 
-// // </div>
+// // // Service Description
 
-// // </div>
+// // // </h2>
 
-// // </section>
+// // // <div class="description">
 
-// // <!-- Description -->
+// // // ${service.description}
 
-// // <section class="glass">
+// // // </div>
 
-// // <h2>
+// // // </section>
 
-// // <i class="fa-solid fa-circle-info"></i>
+// // // <!-- Features -->
 
-// // Service Description
+// // // <section class="glass">
 
-// // </h2>
+// // // <h2>
 
-// // <div class="description">
+// // // <i class="fa-solid fa-star"></i>
 
-// // ${service.description}
+// // // Why Choose HHGS
 
-// // </div>
+// // // </h2>
 
-// // </section>
+// // // <div class="grid">
 
-// // <!-- Features -->
+// // // <div class="feature">
 
-// // <section class="glass">
+// // // <div class="icon">
 
-// // <h2>
+// // // <i class="fa-solid fa-bolt"></i>
 
-// // <i class="fa-solid fa-star"></i>
+// // // </div>
 
-// // Why Choose HHGS
+// // // <h3>
 
-// // </h2>
+// // // Fast Service
 
-// // <div class="grid">
+// // // </h3>
 
-// // <div class="feature">
+// // // <p>
 
-// // <div class="icon">
+// // // Quick processing with minimum waiting time.
 
-// // <i class="fa-solid fa-bolt"></i>
+// // // </p>
 
-// // </div>
+// // // </div>
 
-// // <h3>
+// // // <div class="feature">
 
-// // Fast Service
+// // // <div class="icon">
 
-// // </h3>
+// // // <i class="fa-solid fa-lock"></i>
 
-// // <p>
+// // // </div>
 
-// // Quick processing with minimum waiting time.
+// // // <h3>
 
-// // </p>
+// // // Secure
 
-// // </div>
+// // // </h3>
 
-// // <div class="feature">
+// // // <p>
 
-// // <div class="icon">
+// // // Your documents stay safe and confidential.
 
-// // <i class="fa-solid fa-lock"></i>
+// // // </p>
 
-// // </div>
+// // // </div>
 
-// // <h3>
+// // // <div class="feature">
 
-// // Secure
+// // // <div class="icon">
 
-// // </h3>
+// // // <i class="fa-solid fa-headset"></i>
 
-// // <p>
+// // // </div>
 
-// // Your documents stay safe and confidential.
+// // // <h3>
 
-// // </p>
+// // // 24×7 Support
 
-// // </div>
+// // // </h3>
 
-// // <div class="feature">
+// // // <p>
 
-// // <div class="icon">
+// // // Support whenever you need assistance.
 
-// // <i class="fa-solid fa-headset"></i>
+// // // </p>
 
-// // </div>
+// // // </div>
 
-// // <h3>
+// // // <div class="feature">
 
-// // 24×7 Support
+// // // <div class="icon">
 
-// // </h3>
+// // // <i class="fa-solid fa-circle-check"></i>
 
-// // <p>
+// // // </div>
 
-// // Support whenever you need assistance.
+// // // <h3>
 
-// // </p>
+// // // Trusted
 
-// // </div>
+// // // </h3>
 
-// // <div class="feature">
+// // // <p>
 
-// // <div class="icon">
+// // // Reliable digital services with customer satisfaction.
 
-// // <i class="fa-solid fa-circle-check"></i>
+// // // </p>
 
-// // </div>
+// // // </div>
 
-// // <h3>
+// // // </div>
 
-// // Trusted
+// // // </section>
 
-// // </h3>
+// // // <!-- Documents -->
 
-// // <p>
+// // // <section
+// // // class="glass"
+// // // id="documents"
+// // // >
 
-// // Reliable digital services with customer satisfaction.
+// // // <h2>
 
-// // </p>
+// // // <i class="fa-solid fa-folder-open"></i>
 
-// // </div>
+// // // Required Documents
 
-// // </div>
+// // // </h2>
 
-// // </section>
+// // // <div class="documentList">
 
-// // <!-- Documents -->
+// // // <div class="doc">
 
-// // <section
-// // class="glass"
-// // id="documents"
-// // >
+// // // <i class="fa-solid fa-id-card"></i>
 
-// // <h2>
+// // // Aadhaar Card
 
-// // <i class="fa-solid fa-folder-open"></i>
+// // // </div>
 
-// // Required Documents
+// // // <div class="doc">
 
-// // </h2>
+// // // <i class="fa-solid fa-mobile-screen"></i>
 
-// // <div class="documentList">
+// // // Mobile Number
 
-// // <div class="doc">
+// // // </div>
 
-// // <i class="fa-solid fa-id-card"></i>
+// // // <div class="doc">
 
-// // Aadhaar Card
+// // // <i class="fa-solid fa-image"></i>
 
-// // </div>
+// // // Passport Size Photo
 
-// // <div class="doc">
+// // // </div>
 
-// // <i class="fa-solid fa-mobile-screen"></i>
+// // // <div class="doc">
 
-// // Mobile Number
+// // // <i class="fa-solid fa-file-lines"></i>
 
-// // </div>
+// // // Supporting Documents
 
-// // <div class="doc">
+// // // </div>
 
-// // <i class="fa-solid fa-image"></i>
+// // // </div>
 
-// // Passport Size Photo
+// // // </section>
 
-// // </div>
+// // // <!-- Information -->
 
-// // <div class="doc">
+// // // <section class="info">
 
-// // <i class="fa-solid fa-file-lines"></i>
+// // // <div class="infoCard">
 
-// // Supporting Documents
+// // // <i class="fa-solid fa-clock"></i>
 
-// // </div>
+// // // <h3>
 
-// // </div>
+// // // Processing Time
 
-// // </section>
+// // // </h3>
 
-// // <!-- Information -->
+// // // <p>
 
-// // <section class="info">
+// // // 30 Minutes - 24 Hours
 
-// // <div class="infoCard">
+// // // </p>
 
-// // <i class="fa-solid fa-clock"></i>
+// // // </div>
 
-// // <h3>
+// // // <div class="infoCard">
 
-// // Processing Time
+// // // <i class="fa-solid fa-indian-rupee-sign"></i>
 
-// // </h3>
+// // // <h3>
 
-// // <p>
+// // // Service Charge
 
-// // 30 Minutes - 24 Hours
+// // // </h3>
 
-// // </p>
+// // // <p>
 
-// // </div>
+// // // Contact for Price
 
-// // <div class="infoCard">
+// // // </p>
 
-// // <i class="fa-solid fa-indian-rupee-sign"></i>
+// // // </div>
 
-// // <h3>
+// // // <div class="infoCard">
 
-// // Service Charge
+// // // <i class="fa-solid fa-location-dot"></i>
 
-// // </h3>
+// // // <h3>
 
-// // <p>
+// // // Location
 
-// // Contact for Price
+// // // </h3>
 
-// // </p>
+// // // <p>
 
-// // </div>
+// // // HHGS Digital Service Center
 
-// // <div class="infoCard">
+// // // </p>
 
-// // <i class="fa-solid fa-location-dot"></i>
+// // // </div>
 
-// // <h3>
+// // // </section>
 
-// // Location
+// // // <!-- CTA -->
 
-// // </h3>
+// // // <section
+// // // class="glass"
+// // // id="apply"
+// // // >
 
-// // <p>
+// // // <h2>
 
-// // HHGS Digital Service Center
+// // // Ready To Apply?
 
-// // </p>
+// // // </h2>
 
-// // </div>
+// // // <p>
 
-// // </section>
+// // // Get your work completed quickly and securely.
 
-// // <!-- CTA -->
+// // // </p>
 
-// // <section
-// // class="glass"
-// // id="apply"
-// // >
+// // // <div class="buttons">
 
-// // <h2>
+// // // <a
+// // // href="https://wa.me/919142264714?text=${encodeURIComponent(
+// // // `Hello HHGS, I want to apply for the service: ${service.title}`
+// // // )}"
+// // // target="_blank"
+// // // class="whatsapp"
+// // // >
 
-// // Ready To Apply?
+// // // <i class="fab fa-whatsapp"></i>
 
-// // </h2>
+// // // WhatsApp
 
-// // <p>
+// // // </a>
 
-// // Get your work completed quickly and securely.
+// // // <a
+// // // href="tel:+919142264714"
+// // // class="call"
+// // // >
 
-// // </p>
+// // // <i class="fa-solid fa-phone"></i>
 
-// // <div class="buttons">
+// // // Call Now
 
-// // <a
-// // href="https://wa.me/919142264714?text=${encodeURIComponent(
-// // `Hello HHGS, I want to apply for the service: ${service.title}`
-// // )}"
-// // target="_blank"
-// // class="whatsapp"
-// // >
+// // // </a>
 
-// // <i class="fab fa-whatsapp"></i>
+// // // <a
+// // // href="/"
+// // // class="home"
+// // // >
 
-// // WhatsApp
+// // // <i class="fa-solid fa-house"></i>
 
-// // </a>
+// // // Home
 
-// // <a
-// // href="tel:+919142264714"
-// // class="call"
-// // >
+// // // </a>
 
-// // <i class="fa-solid fa-phone"></i>
+// // // </div>
 
-// // Call Now
+// // // </section>
 
-// // </a>
+// // // <!-- Footer -->
 
-// // <a
-// // href="/"
-// // class="home"
-// // >
+// // // <footer>
 
-// // <i class="fa-solid fa-house"></i>
+// // // © 2026 HHGS Digital Services
 
-// // Home
+// // // </footer>
 
-// // </a>
+// // // </div>
 
-// // </div>
 
-// // </section>
 
-// // <!-- Footer -->
+// // // <script src="/js/service.js"></script>
 
-// // <footer>
+// // // </body>
 
-// // © 2026 HHGS Digital Services
+// // // </html>
+// // // `);
 
-// // </footer>
+// // //     } catch (err) {
 
-// // </div>
+// // //         console.error(err);
+// // //         res.status(500).send(err.message);
 
+// // //     }
+// // // });
+// // // router.get("/student/:id", async (req, res) => {
+// // //     try {
 
+// // //         const student = await Student.findById(req.params.id);
 
-// // <script src="/js/service.js"></script>
+// // //         if (!student) {
+// // //             return res.send("Student not found");
+// // //         }
 
-// // </body>
+// // //         res.send(`
+// // // <!DOCTYPE html>
+// // // <html>
+// // // <head>
+// // // <title>${student.name}</title>
 
-// // </html>
-// // `);
+// // // <style>
 
-// //     } catch (err) {
+// // // *{
+// // //     margin:0;
+// // //     padding:0;
+// // //     box-sizing:border-box;
+// // //     font-family:"Segoe UI",sans-serif;
+// // // }
 
-// //         console.error(err);
-// //         res.status(500).send(err.message);
+// // // body{
+// // //     min-height:100vh;
+// // //     display:flex;
+// // //     justify-content:center;
+// // //     align-items:center;
+// // //     padding:30px;
+// // //     background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+// // // }
 
-// //     }
-// // });
-// // router.get("/student/:id", async (req, res) => {
-// //     try {
+// // // .box{
+// // //     width:100%;
+// // //     max-width:800px;
+// // //     background:rgba(255,255,255,.12);
+// // //     backdrop-filter:blur(18px);
+// // //     border:1px solid rgba(255,255,255,.15);
+// // //     border-radius:25px;
+// // //     padding:40px;
+// // //     text-align:center;
+// // //     box-shadow:0 20px 60px rgba(0,0,0,.35);
+// // //     animation:fadeIn .5s ease;
+// // // }
 
-// //         const student = await Student.findById(req.params.id);
+// // // @keyframes fadeIn{
+// // //     from{
+// // //         opacity:0;
+// // //         transform:translateY(25px);
+// // //     }
+// // //     to{
+// // //         opacity:1;
+// // //         transform:translateY(0);
+// // //     }
+// // // }
 
-// //         if (!student) {
-// //             return res.send("Student not found");
-// //         }
+// // // img{
+// // //     width:220px;
+// // //     height:220px;
+// // //     object-fit:cover;
+// // //     border-radius:20px;
+// // //     border:5px solid rgba(255,255,255,.9);
+// // //     box-shadow:0 15px 40px rgba(0,0,0,.4);
+// // //     margin-bottom:25px;
+// // //     transition:.35s;
+// // // }
 
-// //         res.send(`
-// // <!DOCTYPE html>
-// // <html>
-// // <head>
-// // <title>${student.name}</title>
+// // // img:hover{
+// // //     transform:scale(1.05);
+// // // }
 
-// // <style>
+// // // h2{
+// // //     color:#fff;
+// // //     font-size:34px;
+// // //     margin-bottom:25px;
+// // // }
 
-// // *{
-// //     margin:0;
-// //     padding:0;
-// //     box-sizing:border-box;
-// //     font-family:"Segoe UI",sans-serif;
-// // }
+// // // p{
+// // //     color:#e5e7eb;
+// // //     font-size:17px;
+// // //     line-height:1.8;
+// // //     background:rgba(255,255,255,.08);
+// // //     padding:18px 22px;
+// // //     border-radius:15px;
+// // //     margin:15px 0;
+// // //     text-align:left;
+// // // }
 
-// // body{
-// //     min-height:100vh;
-// //     display:flex;
-// //     justify-content:center;
-// //     align-items:center;
-// //     padding:30px;
-// //     background:linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
-// // }
+// // // strong{
+// // //     color:#93c5fd;
+// // // }
 
-// // .box{
-// //     width:100%;
-// //     max-width:800px;
-// //     background:rgba(255,255,255,.12);
-// //     backdrop-filter:blur(18px);
-// //     border:1px solid rgba(255,255,255,.15);
-// //     border-radius:25px;
-// //     padding:40px;
-// //     text-align:center;
-// //     box-shadow:0 20px 60px rgba(0,0,0,.35);
-// //     animation:fadeIn .5s ease;
-// // }
+// // // a{
+// // //     display:inline-block;
+// // //     margin-top:30px;
+// // //     padding:14px 35px;
+// // //     border-radius:50px;
+// // //     text-decoration:none;
+// // //     background:linear-gradient(135deg,#2563eb,#7c3aed);
+// // //     color:#fff;
+// // //     font-weight:700;
+// // //     transition:.3s;
+// // //     box-shadow:0 10px 25px rgba(37,99,235,.45);
+// // // }
 
-// // @keyframes fadeIn{
-// //     from{
-// //         opacity:0;
-// //         transform:translateY(25px);
-// //     }
-// //     to{
-// //         opacity:1;
-// //         transform:translateY(0);
-// //     }
-// // }
+// // // a:hover{
+// // //     transform:translateY(-3px);
+// // //     box-shadow:0 15px 35px rgba(37,99,235,.6);
+// // // }
 
-// // img{
-// //     width:220px;
-// //     height:220px;
-// //     object-fit:cover;
-// //     border-radius:20px;
-// //     border:5px solid rgba(255,255,255,.9);
-// //     box-shadow:0 15px 40px rgba(0,0,0,.4);
-// //     margin-bottom:25px;
-// //     transition:.35s;
-// // }
+// // // @media(max-width:768px){
 
-// // img:hover{
-// //     transform:scale(1.05);
-// // }
+// // // body{
+// // //     padding:20px;
+// // // }
 
-// // h2{
-// //     color:#fff;
-// //     font-size:34px;
-// //     margin-bottom:25px;
-// // }
+// // // .box{
+// // //     padding:25px;
+// // // }
 
-// // p{
-// //     color:#e5e7eb;
-// //     font-size:17px;
-// //     line-height:1.8;
-// //     background:rgba(255,255,255,.08);
-// //     padding:18px 22px;
-// //     border-radius:15px;
-// //     margin:15px 0;
-// //     text-align:left;
-// // }
+// // // img{
+// // //     width:170px;
+// // //     height:170px;
+// // // }
 
-// // strong{
-// //     color:#93c5fd;
-// // }
+// // // h2{
+// // //     font-size:28px;
+// // // }
 
-// // a{
-// //     display:inline-block;
-// //     margin-top:30px;
-// //     padding:14px 35px;
-// //     border-radius:50px;
-// //     text-decoration:none;
-// //     background:linear-gradient(135deg,#2563eb,#7c3aed);
-// //     color:#fff;
-// //     font-weight:700;
-// //     transition:.3s;
-// //     box-shadow:0 10px 25px rgba(37,99,235,.45);
-// // }
+// // // p{
+// // //     font-size:15px;
+// // // }
 
-// // a:hover{
-// //     transform:translateY(-3px);
-// //     box-shadow:0 15px 35px rgba(37,99,235,.6);
-// // }
+// // // }
 
-// // @media(max-width:768px){
+// // // </style>
 
-// // body{
-// //     padding:20px;
-// // }
+// // // </head>
 
-// // .box{
-// //     padding:25px;
-// // }
+// // // <body>
 
-// // img{
-// //     width:170px;
-// //     height:170px;
-// // }
+// // // <div class="box">
 
-// // h2{
-// //     font-size:28px;
-// // }
+// // // <img src="${student.image}">
 
-// // p{
-// //     font-size:15px;
-// // }
+// // // <h2>${student.name}</h2>
 
-// // }
+// // // <p><b>Father Name:</b> ${student.fatherName || ""}</p>
 
-// // </style>
+// // // <p><b>Course:</b> ${student.course || ""}</p>
 
-// // </head>
+// // // <p><b>Email:</b> ${student.email || ""}</p>
 
-// // <body>
+// // // <p><b>Mobile:</b> ${student.mobile || ""}</p>
 
-// // <div class="box">
+// // // <p><b>Address:</b> ${student.address || ""}</p>
 
-// // <img src="${student.image}">
+// // // <p>${student.description || ""}</p>
 
-// // <h2>${student.name}</h2>
+// // // <a href="/">⬅ Back</a>
 
-// // <p><b>Father Name:</b> ${student.fatherName || ""}</p>
+// // // </div>
 
-// // <p><b>Course:</b> ${student.course || ""}</p>
+// // // </body>
+// // // </html>
+// // // `);
 
-// // <p><b>Email:</b> ${student.email || ""}</p>
+// // //     } catch (err) {
+// // //         console.error(err);
+// // //         res.status(500).send(err.message);
+// // //     }
+// // // });
 
-// // <p><b>Mobile:</b> ${student.mobile || ""}</p>
-
-// // <p><b>Address:</b> ${student.address || ""}</p>
-
-// // <p>${student.description || ""}</p>
-
-// // <a href="/">⬅ Back</a>
-
-// // </div>
-
-// // </body>
-// // </html>
-// // `);
-
-// //     } catch (err) {
-// //         console.error(err);
-// //         res.status(500).send(err.message);
-// //     }
-// // });
-
-// // module.exports = router;
+// // // module.exports = router;
