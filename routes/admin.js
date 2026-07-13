@@ -1,4 +1,4 @@
-const AdminLogin = require("../pages/AdminLogin");
+const AdminLogin = require("../pages/adminLogin");
 const express = require("express");
 const router = express.Router();
 
