@@ -103,7 +103,7 @@
 function DashboardStats(data = {}) {
 
 return `
-<link rel="stylesheet" href="/css/style.css"> 
+<link rel="stylesheet" href="/css/dashboardsections.css"> 
 <div class="stats-grid">
 
 <div class="stat-card">
