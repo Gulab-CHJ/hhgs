@@ -1,26 +1,20 @@
-const dashbord = require("../pages/dashbord");
-const AdminLogin = require("../pages/adminLogin");
 const express = require("express");
 const router = express.Router();
+const dashbord = require("../pages/dashboard");
+const AdminLogin = require("../pages/adminLogin");
+const { login } = require("../controllers/adminAuth");
 
 router.get("/", (req, res) => {
     res.send(AdminLogin());
 });
 
 // Login submit
-router.post("/login", (req, res) => {
-    const { email, password } = req.body;
+router.post("/login", login);
 
-    console.log(email, password);
-
-    res.send(dashbord());
+// Dashboard
+router.get("/admindashboard", (req, res) => {
+    res.send(dashboard());
 });
 
-router.post("/login", (req, res) => {
-    const { email, password } = req.body;
 
-    console.log(email, password);
-
-    res.send("Login Successful");
-});
 module.exports = router;
