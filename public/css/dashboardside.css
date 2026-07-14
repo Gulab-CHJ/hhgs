@@ -1,37 +1,40 @@
 /* ===================================
-   HHGS PREMIUM HEADER
+   HHGS ADMIN HEADER
 =================================== */
 
 .dashboard-header{
     position:sticky;
     top:0;
     z-index:999;
+    width:100%;
+    background:#ffffff;
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:15px 30px;
-    background:#ffffff;
     border-bottom:1px solid #e5e7eb;
-    box-shadow:0 4px 20px rgba(0,0,0,.06);
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
 
-/* Logo */
+/* ==========================
+   LOGO
+========================== */
 
 .header-logo{
     display:flex;
     align-items:center;
-    gap:12px;
 }
 
 .header-logo h2{
     margin:0;
     font-size:26px;
     font-weight:700;
-    color:#2563eb;
-    letter-spacing:.5px;
+    color:#0d6efd;
 }
 
-/* Menu */
+/* ==========================
+   MENU
+========================== */
 
 .header-menu{
     display:flex;
@@ -43,48 +46,48 @@
     display:flex;
     align-items:center;
     gap:8px;
-    padding:11px 18px;
-    color:#475569;
+    padding:10px 16px;
     text-decoration:none;
-    border-radius:12px;
+    color:#555;
+    border-radius:10px;
     font-size:15px;
     font-weight:600;
-    transition:.3s;
+    transition:.3s ease;
+    white-space:nowrap;
 }
 
 .header-menu a i{
-    font-size:17px;
+    font-size:16px;
 }
 
 /* Hover */
 
 .header-menu a:hover{
-    background:#eff6ff;
-    color:#2563eb;
+    background:#eef4ff;
+    color:#0d6efd;
 }
 
 /* Active */
 
 .header-menu a.active{
-    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    background:#0d6efd;
     color:#fff;
-    box-shadow:0 8px 18px rgba(37,99,235,.25);
 }
 
 /* Logout */
 
 .header-menu a.logout{
-    color:#ef4444;
+    color:#dc3545;
 }
 
 .header-menu a.logout:hover{
-    background:#ef4444;
+    background:#dc3545;
     color:#fff;
 }
 
-/* ===============================
+/* ==========================
    TABLET
-================================ */
+========================== */
 
 @media(max-width:992px){
 
@@ -106,9 +109,11 @@
 
 .header-menu{
     width:100%;
+    display:flex;
+    flex-wrap:nowrap;
     overflow-x:auto;
     overflow-y:hidden;
-    flex-wrap:nowrap;
+    gap:10px;
     scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
     padding-bottom:5px;
@@ -124,9 +129,9 @@
 
 }
 
-/* ===============================
+/* ==========================
    MOBILE
-================================ */
+========================== */
 
 @media(max-width:576px){
 
@@ -143,12 +148,12 @@
 }
 
 .header-menu a{
-    padding:10px 14px;
+    padding:8px 12px;
     font-size:13px;
 }
 
 .header-menu a i{
-    font-size:16px;
+    font-size:15px;
 }
 
 }
