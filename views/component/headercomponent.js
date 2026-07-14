@@ -1,6 +1,6 @@
 function Header() {
     return `
-    <link rel="stylesheet" href="/css/style.css">
+     <link rel="stylesheet" href="/css/style.css"> 
 
 <!-- Font Awesome -->
 <link rel="stylesheet"
