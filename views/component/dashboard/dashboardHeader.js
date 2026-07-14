@@ -1,8 +1,7 @@
 function DashboardHeader(){
 
 return `
-
-<header class="admin-header">
+<link rel="stylesheet" href="/css/headercomponent.css">
 
 <div class="admin-logo">
 

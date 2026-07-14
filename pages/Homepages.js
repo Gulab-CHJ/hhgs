@@ -1,5 +1,5 @@
 const Header = require("../views/component/headercomponent");
-
+const Banner = require("../views/component/bannercomponent");
 function Home() {
     return `
 <!DOCTYPE html>
@@ -9,11 +9,12 @@ function Home() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 
-    <link rel="stylesheet" href="/css/headercomponent.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 ${Header()}
+${Banner()}
 
 </body>
 </html>
