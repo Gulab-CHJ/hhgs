@@ -1,7 +1,9 @@
 function DashboardSection(data = {}) {
 
 return `
-<link rel="stylesheet" href="/css/dashboardsections.css">
+<style>
+    @import url('/css/dashboardsections.css');
+</style>
 
 <section class="dashboard-content">
 
