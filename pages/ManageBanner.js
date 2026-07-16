@@ -83,6 +83,7 @@ return `
 <html lang="en">
 
 <head>
+<link rel="stylesheet" href="/css/headercomponent.css"> 
 
 <meta charset="UTF-8">
 
