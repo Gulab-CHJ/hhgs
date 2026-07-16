@@ -14,10 +14,13 @@ app.use(express.static("public"));
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
 
+
 // Home Route
 app.get("/", (req, res) => {
     res.send(Home());
 });
+
+
 
 // Start Server
 const PORT = 3000;

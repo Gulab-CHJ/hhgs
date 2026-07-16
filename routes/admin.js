@@ -3,6 +3,7 @@ const router = express.Router();
 const dashbord = require("../pages/dashboard");
 const AdminLogin = require("../pages/adminLogin");
 const { login } = require("../controllers/adminAuth");
+const AdminController = require("../controllers/adminController");
 
 router.get("/", (req, res) => {
     res.send(AdminLogin());
@@ -15,6 +16,8 @@ router.post("/login", login);
 router.get("/admindashboard", (req, res) => {
     res.send(dashboard());
 });
+
+router.get("/manage-banners", AdminController.manageBanners);
 
 
 module.exports = router;
