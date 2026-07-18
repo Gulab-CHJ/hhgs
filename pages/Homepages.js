@@ -42,6 +42,8 @@ function Home(banners = []) {
 
 <link rel="stylesheet" href="/css/style.css">
 
+<link rel="stylesheet" href="/css/banner.css">
+
 </head>
 
 

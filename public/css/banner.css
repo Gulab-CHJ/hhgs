@@ -1,49 +1,139 @@
 /* =========================
-   FULL WIDTH BANNER
+   BANNER SECTION
 ========================= */
 
-.banner{
+.banner-section{
+
     width:100%;
-    margin:0 auto 25px;
+    margin:0 auto;
     padding:0;
+
 }
 
 
-/* Banner Box */
+/* Single Banner */
+
+.banner{
+
+    width:100%;
+    max-width:1200px;
+    margin:15px auto 25px;
+    padding:0 15px;
+
+}
+
+
+/* Banner Link */
 
 .banner a{
+
     display:block;
     width:100%;
+
     overflow:hidden;
+
     background:#fff;
+
+    border-radius:15px;
+
     text-decoration:none;
 
-    border-radius:0;
+    box-shadow:
+    0 8px 25px rgba(0,0,0,0.12);
+
 }
 
 
-/* Full Image */
+/* Banner Image */
 
 .banner img{
+
     width:100%;
+
     height:auto;
+
     display:block;
+
     object-fit:contain;
+
+    border-radius:15px;
+
 }
 
 
-/* Mobile */
+/* Banner Title */
+
+.banner h3{
+
+    text-align:center;
+
+    margin:10px 0;
+
+    font-size:20px;
+
+    color:#2563eb;
+
+    font-weight:600;
+
+}
+
+
+/* Hover */
+
+.banner a:hover{
+
+    transform:translateY(-3px);
+
+    transition:0.3s ease;
+
+    box-shadow:
+    0 15px 35px rgba(37,99,235,0.25);
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
 
 @media(max-width:768px){
 
 .banner{
-    width:100%;
-    padding:0;
+
+    padding:0 10px;
+
+    margin:10px auto 20px;
+
 }
 
+
+.banner h3{
+
+    font-size:16px;
+
+}
+
+
 .banner img{
+
     width:100%;
     height:auto;
+
+}
+
+}
+
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media(max-width:480px){
+
+.banner h3{
+
+    font-size:14px;
+
 }
 
 }
