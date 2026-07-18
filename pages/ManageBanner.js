@@ -12,8 +12,6 @@ rows += `
         <img src="${banner.image}" class="banner-img">
     </td>
 
-    <td>${banner.title}</td>
-
     <td>
         <a href="${banner.link}" target="_blank">
             ${banner.link}
@@ -41,12 +39,10 @@ rows += `
 
         ${
             banner.active
-            ?
-            `<a href="/admin/deactivate-banner/${banner._id}" class="btn warning">
+            ? `<a href="/admin/deactivate-banner/${banner._id}" class="btn warning">
                 <i class="fa-solid fa-ban"></i>
             </a>`
-            :
-            `<a href="/admin/activate-banner/${banner._id}" class="btn success">
+            : `<a href="/admin/activate-banner/${banner._id}" class="btn success">
                 <i class="fa-solid fa-check"></i>
             </a>`
         }
@@ -113,7 +109,6 @@ Total Banners :
 <tr>
 <th>#</th>
 <th>Banner</th>
-<th>Title</th>
 <th>Link</th>
 <th>Status</th>
 <th>Actions</th>

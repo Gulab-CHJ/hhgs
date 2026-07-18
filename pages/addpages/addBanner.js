@@ -13,8 +13,6 @@ function AddBanner() {
 
 <form action="/admin/add-banner" method="POST" enctype="multipart/form-data">
 
-    <input type="text" name="title" placeholder="Banner Title" required><br><br>
-
     <input type="file" name="image" accept="image/*" required><br><br>
 
     <input type="text" name="link" placeholder="Banner Link"><br><br>
