@@ -22,7 +22,7 @@ router.get("/admindashboard", (req, res) => {
 // router.get("/manage-banners", AdminController.manageBanners);
 // router.get("/add-banner", adminController.addBannerPage);
 // router.post("/add-banner", adminController.saveBanner);
-router.get("/manage-banner", AdminController.manageBanners);
+router.get("/manage-banners", AdminController.manageBanners);
 
 router.get("/add-banner", AdminController.addBannerPage);
 
