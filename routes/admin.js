@@ -4,6 +4,8 @@ const dashbord = require("../pages/dashboard");
 const AdminLogin = require("../pages/adminLogin");
 const { login } = require("../controllers/adminAuth");
 const AdminController = require("../controllers/adminController");
+const upload = require("../config/multer");
+
 
 router.get("/", (req, res) => {
     res.send(AdminLogin());
@@ -17,7 +19,18 @@ router.get("/admindashboard", (req, res) => {
     res.send(dashboard());
 });
 
-router.get("/manage-banners", AdminController.manageBanners);
+// router.get("/manage-banners", AdminController.manageBanners);
+// router.get("/add-banner", adminController.addBannerPage);
+// router.post("/add-banner", adminController.saveBanner);
+router.get("/manage-banner", AdminController.manageBanners);
+
+router.get("/add-banner", AdminController.addBannerPage);
+
+router.post(
+    "/add-banner",
+    upload.single("image"),
+    AdminController.saveBanner
+);
 
 
 module.exports = router;
