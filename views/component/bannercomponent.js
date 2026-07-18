@@ -31,8 +31,7 @@ html += `
 
 <a href="${banner.link}" target="_blank">
 
-<img src="${banner.image}" 
-alt="${banner.title}">
+
 
 </a>
 
