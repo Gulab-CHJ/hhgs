@@ -45,3 +45,21 @@ exports.manageBanners = async (req, res) => {
         res.status(500).send("Error Loading Banners");
     }
 };
+
+
+exports.deleteBanner = async (req, res) => {
+
+    try {
+
+        await Banner.findByIdAndDelete(req.params.id);
+
+        res.redirect("/admin/manage-banner");
+
+    } catch (err) {
+
+        console.log(err);
+        res.status(500).send("Delete Banner Failed");
+
+    }
+
+};

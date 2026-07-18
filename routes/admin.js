@@ -32,5 +32,6 @@ router.post(
     AdminController.saveBanner
 );
 
+router.get("/delete-banner/:id", AdminController.deleteBanner);
 
 module.exports = router;
