@@ -1,70 +1,35 @@
 /* =========================
-   BANNER
+   FULL WIDTH BANNER
 ========================= */
 
 .banner{
-
     width:100%;
-
-    max-width:1200px;
-
-    margin:20px auto 30px;
-
-    padding:0 15px;
-
+    margin:0 auto 25px;
+    padding:0;
 }
 
 
-/* Banner Link */
+/* Banner Box */
 
 .banner a{
-
     display:block;
-
+    width:100%;
     overflow:hidden;
-
-    border-radius:15px;
-
+    background:#fff;
     text-decoration:none;
 
-    background:#fff;
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,.12);
-
+    border-radius:0;
 }
 
 
-/* Image */
+/* Full Image */
 
 .banner img{
-
     width:100%;
-
-    height:auto;       /* image cut nahi hogi */
-
-    max-height:350px;
-
-    object-fit:contain; /* full image dikhegi */
-
+    height:auto;
     display:block;
-
-    border-radius:15px;
-
+    object-fit:contain;
 }
-
-
-/* Hover */
-
-.banner a:hover{
-
-    transform:translateY(-3px);
-
-    box-shadow:
-    0 15px 35px rgba(37,99,235,.25);
-
-}
-
 
 
 /* Mobile */
@@ -72,27 +37,13 @@
 @media(max-width:768px){
 
 .banner{
-
-    padding:0 10px;
-
+    width:100%;
+    padding:0;
 }
-
 
 .banner img{
-
-    max-height:220px;
-
-}
-
-}
-
-
-@media(max-width:480px){
-
-.banner img{
-
-    max-height:160px;
-
+    width:100%;
+    height:auto;
 }
 
 }
