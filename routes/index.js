@@ -12,7 +12,6 @@ router.get("/", async(req,res)=>{
         const banners = await Banner.find({
             active:true
         });
-
         res.send(Home(banners));
 
     }catch(err){

@@ -26,6 +26,7 @@
 const Header = require("../views/component/headercomponent");
 const Banner = require("../views/component/bannercomponent");
 
+
 function Home(banners = []) {
 
     return `
@@ -53,7 +54,7 @@ ${Header()}
 
 ${Banner(banners)}
 
-
+<script src="/js/banner.js"></script>
 </body>
 
 </html>

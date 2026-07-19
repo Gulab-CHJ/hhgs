@@ -1,61 +1,24 @@
-// function Banner() {
-//     return `
-//     <section class="banner">
-
-//         <img src="/images/banner.jpg" alt="HHGS Banner">
-
-//         <div class="banner-content">
-//             <h1>Welcome to HHGS</h1>
-//             <p>Human Healthy Global Services</p>
-
-//             <a href="/contact" class="btn">
-//                 Contact Us
-//             </a>
-//         </div>
-
-//     </section>
-//     `;
-// }
-
-// module.exports = Banner;
-
 function Banner(banners = []) {
 
-let html = "";
+    let html = "";
 
-banners.forEach(banner => {
+    banners.forEach((banner) => {
 
-html += `
+        html += `
+        <div class="banner">
+            <a href="${banner.link || '#'}" target="_blank">
+                <img src="${banner.image}" alt="Banner">
+            </a>
+        </div>
+        `;
 
-<div class="banner">
+    });
 
-<a href="${banner.link}" target="_blank">
-
-<img src="${banner.image}" 
-alt="${banner.title}">
-
-</a>
-
-
-
-</div>
-
-`;
-
-});
-
-
-return `
-
-<section class="banner-section">
-
-${html}
-
-</section>
-
-`;
-
+    return `
+    <section class="banner-section">
+        ${html}
+    </section>
+    `;
 }
-
 
 module.exports = Banner;

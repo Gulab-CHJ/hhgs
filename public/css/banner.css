@@ -1,152 +1,68 @@
-/* =========================
-   BANNER SECTION
-========================= */
-
 .banner-section{
-
-    width:100%;
-    margin:0 auto;
-    padding:0;
-
-}
-
-
-/* Single Banner */
-
-.banner{
-    display:none;
-    opacity:0;
-    transition:opacity .6s ease-in-out;
-
     width:100%;
     max-width:1200px;
-    margin:15px auto 25px;
-    padding:0 15px;
-
-}
-
-
-/* Banner Link */
-
-.banner a{
-
-    display:block;
-    width:100%;
-
+    height:400px;
+    margin:20px auto;
+    position:relative;
     overflow:hidden;
-
-    background:#fff;
-
     border-radius:15px;
-
-    text-decoration:none;
-
-    box-shadow:
-    0 8px 25px rgba(0,0,0,0.12);
-
+    box-shadow:0 8px 25px rgba(0,0,0,.2);
 }
-
-
-/* Banner Image */
-
-.banner img{
-
-    width:100%;
-
-    height:auto;
-
-    display:block;
-
-    object-fit:contain;
-
-    border-radius:15px;
-
-}
-
-
-/* Banner Title */
-
-.banner h3{
-
-    text-align:center;
-
-    margin:10px 0;
-
-    font-size:20px;
-
-    color:#2563eb;
-
-    font-weight:600;
-
-}
-
-
-/* Hover */
-
-.banner a:hover{
-
-    transform:translateY(-3px);
-
-    transition:0.3s ease;
-
-    box-shadow:
-    0 15px 35px rgba(37,99,235,0.25);
-
-}
-
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:768px){
 
 .banner{
-    display:none;
-    opacity:0;
-    transition:opacity .6s ease-in-out;
-
-    padding:0 10px;
-
-    margin:10px auto 20px;
-
-}
-
-
-.banner h3{
-
-    font-size:16px;
-
-}
-
-
-.banner img{
-
+    position:absolute;
+    inset:0;
     width:100%;
-    height:auto;
+    height:100%;
 
+    opacity:0;
+    visibility:hidden;
+
+    transition:opacity 3s ease-in-out,
+               visibility 3s ease-in-out;
+
+    z-index:0;
 }
-
-}
-
-
-/* =========================
-   SMALL MOBILE
-========================= */
-
-@media(max-width:480px){
-
-.banner h3{
-
-    font-size:14px;
-
-}
-
-}
-
-
 
 .banner.active{
-    display:block;
     opacity:1;
+    visibility:visible;
+    z-index:1;
+}
+
+.banner a{
+    display:block;
+    width:100%;
+    height:100%;
+}
+
+.banner img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    user-select:none;
+    -webkit-user-drag:none;
+}
+
+@media (max-width:992px){
+    .banner-section{
+        height:320px;
+    }
+}
+
+@media (max-width:768px){
+    .banner-section{
+        height:220px;
+        border-radius:10px;
+        margin:15px auto;
+    }
+}
+
+@media (max-width:480px){
+    .banner-section{
+        height:170px;
+        border-radius:8px;
+        margin:10px auto;
+    }
 }

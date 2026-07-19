@@ -1,20 +1,21 @@
-const banners = document.querySelectorAll(".banner");
+document.addEventListener("DOMContentLoaded", () => {
 
-let current = 0;
+    const banners = document.querySelectorAll(".banner");
 
-// पहले सिर्फ पहला banner दिखे
-banners.forEach((banner, index) => {
-    banner.style.display = index === 0 ? "block" : "none";
+    if (banners.length <= 1) return;
+
+    let current = 0;
+
+    banners[current].classList.add("active");
+
+    setInterval(() => {
+
+        banners[current].classList.remove("active");
+
+        current = (current + 1) % banners.length;
+
+        banners[current].classList.add("active");
+
+    }, 10000); // 10 सेकंड
+
 });
-
-setInterval(() => {
-    // वर्तमान banner छुपाओ
-    banners[current].style.display = "none";
-
-    // अगला banner
-    current = (current + 1) % banners.length;
-
-    // अगला banner दिखाओ
-    banners[current].style.display = "block";
-
-}, 20000); // 20 सेकंड
