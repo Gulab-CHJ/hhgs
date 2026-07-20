@@ -451,7 +451,7 @@ router.post(
 );
 
 const ManageProducts = require("../pages/manageProducts");
-const Product = require("../models/Product");
+
 router.get("/manage-products", async (req, res) => {
 
     try {
