@@ -29,10 +29,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
             Student
         </a>
 
-        <a href="/doctor-login">
-            <i class="fa-solid fa-user-doctor"></i>
-            Doctor
-        </a>
+        <a href="/admin/doctor-login">
+    <i class="fa-solid fa-user-doctor"></i>
+    Doctor
+</a>
 
         <a href="/services">
             <i class="fa-solid fa-briefcase-medical"></i>

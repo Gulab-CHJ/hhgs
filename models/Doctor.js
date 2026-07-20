@@ -1,94 +1,47 @@
-// // const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-// // const doctorSchema = new mongoose.Schema({
-// //     name: String,
-// //     degree: String,
-// //     specialization: String,
-// //     experience: String,
-// //     hospital: String,
-// //     phone: String,
-// //     email: String,
-// //     address: String,
-// //     image: String,
-// //     description: String
-// // });
+const DoctorSchema = new mongoose.Schema({
 
-// // module.exports = mongoose.models.Doctor || mongoose.model("Doctor", doctorSchema);
+    doctorId: {
+        type: String,
+        unique: true
+    },
 
-// const mongoose = require("mongoose");
+    name: {
+        type: String,
+        required: true
+    },
 
-// const doctorSchema = new mongoose.Schema({
+    degree: String,
 
-//     // Doctor Name
-//     name: {
-//         type: String,
-//         required: true
-//     },
+    specialization: String,
 
-//     // Photo
-//     image: {
-//         type: String,
-//         required: true
-//     },
+    experience: String,
 
-//     // Specialist
-//     specialist: {
-//         type: String,
-//         required: true
-//     },
+    hospital: String,
 
-//     // Qualification
-//     qualification: {
-//         type: String,
-//         required: true
-//     },
+    phone: {
+        type: String,
+        unique: true
+    },
 
-//     // Experience
-//     experience: {
-//         type: String,
-//         required: true
-//     },
+    email: String,
 
-//     // Hospital / Clinic
-//     hospital: {
-//         type: String,
-//         required: true
-//     },
+    password: {
+        type: String,
+        required: true
+    },
 
-//     // Mobile Number
-//     mobile: {
-//         type: String,
-//         required: true
-//     },
+    address: String,
 
-//     // Email
-//     email: {
-//         type: String,
-//         required: true
-//     },
+    image: String,
 
-//     // Consultation Fee
-//     fee: {
-//         type: Number,
-//         required: true
-//     },
+    description: String
 
-//     // Address
-//     address: {
-//         type: String,
-//         required: true
-//     },
+}, {
+    timestamps: true
+});
 
-//     // About Doctor
-//     about: {
-//         type: String,
-//         required: true
-//     }
-
-// }, {
-//     timestamps: true
-// });
-
-// module.exports =
-// mongoose.models.Doctor ||
-// mongoose.model("Doctor", doctorSchema);
+module.exports =
+    mongoose.models.Doctor ||
+    mongoose.model("Doctor", DoctorSchema);

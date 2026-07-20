@@ -1,132 +1,136 @@
 function ManageBanner(banners = []) {
 
-let rows = "";
+    let rows = "";
 
-banners.forEach((banner, index) => {
+    banners.forEach((banner, index) => {
 
-rows += `
-<tr>
-    <td>${index + 1}</td>
+        rows += `
+        <tr>
+            <td>${index + 1}</td>
 
-    <td>
-        <img src="${banner.image}" class="banner-img">
-    </td>
+            <td>
+                <img src="${banner.image}" class="banner-img">
+            </td>
 
-    <td>
-        <a href="${banner.link}" target="_blank">
-            ${banner.link}
-        </a>
-    </td>
+            <td>
+                <a href="${banner.link}" target="_blank">
+                    ${banner.link}
+                </a>
+            </td>
 
-    <td>
-        ${banner.active
-            ? '<span class="status active">Active</span>'
-            : '<span class="status inactive">Inactive</span>'
-        }
-    </td>
+            <td>
+                ${
+                    banner.active
+                        ? '<span class="status active">Active</span>'
+                        : '<span class="status inactive">Inactive</span>'
+                }
+            </td>
 
-    <td class="action">
+            <td class="action">
 
-        <a href="/admin/edit-banner/${banner._id}" class="btn edit">
-            <i class="fa-solid fa-pen"></i>
-        </a>
+                <a href="/admin/edit-banner/${banner._id}" class="btn edit">
+                    <i class="fa-solid fa-pen"></i>
+                </a>
 
-        <a href="/admin/delete-banner/${banner._id}"
-           class="btn delete"
-           onclick="return confirm('Delete Banner?')">
-            <i class="fa-solid fa-trash"></i>
-        </a>
+                <a href="/admin/delete-banner/${banner._id}"
+                   class="btn delete"
+                   onclick="return confirm('Delete Banner?')">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
 
-        ${
-            banner.active
-            ? `<a href="/admin/deactivate-banner/${banner._id}" class="btn warning">
-                <i class="fa-solid fa-ban"></i>
-            </a>`
-            : `<a href="/admin/activate-banner/${banner._id}" class="btn success">
-                <i class="fa-solid fa-check"></i>
-            </a>`
-        }
+                ${
+                    banner.active
+                        ? `
+                        <a href="/admin/deactivate-banner/${banner._id}" class="btn warning">
+                            <i class="fa-solid fa-ban"></i>
+                        </a>
+                        `
+                        : `
+                        <a href="/admin/activate-banner/${banner._id}" class="btn success">
+                            <i class="fa-solid fa-check"></i>
+                        </a>
+                        `
+                }
 
-    </td>
-</tr>
-`;
+            </td>
 
-});
+        </tr>
+        `;
 
-return `
+    });
+
+    return `
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
 
-<title>Manage Banner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="/css/manage-banner.css">
+    <title>Manage Banner</title>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/manage-banner.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<div class="page-header">
+        <div class="page-header">
 
-<div>
+            <div>
+                <h1>
+                    <i class="fa-solid fa-image"></i>
+                    Manage Banners
+                </h1>
 
-<h1>
-<i class="fa-solid fa-image"></i>
-Manage Banners
-</h1>
+                <p>Manage Website Home Page Banners</p>
+            </div>
 
-<p>Manage Website Home Page Banners</p>
+            <a href="/admin/add-banner" class="primary-btn">
+                <i class="fa-solid fa-plus"></i>
+                Add Banner
+            </a>
 
-</div>
+        </div>
 
-<a href="/admin/add-banner" class="primary-btn">
-<i class="fa-solid fa-plus"></i>
-Add Banner
-</a>
+        <div class="total-box">
+            Total Banners : <b>${banners.length}</b>
+        </div>
 
-</div>
+        <div class="table-box">
 
-<div class="total-box">
-Total Banners :
-<b>${banners.length}</b>
-</div>
+            <table>
 
-<div class="table-box">
+                <thead>
 
-<table>
+                    <tr>
+                        <th>#</th>
+                        <th>Banner</th>
+                        <th>Link</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
 
-<thead>
+                </thead>
 
-<tr>
-<th>#</th>
-<th>Banner</th>
-<th>Link</th>
-<th>Status</th>
-<th>Actions</th>
-</tr>
+                <tbody>
 
-</thead>
+                    ${rows}
 
-<tbody>
+                </tbody>
 
-${rows}
+            </table>
 
-</tbody>
+        </div>
 
-</table>
-
-</div>
-
-</div>
+    </div>
 
 </body>
 
