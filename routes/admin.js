@@ -96,7 +96,7 @@ router.get("/manage-doctors", async (req, res) => {
         res.send("Error loading doctors");
     }
 });
-// const AddDoctor = require("../pages/addPages/addDoctor");
+const AddDoctor = require("../pages/addpages/addDoctor");
 
 // router.get("/add-doctor", (req,res)=>{
 //     res.send(AddDoctor());
