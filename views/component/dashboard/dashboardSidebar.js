@@ -1,12 +1,14 @@
 function DashboardHeader() {
 
 return `
+
 <link rel="stylesheet" href="/css/dashboardside.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <header class="dashboard-header">
 
     <div class="header-logo">
-        <h2>HHGS Admin</h2>
+        <h2>HHGS Doctor</h2>
     </div>
 
     <nav class="header-menu">
@@ -44,6 +46,16 @@ return `
         <a href="/admin/manage-banners">
             <i class="fa-solid fa-image"></i>
             <span>Banners</span>
+        </a>
+
+        <a href="/admin/manage-products">
+            <i class="fa-solid fa-capsules"></i>
+            <span>Products</span>
+        </a>
+
+        <a href="/admin/manage-orders">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Orders</span>
         </a>
 
         <a href="/admin/logout" class="logout">

@@ -188,9 +188,13 @@ const AddDoctor = require("../pages/addpages/addDoctor");
 
 const { login } = require("../controllers/adminAuth");
 const AdminController = require("../controllers/adminController");
+const DoctorDashboard = require("../pages/doctorDashboard");
+
+
 
 const Doctor = require("../models/Doctor");
 const upload = require("../config/multer");
+const Product = require("../models/Product");
 
 
 // =============================
@@ -248,26 +252,22 @@ router.post("/doctor/login", async (req, res) => {
         const doctor = await Doctor.findOne({ doctorId });
 
         if (!doctor) {
-            return res.send(
-                DoctorLogin("Doctor ID Not Registered")
-            );
+            return res.send(DoctorLogin("Doctor ID Not Registered"));
         }
 
         if (doctor.password !== password) {
-            return res.send(
-                DoctorLogin("Wrong Password")
-            );
+            return res.send(DoctorLogin("Wrong Password"));
         }
 
-        res.send(`
-            <h2>Welcome Dr. ${doctor.name}</h2>
-            <p>Login Successful ✅</p>
-        `);
+        // Products MongoDB से लाओ
+        const products = await Product.find().sort({ createdAt: -1 });
+
+        // Dashboard भेजो
+        res.send(DoctorDashboard(doctor, products));
 
     } catch (err) {
 
         console.log(err);
-
         res.status(500).send(err.message);
 
     }
