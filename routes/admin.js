@@ -394,5 +394,60 @@ router.get("/delete-doctor/:id", async (req, res) => {
     }
 
 });
+const EditDoctor = require("../pages/editpages/editDoctor");
+// Edit Doctor Page
+router.get("/edit-doctor/:id", async (req, res) => {
+    try {
+
+        const doctor = await Doctor.findById(req.params.id);
+
+        if (!doctor) {
+            return res.send("Doctor Not Found");
+        }
+
+        res.send(EditDoctor(doctor));
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
+});
+
+// Update Doctor
+router.post(
+    "/edit-doctor/:id",
+    upload.single("image"),
+    async (req, res) => {
+
+        try {
+
+            const updateData = {
+                name: req.body.name,
+                degree: req.body.qualification,
+                specialization: req.body.speciality,
+                experience: req.body.experience,
+                hospital: req.body.clinic,
+                phone: req.body.phone,
+                email: req.body.email,
+                password: req.body.password,
+                address: req.body.address,
+                description: req.body.description
+            };
+
+            if (req.file) {
+                updateData.image = "/uploads/" + req.file.filename;
+            }
+
+            await Doctor.findByIdAndUpdate(req.params.id, updateData);
+
+            res.redirect("/admin/manage-doctors");
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.message);
+        }
+
+    }
+);
 
 module.exports = router;
