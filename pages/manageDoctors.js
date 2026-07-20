@@ -1,196 +1,196 @@
-function ManageDoctors(doctors = []) {
+// function ManageDoctors(doctors = []) {
 
-let rows = "";
+// let rows = "";
 
-doctors.forEach((doctor, index) => {
+// doctors.forEach((doctor, index) => {
 
-rows += `
-<tr>
+// rows += `
+// <tr>
 
-<td>${index + 1}</td>
+// <td>${index + 1}</td>
 
-<td>
-<img src="${doctor.photo || "/images/default-doctor.png"}"
-class="doctor-img">
-</td>
+// <td>
+// <img src="${doctor.photo || "/images/default-doctor.png"}"
+// class="doctor-img">
+// </td>
 
-<td>${doctor.doctorId || "-"}</td>
+// <td>${doctor.doctorId || "-"}</td>
 
-<td>${doctor.name || "-"}</td>
+// <td>${doctor.name || "-"}</td>
 
-<td>${doctor.degree || "-"}</td>
+// <td>${doctor.degree || "-"}</td>
 
-<td>${doctor.specialization || "-"}</td>
+// <td>${doctor.specialization || "-"}</td>
 
-<td>${doctor.experience || "-"}</td>
+// <td>${doctor.experience || "-"}</td>
 
-<td>${doctor.hospital || "-"}</td>
+// <td>${doctor.hospital || "-"}</td>
 
-<td>${doctor.phone || "-"}</td>
+// <td>${doctor.phone || "-"}</td>
 
-<td>${doctor.password || "-"}</td>
+// <td>${doctor.password || "-"}</td>
 
-<td>${doctor.email || "-"}</td>
+// <td>${doctor.email || "-"}</td>
 
-<td>
+// <td>
 
-<a href="/admin/edit-doctor/${doctor._id}" class="edit-btn">
-Edit
-</a>
+// <a href="/admin/edit-doctor/${doctor._id}" class="edit-btn">
+// Edit
+// </a>
 
-<a href="/admin/delete-doctor/${doctor._id}"
-class="delete-btn"
-onclick="return confirm('Delete Doctor?')">
-Delete
-</a>
+// <a href="/admin/delete-doctor/${doctor._id}"
+// class="delete-btn"
+// onclick="return confirm('Delete Doctor?')">
+// Delete
+// </a>
 
-</td>
+// </td>
 
-</tr>
-`;
+// </tr>
+// `;
 
-});
+// });
 
-return `
-<!DOCTYPE html>
-<html lang="en">
+// return `
+// <!DOCTYPE html>
+// <html lang="en">
 
-<head>
+// <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+// <meta charset="UTF-8">
+// <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Manage Doctors</title>
+// <title>Manage Doctors</title>
 
-<link rel="stylesheet" href="/css/admin.css">
+// <link rel="stylesheet" href="/css/admin.css">
 
-<style>
+// <style>
 
-.container{
-width:98%;
-margin:30px auto;
-}
+// .container{
+// width:98%;
+// margin:30px auto;
+// }
 
-.top-bar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
+// .top-bar{
+// display:flex;
+// justify-content:space-between;
+// align-items:center;
+// margin-bottom:20px;
+// }
 
-.add-btn{
-background:#0d6efd;
-color:#fff;
-padding:10px 18px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-}
+// .add-btn{
+// background:#0d6efd;
+// color:#fff;
+// padding:10px 18px;
+// border-radius:8px;
+// text-decoration:none;
+// font-weight:bold;
+// }
 
-table{
-width:100%;
-border-collapse:collapse;
-background:#fff;
-}
+// table{
+// width:100%;
+// border-collapse:collapse;
+// background:#fff;
+// }
 
-th,td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
-font-size:14px;
-}
+// th,td{
+// border:1px solid #ddd;
+// padding:10px;
+// text-align:center;
+// font-size:14px;
+// }
 
-th{
-background:#0d6efd;
-color:#fff;
-}
+// th{
+// background:#0d6efd;
+// color:#fff;
+// }
 
-.doctor-img{
-width:60px;
-height:60px;
-border-radius:50%;
-object-fit:cover;
-}
+// .doctor-img{
+// width:60px;
+// height:60px;
+// border-radius:50%;
+// object-fit:cover;
+// }
 
-.edit-btn{
-background:#28a745;
-color:#fff;
-padding:6px 12px;
-border-radius:6px;
-text-decoration:none;
-margin-right:5px;
-}
+// .edit-btn{
+// background:#28a745;
+// color:#fff;
+// padding:6px 12px;
+// border-radius:6px;
+// text-decoration:none;
+// margin-right:5px;
+// }
 
-.delete-btn{
-background:#dc3545;
-color:#fff;
-padding:6px 12px;
-border-radius:6px;
-text-decoration:none;
-}
+// .delete-btn{
+// background:#dc3545;
+// color:#fff;
+// padding:6px 12px;
+// border-radius:6px;
+// text-decoration:none;
+// }
 
-</style>
+// </style>
 
-</head>
+// </head>
 
-<body>
+// <body>
 
-<div class="container">
+// <div class="container">
 
-<div class="top-bar">
+// <div class="top-bar">
 
-<h2>Manage Doctors (${doctors.length})</h2>
+// <h2>Manage Doctors (${doctors.length})</h2>
 
-<a href="/admin/add-doctor" class="add-btn">
-+ Add Doctor
-</a>
+// <a href="/admin/add-doctor" class="add-btn">
+// + Add Doctor
+// </a>
 
-</div>
+// </div>
 
-<table>
+// <table>
 
-<thead>
+// <thead>
 
-<tr>
+// <tr>
 
-<th>#</th>
-<th>Photo</th>
-<th>Doctor ID</th>
-<th>Name</th>
-<th>Degree</th>
-<th>Specialization</th>
-<th>Experience</th>
-<th>Hospital</th>
-<th>Phone</th>
-<th>Password</th>
-<th>Email</th>
-<th>Action</th>
+// <th>#</th>
+// <th>Photo</th>
+// <th>Doctor ID</th>
+// <th>Name</th>
+// <th>Degree</th>
+// <th>Specialization</th>
+// <th>Experience</th>
+// <th>Hospital</th>
+// <th>Phone</th>
+// <th>Password</th>
+// <th>Email</th>
+// <th>Action</th>
 
-</tr>
+// </tr>
 
-</thead>
+// </thead>
 
-<tbody>
+// <tbody>
 
-${rows || `
-<tr>
-<td colspan="12">
-No Doctors Found
-</td>
-</tr>
-`}
+// ${rows || `
+// <tr>
+// <td colspan="12">
+// No Doctors Found
+// </td>
+// </tr>
+// `}
 
-</tbody>
+// </tbody>
 
-</table>
+// </table>
 
-</div>
+// </div>
 
-</body>
+// </body>
 
-</html>
-`;
+// </html>
+// `;
 
-}
+// }
 
-module.exports = ManageDoctors;
+// module.exports = ManageDoctors;

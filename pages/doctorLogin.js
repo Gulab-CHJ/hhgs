@@ -1,92 +1,92 @@
-function DoctorLogin(error = "") {
+// function DoctorLogin(error = "") {
 
-return `
-<!DOCTYPE html>
-<html lang="en">
+// return `
+// <!DOCTYPE html>
+// <html lang="en">
 
-<head>
+// <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+// <meta charset="UTF-8">
+// <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Doctor Login</title>
+// <title>Doctor Login</title>
 
-<link rel="stylesheet" href="/css/admin.css">
+// <link rel="stylesheet" href="/css/admin.css">
 
-<style>
+// <style>
 
-.error-message{
-    background:#ffe5e5;
-    color:#d8000c;
-    border:1px solid #ffb3b3;
-    padding:10px;
-    border-radius:8px;
-    margin-bottom:15px;
-    text-align:center;
-    font-weight:bold;
-}
+// .error-message{
+//     background:#ffe5e5;
+//     color:#d8000c;
+//     border:1px solid #ffb3b3;
+//     padding:10px;
+//     border-radius:8px;
+//     margin-bottom:15px;
+//     text-align:center;
+//     font-weight:bold;
+// }
 
-</style>
+// </style>
 
-</head>
+// </head>
 
-<body>
+// <body>
 
-<div class="login-container">
+// <div class="login-container">
 
-<div class="login-card">
+// <div class="login-card">
 
-<img src="/images/GS LOGO.png" alt="Logo">
+// <img src="/images/GS LOGO.png" alt="Logo">
 
-<h2>Doctor Login</h2>
+// <h2>Doctor Login</h2>
 
-<p>Sign in to continue</p>
+// <p>Sign in to continue</p>
 
-${error ? `<div class="error-message">${error}</div>` : ""}
+// ${error ? `<div class="error-message">${error}</div>` : ""}
 
-<form action="/admin/doctor/login" method="POST">
+// <form action="/admin/doctor/login" method="POST">
 
-<input
-type="text"
-name="doctorId"
-placeholder="Doctor ID (DOC1001)"
-required
->
+// <input
+// type="text"
+// name="doctorId"
+// placeholder="Doctor ID (DOC1001)"
+// required
+// >
 
-<input
-type="password"
-name="password"
-placeholder="Password"
-required
->
+// <input
+// type="password"
+// name="password"
+// placeholder="Password"
+// required
+// >
 
-<button type="submit">
-Login
-</button>
+// <button type="submit">
+// Login
+// </button>
 
-</form>
+// </form>
 
-<a href="/">← Back Home</a>
+// <a href="/">← Back Home</a>
 
-</div>
+// </div>
 
-</div>
+// </div>
 
-<script>
+// <script>
 
-setTimeout(()=>{
-const box=document.querySelector(".error-message");
-if(box){
-box.style.display="none";
-}
-},3000);
+// setTimeout(()=>{
+// const box=document.querySelector(".error-message");
+// if(box){
+// box.style.display="none";
+// }
+// },3000);
 
-</script>
+// </script>
 
-</body>
-</html>
-`;
+// </body>
+// </html>
+// `;
 
-}
+// }
 
-module.exports = DoctorLogin;
+// module.exports = DoctorLogin;
