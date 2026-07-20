@@ -450,4 +450,60 @@ router.post(
     }
 );
 
+const ManageProducts = require("../pages/manageProducts");
+const Product = require("../models/Product");
+router.get("/manage-products", async (req, res) => {
+
+    try {
+
+        const products = await Product.find().sort({ createdAt: -1 });
+
+        res.send(ManageProducts(products));
+
+    } catch (err) {
+
+        console.log(err);
+        res.status(500).send(err.message);
+
+    }
+
+});
+const AddProduct = require("../pages/addpages/addProduct");
+
+router.get("/add-product", (req, res) => {
+    res.send(AddProduct());
+});
+router.post(
+    "/add-product",
+    upload.single("image"),
+    async (req, res) => {
+
+        try {
+
+            const product = new Product({
+
+                name: req.body.name,
+                price: req.body.price,
+                description: req.body.description,
+
+                image: req.file
+                    ? "/uploads/" + req.file.filename
+                    : ""
+
+            });
+
+            await product.save();
+
+            res.redirect("/admin/manage-products");
+
+        } catch (err) {
+
+            console.log(err);
+            res.status(500).send(err.message);
+
+        }
+
+    }
+);
+
 module.exports = router;
