@@ -82,20 +82,20 @@ router.post(
 router.get("/delete-banner/:id", AdminController.deleteBanner);
 
 
-// const ManageDoctors = require("../pages/manageDoctors");
+const ManageDoctors = require("../pages/manageDoctors");
 
-// router.get("/manage-doctors", async (req, res) => {
-//     try {
+router.get("/manage-doctors", async (req, res) => {
+    try {
 
-//         const doctors = await Doctor.find();
+        const doctors = await Doctor.find();
 
-//         res.send(ManageDoctors(doctors));
+        res.send(ManageDoctors(doctors));
 
-//     } catch (err) {
-//         console.log(err);
-//         res.send("Error loading doctors");
-//     }
-// });
+    } catch (err) {
+        console.log(err);
+        res.send("Error loading doctors");
+    }
+});
 // const AddDoctor = require("../pages/addPages/addDoctor");
 
 // router.get("/add-doctor", (req,res)=>{
