@@ -10,7 +10,7 @@ rows += `
 <td>${index + 1}</td>
 
 <td>
-<img src="${doctor.image || "/images/default-doctor.png"}"
+<img src="${doctor.photo || "/images/default-doctor.png"}"
 class="doctor-img">
 </td>
 
