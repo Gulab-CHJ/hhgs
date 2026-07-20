@@ -1,123 +1,123 @@
-// function AddDoctor() {
-//     return `
-// <!DOCTYPE html>
-// <html lang="en">
-// <head>
+function AddDoctor() {
+    return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
-// <meta charset="UTF-8">
-// <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-// <title>Add Doctor</title>
+<title>Add Doctor</title>
 
-// <link rel="stylesheet" href="/css/admin.css">
+<link rel="stylesheet" href="/css/admin.css">
 
-// </head>
+</head>
 
-// <body>
+<body>
 
-// <div class="login-container">
+<div class="login-container">
 
-// <div class="login-card">
+<div class="login-card">
 
-// <h2>Add Doctor</h2>
+<h2>Add Doctor</h2>
 
-// <form action="/admin/add-doctor" method="POST" enctype="multipart/form-data">
+<form action="/admin/add-doctor" method="POST" enctype="multipart/form-data">
 
-// <input
-// type="text"
-// name="name"
-// placeholder="Doctor Name"
-// required
-// >
+<input
+type="text"
+name="name"
+placeholder="Doctor Name"
+required
+>
 
-// <input
-// type="text"
-// name="qualification"
-// placeholder="Qualification (MBBS, MD...)"
-// required
-// >
+<input
+type="text"
+name="qualification"
+placeholder="Qualification (MBBS, MD...)"
+required
+>
 
-// <input
-// type="text"
-// name="speciality"
-// placeholder="Specialization"
-// required
-// >
+<input
+type="text"
+name="speciality"
+placeholder="Specialization"
+required
+>
 
-// <input
-// type="text"
-// name="experience"
-// placeholder="Experience"
-// required
-// >
+<input
+type="text"
+name="experience"
+placeholder="Experience"
+required
+>
 
-// <input
-// type="text"
-// name="clinic"
-// placeholder="Hospital / Clinic"
-// required
-// >
+<input
+type="text"
+name="clinic"
+placeholder="Hospital / Clinic"
+required
+>
 
-// <input
-// type="text"
-// name="phone"
-// placeholder="Phone Number"
-// required
-// >
+<input
+type="text"
+name="phone"
+placeholder="Phone Number"
+required
+>
 
-// <input
-// type="email"
-// name="email"
-// placeholder="Email"
-// >
+<input
+type="email"
+name="email"
+placeholder="Email"
+>
 
-// <input
-// type="password"
-// name="password"
-// placeholder="Login Password"
-// required
-// >
+<input
+type="password"
+name="password"
+placeholder="Login Password"
+required
+>
 
-// <textarea
-// name="description"
-// placeholder="Doctor Description"
-// rows="4"
-// ></textarea>
+<textarea
+name="description"
+placeholder="Doctor Description"
+rows="4"
+></textarea>
 
-// <input
-// type="text"
-// name="address"
-// placeholder="Address"
-// required
-// >
+<input
+type="text"
+name="address"
+placeholder="Address"
+required
+>
 
-// <input
-// type="file"
-// name="image"
-// accept="image/*"
-// required
-// >
+<input
+type="file"
+name="image"
+accept="image/*"
+required
+>
 
-// <button type="submit">
-// Save Doctor
-// </button>
+<button type="submit">
+Save Doctor
+</button>
 
-// </form>
+</form>
 
-// <br>
+<br>
 
-// <a href="/admin/manage-doctors">
-// Manage Doctors
-// </a>
+<a href="/admin/manage-doctors">
+Manage Doctors
+</a>
 
-// </div>
+</div>
 
-// </div>
+</div>
 
-// </body>
+</body>
 
-// </html>
-// `;
-// }
+</html>
+`;
+}
 
-// module.exports = AddDoctor;
+module.exports = AddDoctor;
