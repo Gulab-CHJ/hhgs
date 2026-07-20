@@ -98,79 +98,79 @@ router.get("/manage-doctors", async (req, res) => {
 });
 const AddDoctor = require("../pages/addpages/addDoctor");
 
-// router.get("/add-doctor", (req,res)=>{
-//     res.send(AddDoctor());
-// });
+router.get("/add-doctor", (req,res)=>{
+    res.send(AddDoctor());
+});
 
-// router.post(
-//     "/add-doctor",
-//     upload.single("image"),
-//     async (req, res) => {
+router.post(
+    "/add-doctor",
+    upload.single("image"),
+    async (req, res) => {
 
-//         try {
+        try {
 
-//             // Auto Doctor ID
-//             const totalDoctors = await Doctor.countDocuments();
-//             const doctorId = "DOC" + (1001 + totalDoctors);
+            // Auto Doctor ID
+            const totalDoctors = await Doctor.countDocuments();
+            const doctorId = "DOC" + (1001 + totalDoctors);
 
-//             // New Doctor
-//             const doctor = new Doctor({
+            // New Doctor
+            const doctor = new Doctor({
 
-//                 doctorId: doctorId,
+                doctorId: doctorId,
 
-//                 name: req.body.name,
+                name: req.body.name,
 
-//                 degree: req.body.qualification,
+                degree: req.body.qualification,
 
-//                 specialization: req.body.speciality,
+                specialization: req.body.speciality,
 
-//                 experience: req.body.experience,
+                experience: req.body.experience,
 
-//                 hospital: req.body.clinic,
+                hospital: req.body.clinic,
 
-//                 phone: req.body.phone,
+                phone: req.body.phone,
 
-//                 email: req.body.email,
+                email: req.body.email,
 
-//                 password: req.body.password,
+                password: req.body.password,
 
-//                 address: req.body.address,
+                address: req.body.address,
 
-//                 description: req.body.description,
+                description: req.body.description,
 
-//                 image: req.file
-//                     ? "/uploads/" + req.file.filename
-//                     : ""
+                image: req.file
+                    ? "/uploads/" + req.file.filename
+                    : ""
 
-//             });
+            });
 
-//             await doctor.save();
+            await doctor.save();
 
-//             res.send(`
-//                 <h2>Doctor Added Successfully ✅</h2>
+            res.send(`
+                <h2>Doctor Added Successfully ✅</h2>
 
-//                 <p><b>Doctor ID:</b> ${doctorId}</p>
+                <p><b>Doctor ID:</b> ${doctorId}</p>
 
-//                 <p><b>Password:</b> ${req.body.password}</p>
+                <p><b>Password:</b> ${req.body.password}</p>
 
-//                 <a href="/admin/manage-doctors">
-//                     Manage Doctors
-//                 </a>
-//             `);
+                <a href="/admin/manage-doctors">
+                    Manage Doctors
+                </a>
+            `);
 
-//         } catch (err) {
+        } catch (err) {
 
-//             console.log(err);
+            console.log(err);
 
-//             res.send(`
-//                 <h2>Error</h2>
-//                 <p>${err.message}</p>
-//             `);
+            res.send(`
+                <h2>Error</h2>
+                <p>${err.message}</p>
+            `);
 
-//         }
+        }
 
-//     }
-// );
+    }
+);
 
 
 
