@@ -310,66 +310,66 @@ router.get("/add-doctor", (req, res) => {
 // Save Doctor
 // =============================
 
-router.post(
-    "/add-doctor",
-    upload.single("image"),
-    async (req, res) => {
+// router.post(
+//     "/add-doctor",
+//     upload.single("image"),
+//     async (req, res) => {
 
-        try {
+//         try {
 
-            console.log("BODY:", req.body);
-            console.log("FILE:", req.file);
+//             console.log("BODY:", req.body);
+//             console.log("FILE:", req.file);
 
-            const totalDoctors = await Doctor.countDocuments();
+//             const totalDoctors = await Doctor.countDocuments();
 
-            const doctorId = "DOC" + (1001 + totalDoctors);
+//             const doctorId = "DOC" + (1001 + totalDoctors);
 
-            const doctor = new Doctor({
+//             const doctor = new Doctor({
 
-                doctorId,
+//                 doctorId,
 
-                name: req.body.name,
+//                 name: req.body.name,
 
-                degree: req.body.qualification,
+//                 degree: req.body.qualification,
 
-                specialization: req.body.speciality,
+//                 specialization: req.body.speciality,
 
-                experience: req.body.experience,
+//                 experience: req.body.experience,
 
-                hospital: req.body.clinic,
+//                 hospital: req.body.clinic,
 
-                phone: req.body.phone,
+//                 phone: req.body.phone,
 
-                email: req.body.email,
+//                 email: req.body.email,
 
-                password: req.body.password,
+//                 password: req.body.password,
 
-                address: req.body.address,
+//                 address: req.body.address,
 
-                description: req.body.description,
+//                 description: req.body.description,
 
-                image: req.file
-                    ? "/uploads/" + req.file.filename
-                    : ""
+//                 image: req.file
+//                     ? "/uploads/" + req.file.filename
+//                     : ""
 
-            });
+//             });
 
-            await doctor.save();
+//             await doctor.save();
 
-            console.log("Doctor Saved:", doctor);
+//             console.log("Doctor Saved:", doctor);
 
-            res.redirect("/admin/manage-doctors");
+//             res.redirect("/admin/manage-doctors");
 
-        } catch (err) {
+//         } catch (err) {
 
-            console.log("ADD DOCTOR ERROR:", err);
+//             console.log("ADD DOCTOR ERROR:", err);
 
-            res.status(500).send(err.message);
+//             res.status(500).send(err.message);
 
-        }
+//         }
 
-    }
-);
+//     }
+// );
 
 
 // =============================
