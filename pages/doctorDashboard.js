@@ -6,12 +6,20 @@ products.forEach(product => {
 
 cards += `
 <div class="card">
-    <img src="${product.image}" alt="${product.name}">
+
+    <div class="img-box">
+        <span class="badge">New</span>
+        <img src="${product.image}" alt="${product.name}">
+    </div>
+
     <div class="body">
         <h3>${product.name}</h3>
-        <p>₹ ${product.price}</p>
-        <button>View</button>
+
+        <p class="price">₹ ${product.price}</p>
+
+        <button>View Product</button>
     </div>
+
 </div>
 `;
 
@@ -20,7 +28,7 @@ cards += `
 return `
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
@@ -39,109 +47,246 @@ font-family:Arial,sans-serif;
 }
 
 body{
-background:#f5f5f5;
+background:#f1f3f6;
 overflow-x:hidden;
 }
 
+/* Header */
+
 header{
-background:#0d6efd;
+background:#2874f0;
 color:#fff;
-padding:15px;
+padding:15px 20px;
 display:flex;
 justify-content:space-between;
 align-items:center;
 flex-wrap:wrap;
+box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 
-header a{
-color:#fff;
-text-decoration:none;
-margin-left:15px;
-}
-
-.welcome{
-background:#fff;
-margin:15px;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,.1);
-}
-
-.products{
-
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-padding:15px;
-
-}
-
-.card{
-
-background:#fff;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 2px 8px rgba(0,0,0,.1);
-
-}
-
-.card img{
-
-width:100%;
-height:180px;
-object-fit:cover;
-
-}
-
-.body{
-
-padding:15px;
-
-}
-
-.body h3{
-
-margin-bottom:10px;
-
-}
-
-.body p{
-
-margin-bottom:10px;
-color:#0d6efd;
-font-weight:bold;
-
-}
-
-button{
-
-width:100%;
-padding:10px;
-border:none;
-background:#0d6efd;
-color:white;
-border-radius:5px;
-cursor:pointer;
-
-}
-
-button:hover{
-
-background:#0b5ed7;
-
-}
-
-@media(max-width:768px){
-
-header{
-flex-direction:column;
-gap:10px;
-text-align:center;
+header h2{
+font-size:24px;
 }
 
 header nav{
 display:flex;
 gap:15px;
+}
+
+header a{
+color:#fff;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* Welcome */
+
+.welcome{
+max-width:1400px;
+margin:20px auto;
+padding:20px;
+background:#fff;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.welcome h2{
+margin-bottom:8px;
+color:#333;
+}
+
+.welcome p{
+color:#666;
+}
+
+/* Products */
+
+.products{
+max-width:1400px;
+margin:auto;
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:20px;
+}
+
+/* Card */
+
+.card{
+background:#fff;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+transition:.3s;
+display:flex;
+flex-direction:column;
+cursor:pointer;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 12px 25px rgba(0,0,0,.18);
+}
+
+/* Image */
+
+.img-box{
+position:relative;
+background:#fafafa;
+overflow:hidden;
+}
+
+.img-box img{
+width:100%;
+height:220px;
+object-fit:contain;
+padding:20px;
+transition:.4s;
+}
+
+.card:hover img{
+transform:scale(1.08);
+}
+
+/* Badge */
+
+.badge{
+position:absolute;
+top:10px;
+left:10px;
+background:#00b517;
+color:#fff;
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+
+/* Body */
+
+.body{
+padding:15px;
+display:flex;
+flex-direction:column;
+flex:1;
+}
+
+.body h3{
+font-size:18px;
+color:#222;
+margin-bottom:10px;
+height:45px;
+overflow:hidden;
+}
+
+.price{
+font-size:22px;
+font-weight:bold;
+color:#2874f0;
+margin-bottom:15px;
+}
+
+button{
+margin-top:auto;
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#2874f0;
+color:#fff;
+font-size:15px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+background:#0d6efd;
+}
+
+/* Tablet */
+
+@media(max-width:992px){
+
+.products{
+grid-template-columns:repeat(3,1fr);
+}
+
+.img-box img{
+height:190px;
+}
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+header{
+flex-direction:column;
+text-align:center;
+gap:10px;
+}
+
+.products{
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+padding:12px;
+}
+
+.img-box img{
+height:160px;
+padding:12px;
+}
+
+.body{
+padding:10px;
+}
+
+.body h3{
+font-size:15px;
+height:38px;
+}
+
+.price{
+font-size:18px;
+}
+
+button{
+padding:10px;
+font-size:14px;
+}
+
+}
+
+/* Small Mobile */
+
+@media(max-width:480px){
+
+.products{
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+}
+
+.img-box img{
+height:140px;
+}
+
+.body h3{
+font-size:14px;
+}
+
+.price{
+font-size:17px;
+}
+
+button{
+font-size:13px;
+padding:9px;
+}
+
+.badge{
+font-size:10px;
+padding:4px 8px;
 }
 
 }
