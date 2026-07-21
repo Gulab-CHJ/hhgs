@@ -5,329 +5,935 @@ let cards = "";
 products.forEach(product => {
 
 cards += `
+
 <div class="card">
 
     <div class="img-box">
-        <span class="badge">New</span>
-        <img src="${product.image}" alt="${product.name}">
+
+        <span class="badge">
+            NEW
+        </span>
+
+        <img src="${product.image || '/images/no-image.png'}"
+        alt="${product.name}">
+
     </div>
 
+
     <div class="body">
-        <h3>${product.name}</h3>
 
-        <p class="price">₹ ${product.price}</p>
+        <h3>
+            ${product.name}
+        </h3>
 
-        <button>View Product</button>
+
+        <div class="rating">
+            ★★★★★
+        </div>
+
+
+        <p class="price">
+            ₹ ${product.price}
+        </p>
+
+
+        <button onclick="viewProduct('${product._id}')">
+    View Product
+</button>
+
+
     </div>
 
 </div>
+
 `;
 
 });
 
+
 return `
 
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Doctor Dashboard</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+
+<title>
+Doctor Dashboard
+</title>
+
 
 <style>
 
+
 *{
+
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:'Segoe UI',sans-serif;
+
 }
+
+
 
 body{
-background:#f1f3f6;
+
+background:
+linear-gradient(135deg,#eef2ff,#ffffff);
+
+min-height:100vh;
+
 overflow-x:hidden;
+
 }
 
-/* Header */
+
+
+/* HEADER */
+
 
 header{
-background:#2874f0;
-color:#fff;
-padding:15px 20px;
+
+background:
+linear-gradient(90deg,#2563eb,#4f46e5);
+
+padding:18px 35px;
+
 display:flex;
+
 justify-content:space-between;
+
 align-items:center;
-flex-wrap:wrap;
-box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+box-shadow:
+0 8px 25px rgba(0,0,0,.18);
+
+position:sticky;
+
+top:0;
+
+z-index:100;
+
 }
 
-header h2{
-font-size:24px;
+
+
+.logo{
+
+font-size:28px;
+
+font-weight:700;
+
+color:white;
+
 }
 
-header nav{
+
+
+nav{
+
 display:flex;
+
 gap:15px;
+
 }
 
-header a{
-color:#fff;
+
+
+nav a{
+
+color:white;
+
 text-decoration:none;
-font-weight:bold;
+
+font-weight:600;
+
+padding:10px 18px;
+
+border-radius:10px;
+
+transition:.3s;
+
 }
 
-/* Welcome */
+
+
+nav a:hover{
+
+background:
+rgba(255,255,255,.2);
+
+}
+
+
+
+/* WELCOME */
+
 
 .welcome{
+
 max-width:1400px;
-margin:20px auto;
-padding:20px;
-background:#fff;
-border-radius:12px;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+margin:30px auto;
+
+padding:25px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+
+background:
+rgba(255,255,255,.75);
+
+
+backdrop-filter:
+blur(15px);
+
+
+border-radius:20px;
+
+
+box-shadow:
+0 15px 40px rgba(0,0,0,.08);
+
 }
+
+
 
 .welcome h2{
+
+font-size:30px;
+
+color:#222;
+
 margin-bottom:8px;
-color:#333;
+
 }
+
+
 
 .welcome p{
+
 color:#666;
+
 }
 
-/* Products */
+
+
+.count{
+
+background:
+linear-gradient(90deg,#2563eb,#4f46e5);
+
+color:white;
+
+padding:12px 20px;
+
+border-radius:12px;
+
+font-weight:bold;
+
+}
+
+
+
+/* SEARCH */
+
+
+.search-box{
+
+max-width:1400px;
+
+margin:auto;
+
+padding:0 20px 20px;
+
+}
+
+
+
+.search-box input{
+
+width:100%;
+
+padding:15px 20px;
+
+border-radius:12px;
+
+border:1px solid #ddd;
+
+font-size:16px;
+
+outline:none;
+
+}
+
+
+
+/* PRODUCT GRID */
+
 
 .products{
+
 max-width:1400px;
+
 margin:auto;
+
 padding:20px;
+
+
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-gap:20px;
+
+grid-template-columns:
+repeat(auto-fit,minmax(250px,1fr));
+
+
+gap:25px;
+
 }
 
-/* Card */
+
+
+/* CARD */
+
 
 .card{
-background:#fff;
-border-radius:15px;
+
+background:white;
+
+border-radius:20px;
+
 overflow:hidden;
-box-shadow:0 4px 12px rgba(0,0,0,.08);
-transition:.3s;
+
+
+box-shadow:
+0 8px 20px rgba(0,0,0,.08);
+
+
+transition:.35s;
+
 display:flex;
+
 flex-direction:column;
-cursor:pointer;
+
 }
+
+
 
 .card:hover{
-transform:translateY(-8px);
-box-shadow:0 12px 25px rgba(0,0,0,.18);
+
+transform:
+translateY(-10px);
+
+
+box-shadow:
+0 20px 40px rgba(37,99,235,.25);
+
 }
 
-/* Image */
+
+
+/* IMAGE */
+
 
 .img-box{
+
+height:230px;
+
+background:#f8f9ff;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
 position:relative;
-background:#fafafa;
+
 overflow:hidden;
+
 }
+
+
 
 .img-box img{
-width:100%;
-height:220px;
+
+width:90%;
+
+height:190px;
+
 object-fit:contain;
-padding:20px;
+
 transition:.4s;
+
 }
+
+
 
 .card:hover img{
-transform:scale(1.08);
+
+transform:scale(1.1);
+
 }
 
-/* Badge */
+
+
+/* BADGE */
+
 
 .badge{
+
 position:absolute;
-top:10px;
-left:10px;
-background:#00b517;
-color:#fff;
-padding:5px 10px;
-border-radius:20px;
+
+top:12px;
+
+left:12px;
+
+
+background:
+linear-gradient(90deg,#ff512f,#dd2476);
+
+
+color:white;
+
+
+padding:6px 12px;
+
+
+border-radius:50px;
+
+
 font-size:12px;
+
+
 font-weight:bold;
+
 }
 
-/* Body */
+
+
+/* BODY */
+
 
 .body{
-padding:15px;
+
+padding:18px;
+
 display:flex;
+
 flex-direction:column;
+
 flex:1;
+
 }
+
+
 
 .body h3{
+
 font-size:18px;
+
 color:#222;
+
 margin-bottom:10px;
-height:45px;
-overflow:hidden;
+
+min-height:45px;
+
 }
+
+
+
+.rating{
+
+color:#ffb400;
+
+letter-spacing:2px;
+
+margin-bottom:10px;
+
+}
+
+
 
 .price{
-font-size:22px;
+
+font-size:25px;
+
 font-weight:bold;
-color:#2874f0;
+
+color:#2563eb;
+
 margin-bottom:15px;
+
 }
+/* BUTTON */
 
 button{
+
 margin-top:auto;
+
 width:100%;
-padding:12px;
+
+padding:13px;
+
 border:none;
-border-radius:8px;
-background:#2874f0;
-color:#fff;
+
+border-radius:12px;
+
+
+background:
+linear-gradient(90deg,#2563eb,#4f46e5);
+
+
+color:white;
+
 font-size:15px;
+
+font-weight:600;
+
 cursor:pointer;
+
 transition:.3s;
+
 }
+
+
 
 button:hover{
-background:#0d6efd;
+
+transform:scale(1.03);
+
+
+box-shadow:
+0 10px 25px rgba(37,99,235,.35);
+
 }
 
-/* Tablet */
+
+
+/* EMPTY MESSAGE */
+
+
+.empty{
+
+text-align:center;
+
+width:100%;
+
+padding:50px;
+
+font-size:20px;
+
+color:#777;
+
+}
+
+
+
+/* FOOTER */
+
+
+footer{
+
+text-align:center;
+
+padding:25px;
+
+color:#666;
+
+font-size:14px;
+
+}
+
+
+
+
+/* TABLET */
+
 
 @media(max-width:992px){
 
+
 .products{
-grid-template-columns:repeat(3,1fr);
+
+grid-template-columns:
+repeat(3,1fr);
+
 }
+
+
+.img-box{
+
+height:200px;
+
+}
+
 
 .img-box img{
-height:190px;
-}
+
+height:160px;
 
 }
 
-/* Mobile */
+
+}
+
+
+
+
+/* MOBILE */
+
 
 @media(max-width:768px){
 
+
 header{
+
 flex-direction:column;
-text-align:center;
-gap:10px;
+
+gap:15px;
+
+padding:15px;
+
 }
+
+
+.logo{
+
+font-size:22px;
+
+}
+
+
+nav{
+
+gap:8px;
+
+}
+
+
+nav a{
+
+font-size:14px;
+
+padding:8px 12px;
+
+}
+
+
+
+.welcome{
+
+margin:15px;
+
+padding:20px;
+
+flex-direction:column;
+
+gap:15px;
+
+text-align:center;
+
+}
+
+
+
+.welcome h2{
+
+font-size:22px;
+
+}
+
+
 
 .products{
-grid-template-columns:repeat(2,1fr);
+
+grid-template-columns:
+repeat(2,1fr);
+
 gap:12px;
+
 padding:12px;
+
 }
+
+
+
+.img-box{
+
+height:160px;
+
+}
+
+
 
 .img-box img{
-height:160px;
-padding:12px;
+
+height:130px;
+
 }
+
+
 
 .body{
-padding:10px;
+
+padding:12px;
+
 }
+
+
 
 .body h3{
+
 font-size:15px;
-height:38px;
+
+min-height:38px;
+
 }
+
+
+
+.rating{
+
+font-size:12px;
+
+}
+
+
 
 .price{
+
 font-size:18px;
+
 }
+
+
 
 button{
+
 padding:10px;
-font-size:14px;
-}
+
+font-size:13px;
 
 }
 
-/* Small Mobile */
+
+
+}
+
+
+
+
+
+/* SMALL MOBILE */
+
 
 @media(max-width:480px){
 
+
 .products{
-grid-template-columns:repeat(2,1fr);
+
+grid-template-columns:
+repeat(2,1fr);
+
 gap:10px;
+
 }
 
-.img-box img{
-height:140px;
-}
-
-.body h3{
-font-size:14px;
-}
-
-.price{
-font-size:17px;
-}
-
-button{
-font-size:13px;
-padding:9px;
-}
 
 .badge{
+
 font-size:10px;
-padding:4px 8px;
-}
+
+padding:5px 8px;
 
 }
+
+
+.logo{
+
+font-size:20px;
+
+}
+
+
+}
+
+
+
+
 
 </style>
 
 </head>
 
+
+
 <body>
+
+
 
 <header>
 
-<h2>Doctor Panel</h2>
+
+<div class="logo">
+
+🩺 Doctor Panel
+
+</div>
+
+
 
 <nav>
-<a href="#">Home</a>
-<a href="/admin/doctor/logout">Logout</a>
+
+
+<a href="#">
+
+Home
+
+</a>
+
+
+
+<a href="#">
+
+Products
+
+</a>
+
+
+
+<a href="/admin/doctor/logout">
+
+Logout
+
+</a>
+
+
+
 </nav>
+
+
 
 </header>
 
-<div class="welcome">
 
-<h2>Welcome Dr. ${doctor.name}</h2>
 
-<p>Available Products</p>
+
+
+<section class="welcome">
+
+
+
+<div>
+
+
+<h2>
+
+Welcome Dr. ${doctor.name}
+
+</h2>
+
+
+
+<p>
+
+Available Premium Healthcare Products
+
+</p>
+
+
 
 </div>
+
+
+
+
+<div class="count">
+
+
+${products.length} Products
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+<div class="search-box">
+
+
+<input
+
+type="text"
+
+placeholder="Search Products...">
+
+
+</div>
+
+
+
+
 
 <div class="products">
 
-${cards || "<p>No Products Available</p>"}
+
+${cards || `
+
+<div class="empty">
+
+No Products Available
 
 </div>
 
+`}
+
+
+</div>
+
+
+
+
+
+<footer>
+
+
+© 2026 Doctor Panel | Premium Healthcare
+
+
+</footer>
+
+
+
+
+
 </body>
 
+
 </html>
+
 
 `;
 
 }
+
+
 
 module.exports = DoctorDashboard;

@@ -350,8 +350,8 @@ router.post(
                 description: req.body.description,
 
                 image: req.file
-                    ? "/uploads/" + req.file.filename
-                    : ""
+    ? "/storage/uploads/" + req.file.filename
+    : ""
 
             });
 
@@ -435,8 +435,8 @@ router.post(
             };
 
             if (req.file) {
-                updateData.image = "/uploads/" + req.file.filename;
-            }
+    updateData.image = "/storage/uploads/" + req.file.filename;
+}
 
             await Doctor.findByIdAndUpdate(req.params.id, updateData);
 
@@ -487,8 +487,8 @@ router.post(
                 description: req.body.description,
 
                 image: req.file
-                    ? "/uploads/" + req.file.filename
-                    : ""
+    ? "/storage/uploads/" + req.file.filename
+    : ""
 
             });
 
