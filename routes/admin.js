@@ -505,5 +505,22 @@ router.post(
 
     }
 );
+// Delete Product
+router.get("/delete-product/:id", async (req, res) => {
+
+    try {
+
+        await Product.findByIdAndDelete(req.params.id);
+
+        res.redirect("/admin/manage-products");
+
+    } catch (err) {
+
+        console.log(err);
+        res.status(500).send(err.message);
+
+    }
+
+});
 
 module.exports = router;
