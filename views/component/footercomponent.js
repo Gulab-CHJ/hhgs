@@ -4,158 +4,161 @@ return `
 
 <style>
 
-.footer{
+.footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 20vh; /* 20% screen height */
+    height: 20vh; /* Exactly 20% screen height */
     background: linear-gradient(135deg, #0f172a, #1e3a8a);
     color: #fff;
-    font-family: Arial, sans-serif;
-    padding: 15px 20px 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px 15px;
     box-sizing: border-box;
     z-index: 9999;
-    overflow-y: auto; /* Screen chhoti hone par content scrollable rahega */
+    display: flex;
+    align-items: center;
 }
 
-/* Scrollbar styling for smooth look */
-.footer::-webkit-scrollbar {
-    width: 4px;
-}
-.footer::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.3);
-    border-radius: 4px;
-}
-
-.footer-container{
+.footer-container {
     max-width: 1200px;
     width: 100%;
-    margin: auto;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
 }
 
-.footer-top{
+.footer-top {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: 1.5fr 1fr 1.2fr;
+    gap: 15px;
+    align-items: start;
 }
 
-.footer-box{
-    width: 100%;
-}
-
-.footer-box h2{
-    font-size: 20px;
-    margin-bottom: 8px;
-}
-
-.footer-box h3{
+.footer-box h2 {
     font-size: 16px;
-    margin-bottom: 8px;
-}
-
-.footer-box p{
-    color: #d1d5db;
-    line-height: 1.4;
-    margin-bottom: 6px;
-    font-size: 13px;
-    word-break: break-word;
-}
-
-.footer-box ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-box ul li{
-    margin: 4px 0;
-}
-
-.footer-box ul li a{
-    color: #fff;
-    text-decoration: none;
-    font-size: 13px;
-    transition: .3s;
-}
-
-.footer-box ul li a:hover{
+    font-weight: 700;
+    margin: 0 0 4px 0;
     color: #38bdf8;
 }
 
-.social{
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 10px;
+.footer-box h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
 }
 
-.social a{
-    width: 32px;
-    height: 32px;
+.footer-box p {
+    color: #cbd5e1;
+    line-height: 1.3;
+    margin: 0 0 3px 0;
+    font-size: 12px;
+}
+
+.footer-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+}
+
+.footer-box ul li a {
+    color: #e2e8f0;
+    text-decoration: none;
+    font-size: 12px;
+    transition: color 0.2s;
+}
+
+.footer-box ul li a:hover {
+    color: #38bdf8;
+}
+
+.social {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.social a {
+    width: 26px;
+    height: 26px;
     border-radius: 50%;
-    background: #fff;
-    color: #1e3a8a;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     text-decoration: none;
-    font-size: 14px;
-    transition: .3s;
+    font-size: 12px;
+    transition: all 0.3s ease;
 }
 
-.social a:hover{
+.social a:hover {
     background: #38bdf8;
-    color: #fff;
+    color: #0f172a;
     transform: translateY(-2px);
 }
 
-.footer-bottom{
-    margin-top: 10px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(255,255,255,.2);
+.footer-bottom {
+    padding-top: 6px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
-    color: #cbd5e1;
-    font-size: 12px;
+    color: #94a3b8;
+    font-size: 11px;
 }
 
-/* TABLET */
-@media(max-width:992px){
-    .footer-top{
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
+/* MOBILE FIX (No Scrollbar, Professional Layout) */
+@media (max-width: 768px) {
+    .footer {
+        padding: 8px 10px;
     }
-}
 
-/* MOBILE */
-@media(max-width:768px){
-    .footer-top{
+    .footer-top {
+        grid-template-columns: 1fr 1fr; /* 2 columns on mobile */
+        gap: 10px;
+    }
+
+    .footer-box.contact-box {
+        grid-column: span 2; /* Contact moves to full width row if needed or compacts */
         display: flex;
-        flex-direction: row;
-        gap: 20px;
-        overflow-x: auto;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 4px 8px;
+        border-radius: 4px;
     }
 
-    .footer-box{
-        min-width: 200px;
-        width: 200px;
-        text-align: left;
+    .footer-box.contact-box h3 {
+        display: none; /* Hide header on mobile to save space */
     }
 
-    .footer-box h2{
-        font-size: 18px;
+    .footer-box.contact-box p {
+        margin: 0;
+        font-size: 11px;
     }
 
-    .footer-box h3{
-        font-size: 15px;
+    .footer-box h2 {
+        font-size: 14px;
     }
 
-    .social{
-        justify-content: flex-start;
+    .footer-box p, 
+    .footer-box ul li a {
+        font-size: 11px;
+    }
+
+    .social a {
+        width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+
+    .footer-bottom {
+        font-size: 10px;
+        padding-top: 4px;
     }
 }
 
@@ -167,10 +170,10 @@ return `
     <div class="footer-container">
         <div class="footer-top">
 
+            <!-- Box 1: Brand & Social -->
             <div class="footer-box">
                 <h2>GLOBAL SERVICE</h2>
-                <p>SAFE & SECURE Digital Services.</p>
-                <p>Fast • Trusted • Reliable</p>
+                <p>Safe & Secure Services</p>
                 <div class="social">
                     <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -179,25 +182,27 @@ return `
                 </div>
             </div>
 
+            <!-- Box 2: Quick Links -->
             <div class="footer-box">
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="/">Home</a></li>
                     <li><a href="/services">Services</a></li>
-                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/about">About</a></li>
                     <li><a href="/contact">Contact</a></li>
                 </ul>
             </div>
 
-            <div class="footer-box">
+            <!-- Box 3: Contact Info -->
+            <div class="footer-box contact-box">
                 <h3>Contact Us</h3>
-                <p><i class="fa-solid fa-location-dot"></i> Muzaffarpur, Bihar</p>
+                <p><i class="fa-solid fa-location-dot"></i> Muzaffarpur</p>
                 <p><i class="fa-solid fa-phone"></i> +91 9142264714</p>
-                <p><i class="fa-solid fa-envelope"></i> info@example.com</p>
             </div>
 
         </div>
 
+        <!-- Bottom Copyright -->
         <div class="footer-bottom">
             © ${new Date().getFullYear()} GLOBAL SERVICE. All Rights Reserved.
         </div>
