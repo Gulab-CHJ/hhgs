@@ -4,57 +4,71 @@ return `
 
 <style>
 
+/* Main Footer Container */
 .footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 20vh; /* Exactly 20% screen height */
+    height: 20vh; /* Fixed 20% Height */
     background: linear-gradient(135deg, #0f172a, #1e3a8a);
     color: #fff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 10px 15px;
+    font-family: Arial, sans-serif;
+    padding: 8px 15px;
     box-sizing: border-box;
     z-index: 9999;
     display: flex;
     align-items: center;
+    overflow: hidden; /* Strict NO scroll */
 }
 
 .footer-container {
     max-width: 1200px;
     width: 100%;
+    height: 100%;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+/* Grid Layout for Top Section */
+.footer-top {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap: 15px;
+    height: calc(100% - 22px);
+    align-items: center;
+}
+
+.footer-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     height: 100%;
 }
 
-.footer-top {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1.2fr;
-    gap: 15px;
-    align-items: start;
-}
-
 .footer-box h2 {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
-    margin: 0 0 4px 0;
+    margin: 0 0 2px 0;
     color: #38bdf8;
+    white-space: nowrap;
 }
 
 .footer-box h3 {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
-    margin: 0 0 6px 0;
+    margin: 0 0 4px 0;
+    color: #f8fafc;
 }
 
 .footer-box p {
     color: #cbd5e1;
-    line-height: 1.3;
-    margin: 0 0 3px 0;
-    font-size: 12px;
+    margin: 0 0 2px 0;
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
 }
 
 .footer-box ul {
@@ -63,13 +77,13 @@ return `
     margin: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4px;
+    gap: 2px 8px;
 }
 
 .footer-box ul li a {
     color: #e2e8f0;
     text-decoration: none;
-    font-size: 12px;
+    font-size: 11px;
     transition: color 0.2s;
 }
 
@@ -77,88 +91,82 @@ return `
     color: #38bdf8;
 }
 
+/* Social Icons Layout */
 .social {
     display: flex;
-    gap: 8px;
-    margin-top: 6px;
+    gap: 6px;
+    margin-top: 4px;
 }
 
 .social a {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     text-decoration: none;
-    font-size: 12px;
-    transition: all 0.3s ease;
+    font-size: 11px;
+    transition: all 0.2s ease;
 }
 
 .social a:hover {
     background: #38bdf8;
     color: #0f172a;
-    transform: translateY(-2px);
 }
 
+/* Copyright Section */
 .footer-bottom {
-    padding-top: 6px;
+    height: 18px;
+    line-height: 18px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
     color: #94a3b8;
-    font-size: 11px;
+    font-size: 10px;
 }
 
-/* MOBILE FIX (No Scrollbar, Professional Layout) */
+/* Perfect Alignment Mobile Screen Optimization */
 @media (max-width: 768px) {
     .footer {
-        padding: 8px 10px;
+        padding: 6px 10px;
     }
 
     .footer-top {
-        grid-template-columns: 1fr 1fr; /* 2 columns on mobile */
-        gap: 10px;
-    }
-
-    .footer-box.contact-box {
-        grid-column: span 2; /* Contact moves to full width row if needed or compacts */
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: rgba(255, 255, 255, 0.05);
-        padding: 4px 8px;
-        border-radius: 4px;
-    }
-
-    .footer-box.contact-box h3 {
-        display: none; /* Hide header on mobile to save space */
-    }
-
-    .footer-box.contact-box p {
-        margin: 0;
-        font-size: 11px;
+        grid-template-columns: 1fr 1fr 1fr; /* 3 Columns mobile par bhi clean align rahegi */
+        gap: 6px;
     }
 
     .footer-box h2 {
-        font-size: 14px;
+        font-size: 12px;
+    }
+
+    .footer-box h3 {
+        font-size: 11px;
+        margin-bottom: 2px;
     }
 
     .footer-box p, 
     .footer-box ul li a {
-        font-size: 11px;
+        font-size: 9.5px;
+    }
+
+    .footer-box ul {
+        grid-template-columns: 1fr; /* Links Vertical list ban jayegi spacing maintain karne ke liye */
+        gap: 1px;
     }
 
     .social a {
-        width: 24px;
-        height: 24px;
-        font-size: 11px;
+        width: 20px;
+        height: 20px;
+        font-size: 9px;
     }
 
     .footer-bottom {
-        font-size: 10px;
-        padding-top: 4px;
+        font-size: 9px;
+        height: 14px;
+        line-height: 14px;
     }
 }
 
@@ -170,10 +178,10 @@ return `
     <div class="footer-container">
         <div class="footer-top">
 
-            <!-- Box 1: Brand & Social -->
+            <!-- Brand Section -->
             <div class="footer-box">
                 <h2>GLOBAL SERVICE</h2>
-                <p>Safe & Secure Services</p>
+                <p>Digital Services</p>
                 <div class="social">
                     <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
                     <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -182,7 +190,7 @@ return `
                 </div>
             </div>
 
-            <!-- Box 2: Quick Links -->
+            <!-- Quick Links -->
             <div class="footer-box">
                 <h3>Quick Links</h3>
                 <ul>
@@ -193,16 +201,16 @@ return `
                 </ul>
             </div>
 
-            <!-- Box 3: Contact Info -->
-            <div class="footer-box contact-box">
-                <h3>Contact Us</h3>
+            <!-- Contact Info -->
+            <div class="footer-box">
+                <h3>Contact</h3>
                 <p><i class="fa-solid fa-location-dot"></i> Muzaffarpur</p>
                 <p><i class="fa-solid fa-phone"></i> +91 9142264714</p>
             </div>
 
         </div>
 
-        <!-- Bottom Copyright -->
+        <!-- Copyright -->
         <div class="footer-bottom">
             © ${new Date().getFullYear()} GLOBAL SERVICE. All Rights Reserved.
         </div>
