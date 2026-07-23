@@ -13,10 +13,16 @@ const storage = new CloudinaryStorage({
 
         allowed_formats: [
             "jpg",
-            "png",
             "jpeg",
+            "png",
             "webp"
-        ]
+        ],
+
+        public_id: (req, file) => {
+
+            return Date.now() + "-" + file.originalname.split(".")[0];
+
+        }
 
     }
 
@@ -27,8 +33,10 @@ const upload = multer({
 
     storage: storage,
 
-    limits:{
-        fileSize: 20 * 1024 * 1024
+    limits: {
+
+        fileSize: 20 * 1024 * 1024   // 20 MB
+
     }
 
 });
