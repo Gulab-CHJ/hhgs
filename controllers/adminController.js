@@ -123,29 +123,30 @@ exports.saveBanner = async (req,res)=>{
 
     try{
 
-        console.log("BODY:", req.body);
-        console.log("FILE:", req.file);
+        console.log("BODY => ", req.body);
+        console.log("FILE => ", req.file);
 
 
         if(!req.file){
 
-            return res.status(400)
-            .send("Image not uploaded");
+            return res.status(400).send(
+                "Image file not received"
+            );
 
         }
 
 
-       const banner = new Banner({
+        const banner = new Banner({
 
-    title:req.body.title,
+            title:req.body.title,
 
-    image:req.file.path,
+            image:req.file.path,
 
-    link:req.body.link,
+            link:req.body.link,
 
-    active:true
+            active:true
 
-});
+        });
 
 
         await banner.save();
@@ -154,11 +155,15 @@ exports.saveBanner = async (req,res)=>{
         res.redirect("/admin/manage-banner");
 
 
-    }catch(err){
+    }
+    catch(err){
 
-        console.log("BANNER ERROR:",err);
+        console.log("SAVE ERROR => ",err);
 
-        res.status(500).send(err.message);
+        res.status(500).send(`
+            <h2>Server Error</h2>
+            <pre>${err.stack}</pre>
+        `);
 
     }
 
