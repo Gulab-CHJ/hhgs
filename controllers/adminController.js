@@ -76,28 +76,74 @@ exports.addBannerPage = (req, res) => {
 
 
 // Save Banner
-exports.saveBanner = async (req, res) => {
+// exports.saveBanner = async (req, res) => {
 
-    try {
+//     try {
+
+//         console.log("BODY:", req.body);
+//         console.log("FILE:", req.file);
+
+
+//         if (!req.file) {
+//             return res.status(400).send("Please upload a banner image.");
+//         }
+
+
+//         const banner = new Banner({
+
+//             title: req.body.title,
+
+//             image: req.file.path,
+
+//             link: req.body.link,
+
+//             active: true
+
+//         });
+
+
+//         await banner.save();
+
+
+//         res.redirect("/admin/manage-banner");
+
+
+//     } catch (err) {
+
+//         console.log("SAVE BANNER ERROR:", err.message);
+
+//         res.status(500).send(err.message);
+
+//     }
+
+// };
+
+
+exports.saveBanner = async (req,res)=>{
+
+    try{
 
         console.log("BODY:", req.body);
         console.log("FILE:", req.file);
 
 
-        if (!req.file) {
-            return res.status(400).send("Please upload a banner image.");
+        if(!req.file){
+
+            return res.status(400)
+            .send("Image not uploaded");
+
         }
 
 
         const banner = new Banner({
 
-            title: req.body.title,
+            title:req.body.title || "",
 
-            image: req.file.path,
+            image:req.file.path,
 
-            link: req.body.link,
+            link:req.body.link,
 
-            active: true
+            active:true
 
         });
 
@@ -108,16 +154,15 @@ exports.saveBanner = async (req, res) => {
         res.redirect("/admin/manage-banner");
 
 
-    } catch (err) {
+    }catch(err){
 
-        console.log("SAVE BANNER ERROR:", err.message);
+        console.log("BANNER ERROR:",err);
 
         res.status(500).send(err.message);
 
     }
 
 };
-
 
 // Manage Banner Page
 exports.manageBanners = async (req, res) => {
@@ -177,3 +222,4 @@ exports.deleteBanner = async (req, res) => {
     }
 
 };
+

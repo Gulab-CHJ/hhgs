@@ -227,17 +227,42 @@ router.get("/manage-banner", AdminController.manageBanners);
 
 router.get("/add-banner", AdminController.addBannerPage);
 
+// router.post(
+//     "/add-banner",
+//     (req,res,next)=>{
+
+//         upload.single("image")(req,res,function(err){
+
+//             if(err){
+
+//                 console.log("MULTER ERROR:",err);
+
+//                 return res.status(500).send(err.message);
+
+//             }
+
+//             next();
+
+//         });
+
+//     },
+//     AdminController.saveBanner
+// );
+
 router.post(
     "/add-banner",
-    (req,res,next)=>{
+    (req, res, next) => {
 
-        upload.single("image")(req,res,function(err){
+        upload.single("image")(req, res, function(err) {
 
-            if(err){
+            if (err) {
 
-                console.log("MULTER ERROR:",err);
+                console.log("UPLOAD ERROR:", err);
 
-                return res.status(500).send(err.message);
+                return res.status(500).send(`
+                    <h2>Upload Error</h2>
+                    <pre>${err.message}</pre>
+                `);
 
             }
 
