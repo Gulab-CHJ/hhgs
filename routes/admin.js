@@ -249,30 +249,8 @@ router.get("/add-banner", AdminController.addBannerPage);
 //     AdminController.saveBanner
 // );
 
+
 router.post(
-    "/add-banner",
-    (req, res, next) => {
-
-        upload.single("image")(req, res, function(err) {
-
-            if (err) {
-
-                console.log("UPLOAD ERROR:", err);
-
-                return res.status(500).send(`
-                    <h2>Upload Error</h2>
-                    <pre>${err.message}</pre>
-                `);
-
-            }
-
-            next();
-
-        });
-
-    },
-    AdminController.saveBanner
-);router.post(
     "/add-banner",
     upload.single("image"),
     AdminController.saveBanner
