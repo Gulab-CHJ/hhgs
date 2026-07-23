@@ -135,17 +135,17 @@ exports.saveBanner = async (req,res)=>{
         }
 
 
-        const banner = new Banner({
+       const banner = new Banner({
 
-            title:req.body.title || "",
+    title:req.body.title,
 
-            image:req.file.path,
+    image:req.file.path,
 
-            link:req.body.link,
+    link:req.body.link,
 
-            active:true
+    active:true
 
-        });
+});
 
 
         await banner.save();

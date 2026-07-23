@@ -1,43 +1,29 @@
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-const uploadPath = path.join(
-    __dirname,
-    "../storage/uploads"
-);
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("./cloudinary");
 
 
-// अगर folder नहीं है तो बना दो
-if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath, {
-        recursive: true
-    });
-}
+const storage = new CloudinaryStorage({
 
+    cloudinary: cloudinary,
 
-const storage = multer.diskStorage({
+    params: {
 
-    destination: function(req, file, cb){
+        folder: "hhgs-banners",
 
-        cb(null, uploadPath);
-
-    },
-
-
-    filename: function(req, file, cb){
-
-        cb(
-            null,
-            Date.now() + path.extname(file.originalname)
-        );
+        allowed_formats: [
+            "jpg",
+            "png",
+            "jpeg",
+            "webp"
+        ]
 
     }
 
 });
 
 
-module.exports = multer({
+const upload = multer({
 
     storage: storage,
 
@@ -46,3 +32,6 @@ module.exports = multer({
     }
 
 });
+
+
+module.exports = upload;
