@@ -100,7 +100,7 @@
 // app.listen(PORT, () => {
 //     console.log(`Server Running: http://localhost:${PORT}`);
 // });
-
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 
