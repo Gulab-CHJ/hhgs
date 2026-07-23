@@ -26,6 +26,7 @@
 const Header = require("../views/component/headercomponent");
 const Banner = require("../views/component/bannercomponent");
 const Footer = require("../views/component/footercomponent");
+const DoctorSection = require("../views/component/doctorcomponent");
 
 
 function Home(banners = []) {
@@ -54,6 +55,8 @@ function Home(banners = []) {
 ${Header()}
 
 ${Banner(banners)}
+
+${DoctorSection(doctors)}
 
 ${Footer()}
 
