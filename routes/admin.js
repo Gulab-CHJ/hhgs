@@ -229,7 +229,23 @@ router.get("/add-banner", AdminController.addBannerPage);
 
 router.post(
     "/add-banner",
-    upload.single("image"),
+    (req,res,next)=>{
+
+        upload.single("image")(req,res,function(err){
+
+            if(err){
+
+                console.log("MULTER ERROR:",err);
+
+                return res.status(500).send(err.message);
+
+            }
+
+            next();
+
+        });
+
+    },
     AdminController.saveBanner
 );
 
