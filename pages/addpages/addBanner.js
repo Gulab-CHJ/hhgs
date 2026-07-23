@@ -305,72 +305,25 @@ Upload banner image and add redirect link
 </div>
 
 
-
 <form 
 action="/admin/add-banner" 
 method="POST" 
 enctype="multipart/form-data">
 
-
-
-<div class="form-group">
-
-<label>
-Banner Image
-</label>
-
-
 <input 
 type="file"
 name="image"
 accept="image/*"
-onchange="previewImage(event)"
 required>
 
-
-<div class="preview">
-
-<img id="preview">
-
-</div>
-
-
-</div>
-
-
-
-
-
-<div class="form-group">
-
-
-<label>
-Banner Link
-</label>
-
-
 <input 
-
 type="text"
-
 name="link"
-
 placeholder="https://example.com">
 
-
-</div>
-
-
-
-
-
 <button type="submit">
-
 Save Banner
-
 </button>
-
-
 
 </form>
 
