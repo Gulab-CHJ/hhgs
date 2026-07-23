@@ -110,17 +110,13 @@ exports.saveBanner = async (req, res) => {
 
     } catch (err) {
 
-        console.log("SAVE BANNER ERROR:", err);
+        console.log("SAVE BANNER ERROR:", err.message);
 
-        res.status(500).send(`
-            <h2>Internal Server Error</h2>
-            <pre>${err.stack}</pre>
-        `);
+        res.status(500).send(err.message);
 
     }
 
 };
-
 
 
 // Manage Banner Page
