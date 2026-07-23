@@ -80,53 +80,42 @@ exports.saveBanner = async (req, res) => {
 
     try {
 
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
+
 
         if (!req.file) {
-
-            return res.status(400)
-            .send("Please upload a banner image.");
-
+            return res.status(400).send("Please upload a banner image.");
         }
-
 
 
         const banner = new Banner({
 
-
             title: req.body.title,
 
-
-            // Cloudinary Image URL
             image: req.file.path,
-
 
             link: req.body.link,
 
-
             active: true
 
-
         });
-
 
 
         await banner.save();
 
 
-
         res.redirect("/admin/manage-banner");
-
 
 
     } catch (err) {
 
-
         console.log("SAVE BANNER ERROR:", err);
 
-
-        res.status(500)
-        .send(err.message);
-
+        res.status(500).send(`
+            <h2>Internal Server Error</h2>
+            <pre>${err.stack}</pre>
+        `);
 
     }
 
