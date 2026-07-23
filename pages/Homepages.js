@@ -29,7 +29,7 @@ const Footer = require("../views/component/footercomponent");
 const DoctorSection = require("../views/component/doctorcomponent");
 
 
-function Home(banners = []) {
+function Home(banners = [], doctors = []) {
 
     return `
 <!DOCTYPE html>
