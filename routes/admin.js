@@ -193,7 +193,8 @@ const DoctorDashboard = require("../pages/doctorDashboard");
 
 
 const Doctor = require("../models/Doctor");
-const upload = require("../config/multer");
+// const upload = require("../config/multer");
+const upload = require("../config/upload");
 const Product = require("../models/Product");
 
 
@@ -349,8 +350,8 @@ router.post(
 
                 description: req.body.description,
 
-                image: req.file
-    ? "/storage/uploads/" + req.file.filename
+             image: req.file
+    ? req.file.path
     : ""
 
             });
@@ -434,8 +435,10 @@ router.post(
                 description: req.body.description
             };
 
-            if (req.file) {
-    updateData.image = "/storage/uploads/" + req.file.filename;
+   if (req.file) {
+
+    updateData.image = req.file.path;
+
 }
 
             await Doctor.findByIdAndUpdate(req.params.id, updateData);
@@ -486,8 +489,8 @@ router.post(
                 price: req.body.price,
                 description: req.body.description,
 
-                image: req.file
-    ? "/storage/uploads/" + req.file.filename
+       image: req.file
+    ? req.file.path
     : ""
 
             });
