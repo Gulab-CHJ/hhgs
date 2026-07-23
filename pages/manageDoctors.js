@@ -10,8 +10,13 @@ rows += `
 <td>${index + 1}</td>
 
 <td>
-<img src="${doctor.photo || "/images/default-doctor.png"}"
-class="doctor-img">
+${
+    doctor.image
+    ?
+    `<img src="${doctor.image}" class="doctor-img">`
+    :
+    `<img src="/images/default-doctor.png" class="doctor-img">`
+}
 </td>
 
 <td>${doctor.doctorId || "-"}</td>
