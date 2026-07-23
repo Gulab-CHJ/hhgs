@@ -1,37 +1,57 @@
 const multer = require("multer");
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("./cloudinary");
+const path = require("path");
 
+const storage = multer.diskStorage({
 
-const storage = new CloudinaryStorage({
+    destination: function(req, file, cb){
 
-    cloudinary: cloudinary,
+        cb(null, "storage/uploads");
 
-    params: {
+    },
 
-        folder: "hhgs-banners",
+    filename: function(req, file, cb){
 
-        allowed_formats: [
-            "jpg",
-            "jpeg",
-            "png",
-            "webp"
-        ]
+        const ext = path.extname(file.originalname);
+
+        cb(
+            null,
+            Date.now() + ext
+        );
 
     }
 
 });
 
 
-const upload = multer({
+const fileFilter = (req,file,cb)=>{
+
+    if(
+        file.mimetype === "image/jpeg" ||
+        file.mimetype === "image/png" ||
+        file.mimetype === "image/jpg" ||
+        file.mimetype === "image/webp"
+    ){
+
+        cb(null,true);
+
+    }else{
+
+        cb(new Error("Only image file allowed"),false);
+
+    }
+
+};
+
+
+
+module.exports = multer({
 
     storage: storage,
 
-    limits: {
-        fileSize: 10 * 1024 * 1024
+    fileFilter:fileFilter,
+
+    limits:{
+        fileSize: 5 * 1024 * 1024
     }
 
 });
-
-
-module.exports = upload;
