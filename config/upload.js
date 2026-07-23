@@ -9,7 +9,7 @@ const storage = new CloudinaryStorage({
 
     params: {
 
-        folder: "osium-products",
+        folder: "hhgs-banners",
 
         allowed_formats: [
             "jpg",
@@ -28,7 +28,7 @@ const upload = multer({
     storage: storage,
 
     limits: {
-        fileSize: 10 * 1024 * 1024   // 10 MB
+        fileSize: 10 * 1024 * 1024
     }
 
 });

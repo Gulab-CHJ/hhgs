@@ -272,6 +272,10 @@ router.post(
 
     },
     AdminController.saveBanner
+);router.post(
+    "/add-banner",
+    upload.single("image"),
+    AdminController.saveBanner
 );
 
 router.get("/delete-banner/:id", AdminController.deleteBanner);
