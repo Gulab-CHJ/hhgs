@@ -548,6 +548,7 @@ return `
     text-decoration:none;
     color:inherit;
     display:block;
+   cursor: pointer;
 
 }
 
