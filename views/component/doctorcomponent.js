@@ -68,52 +68,121 @@ function DoctorSection(doctors = []) {
 
     width:100%;
     max-width:1400px;
-    margin:40px auto;
-    padding:20px;
+    margin:60px auto;
+    padding:30px 20px;
 
 }
+
 
 .doctor-title{
 
     text-align:center;
-    font-size:34px;
-    font-weight:700;
-    margin-bottom:25px;
-    color:#1e3a8a;
+    font-size:38px;
+    font-weight:800;
+    margin-bottom:40px;
+    color:#0f3d91;
+    position:relative;
 
 }
+
+
+.doctor-title::after{
+
+    content:"";
+    width:80px;
+    height:4px;
+    background:#16a34a;
+    display:block;
+    margin:12px auto;
+    border-radius:20px;
+
+}
+
+
+
+/* GRID */
 
 .doctor-grid{
 
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
+    grid-template-columns:repeat(auto-fit,minmax(280px,320px));
+    gap:30px;
+    justify-content:center;
 
 }
+
+
+
+
+/* CARD */
 
 .doctor-card{
 
-    background:#fff;
-    border-radius:20px;
+    background:
+    linear-gradient(
+    145deg,
+    #ffffff,
+    #f1f7ff
+    );
+
+    border-radius:25px;
     overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,.12);
-    transition:.35s;
+
+    box-shadow:
+    0 15px 35px rgba(0,0,0,.12);
+
+    transition:.4s;
+
+    border:1px solid rgba(37,99,235,.15);
 
 }
+
 
 .doctor-card:hover{
 
-    transform:translateY(-8px);
+    transform:
+    translateY(-12px)
+    scale(1.03);
+
+    box-shadow:
+    0 25px 50px rgba(37,99,235,.25);
 
 }
+
+
+
+
+/* IMAGE */
 
 .doctor-img{
 
     width:100%;
-    height:260px;
+    height:270px;
+
     overflow:hidden;
 
+    position:relative;
+
 }
+
+
+.doctor-img::after{
+
+    content:"";
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:60px;
+
+    background:
+    linear-gradient(
+    transparent,
+    rgba(0,0,0,.15)
+    );
+
+}
+
 
 .doctor-img img{
 
@@ -121,104 +190,179 @@ function DoctorSection(doctors = []) {
     height:100%;
     object-fit:cover;
 
+    transition:.5s;
+
 }
+
+
+.doctor-card:hover img{
+
+    transform:scale(1.08);
+
+}
+
+
+
+
+
+/* BODY */
 
 .doctor-body{
 
-    padding:20px;
+    padding:25px;
     text-align:center;
 
 }
 
+
+
 .doctor-body h3{
 
-    margin:0;
+    font-size:23px;
+    font-weight:800;
+
     color:#0f172a;
-    font-size:22px;
+
+    margin-bottom:8px;
 
 }
+
+
 
 .degree{
 
     color:#2563eb;
-    font-weight:600;
-    margin:10px 0;
+    font-weight:700;
+    font-size:16px;
 
 }
+
 
 .speciality{
 
-    color:#555;
+    color:#475569;
+    margin:8px;
 
 }
+
 
 .hospital{
 
-    color:#888;
+    color:#64748b;
     font-size:14px;
-    margin-top:8px;
 
 }
+
+
+
+
+
+/* BUTTON */
 
 .doctor-btns{
 
     display:flex;
-    gap:10px;
-    margin-top:18px;
+    gap:12px;
+    margin-top:22px;
 
 }
+
+
 
 .doctor-btns a{
 
     flex:1;
+
+    padding:13px;
+
+    border-radius:30px;
+
+    color:white;
+
     text-decoration:none;
-    color:#fff;
-    padding:12px;
-    border-radius:8px;
-    font-weight:600;
+
+    font-weight:700;
+
+    transition:.3s;
 
 }
+
+
 
 .call-btn{
 
-    background:#2563eb;
+    background:
+    linear-gradient(135deg,#2563eb,#1d4ed8);
 
 }
+
+
 
 .whatsapp-btn{
 
-    background:#16a34a;
+    background:
+    linear-gradient(135deg,#16a34a,#15803d);
 
 }
 
-.no-doctor{
 
-    text-align:center;
-    padding:50px;
-    background:#fff;
-    border-radius:15px;
+
+.doctor-btns a:hover{
+
+    transform:scale(1.05);
 
 }
+
+
+
+
+
+/* CLICK */
+
+.doctor-link{
+
+    text-decoration:none;
+    color:inherit;
+
+}
+
+
+
+
+/* MOBILE */
 
 @media(max-width:768px){
 
-.doctor-title{
 
-    font-size:26px;
+.doctor-section{
+
+    padding:20px 15px;
 
 }
+
+
+.doctor-title{
+
+    font-size:30px;
+
+}
+
 
 .doctor-grid{
 
     grid-template-columns:repeat(2,1fr);
+    gap:15px;
 
 }
+
+
 
 .doctor-img{
 
-    height:180px;
+    height:190px;
 
 }
+
 
 .doctor-body{
 
@@ -226,11 +370,13 @@ function DoctorSection(doctors = []) {
 
 }
 
+
 .doctor-body h3{
 
     font-size:17px;
 
 }
+
 
 .degree,
 .speciality,
@@ -240,21 +386,28 @@ function DoctorSection(doctors = []) {
 
 }
 
+
 .doctor-btns{
 
     flex-direction:column;
 
 }
 
+
+
 }
 
+
+
 @media(max-width:480px){
+
 
 .doctor-grid{
 
     grid-template-columns:1fr;
 
 }
+
 
 }
 
