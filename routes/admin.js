@@ -562,7 +562,7 @@ router.get("/delete-product/:id", async (req, res) => {
 
 });
 
-const DoctorProfile = require("../pages/doctorProfile");
+// const DoctorProfile = require("../pages/doctorProfile");
 
 
 router.get("/doctor/:id", async (req,res)=>{
