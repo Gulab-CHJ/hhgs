@@ -291,7 +291,7 @@ async function unlockPhone() {
 
         const options = {
 
-            key: "rzp_test_SrzTcHdvE8Qbkq", // Your Razorpay Test Key
+            key: "rzp_live_THG6859JR3Ww9Y", // Your Razorpay Test Key
 
             amount: order.amount,
             currency: order.currency,
