@@ -660,18 +660,13 @@ return `
 
 .doctor-grid{
 
-
     display:grid;
 
-    grid-template-columns:
-    repeat(auto-fit,minmax(280px,320px));
-
+    grid-template-columns:repeat(auto-fill,minmax(280px,320px));
 
     gap:30px;
 
-
-    justify-content:center;
-
+    justify-content:start;
 
 }
 
