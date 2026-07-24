@@ -273,72 +273,71 @@ function DoctorProfile(doctor) {
 
 <script>
 
-async function unlockPhone(){
+async function unlockPhone() {
 
     const btn = document.getElementById("unlockBtn");
 
     btn.innerHTML = "Please Wait...";
     btn.disabled = true;
 
-    try{
+    try {
 
-        fetch("/admin/verify-phone-payment", {
-    method: "POST",
-    headers:{
-        "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
-        paymentId:response.razorpay_payment_id,
-        doctorId:"${doctor._id}"
-    })
-})
+        // Create Order
+        const res = await fetch("/admin/create-phone-payment", {
+            method: "POST"
+        });
 
         const order = await res.json();
 
         const options = {
 
-            key: "YOUR_RAZORPAY_KEY", // अपनी Razorpay Key डालो
+            key: "rzp_test_SrzTcHdvE8Qbkq", // Your Razorpay Test Key
 
             amount: order.amount,
             currency: order.currency,
             order_id: order.id,
 
-            name:"HHGS",
-            description:"Doctor Phone Unlock",
+            name: "HHGS",
+            description: "Doctor Phone Unlock",
 
-            handler:function(response){
+            handler: async function (response) {
 
-                fetch("/verify-phone-payment",{
+                const verify = await fetch("/admin/verify-phone-payment", {
 
-                    method:"POST",
+                    method: "POST",
 
-                    headers:{
-                        "Content-Type":"application/json"
+                    headers: {
+                        "Content-Type": "application/json"
                     },
 
-                    body:JSON.stringify({
+                    body: JSON.stringify({
 
-                        paymentId:response.razorpay_payment_id,
-                        doctorId:"${doctor._id}"
+                        paymentId: response.razorpay_payment_id,
+                        orderId: response.razorpay_order_id,
+                        signature: response.razorpay_signature,
+                        doctorId: "${doctor._id}"
 
                     })
 
-                })
+                });
 
-                .then(res=>res.json())
+                const data = await verify.json();
 
-                .then(data=>{
+                if (data.success) {
 
-                    if(data.success){
-
-                        document.getElementById("doctorPhone").innerHTML =
+                    document.getElementById("doctorPhone").innerHTML =
                         "${doctor.phone}";
 
-                        btn.innerHTML="Unlocked ✔";
+                    btn.innerHTML = "Unlocked ✔";
 
-                    }
+                } else {
 
-                });
+                    btn.disabled = false;
+                    btn.innerHTML = "🔓 Unlock for ₹1";
+
+                    alert("Payment Verification Failed");
+
+                }
 
             }
 
@@ -348,16 +347,16 @@ async function unlockPhone(){
 
         rzp.open();
 
-    }catch(err){
+    } catch (err) {
 
-    console.error("Payment Error:", err);
+        console.error(err);
 
-    btn.disabled = false;
-    btn.innerHTML = "🔓 Unlock for ₹1";
+        btn.disabled = false;
+        btn.innerHTML = "🔓 Unlock for ₹1";
 
-    alert(err.message || "Payment Failed");
+        alert("Payment Failed");
 
-}
+    }
 
 }
 
