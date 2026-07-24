@@ -1,6 +1,5 @@
 require("dotenv").config();
 const crypto = require("crypto");
-
 console.log("KEY:", process.env.RAZORPAY_KEY_ID);
 console.log("SECRET:", process.env.RAZORPAY_KEY_SECRET);
 
@@ -502,4 +501,53 @@ router.post("/verify-phone-payment", async (req, res) => {
     });
 
 });
+
+
+// router.get("/consultation/:id", async (req,res)=>{
+
+//     try{
+
+//         const doctor = await Doctor.findById(req.params.id);
+
+
+//         if(!doctor){
+//             return res.send("Doctor not found");
+//         }
+
+
+//         res.send(`
+        
+//         <h1>
+//         Consultation with Dr. ${doctor.name}
+//         </h1>
+
+//         <p>
+//         Specialization: ${doctor.specialization}
+//         </p>
+
+//         <p>
+//         Address: ${doctor.address}
+//         </p>
+
+//         <button>
+//         Book Appointment
+//         </button>
+
+//         `);
+
+
+//     }catch(error){
+
+//         console.log(error);
+
+//         res.status(500).send("Server Error");
+
+//     }
+
+// });
+
+const Consultation = require("../pages/consultation");
+
+
+router.get("/consultation/:id", Consultation);
 module.exports = router;

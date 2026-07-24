@@ -496,32 +496,7 @@ ADDRESS : ${doctor.address || ""}
 
 
 
-<div class="doctor-btns">
 
-
-<a 
-href="tel:${doctor.phone}"
-class="call-btn"
-onclick="event.stopPropagation();">
-
-📞 Call
-
-</a>
-
-
-
-<a
-href="https://wa.me/91${doctor.phone}?text=Hello Doctor"
-target="_blank"
-class="whatsapp-btn"
-onclick="event.stopPropagation();">
-
-💬 WhatsApp
-
-</a>
-
-
-</div>
 
 
 </div>
