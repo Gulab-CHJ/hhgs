@@ -449,9 +449,9 @@ function DoctorSection(doctors = []) {
 
         doctors.forEach((doctor) => {
 
-            cards += `
-            <a href="/doctor/${doctor._id}" class="doctor-link">
-            <div 
+          cards += `
+
+<div 
 class="doctor-card doctor-link"
 
 onclick="window.location.href='/doctor/${doctor._id}'"
