@@ -226,25 +226,25 @@ function DoctorProfile(doctor) {
   </div>
 
   <div class="info-value" id="doctorPhone">
-    **********
-  </div>
+    ${doctor.phoneUnlocked ? doctor.phone : "**********"}
+</div>
 
   <br>
 
-  <button
-      onclick="unlockPhone()"
-      id="unlockBtn"
-      style="
-      background:#16a34a;
-      color:#fff;
-      border:none;
-      padding:10px 18px;
-      border-radius:10px;
-      cursor:pointer;
-      font-weight:bold;
-      ">
-      🔓 Unlock for ₹1
-  </button>
+ <button
+onclick="unlockPhone()"
+id="unlockBtn"
+style="
+background:#16a34a;
+color:#fff;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+">
+🔓 Unlock for ₹1
+</button>
 
   </div>
 
@@ -362,7 +362,7 @@ async function unlockPhone() {
 
 </script>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 `;
 }
 
