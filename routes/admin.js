@@ -24,7 +24,7 @@ const { login } = require("../controllers/adminAuth");
 const AdminController = require("../controllers/adminController");
 const DoctorDashboard = require("../pages/doctorDashboard");
 
-const AddGovernment = require("../pages/addpages/addGovernment");
+// const AddGovernment = require("../pages/addpages/addGovernment");
 
 
 
