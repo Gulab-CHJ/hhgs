@@ -1,236 +1,252 @@
-function DoctorProfile(doctor){
-
-return `
-
+function DoctorProfile(doctor) {
+  return `
 <style>
+  :root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --accent: #10b981;
+    --accent-hover: #059669;
+    --bg-light: #f8fafc;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+  }
 
-.profile-page{
+  .profile-page {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
 
-max-width:1200px;
-margin:40px auto;
-padding:20px;
-font-family:Arial;
+  .doctor-card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+  }
 
-}
+  /* Header Section */
+  .profile-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #0d9488 100%);
+    padding: 40px 30px;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+  }
 
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
 
-.doctor-profile{
+  .profile-header img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #ffffff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
 
-background:white;
-border-radius:25px;
-box-shadow:0 15px 40px rgba(0,0,0,.15);
-overflow:hidden;
+  .verified-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: var(--accent);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    font-size: 14px;
+  }
 
-}
+  .doc-name {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.5px;
+  }
 
+  .doc-spec {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
 
-.profile-header{
+  /* Body Section */
+  .profile-body {
+    padding: 35px;
+  }
 
-background:linear-gradient(135deg,#2563eb,#16a34a);
-color:white;
-padding:30px;
-text-align:center;
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+  }
 
-}
+  .info-card {
+    background: var(--bg-light);
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid #f1f5f9;
+    transition: all 0.2s ease;
+  }
 
+  .info-card:hover {
+    transform: translateY(-2px);
+    background: #ffffff;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.04);
+    border-color: #cbd5e1;
+  }
 
-.profile-header img{
+  .info-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-width:180px;
-height:180px;
-border-radius:50%;
-object-fit:cover;
-border:5px solid white;
+  .info-value {
+    font-size: 16px;
+    color: var(--text-dark);
+    font-weight: 600;
+    word-break: break-word;
+  }
 
-}
+  /* Action Box */
+  .patient-action-box {
+    background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+    border: 1px solid #bbf7d0;
+    padding: 28px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
 
+  .action-text h2 {
+    margin: 0 0 4px 0;
+    font-size: 20px;
+    color: var(--text-dark);
+  }
 
-.profile-body{
+  .action-text p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
 
-padding:30px;
+  .consult-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
 
-}
+  .consult-btn:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35);
+    transform: translateY(-1px);
+  }
 
-.consult-btn{
-
-display:inline-block;
-background:#16a34a;
-color:white;
-padding:14px 30px;
-border-radius:30px;
-text-decoration:none;
-font-weight:bold;
-margin-top:15px;
-
-}
-
-.consult-btn:hover{
-
-background:#15803d;
-
-}
-
-
-.info{
-
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:20px;
-
-}
-
-
-.box{
-
-background:#f1f5f9;
-padding:15px;
-border-radius:15px;
-
-}
-
-
-.patient-section{
-
-margin-top:30px;
-padding:25px;
-background:#eff6ff;
-border-radius:20px;
-
-}
-
-
-
-button{
-
-background:#16a34a;
-color:white;
-border:none;
-padding:14px 25px;
-border-radius:30px;
-font-weight:bold;
-
-}
-
-
-@media(max-width:600px){
-
-.info{
-
-grid-template-columns:1fr;
-
-}
-
-}
-
+  @media(max-width: 640px) {
+    .patient-action-box {
+      flex-direction: column;
+      text-align: center;
+    }
+    .consult-btn {
+      width: 100%;
+    }
+  }
 </style>
 
-
 <div class="profile-page">
+  <div class="doctor-card">
+    
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="avatar-wrapper">
+        <img src="${doctor.image || "/images/default-doctor.png"}" alt="Dr. ${doctor.name || 'Doctor'}">
+        <span class="verified-badge">✓</span>
+      </div>
+      <h1 class="doc-name">Dr. ${doctor.name || "N/A"}</h1>
+      <span class="doc-spec">${doctor.specialization || "General Physician"}</span>
+    </div>
 
+    <!-- Profile Details -->
+    <div class="profile-body">
+      <div class="info-grid">
+        
+        <div class="info-card">
+          <div class="info-label">🎓 Degree</div>
+          <div class="info-value">${doctor.degree || "N/A"}</div>
+        </div>
 
-<div class="doctor-profile">
+        <div class="info-card">
+          <div class="info-label">⏳ Experience</div>
+          <div class="info-value">${doctor.experience ? doctor.experience + ' Years' : 'N/A'}</div>
+        </div>
 
+        <div class="info-card">
+          <div class="info-label">🏥 Hospital</div>
+          <div class="info-value">${doctor.hospital || "N/A"}</div>
+        </div>
 
-<div class="profile-header">
+        <div class="info-card">
+          <div class="info-label">📞 Phone</div>
+          <div class="info-value">${doctor.phone || "N/A"}</div>
+        </div>
 
+        <div class="info-card" style="grid-column: span 2 / -1;">
+          <div class="info-label">📍 Address</div>
+          <div class="info-value">${doctor.address || "N/A"}</div>
+        </div>
 
-<img src="${doctor.image || "/images/default-doctor.png"}">
+      </div>
 
+      <!-- Action Box -->
+      <div class="patient-action-box">
+        <div class="action-text">
+          <h2>Online Consultation</h2>
+          <p>Book a slot and connect directly with Dr. ${doctor.name || 'Doctor'}</p>
+        </div>
+        <a href="/admin/consultation/${doctor._id}" class="consult-btn">
+          Start Consultation →
+        </a>
+      </div>
 
-<h1>
-Dr. ${doctor.name}
-</h1>
+    </div>
 
-
-<h3>
-${doctor.specialization || ""}
-</h3>
-
-
+  </div>
 </div>
-
-
-
-<div class="profile-body">
-
-
-<div class="info">
-
-
-<div class="box">
-<b>Degree</b>
-<br>
-${doctor.degree || ""}
-</div>
-
-
-<div class="box">
-<b>Experience</b>
-<br>
-${doctor.experience || ""} Years
-</div>
-
-
-<div class="box">
-<b>Hospital</b>
-<br>
-${doctor.hospital || ""}
-</div>
-
-
-<div class="box">
-<b>Address</b>
-<br>
-${doctor.address || ""}
-</div>
-
-
-<div class="box">
-<b>Phone</b>
-<br>
-${doctor.phone || ""}
-</div>
-
-
-</div>
-
-
-
-
-<div class="patient-section">
-
-
-<h2>
-Patient Section
-</h2>
-
-
-<p>
-Book consultation with Dr. ${doctor.name}
-</p>
-
-
-<a href="/admin/consultation/${doctor._id}" class="consult-btn">
-    Start Consultation
-</a>
-
-
-</div>
-
-
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
 `;
-
 }
-
 
 module.exports = DoctorProfile;
