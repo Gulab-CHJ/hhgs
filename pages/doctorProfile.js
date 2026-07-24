@@ -284,8 +284,20 @@ async function unlockPhone() {
 
         // Create Order
         const res = await fetch("/admin/create-phone-payment", {
-            method: "POST"
-        });
+    method:"POST",
+    headers:{
+        "Content-Type":"application/json"
+    }
+});
+
+const order = await res.json();
+
+console.log(order);
+
+if(!order.id){
+    alert("Order create failed");
+    return;
+}
 
         const order = await res.json();
 

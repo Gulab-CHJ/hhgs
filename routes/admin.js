@@ -435,30 +435,82 @@ router.get("/doctor/:id", async (req,res)=>{
 //     key_id: process.env.RAZORPAY_KEY,
 //     key_secret: process.env.RAZORPAY_SECRET
 // });
-router.post("/create-phone-payment", async (req, res) => {
+router.post("/create-phone-payment", async(req,res)=>{
 
-    try {
+try{
 
-        const order = await razorpay.orders.create({
+const order = await razorpay.orders.create({
 
-            amount: 100,      // ₹1 = 100 paise
-            currency: "INR",
-            receipt: "doctor_phone"
+amount:100,   // ₹1 = 100 paise
+currency:"INR",
+receipt:"phone_unlock"
 
-        });
+});
 
-        res.json(order);
 
-    } catch (err) {
+res.json(order);
 
-        console.log(err);
 
-        res.status(500).json({
-            success: false,
-            message: err.message
-        });
+}catch(err){
 
-    }
+console.log(err);
+
+res.status(500).json({
+error:err.message
+});
+
+}
+
+});
+
+router.post("/verify-phone-payment",async(req,res)=>{
+
+
+const {
+paymentId,
+orderId,
+signature,
+doctorId
+}=req.body;
+
+
+const body = orderId + "|" + paymentId;
+
+
+const expectedSignature =
+crypto
+.createHmac(
+"sha256",
+process.env.RAZORPAY_KEY_SECRET
+)
+.update(body)
+.digest("hex");
+
+
+
+if(expectedSignature === signature){
+
+
+await Doctor.findByIdAndUpdate(
+doctorId,
+{
+phoneUnlocked:true
+}
+);
+
+
+return res.json({
+success:true
+});
+
+
+}
+
+
+res.json({
+success:false
+});
+
 
 });
 
