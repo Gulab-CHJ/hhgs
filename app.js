@@ -151,15 +151,13 @@ app.use("/admin", adminRoutes);
 
 // Error Handler (Upload error दिखाने के लिए)
 
-app.use((err,req,res,next)=>{
-
-    console.log("GLOBAL ERROR:",err);
+app.use((err, req, res, next) => {
+    console.error(err);
 
     res.status(500).send(`
         <h2>Server Error</h2>
-        <pre>${err.message}</pre>
+        <pre>${err.stack || err.message || JSON.stringify(err)}</pre>
     `);
-
 });
 
 
