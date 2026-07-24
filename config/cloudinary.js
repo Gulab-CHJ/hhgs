@@ -1,5 +1,10 @@
 require("dotenv").config();
 
+console.log("Cloud:", process.env.CLOUDINARY_CLOUD_NAME);
+console.log("Key:", process.env.CLOUDINARY_API_KEY);
+console.log("Secret:", process.env.CLOUDINARY_API_SECRET ? "OK" : "MISSING");
+
+
 const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
