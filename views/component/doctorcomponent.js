@@ -462,7 +462,7 @@ ${doctor.degree || ""}
 ${doctor.specialization || ""}
 ${doctor.hospital || ""}
 ">
-</div>
+
 
 
                 <div class="doctor-img">
@@ -520,6 +520,8 @@ ${doctor.hospital || ""}
 
 
     </div>
+
+  </div>
 
 
 </div>
