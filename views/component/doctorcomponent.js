@@ -435,21 +435,7 @@
 
 function DoctorSection(doctors = []) {
 
-    let cards = "";
-
-    if (doctors.length === 0) {
-
-        cards = `
-        <div class="no-doctor">
-            <h3>No Doctors Available</h3>
-        </div>
-        `;
-
-    } else {
-
-        doctors.forEach((doctor) => {
-
-          cards += `
+    cards += `
 
 <div 
 class="doctor-card doctor-link"
@@ -458,75 +444,74 @@ onclick="window.location.href='/doctor/${doctor._id}'"
 
 data-search="
 ${doctor.name || ""}
-${doctor.degree || ""}
 ${doctor.specialization || ""}
-${doctor.hospital || ""}
+${doctor.address || ""}
 ">
 
 
+<div class="doctor-img">
 
-                <div class="doctor-img">
+    <img 
+    src="${doctor.image || "/images/default-doctor.png"}"
+    alt="${doctor.name || "Doctor"}">
 
-                    <img 
-                    src="${doctor.image || "/images/default-doctor.png"}"
-                    alt="${doctor.name || "Doctor"}">
-
-                </div>
-
-
-
-                <div class="doctor-body">
-
-
-    <h3>
-        NAME : ${doctor.name || ""}
-    </h3>
-
-
-    <p class="speciality">
-        SPECIALIZATION : ${doctor.specialization || ""}
-    </p>
-
-
-    <p class="hospital">
-        ADDRESS : ${doctor.address || ""}
-    </p>
+</div>
 
 
 
-    <div class="doctor-btns">
+<div class="doctor-body">
 
 
-        <a 
-        href="tel:${doctor.phone}"
-        class="call-btn"
-        onclick="event.stopPropagation();">
-
-            📞 Call
-
-        </a>
+<h3>
+NAME : ${doctor.name || ""}
+</h3>
 
 
-
-        <a
-        href="https://wa.me/91${doctor.phone}?text=Hello Doctor"
-        target="_blank"
-        class="whatsapp-btn"
-        onclick="event.stopPropagation();">
-
-            💬 WhatsApp
-
-        </a>
+<p class="speciality">
+SPECIALIZATION : ${doctor.specialization || ""}
+</p>
 
 
-    </div>
+<p class="hospital">
+ADDRESS : ${doctor.address || ""}
+</p>
 
-  </div>
+
+
+<div class="doctor-btns">
+
+
+<a 
+href="tel:${doctor.phone}"
+class="call-btn"
+onclick="event.stopPropagation();">
+
+📞 Call
+
+</a>
+
+
+
+<a
+href="https://wa.me/91${doctor.phone}?text=Hello Doctor"
+target="_blank"
+class="whatsapp-btn"
+onclick="event.stopPropagation();">
+
+💬 WhatsApp
+
+</a>
 
 
 </div>
 
-            `;
+
+</div>
+
+
+</div>
+
+`;
 
         });
 
