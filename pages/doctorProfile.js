@@ -270,8 +270,10 @@ font-weight:bold;
 
   </div>
 </div>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
+
 
 async function unlockPhone() {
 
@@ -280,99 +282,166 @@ async function unlockPhone() {
     btn.innerHTML = "Please Wait...";
     btn.disabled = true;
 
+
     try {
 
-        // Create Order
+
         const res = await fetch("/admin/create-phone-payment", {
+
     method:"POST",
+
     headers:{
         "Content-Type":"application/json"
-    }
+    },
+
+    body:JSON.stringify({
+
+        doctorId:"${doctor._id}"
+
+    })
+
 });
 
-const order = await res.json();
-
-console.log(order);
-
-if(!order.id){
-    alert("Order create failed");
-    return;
-}
 
         const order = await res.json();
 
+
+        if(!order.id){
+
+            alert("Order create failed");
+
+            btn.disabled=false;
+            btn.innerHTML="🔓 Unlock for ₹1";
+
+            return;
+        }
+
+
+
         const options = {
 
-            key: "rzp_live_THG6859JR3Ww9Y", // Your Razorpay Test Key
 
-            amount: order.amount,
-            currency: order.currency,
-            order_id: order.id,
+            key:"rzp_live_THG6859JR3Ww9Y",
 
-            name: "HHGS",
-            description: "Doctor Phone Unlock",
 
-            handler: async function (response) {
+            amount:order.amount,
 
-                const verify = await fetch("/admin/verify-phone-payment", {
 
-                    method: "POST",
+            currency:order.currency,
 
-                    headers: {
-                        "Content-Type": "application/json"
+
+            order_id:order.id,
+
+
+            name:"HHGS",
+
+
+            description:"Doctor Phone Unlock",
+
+
+
+            handler: async function(response){
+
+
+                const verify = await fetch(
+                    "/admin/verify-phone-payment",
+                    {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":"application/json"
                     },
 
-                    body: JSON.stringify({
 
-                        paymentId: response.razorpay_payment_id,
-                        orderId: response.razorpay_order_id,
-                        signature: response.razorpay_signature,
-                        doctorId: "${doctor._id}"
+                    body:JSON.stringify({
+
+                        paymentId:
+                        response.razorpay_payment_id,
+
+
+                        orderId:
+                        response.razorpay_order_id,
+
+
+                        signature:
+                        response.razorpay_signature,
+
+
+                        doctorId:"${doctor._id}"
 
                     })
 
                 });
 
+
+
                 const data = await verify.json();
 
-                if (data.success) {
 
-                    document.getElementById("doctorPhone").innerHTML =
-                        "${doctor.phone}";
 
-                    btn.innerHTML = "Unlocked ✔";
+                if(data.success){
 
-                } else {
 
-                    btn.disabled = false;
-                    btn.innerHTML = "🔓 Unlock for ₹1";
+                    document.getElementById(
+                    "doctorPhone"
+                    ).innerHTML=data.phone;
 
-                    alert("Payment Verification Failed");
+
+                    btn.innerHTML="Unlocked ✔";
+
+                    btn.disabled=true;
+
+
+                }else{
+
+
+                    alert("Payment verification failed");
+
+                    btn.disabled=false;
+
+                    btn.innerHTML="🔓 Unlock for ₹1";
 
                 }
 
+
+
             }
+
 
         };
 
-        const rzp = new Razorpay(options);
 
-        rzp.open();
 
-    } catch (err) {
+        const razorpay = new Razorpay(options);
 
-        console.error(err);
 
-        btn.disabled = false;
-        btn.innerHTML = "🔓 Unlock for ₹1";
+        razorpay.open();
 
-        alert("Payment Failed");
+
+
+    } catch(error){
+
+
+        console.log(error);
+
+
+        alert("Payment Error");
+
+
+        btn.disabled=false;
+
+        btn.innerHTML="🔓 Unlock for ₹1";
+
 
     }
+
+
 
 }
 
 </script>
+
 
 
 `;

@@ -1,4 +1,5 @@
 require("dotenv").config();
+const crypto = require("crypto");
 
 console.log("KEY:", process.env.RAZORPAY_KEY_ID);
 console.log("SECRET:", process.env.RAZORPAY_KEY_SECRET);
@@ -463,55 +464,42 @@ error:err.message
 
 });
 
-router.post("/verify-phone-payment",async(req,res)=>{
+router.post("/verify-phone-payment", async (req, res) => {
 
+    const {
+        paymentId,
+        orderId,
+        signature,
+        doctorId
+    } = req.body;
 
-const {
-paymentId,
-orderId,
-signature,
-doctorId
-}=req.body;
+    const body = orderId + "|" + paymentId;
 
+    const expectedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+        .update(body)
+        .digest("hex");
 
-const body = orderId + "|" + paymentId;
+    if (expectedSignature !== signature) {
+        return res.json({
+            success: false
+        });
+    }
 
+    const doctor = await Doctor.findByIdAndUpdate(
+        doctorId,
+        {
+            phoneUnlocked: true
+        },
+        {
+            new: true
+        }
+    );
 
-const expectedSignature =
-crypto
-.createHmac(
-"sha256",
-process.env.RAZORPAY_KEY_SECRET
-)
-.update(body)
-.digest("hex");
-
-
-
-if(expectedSignature === signature){
-
-
-await Doctor.findByIdAndUpdate(
-doctorId,
-{
-phoneUnlocked:true
-}
-);
-
-
-return res.json({
-success:true
-});
-
-
-}
-
-
-res.json({
-success:false
-});
-
+    return res.json({
+        success: true,
+        phone: doctor.phone
+    });
 
 });
-
 module.exports = router;

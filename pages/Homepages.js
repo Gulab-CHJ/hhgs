@@ -61,6 +61,7 @@ ${DoctorSection(doctors)}
 ${Footer()}
 
 <script src="/js/banner.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </body>
 
 </html>
