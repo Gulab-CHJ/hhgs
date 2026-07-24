@@ -24,6 +24,8 @@ const { login } = require("../controllers/adminAuth");
 const AdminController = require("../controllers/adminController");
 const DoctorDashboard = require("../pages/doctorDashboard");
 
+const AddGovernment = require("../pages/addpages/addGovernment");
+
 
 
 const Doctor = require("../models/Doctor");
@@ -549,5 +551,100 @@ router.post("/verify-phone-payment", async (req, res) => {
 const Consultation = require("../pages/consultation");
 
 
+
+
+
+
 router.get("/consultation/:id", Consultation);
+
+
+
+
+
+router.get("/add-government",(req,res)=>{
+
+    res.send(AddGovernment());
+
+});
+
+const GovernmentPerson = require("../models/GovernmentPerson");
+router.post(
+"/add-government",
+upload.single("image"),
+async(req,res)=>{
+
+try{
+
+
+const person = new GovernmentPerson({
+
+name:req.body.name,
+
+position:req.body.position,
+
+department:req.body.department,
+
+phone:req.body.phone,
+
+address:req.body.address,
+
+description:req.body.description,
+
+
+image:req.file
+? req.file.path
+:""
+
+});
+
+
+await person.save();
+
+
+console.log("Government Person Saved:", person);
+
+
+res.redirect("/admin/add-government");
+
+
+}
+catch(err){
+
+console.log("ADD GOVERNMENT ERROR:",err);
+
+res.status(500).send(err.message);
+
+}
+
+
+});
+
+const ManageGovernment = require("../pages/manageGovernment");
+
+router.get("/manage-government", async(req,res)=>{
+
+    try{
+
+        const persons = await GovernmentPerson
+        .find()
+        .sort({createdAt:-1});
+
+
+        res.send(
+            ManageGovernment(persons)
+        );
+
+
+    }catch(err){
+
+        console.log("MANAGE GOVERNMENT ERROR:",err);
+
+        res.status(500)
+        .send(err.message);
+
+    }
+
+});
+
+
 module.exports = router;

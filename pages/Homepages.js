@@ -27,9 +27,14 @@ const Header = require("../views/component/headercomponent");
 const Banner = require("../views/component/bannercomponent");
 const Footer = require("../views/component/footercomponent");
 const DoctorSection = require("../views/component/doctorcomponent");
+const GovernmentSection = require("../views/component/governmentcomponent");
 
 
-function Home(banners = [], doctors = []) {
+function Home(
+    banners = [], 
+    doctors = [], 
+    governments = []
+) {
 
     return `
 <!DOCTYPE html>
@@ -57,6 +62,8 @@ ${Header()}
 ${Banner(banners)}
 
 ${DoctorSection(doctors)}
+
+${GovernmentSection(governments)}
 
 ${Footer()}
 
