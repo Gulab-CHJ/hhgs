@@ -282,9 +282,16 @@ async function unlockPhone(){
 
     try{
 
-        const res = await fetch("/create-phone-payment",{
-            method:"POST"
-        });
+        fetch("/admin/verify-phone-payment", {
+    method: "POST",
+    headers:{
+        "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+        paymentId:response.razorpay_payment_id,
+        doctorId:"${doctor._id}"
+    })
+})
 
         const order = await res.json();
 
