@@ -562,32 +562,37 @@ router.get("/delete-product/:id", async (req, res) => {
 
 });
 
-// const DoctorProfile = require("../pages/doctorProfile");
+// =============================
+// Doctor Profile Page
+// =============================
+
+const DoctorProfile = require("../pages/doctorProfile");
 
 
-// router.get("/doctor/:id", async (req,res)=>{
+router.get("/doctor/:id", async (req,res)=>{
 
-//     try{
+    try{
 
-//         const doctor = await Doctor.findById(req.params.id);
+        const doctor = await Doctor.findById(req.params.id);
 
-
-//         if(!doctor){
-//             return res.send("Doctor Not Found");
-//         }
-
-
-//         res.send(DoctorProfile(doctor));
+        if(!doctor){
+            return res.send("Doctor Not Found");
+        }
 
 
-//     }catch(err){
+        res.send(
+            DoctorProfile(doctor)
+        );
 
-//         console.log(err);
 
-//         res.status(500).send(err.message);
+    }catch(err){
 
-//     }
+        console.log(err);
 
-// });
+        res.status(500).send(err.message);
+
+    }
+
+});
 
 module.exports = router;
