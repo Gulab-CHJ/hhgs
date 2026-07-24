@@ -343,12 +343,14 @@ async function unlockPhone(){
 
     }catch(err){
 
-        btn.disabled = false;
-        btn.innerHTML = "🔓 Unlock for ₹1";
+    console.error("Payment Error:", err);
 
-        alert("Payment Failed");
+    btn.disabled = false;
+    btn.innerHTML = "🔓 Unlock for ₹1";
 
-    }
+    alert(err.message || "Payment Failed");
+
+}
 
 }
 
