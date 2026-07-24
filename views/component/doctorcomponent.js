@@ -451,13 +451,17 @@ function DoctorSection(doctors = []) {
 
             cards += `
             <a href="/doctor/${doctor._id}" class="doctor-link">
-            <div class="doctor-card"
-            data-search="
-            ${doctor.name || ""}
-            ${doctor.degree || ""}
-            ${doctor.specialization || ""}
-            ${doctor.hospital || ""}
-            ">
+            <div 
+class="doctor-card doctor-link"
+
+onclick="window.location.href='/doctor/${doctor._id}'"
+
+data-search="
+${doctor.name || ""}
+${doctor.degree || ""}
+${doctor.specialization || ""}
+${doctor.hospital || ""}
+">
 
 
                 <div class="doctor-img">
