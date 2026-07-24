@@ -191,9 +191,9 @@ Book consultation with Dr. ${doctor.name}
 </p>
 
 
-<button>
-Start Consultation
-</button>
+<a href="/admin/consultation/${doctor._id}" class="consult-btn">
+    Start Consultation
+</a>
 
 
 </div>
