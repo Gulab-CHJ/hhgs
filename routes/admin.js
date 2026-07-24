@@ -562,4 +562,32 @@ router.get("/delete-product/:id", async (req, res) => {
 
 });
 
+const DoctorProfile = require("../pages/doctorProfile");
+
+
+router.get("/doctor/:id", async (req,res)=>{
+
+    try{
+
+        const doctor = await Doctor.findById(req.params.id);
+
+
+        if(!doctor){
+            return res.send("Doctor Not Found");
+        }
+
+
+        res.send(DoctorProfile(doctor));
+
+
+    }catch(err){
+
+        console.log(err);
+
+        res.status(500).send(err.message);
+
+    }
+
+});
+
 module.exports = router;

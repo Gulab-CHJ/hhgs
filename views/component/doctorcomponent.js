@@ -458,7 +458,7 @@ function DoctorSection(doctors = []) {
 <div 
 class="doctor-card doctor-link"
 
-onclick="window.location.href='/doctor/${doctor._id}'"
+onclick="window.location.href='/admin/doctor/${doctor._id}'"
 
 data-search="
 ${doctor.name || ""}
