@@ -345,9 +345,22 @@ router.post(
             console.log("BODY:", req.body);
             console.log("FILE:", req.file);
 
-            const totalDoctors = await Doctor.countDocuments();
+           const lastDoctor = await Doctor.findOne()
+.sort({ createdAt: -1 });
 
-            const doctorId = "DOC" + (1001 + totalDoctors);
+
+let nextNumber = 1001;
+
+
+if(lastDoctor && lastDoctor.doctorId){
+
+    nextNumber =
+    parseInt(lastDoctor.doctorId.replace("DOC","")) + 1;
+
+}
+
+
+const doctorId = "DOC" + nextNumber;
 
             const doctor = new Doctor({
 
