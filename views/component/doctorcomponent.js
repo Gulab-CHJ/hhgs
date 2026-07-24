@@ -435,7 +435,25 @@
 
 function DoctorSection(doctors = []) {
 
-    cards += `
+    let cards = "";
+
+
+    if(doctors.length === 0){
+
+        cards = `
+        <div class="no-doctor">
+            <h3>No Doctors Available</h3>
+        </div>
+        `;
+
+    }
+    else{
+
+
+        doctors.forEach((doctor)=>{
+
+
+        cards += `
 
 <div 
 class="doctor-card doctor-link"
@@ -451,9 +469,9 @@ ${doctor.address || ""}
 
 <div class="doctor-img">
 
-    <img 
-    src="${doctor.image || "/images/default-doctor.png"}"
-    alt="${doctor.name || "Doctor"}">
+<img 
+src="${doctor.image || "/images/default-doctor.png"}"
+alt="${doctor.name || "Doctor"}">
 
 </div>
 
@@ -511,13 +529,13 @@ onclick="event.stopPropagation();">
 
 </div>
 
+
 `;
 
         });
 
+
     }
-
-
 
 return `
 
