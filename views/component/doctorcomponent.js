@@ -477,57 +477,51 @@ ${doctor.hospital || ""}
                 <div class="doctor-body">
 
 
-                    <h3>
-                        ${doctor.name || ""}
-                    </h3>
+    <h3>
+        NAME : ${doctor.name || ""}
+    </h3>
 
 
-                    
+    <p class="speciality">
+        SPECIALIZATION : ${doctor.specialization || ""}
+    </p>
 
 
-
-                    <p class="speciality">
-                        ${doctor.specialization || ""}
-                    </p>
-
-
-
-                    <p class="hospital">
-    ${doctor.address || ""}
-</p>
+    <p class="hospital">
+        ADDRESS : ${doctor.address || ""}
+    </p>
 
 
 
-                    <div class="doctor-btns">
+    <div class="doctor-btns">
 
 
-                        <a 
-                        href="tel:${doctor.phone}"
-                        class="call-btn">
+        <a 
+        href="tel:${doctor.phone}"
+        class="call-btn"
+        onclick="event.stopPropagation();">
 
-                            📞 Call
+            📞 Call
 
-                        </a>
-
-
-
-                        <a
-                        href="https://wa.me/91${doctor.phone}?text=Hello Doctor"
-                        target="_blank"
-                        class="whatsapp-btn">
-
-                            💬 WhatsApp
-
-                        </a>
+        </a>
 
 
-                    </div>
+
+        <a
+        href="https://wa.me/91${doctor.phone}?text=Hello Doctor"
+        target="_blank"
+        class="whatsapp-btn"
+        onclick="event.stopPropagation();">
+
+            💬 WhatsApp
+
+        </a>
 
 
-                </div>
+    </div>
 
 
-            </div>
+</div>
 
             `;
 
