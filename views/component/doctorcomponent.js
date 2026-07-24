@@ -450,7 +450,7 @@ function DoctorSection(doctors = []) {
         doctors.forEach((doctor) => {
 
             cards += `
-
+            <a href="/doctor/${doctor._id}" class="doctor-link">
             <div class="doctor-card"
             data-search="
             ${doctor.name || ""}
