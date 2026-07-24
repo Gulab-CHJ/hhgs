@@ -482,9 +482,7 @@ ${doctor.hospital || ""}
                     </h3>
 
 
-                    <p class="degree">
-                        ${doctor.degree || ""}
-                    </p>
+                    
 
 
 
@@ -495,8 +493,8 @@ ${doctor.hospital || ""}
 
 
                     <p class="hospital">
-                        ${doctor.hospital || ""}
-                    </p>
+    ${doctor.address || ""}
+</p>
 
 
 
