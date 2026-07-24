@@ -51,6 +51,25 @@ padding:30px;
 
 }
 
+.consult-btn{
+
+display:inline-block;
+background:#16a34a;
+color:white;
+padding:14px 30px;
+border-radius:30px;
+text-decoration:none;
+font-weight:bold;
+margin-top:15px;
+
+}
+
+.consult-btn:hover{
+
+background:#15803d;
+
+}
+
 
 .info{
 
