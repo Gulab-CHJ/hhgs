@@ -539,6 +539,13 @@ return `
 
 
 <style>
+.doctor-link{
+
+    text-decoration:none;
+    color:inherit;
+    display:block;
+
+}
 
 
 .doctor-section{
