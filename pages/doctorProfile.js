@@ -220,9 +220,33 @@ function DoctorProfile(doctor) {
         </div>
 
         <div class="info-card">
-          <div class="info-label">📞 Phone</div>
-          <div class="info-value">${doctor.phone || "N/A"}</div>
-        </div>
+
+  <div class="info-label">
+    📞 Phone Number
+  </div>
+
+  <div class="info-value" id="doctorPhone">
+    **********
+  </div>
+
+  <br>
+
+  <button
+      onclick="unlockPhone()"
+      id="unlockBtn"
+      style="
+      background:#16a34a;
+      color:#fff;
+      border:none;
+      padding:10px 18px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:bold;
+      ">
+      🔓 Unlock for ₹1
+  </button>
+
+  </div>
 
         <div class="info-card" style="grid-column: span 2 / -1;">
           <div class="info-label">📍 Address</div>
@@ -246,6 +270,91 @@ function DoctorProfile(doctor) {
 
   </div>
 </div>
+
+<script>
+
+async function unlockPhone(){
+
+    const btn = document.getElementById("unlockBtn");
+
+    btn.innerHTML = "Please Wait...";
+    btn.disabled = true;
+
+    try{
+
+        const res = await fetch("/create-phone-payment",{
+            method:"POST"
+        });
+
+        const order = await res.json();
+
+        const options = {
+
+            key: "YOUR_RAZORPAY_KEY", // अपनी Razorpay Key डालो
+
+            amount: order.amount,
+            currency: order.currency,
+            order_id: order.id,
+
+            name:"HHGS",
+            description:"Doctor Phone Unlock",
+
+            handler:function(response){
+
+                fetch("/verify-phone-payment",{
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        paymentId:response.razorpay_payment_id,
+                        doctorId:"${doctor._id}"
+
+                    })
+
+                })
+
+                .then(res=>res.json())
+
+                .then(data=>{
+
+                    if(data.success){
+
+                        document.getElementById("doctorPhone").innerHTML =
+                        "${doctor.phone}";
+
+                        btn.innerHTML="Unlocked ✔";
+
+                    }
+
+                });
+
+            }
+
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.open();
+
+    }catch(err){
+
+        btn.disabled = false;
+        btn.innerHTML = "🔓 Unlock for ₹1";
+
+        alert("Payment Failed");
+
+    }
+
+}
+
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 `;
 }
 
