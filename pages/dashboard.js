@@ -740,54 +740,54 @@ Chart Area
 </html>
 `;
 
-// }
-
-// module.exports = AdminDashboard;
-
-const DashboardSidebar = require("../views/component/dashboard/dashboardSidebar");
-const DashboardSection = require("../views/component/dashboard/dashboardSection");
-
-function AdminDashboard() {
-
-return `
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>HHGS Admin</title>
-
-
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-</head>
-
-<body>
-
-<div class="admin-layout">
-
-    ${DashboardSidebar()}
-
-    <main class="admin-content">
-
-        ${DashboardSection()}
-
-    </main>
-
-</div>
-
-<script src="/js/admin-dashboard.js"></script>
-
-</body>
-
-</html>
-`;
-
 }
 
 module.exports = AdminDashboard;
+
+// const DashboardSidebar = require("../views/component/dashboard/dashboardSidebar");
+// const DashboardSection = require("../views/component/dashboard/dashboardSection");
+
+// function AdminDashboard() {
+
+// return `
+// <!DOCTYPE html>
+// <html lang="en">
+
+// <head>
+
+// <meta charset="UTF-8">
+// <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+// <title>HHGS Admin</title>
+
+
+
+// <link rel="stylesheet"
+// href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+// </head>
+
+// <body>
+
+// <div class="admin-layout">
+
+//     ${DashboardSidebar()}
+
+//     <main class="admin-content">
+
+//         ${DashboardSection()}
+
+//     </main>
+
+// </div>
+
+// <script src="/js/admin-dashboard.js"></script>
+
+// </body>
+
+// </html>
+// `;
+
+// }
+
+// module.exports = AdminDashboard;
