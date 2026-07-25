@@ -1,3 +1,4 @@
+
 // const multer = require("multer");
 // const path = require("path");
 // const fs = require("fs");
@@ -8,16 +9,57 @@
 //     fs.mkdirSync(uploadPath, { recursive: true });
 // }
 
+
 // const storage = multer.diskStorage({
+
 //     destination: (req, file, cb) => {
 //         cb(null, uploadPath);
 //     },
+
+
 //     filename: (req, file, cb) => {
-//         cb(null, Date.now() + "-" + file.originalname);
+
+//         cb(
+//             null,
+//             Date.now() + "-" + file.originalname
+//         );
+
 //     }
+
 // });
 
-// const upload = multer({ storage });
+
+// const upload = multer({
+
+//     storage: storage,
+
+//     limits:{
+//         fileSize: 10 * 1024 * 1024   // 5 MB
+//     },
+
+//     fileFilter:(req,file,cb)=>{
+
+//         const ext = path.extname(file.originalname);
+
+//         if(
+//             ext === ".jpg" ||
+//             ext === ".jpeg" ||
+//             ext === ".png" ||
+//             ext === ".webp"
+//         ){
+
+//             cb(null,true);
+
+//         }else{
+
+//             cb(new Error("Only Image Allowed"));
+
+//         }
+
+//     }
+
+// });
+
 
 // module.exports = upload;
 
@@ -25,54 +67,53 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+// Upload Folder
 const uploadPath = path.join(process.cwd(), "storage", "uploads");
 
+// Create Folder if not exists
 if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath, { recursive: true });
 }
 
-
+// Storage Configuration
 const storage = multer.diskStorage({
 
     destination: (req, file, cb) => {
         cb(null, uploadPath);
     },
 
-
     filename: (req, file, cb) => {
-
         cb(
             null,
             Date.now() + "-" + file.originalname
         );
-
     }
 
 });
 
-
+// Multer Configuration
 const upload = multer({
 
     storage: storage,
 
-    limits:{
-        fileSize: 10 * 1024 * 1024   // 5 MB
+    limits: {
+        fileSize: 10 * 1024 * 1024 // 10 MB
     },
 
-    fileFilter:(req,file,cb)=>{
+    fileFilter: (req, file, cb) => {
 
-        const ext = path.extname(file.originalname);
+        const ext = path.extname(file.originalname).toLowerCase();
 
-        if(
+        if (
             ext === ".jpg" ||
             ext === ".jpeg" ||
             ext === ".png" ||
             ext === ".webp"
-        ){
+        ) {
 
-            cb(null,true);
+            cb(null, true);
 
-        }else{
+        } else {
 
             cb(new Error("Only Image Allowed"));
 
@@ -81,6 +122,5 @@ const upload = multer({
     }
 
 });
-
 
 module.exports = upload;
