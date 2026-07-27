@@ -1,220 +1,395 @@
-// const mongoose = require("mongoose");
+// // // const mongoose = require("mongoose");
 
-// const DoctorSchema = new mongoose.Schema({
+// // // const DoctorSchema = new mongoose.Schema({
 
-//     doctorId: {
-//         type: String,
-//         unique: true
-//     },
+// // //     doctorId: {
+// // //         type: String,
+// // //         unique: true
+// // //     },
 
-//     name: {
-//         type: String,
-//         required: true
-//     },
+// // //     name: {
+// // //         type: String,
+// // //         required: true
+// // //     },
 
-//     degree: String,
+// // //     degree: String,
 
-//     specialization: String,
+// // //     specialization: String,
 
-//     experience: String,
+// // //     experience: String,
 
-//     hospital: String,
+// // //     hospital: String,
 
-//     phone: {
-//         type: String,
-//         unique: true
-//     },
+// // //     phone: {
+// // //         type: String,
+// // //         unique: true
+// // //     },
 
-//     email: String,
+// // //     email: String,
 
-//     password: {
-//         type: String,
-//         required: true
-//     },
+// // //     password: {
+// // //         type: String,
+// // //         required: true
+// // //     },
 
-//     address: String,
+// // //     address: String,
 
-//     image: String,
+// // //     image: String,
 
-//     description: String
+// // //     description: String
 
-// }, {
-//     timestamps: true
-// });
+// // // }, {
+// // //     timestamps: true
+// // // });
 
-// module.exports =
-//     mongoose.models.Doctor ||
-//     mongoose.model("Doctor", DoctorSchema);
+// // // module.exports =
+// // //     mongoose.models.Doctor ||
+// // //     mongoose.model("Doctor", DoctorSchema);
+
+// // const mongoose = require("mongoose");
+
+
+// // const DoctorSchema = new mongoose.Schema({
+
+
+// //     doctorId: {
+
+// //         type: String,
+
+// //         unique: true
+
+// //     },
+
+
+// //     name: {
+
+// //         type: String,
+
+// //         required: true
+
+// //     },
+
+
+// //     degree: {
+
+// //         type: String
+
+// //     },
+
+
+// //     specialization: {
+
+// //         type: String
+
+// //     },
+
+
+// //     experience: {
+
+// //         type: String
+
+// //     },
+
+
+// //     hospital: {
+
+// //         type: String
+
+// //     },
+
+
+// //     phone: {
+
+// //         type: String,
+
+// //         unique: true
+
+// //     },
+
+
+// //     email: {
+
+// //         type: String
+
+// //     },
+
+
+// //     password: {
+
+// //         type: String,
+
+// //         required: true
+
+// //     },
+
+
+// //     address: {
+
+// //         type: String
+
+// //     },
+
+
+// //     image: {
+
+// //         type: String
+
+// //     },
+
+
+// //     description: {
+
+// //         type: String
+
+// //     },
+
+
+
+// //     // ======================
+// //     // DOCTOR AVAILABILITY
+// //     // ======================
+
+
+// //     availableDay: {
+
+// //         type: String,
+
+// //         default: ""
+
+// //     },
+
+
+// //     timeFrom: {
+
+// //         type: String,
+
+// //         default: ""
+
+// //     },
+
+
+// //     timeTo: {
+
+// //         type: String,
+
+// //         default: ""
+
+// //     },
+
+
+
+// //     // ======================
+// //     // CONSULTATION FEE
+// //     // ======================
+
+
+// //     fee: {
+
+// //         type: Number,
+
+// //         default: 0
+
+// //     },
+
+
+// //     feeType: {
+
+// //         type: String,
+
+// //         enum: [
+// //             "per_visit",
+// //             "per_month",
+// //             "per_hour"
+// //         ],
+
+// //         default: "per_visit"
+
+// //     }
+
+
+// // }, {
+
+
+// //     timestamps:true
+
+// // });
+
+
+
+// // module.exports =
+// //     mongoose.models.Doctor ||
+// //     mongoose.model("Doctor", DoctorSchema);
+
+// // ======================
+// // DOCTOR AVAILABILITY
+// // ======================
+
+// availableDay: {
+//     type: String,
+//     default: ""
+// },
+
+// timeFrom: {
+//     type: String,
+//     default: ""
+// },
+
+// timeTo: {
+//     type: String,
+//     default: ""
+// },
+
+// // ======================
+// // APPOINTMENT SETTINGS
+// // ======================
+
+// slotDuration: {
+//     type: Number,
+//     enum: [5, 10, 15, 20, 25, 30, 45, 60],
+//     default: 10
+// },
+
+// // ======================
+// // CONSULTATION FEE
+// // ======================
+
+// fee: {
+//     type: Number,
+//     default: 0
+// },
+
+// feeType: {
+//     type: String,
+//     enum: [
+//         "per_visit",
+//         "per_hour",
+//         "per_day",
+//         "per_month"
+//     ],
+//     default: "per_visit"
+// }
+
+
 
 const mongoose = require("mongoose");
 
-
 const DoctorSchema = new mongoose.Schema({
 
-
     doctorId: {
-
         type: String,
-
         unique: true
-
     },
-
 
     name: {
-
         type: String,
-
         required: true
-
     },
-
 
     degree: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
-
 
     specialization: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
-
 
     experience: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
-
 
     hospital: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
-
 
     phone: {
-
         type: String,
-
-        unique: true
-
+        unique: true,
+        required: true
     },
-
 
     email: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
-
 
     password: {
-
         type: String,
-
         required: true
-
     },
-
 
     address: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
-
 
     image: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
-
 
     description: {
-
-        type: String
-
+        type: String,
+        default: ""
     },
 
-
-
-    // ======================
+    // ==========================
     // DOCTOR AVAILABILITY
-    // ======================
-
+    // ==========================
 
     availableDay: {
-
         type: String,
-
         default: ""
-
     },
-
 
     timeFrom: {
-
         type: String,
-
         default: ""
-
     },
-
 
     timeTo: {
-
         type: String,
-
         default: ""
-
     },
 
+    // ==========================
+    // APPOINTMENT SETTINGS
+    // ==========================
 
+    slotDuration: {
+        type: Number,
+        enum: [5, 10, 15, 20, 25, 30, 45, 60],
+        default: 10
+    },
 
-    // ======================
+    // ==========================
     // CONSULTATION FEE
-    // ======================
-
+    // ==========================
 
     fee: {
-
         type: Number,
-
         default: 0
-
     },
 
-
     feeType: {
-
-        type: String,
-
-        enum: [
-            "per_visit",
-            "per_month",
-            "per_hour"
-        ],
-
-        default: "per_visit"
-
-    }
-
+    type: String,
+    enum: [
+        "per_visit",
+        "per_hour",
+        "per_day",
+        "per_week",
+        "half_month",
+        "per_month"
+    ],
+    default: "per_visit"
+}
 
 }, {
-
-
-    timestamps:true
-
+    timestamps: true
 });
-
-
 
 module.exports =
     mongoose.models.Doctor ||

@@ -164,6 +164,23 @@ app.use((err, req, res, next) => {
 
 // Server
 
+
+
+// const appointmentRoute =
+// require("./routes/appointment");
+
+
+// app.use(
+// "/appointment",
+// appointmentRoute
+// );
+
+const appointmentRoute = require("./routes/appointment");
+
+console.log("Appointment Route Loaded");
+
+app.use("/appointment", appointmentRoute);
+
 const PORT = process.env.PORT || 3000;
 
 

@@ -859,149 +859,315 @@ router.get("/add-doctor", (req, res) => {
 // Save Doctor
 // =============================
 
+// router.post(
+//     "/add-doctor",
+//     upload.single("image"),
+//     async (req, res) => {
+
+//         try {
+
+//             console.log("BODY:", req.body);
+//             console.log("FILE:", req.file);
+
+
+
+//             // Duplicate Phone Check
+
+//             const existDoctor = await Doctor.findOne({
+//                 phone: req.body.phone
+//             });
+
+
+//             if (existDoctor) {
+
+//                 return res.send(
+//                     AddDoctor("Phone Number Already Registered")
+//                 );
+
+//             }
+
+
+
+//             // Generate Doctor ID
+
+//             const lastDoctor = await Doctor.findOne()
+//                 .sort({ createdAt: -1 });
+
+
+//             let nextNumber = 1001;
+
+
+//             if (lastDoctor && lastDoctor.doctorId) {
+
+//                 nextNumber =
+//                 parseInt(lastDoctor.doctorId.replace("DOC", "")) + 1;
+
+//             }
+
+
+//             const doctorId = "DOC" + nextNumber;
+
+
+
+//             // Create Doctor
+
+//             const doctor = new Doctor({
+
+//                 doctorId,
+
+
+//                 name: req.body.name,
+
+
+//                 degree: req.body.qualification,
+
+
+//                 specialization: req.body.speciality,
+
+
+//                 experience: req.body.experience,
+
+
+//                 hospital: req.body.clinic,
+
+
+//                 phone: req.body.phone,
+
+
+//                 email: req.body.email,
+
+
+//                 password: req.body.password,
+
+
+//                 address: req.body.address,
+
+
+//                 description: req.body.description,
+
+
+
+//                 // Availability
+
+//                 availableDay: req.body.availableDay,
+
+//                 timeFrom: req.body.timeFrom,
+
+//                 timeTo: req.body.timeTo,
+
+
+
+//                 // Fee
+
+//                 fee: req.body.fee,
+
+//                 feeType: req.body.feeType,
+
+
+
+//                 image: req.file ? req.file.path : ""
+
+//             });
+
+
+
+//             await doctor.save();
+
+
+//             console.log("Doctor Saved:", doctor);
+
+
+//             res.redirect("/admin/manage-doctors");
+
+
+
+//         } catch (err) {
+
+
+//             console.log("ADD DOCTOR ERROR:", err);
+
+
+//             if (err.code === 11000) {
+
+//                 return res.send(
+//                     AddDoctor("Phone Number Already Registered")
+//                 );
+
+//             }
+
+
+//             res.status(500).send(err.message);
+
+//         }
+
+//     }
+// );
+
+
 router.post(
     "/add-doctor",
     upload.single("image"),
-    async (req, res) => {
+    async (req,res)=>{
 
-        try {
+    try{
 
-            console.log("BODY:", req.body);
-            console.log("FILE:", req.file);
 
+        console.log("BODY:",req.body);
+        console.log("FILE:",req.file);
 
 
-            // Duplicate Phone Check
 
-            const existDoctor = await Doctor.findOne({
-                phone: req.body.phone
-            });
+        const existDoctor = await Doctor.findOne({
+            phone:req.body.phone
+        });
 
 
-            if (existDoctor) {
+        if(existDoctor){
 
-                return res.send(
-                    AddDoctor("Phone Number Already Registered")
-                );
-
-            }
-
-
-
-            // Generate Doctor ID
-
-            const lastDoctor = await Doctor.findOne()
-                .sort({ createdAt: -1 });
-
-
-            let nextNumber = 1001;
-
-
-            if (lastDoctor && lastDoctor.doctorId) {
-
-                nextNumber =
-                parseInt(lastDoctor.doctorId.replace("DOC", "")) + 1;
-
-            }
-
-
-            const doctorId = "DOC" + nextNumber;
-
-
-
-            // Create Doctor
-
-            const doctor = new Doctor({
-
-                doctorId,
-
-
-                name: req.body.name,
-
-
-                degree: req.body.qualification,
-
-
-                specialization: req.body.speciality,
-
-
-                experience: req.body.experience,
-
-
-                hospital: req.body.clinic,
-
-
-                phone: req.body.phone,
-
-
-                email: req.body.email,
-
-
-                password: req.body.password,
-
-
-                address: req.body.address,
-
-
-                description: req.body.description,
-
-
-
-                // Availability
-
-                availableDay: req.body.availableDay,
-
-                timeFrom: req.body.timeFrom,
-
-                timeTo: req.body.timeTo,
-
-
-
-                // Fee
-
-                fee: req.body.fee,
-
-                feeType: req.body.feeType,
-
-
-
-                image: req.file ? req.file.path : ""
-
-            });
-
-
-
-            await doctor.save();
-
-
-            console.log("Doctor Saved:", doctor);
-
-
-            res.redirect("/admin/manage-doctors");
-
-
-
-        } catch (err) {
-
-
-            console.log("ADD DOCTOR ERROR:", err);
-
-
-            if (err.code === 11000) {
-
-                return res.send(
-                    AddDoctor("Phone Number Already Registered")
-                );
-
-            }
-
-
-            res.status(500).send(err.message);
+            return res.send(
+                "Phone Number Already Registered"
+            );
 
         }
 
+
+
+        const lastDoctor = await Doctor.findOne()
+        .sort({createdAt:-1});
+
+
+        let nextNumber = 1001;
+
+
+        if(lastDoctor && lastDoctor.doctorId){
+
+            nextNumber =
+            parseInt(
+                lastDoctor.doctorId.replace("DOC","")
+            ) + 1;
+
+        }
+
+
+        const doctorId = "DOC" + nextNumber;
+
+
+
+        const doctor = new Doctor({
+
+
+            doctorId,
+
+
+            name:req.body.name,
+
+
+            degree:req.body.qualification,
+
+
+            specialization:req.body.speciality,
+
+
+            experience:req.body.experience,
+
+
+            hospital:req.body.clinic,
+
+
+            phone:req.body.phone,
+
+
+            email:req.body.email,
+
+
+            password:req.body.password,
+
+
+            address:req.body.address,
+
+
+            description:req.body.description,
+
+
+
+            // ======================
+            // DOCTOR AVAILABILITY
+            // ======================
+
+
+            availableDay:req.body.availableDay,
+
+
+            timeFrom:req.body.timeFrom,
+
+
+            timeTo:req.body.timeTo,
+
+
+
+            // ======================
+            // APPOINTMENT SLOT
+            // ======================
+
+
+            slotDuration:req.body.slotDuration,
+
+
+
+            // ======================
+            // FEE
+            // ======================
+
+
+            fee:req.body.fee,
+
+
+            feeType:req.body.feeType,
+
+
+
+            image:req.file
+            ? req.file.path
+            :""
+
+        });
+
+
+
+        await doctor.save();
+
+
+
+        console.log(
+            "Doctor Saved:",
+            doctor
+        );
+
+
+
+        res.redirect(
+            "/admin/manage-doctors"
+        );
+
+
+
     }
-);
+    catch(err){
+
+
+        console.log(
+            "ADD DOCTOR ERROR:",
+            err
+        );
+
+
+        res.status(500)
+        .send(err.message);
+
+
+    }
+
+});
 
 // =============================
 // Delete Doctor
@@ -1054,142 +1220,295 @@ router.get("/edit-doctor/:id", async (req, res) => {
 // Update Doctor
 // =============================
 
+// router.post(
+//     "/edit-doctor/:id",
+//     upload.single("image"),
+//     async (req, res) => {
+
+//         try {
+
+
+//             // Phone duplicate check
+
+//             const existDoctor = await Doctor.findOne({
+
+//                 phone:req.body.phone,
+
+//                 _id:{
+//                     $ne:req.params.id
+//                 }
+
+//             });
+
+
+//             if(existDoctor){
+
+//                 return res.send(
+//                     "Phone Number Already Registered"
+//                 );
+
+//             }
+
+
+
+//             const updateData = {
+
+
+//                 name: req.body.name,
+
+
+//                 degree: req.body.qualification,
+
+
+//                 specialization: req.body.speciality,
+
+
+//                 experience: req.body.experience,
+
+
+//                 hospital: req.body.clinic,
+
+
+//                 phone: req.body.phone,
+
+
+//                 email: req.body.email,
+
+
+//                 password: req.body.password,
+
+
+//                 address: req.body.address,
+
+
+//                 description: req.body.description,
+
+
+
+//                 // ======================
+//                 // Doctor Timing
+//                 // ======================
+
+
+//                 availableDay:req.body.availableDay,
+
+
+//                 timeFrom:req.body.timeFrom,
+
+
+//                 timeTo:req.body.timeTo,
+
+
+
+//                 // ======================
+//                 // Consultation Fee
+//                 // ======================
+
+
+//                 fee:req.body.fee,
+
+
+//                 feeType:req.body.feeType
+
+
+//             };
+
+
+
+//             // New Image Upload
+
+//             if(req.file){
+
+//                 updateData.image = req.file.path;
+
+//             }
+
+
+
+//             await Doctor.findByIdAndUpdate(
+
+//                 req.params.id,
+
+//                 updateData,
+
+//                 {
+//                     new:true
+//                 }
+
+//             );
+
+
+
+//             res.redirect("/admin/manage-doctors");
+
+
+
+//         } catch(err){
+
+
+//             console.log("UPDATE DOCTOR ERROR:",err);
+
+
+//             res.status(500).send(err.message);
+
+
+//         }
+
+//     }
+// );
+
 router.post(
-    "/edit-doctor/:id",
-    upload.single("image"),
-    async (req, res) => {
+"/edit-doctor/:id",
+upload.single("image"),
+async(req,res)=>{
 
-        try {
+try{
 
 
-            // Phone duplicate check
+const existDoctor = await Doctor.findOne({
 
-            const existDoctor = await Doctor.findOne({
+phone:req.body.phone,
 
-                phone:req.body.phone,
+_id:{
+$ne:req.params.id
+}
 
-                _id:{
-                    $ne:req.params.id
-                }
+});
 
-            });
 
+if(existDoctor){
 
-            if(existDoctor){
-
-                return res.send(
-                    "Phone Number Already Registered"
-                );
-
-            }
-
-
-
-            const updateData = {
-
-
-                name: req.body.name,
-
-
-                degree: req.body.qualification,
-
-
-                specialization: req.body.speciality,
-
-
-                experience: req.body.experience,
-
-
-                hospital: req.body.clinic,
-
-
-                phone: req.body.phone,
-
-
-                email: req.body.email,
-
-
-                password: req.body.password,
-
-
-                address: req.body.address,
-
-
-                description: req.body.description,
-
-
-
-                // ======================
-                // Doctor Timing
-                // ======================
-
-
-                availableDay:req.body.availableDay,
-
-
-                timeFrom:req.body.timeFrom,
-
-
-                timeTo:req.body.timeTo,
-
-
-
-                // ======================
-                // Consultation Fee
-                // ======================
-
-
-                fee:req.body.fee,
-
-
-                feeType:req.body.feeType
-
-
-            };
-
-
-
-            // New Image Upload
-
-            if(req.file){
-
-                updateData.image = req.file.path;
-
-            }
-
-
-
-            await Doctor.findByIdAndUpdate(
-
-                req.params.id,
-
-                updateData,
-
-                {
-                    new:true
-                }
-
-            );
-
-
-
-            res.redirect("/admin/manage-doctors");
-
-
-
-        } catch(err){
-
-
-            console.log("UPDATE DOCTOR ERROR:",err);
-
-
-            res.status(500).send(err.message);
-
-
-        }
-
-    }
+return res.send(
+"Phone Number Already Registered"
 );
+
+}
+
+
+
+const updateData={
+
+
+
+name:req.body.name,
+
+
+degree:req.body.qualification,
+
+
+specialization:req.body.speciality,
+
+
+experience:req.body.experience,
+
+
+hospital:req.body.clinic,
+
+
+phone:req.body.phone,
+
+
+email:req.body.email,
+
+
+password:req.body.password,
+
+
+address:req.body.address,
+
+
+description:req.body.description,
+
+
+
+// ======================
+// AVAILABILITY
+// ======================
+
+
+availableDay:req.body.availableDay,
+
+
+timeFrom:req.body.timeFrom,
+
+
+timeTo:req.body.timeTo,
+
+
+
+// ======================
+// APPOINTMENT SLOT
+// ======================
+
+
+slotDuration:req.body.slotDuration,
+
+
+
+// ======================
+// FEE
+// ======================
+
+
+fee:req.body.fee,
+
+
+feeType:req.body.feeType
+
+
+};
+
+
+
+
+
+if(req.file){
+
+updateData.image=req.file.path;
+
+}
+
+
+
+
+
+await Doctor.findByIdAndUpdate(
+
+req.params.id,
+
+updateData,
+
+{
+new:true
+}
+
+);
+
+
+
+res.redirect(
+"/admin/manage-doctors"
+);
+
+
+
+}
+catch(err){
+
+console.log(
+"UPDATE ERROR:",
+err
+);
+
+
+res.status(500)
+.send(err.message);
+
+
+}
+
+
+});
 
 const ManageProducts = require("../pages/manageProducts");
 
