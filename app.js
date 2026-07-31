@@ -181,6 +181,18 @@ console.log("Appointment Route Loaded");
 
 app.use("/appointment", appointmentRoute);
 
+
+const serviceRoutes = require("./routes/service");
+
+app.use("/", serviceRoutes);
+
+app.use(
+"/uploads",
+express.static("uploads")
+);
+
+
+
 const PORT = process.env.PORT || 3000;
 
 

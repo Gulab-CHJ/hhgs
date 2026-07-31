@@ -45,8 +45,9 @@ function Home(
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="/images/favicon.png">
 
-<title>Home</title>
+<title>HHGS23 | Online Healthcare & Government Services</title>
 
 <link rel="stylesheet" href="/css/style.css">
 

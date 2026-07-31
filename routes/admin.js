@@ -1668,4 +1668,242 @@ router.get("/manage-government", async (req, res) => {
     }
 });
 
+
+
+
+const ManageServices = require("../pages/adminpages/manageServices");
+
+router.get("/manage-services", async (req, res) => {
+    const services = await Service.find();
+    res.send(ManageServices(services));
+});
+
+
+
+const EditService = require("../pages/editpages/editService");
+
+router.get("/edit-service/:id", async (req,res)=>{
+
+try{
+
+const service = await Service.findById(req.params.id);
+
+console.log("EDIT SERVICE DATA:", service);
+
+
+if(!service){
+    return res.send("Service Not Found");
+}
+
+
+res.send(EditService(service));
+
+
+}
+catch(err){
+
+console.log("EDIT SERVICE ERROR:",err);
+
+res.status(500).send(err.message);
+
+}
+
+});
+
+router.post("/edit-service/:id", async (req, res) => {
+    try {
+
+        await Service.findByIdAndUpdate(req.params.id, {
+            title: req.body.title,
+            description: req.body.description,
+            image: req.body.image
+        });
+
+        res.redirect("/admin/manage-services");
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err.message);
+    }
+});
+
+
+
+
+
+router.get("/delete-service/:id", async (req, res) => {
+    try {
+
+        await Service.findByIdAndDelete(req.params.id);
+
+        res.redirect("/admin/manage-services");
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).send("Delete Failed");
+
+    }
+});
+
+
+router.post("/delete-service/:id", async (req, res) => {
+    try {
+
+        await Service.findByIdAndDelete(req.params.id);
+
+        res.redirect("/admin/manage-services");
+
+    } catch (err) {
+
+        console.error(err);
+
+        res.status(500).send("Delete Failed");
+
+    }
+});
+
+const AddService = require("../pages/addpages/addService");
+
+// Add Service Page
+router.get("/add-service", (req, res) => {
+    res.send(AddService());
+});
+
+
+
+
+// router.post(
+// "/add-service",
+// upload.single("image"),
+// async (req,res)=>{
+
+// try{
+
+
+
+
+// const service = new Service({
+
+// title:req.body.title,
+
+// image:req.file
+// ? req.file.path
+// : "",
+
+// description:req.body.description
+
+// });
+
+
+// await service.save();
+
+
+// res.redirect("/admin/manage-services");
+
+
+// }
+// catch(err){
+
+// console.log("ADD SERVICE ERROR:",err);
+
+// res.status(500).send(err.message);
+
+// }
+
+// });
+
+
+router.post(
+"/add-service",
+upload.single("image"),
+async (req,res)=>{
+
+try{
+
+
+console.log("FILE:",req.file);
+console.log("BODY:",req.body);
+
+
+
+const service = new Service({
+
+title:req.body.title,
+
+image:req.file
+? req.file.path
+: "",
+
+description:req.body.description,
+
+features:req.body.features || []
+
+});
+
+
+await service.save();
+
+
+res.redirect("/admin/manage-services");
+
+
+}
+catch(err){
+
+console.log("ADD SERVICE ERROR:",err);
+
+res.status(500).send(err.message);
+
+}
+
+});
+
+const ServiceDetails = require("../pages/serviceDetails");
+router.get("/service/:id", async (req, res) => {
+    try {
+        const service = await Service.findById(req.params.id);
+
+        if (!service) {
+            return res.status(404).send("Service not found");
+        }
+
+        res.render("service-details", { service });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
+});
+
+
+// const ServicePage = require("../pages/services");
+
+// router.get("/services", async (req,res)=>{
+
+//     try{
+
+//         const services = await Service
+//         .find()
+//         .sort({createdAt:-1});
+
+
+//         console.log("SERVICES DATA:", services);
+
+
+//         res.send(
+//             ServicePage(services)
+//         );
+
+
+//     }catch(err){
+
+//         console.log(err);
+
+//         res.status(500).send(err.message);
+
+//     }
+
+// });
+
 module.exports = router;

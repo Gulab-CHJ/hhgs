@@ -1,0 +1,522 @@
+function ServicesPage(services = []) {
+return `
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Our Medical Services</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Arial,sans-serif;
+}
+
+
+body{
+
+    background:
+    linear-gradient(135deg,#f8fbff,#e0f2fe);
+
+    color:#111827;
+
+}
+
+
+
+/* ================= HEADER ================= */
+
+
+.header{
+
+    background:
+    linear-gradient(
+    135deg,
+    #1d4ed8,
+    #06b6d4
+    );
+
+    padding:55px 20px;
+
+    text-align:center;
+
+    color:white;
+
+    border-radius:0 0 40px 40px;
+
+    box-shadow:
+    0 15px 40px rgba(37,99,235,.35);
+
+}
+
+
+
+.logo{
+
+    width:95px;
+    height:95px;
+
+    object-fit:contain;
+
+    background:white;
+
+    padding:10px;
+
+    border-radius:50%;
+
+    margin-bottom:18px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.25);
+
+}
+
+
+
+.header h1{
+
+    font-size:38px;
+
+    font-weight:800;
+
+}
+
+
+
+.header p{
+
+    margin-top:12px;
+
+    font-size:17px;
+
+    opacity:.95;
+
+}
+
+
+
+/* ================= CONTAINER ================= */
+
+
+.container{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:40px 25px;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+
+    gap:25px;
+
+}
+
+
+
+/* ================= SERVICE CARD ================= */
+
+
+.service-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    background:#ffffff;
+
+    color:#111827;
+
+    max-width:260px;
+
+    width:100%;
+
+    margin:auto;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    text-decoration:none;
+
+    border:1px solid #e5e7eb;
+
+
+    box-shadow:
+
+    0 10px 25px rgba(0,0,0,.10);
+
+
+    transition:.35s ease;
+
+}
+
+
+
+.service-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+
+    0 18px 35px rgba(37,99,235,.22);
+
+}
+
+
+
+/* ================= IMAGE ================= */
+
+
+.image-box{
+
+    width:100%;
+
+    height:170px;
+
+    overflow:hidden;
+
+    background:#eef4ff;
+
+}
+
+
+
+.image-box img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+
+    transition:.4s;
+
+}
+
+
+
+.service-card:hover .image-box img{
+
+    transform:scale(1.08);
+
+}
+
+
+
+/* ================= CONTENT ================= */
+
+
+.content{
+
+    padding:16px;
+
+    text-align:center;
+
+}
+
+
+
+.content h2{
+
+    font-size:19px;
+
+    color:#0f172a;
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+}
+
+
+
+.content p{
+
+    font-size:13px;
+
+    color:#64748b;
+
+    line-height:1.6;
+
+    min-height:42px;
+
+    margin-bottom:16px;
+
+}
+
+
+
+/* ================= BUTTON ================= */
+
+
+.view-btn{
+
+    display:inline-block;
+
+    padding:10px 20px;
+
+    border-radius:30px;
+
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #2563eb,
+    #06b6d4
+    );
+
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    box-shadow:
+
+    0 8px 20px rgba(37,99,235,.25);
+
+
+    transition:.3s;
+
+}
+
+
+
+.service-card:hover .view-btn{
+
+    transform:scale(1.05);
+
+}
+
+
+
+/* ================= FOOTER ================= */
+
+
+.footer{
+
+    margin-top:60px;
+
+    padding:40px 20px;
+
+    text-align:center;
+
+
+    background:
+
+    linear-gradient(
+    135deg,
+    #020617,
+    #1e293b
+    );
+
+
+    color:white;
+
+    border-radius:35px 35px 0 0;
+
+}
+
+
+
+.footer h3{
+
+    font-size:28px;
+
+    font-weight:800;
+
+}
+
+
+
+.footer p{
+
+    margin-top:10px;
+
+    color:#cbd5e1;
+
+}
+
+
+
+/* ================= MOBILE ================= */
+
+
+@media(max-width:768px){
+
+
+.header{
+
+    padding:40px 15px;
+
+}
+
+
+.logo{
+
+    width:80px;
+
+    height:80px;
+
+}
+
+
+.header h1{
+
+    font-size:28px;
+
+}
+
+
+.header p{
+
+    font-size:14px;
+
+}
+
+
+
+.container{
+
+    padding:25px 15px;
+
+    grid-template-columns:1fr;
+
+}
+
+
+
+.service-card{
+
+    max-width:320px;
+
+}
+
+
+
+.image-box{
+
+    height:180px;
+
+}
+
+
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section class="header">
+
+<img 
+src="/images/GS LOGO.png"
+class="logo"
+alt="GS Logo"
+>
+
+<h1>
+✨ Professional Service Center
+</h1>
+
+<p>
+Reliable • Fast • Secure Digital Solutions
+</p>
+
+</section>
+
+<section class="container">
+
+${
+services.length
+?
+
+services.map(service=>`
+
+<a href="/service/${service._id}" class="service-card">
+
+<div class="image-box">
+
+<img
+  src="${
+    service.image
+      ? (
+          service.image.startsWith("http")
+            ? service.image
+            : "/" + service.image.replace(/\\/g, "/")
+        )
+      : "/images/no-image.png"
+  }"
+  alt="${service.title}"
+  loading="lazy"
+  onerror="this.onerror=null;this.src='/images/no-image.png';"
+/>
+
+</div>
+
+<div class="content">
+
+<h2>${service.title}</h2>
+
+<p>
+
+${
+service.description
+?
+service.description.substring(0,90)
+:
+"Premium Healthcare Service Available"
+}
+
+...
+
+</p>
+
+<span class="view-btn">
+View Details →
+</span>
+
+</div>
+
+</a>
+
+`).join("")
+
+:
+`
+<div class="empty">
+
+No Services Available
+
+</div>
+`
+}
+</section>
+
+<footer class="footer">
+    <h3>GLOBAL SERVICE</h3>
+    <p>Safe & Secure Healthcare Solution</p>
+</footer>
+
+</body>
+</html>
+`;
+}
+
+module.exports = ServicesPage;
