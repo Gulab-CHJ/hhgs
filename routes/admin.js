@@ -1906,4 +1906,20 @@ router.get("/service/:id", async (req, res) => {
 
 // });
 
+
+
+
+
+const ManageStudents = require("../pages/admin/manageStudents");
+
+
+router.get("/admin/manageStudents", (req,res)=>{
+
+    res.send(ManageStudents());
+
+});
+
+
+module.exports = router;
+
 module.exports = router;
