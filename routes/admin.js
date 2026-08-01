@@ -1710,43 +1710,95 @@ res.status(500).send(err.message);
 
 });
 
+
+
+
+
+
+// router.get("/delete-service/:id", async (req, res) => {
+//     try {
+
+//         await Service.findByIdAndDelete(req.params.id);
+
+//         res.redirect("/admin/manage-services");
+
+//     } catch (err) {
+
+//         console.error(err);
+
+//         res.status(500).send("Delete Failed");
+
+//     }
+// });
+
+// router.post("/edit-service/:id", async (req, res) => {
+
+//     try {
+
+//         await Service.findByIdAndUpdate(req.params.id, {
+
+//             title: req.body.title,
+
+//             image: req.body.image,
+
+//             description: req.body.description,
+
+//             features: req.body.features || []
+
+//         });
+
+//         res.redirect("/admin/manage-services");
+
+//     } catch (err) {
+
+//         console.log(err);
+
+//         res.status(500).send(err.message);
+
+//     }
+
+// });
+
+
+
+
 router.post("/edit-service/:id", async (req, res) => {
     try {
 
-        await Service.findByIdAndUpdate(req.params.id, {
-            title: req.body.title,
-            description: req.body.description,
-            image: req.body.image
-        });
+        console.log("=== EDIT POST HIT ===");
+        console.log("PARAMS:", req.params);
+
+        console.log("BODY:", req.body);
+
+        const features = req.body.features || [];
+
+        const updatedService = await Service.findByIdAndUpdate(
+            req.params.id,
+            {
+                title: req.body.title,
+                image: req.body.image,
+                description: req.body.description,
+                features: Array.isArray(features) ? features : [features]
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedService) {
+            return res.status(404).send("Service Not Found");
+        }
+
+        console.log("UPDATED:", updatedService);
 
         res.redirect("/admin/manage-services");
 
     } catch (err) {
-        console.error(err);
+        console.error("EDIT SERVICE ERROR:", err);
         res.status(500).send(err.message);
     }
 });
-
-
-
-
-
-router.get("/delete-service/:id", async (req, res) => {
-    try {
-
-        await Service.findByIdAndDelete(req.params.id);
-
-        res.redirect("/admin/manage-services");
-
-    } catch (err) {
-
-        console.error(err);
-
-        res.status(500).send("Delete Failed");
-
-    }
-});
-
 
 router.post("/delete-service/:id", async (req, res) => {
     try {
@@ -1922,4 +1974,3 @@ router.get("/admin/manageStudents", (req,res)=>{
 
 module.exports = router;
 
-module.exports = router;

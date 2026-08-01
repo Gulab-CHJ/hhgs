@@ -254,7 +254,7 @@ button:hover{
 
 
 <div class="logo">
-    <img src="/images/GS LOGO.png." alt="Logo">
+    <img src="/images/GS LOGO.png" alt="Logo">
 </div>
 
 

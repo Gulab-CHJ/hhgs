@@ -293,302 +293,203 @@ return `
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Arial,sans-serif;
 }
-
 
 body{
-
-min-height:100vh;
-
-background:
-linear-gradient(135deg,#e0f2fe,#eff6ff,#dbeafe);
-
-padding:30px 15px;
-
+    min-height:100vh;
+    padding:25px;
+    background:linear-gradient(135deg,#eef6ff,#dbeafe,#f8fbff);
 }
 
-
-
-/* Main Card */
-
-.card{
-
-background:rgba(255,255,255,.85);
-
-backdrop-filter:blur(20px);
-
-max-width:750px;
-
-margin:auto;
-
-padding:30px;
-
-border-radius:30px;
-
-border:1px solid rgba(255,255,255,.5);
-
-box-shadow:
-
-0 20px 50px rgba(0,0,0,.15);
-
-}
-
-
-
-/* CSC Header */
+/* ================= HEADER ================= */
 
 .header{
-
-text-align:center;
-
-padding:20px;
-
-border-radius:20px;
-
-background:
-
-linear-gradient(135deg,#0066ff,#00b4d8);
-
-color:white;
-
-margin-bottom:25px;
-
-box-shadow:
-
-0 10px 25px rgba(0,102,255,.3);
-
+    max-width:1000px;
+    margin:0 auto 35px;
+    padding:35px;
+    text-align:center;
+    color:#fff;
+    border-radius:25px;
+    background:linear-gradient(135deg,#2563eb,#0ea5e9);
+    box-shadow:0 20px 40px rgba(37,99,235,.30);
 }
-
-
 
 .header h1{
-
-color:white;
-
-font-size:36px;
-
-font-weight:800;
-
-margin-bottom:8px;
-
+    font-size:40px;
+    font-weight:800;
+    margin-bottom:10px;
 }
-
-
 
 .header p{
-
-color:#e0f2fe;
-
-font-size:17px;
-
+    font-size:17px;
+    opacity:.95;
 }
 
-
-
-/* Service Image */
-
-img{
-
-width:100%;
-
-height:280px;
-
-object-fit:cover;
-
-border-radius:25px;
-
-margin-bottom:20px;
-
-box-shadow:
-
-0 10px 25px rgba(0,0,0,.15);
-
-}
-
-
-
-/* Service Title */
-
-.service-title{
-
-font-size:30px;
-
-color:#0f172a;
-
-margin:20px 0;
-
-font-weight:800;
-
-}
-
-
-
-/* Description */
-
-.description{
-
-background:#f8fafc;
-
-padding:18px;
-
-border-radius:15px;
-
-color:#475569;
-
-line-height:1.8;
-
-font-size:16px;
-
-border-left:5px solid #0066ff;
-
-}
-
-
-
-/* Feature Heading */
-
-h2{
-
-margin-top:30px;
-
-color:#0f172a;
-
-font-size:24px;
-
-}
-
-
-
-/* Feature List */
-
-ul{
-
-margin-top:15px;
-
-padding:0;
-
-list-style:none;
-
-}
-
-
-
-li{
-
-background:#f1f5f9;
-
-margin:10px 0;
-
-padding:14px 18px;
-
-border-radius:15px;
-
-font-size:16px;
-
-color:#334155;
-
-transition:.3s;
-
-border:1px solid #e2e8f0;
-
-}
-
-
-
-li:hover{
-
-transform:translateX(8px);
-
-background:#dbeafe;
-
-}
-
-
-
-/* Apply Button */
-
-.btn{
-
-display:block;
-
-text-align:center;
-
-margin-top:30px;
-
-background:
-
-linear-gradient(135deg,#0066ff,#00b4d8);
-
-color:white;
-
-padding:15px;
-
-border-radius:50px;
-
-text-decoration:none;
-
-font-size:18px;
-
-font-weight:700;
-
-box-shadow:
-
-0 10px 25px rgba(0,102,255,.35);
-
-transition:.3s;
-
-}
-
-
-
-.btn:hover{
-
-transform:translateY(-3px);
-
-box-shadow:
-
-0 15px 35px rgba(0,102,255,.5);
-
-}
-
-
-
-/* Mobile */
-
-@media(max-width:600px){
-
+/* ================= CARD ================= */
 
 .card{
-
-padding:20px;
-
-border-radius:20px;
-
+    max-width:1000px;
+    margin:auto;
+    background:#fff;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,.12);
 }
 
+/* ================= IMAGE ================= */
+
+.card img{
+    display:block;
+    width:100%;
+    height:380px;
+    object-fit:contain;
+    background:#f8fafc;
+    padding:20px;
+    border-bottom:1px solid #e5e7eb;
+    transition:all .4s ease;
+}
+
+.card:hover img{
+    transform:scale(1.03);
+}
+
+/* ================= TITLE ================= */
+
+.card h1{
+    font-size:34px;
+    color:#0f172a;
+    font-weight:800;
+    padding:30px 30px 15px;
+}
+
+/* ================= DESCRIPTION ================= */
+
+.description{
+    margin:0 30px;
+    padding:22px;
+    background:#f8fbff;
+    border-left:6px solid #2563eb;
+    border-radius:18px;
+    color:#475569;
+    font-size:16px;
+    line-height:1.8;
+}
+
+/* ================= FEATURES ================= */
+
+.card h2{
+    margin:35px 30px 20px;
+    font-size:28px;
+    color:#0f172a;
+}
+
+ul{
+    list-style:none;
+    margin:0 30px 30px;
+}
+
+li{
+    background:#fff;
+    margin-bottom:15px;
+    padding:18px 20px;
+    border-radius:16px;
+    border:1px solid #dbeafe;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    transition:.3s;
+    font-size:16px;
+    color:#334155;
+}
+
+li:hover{
+    transform:translateX(8px);
+    background:#eff6ff;
+    border-color:#2563eb;
+}
+
+/* ================= BUTTON ================= */
+
+.btn{
+    display:block;
+    width:280px;
+    margin:35px auto 35px;
+    text-align:center;
+    text-decoration:none;
+    padding:16px;
+    border-radius:50px;
+    font-size:18px;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+    box-shadow:0 15px 35px rgba(22,163,74,.35);
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-5px);
+    box-shadow:0 20px 45px rgba(22,163,74,.45);
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:768px){
+
+body{
+    padding:15px;
+}
+
+.header{
+    padding:22px;
+}
 
 .header h1{
-
-font-size:28px;
-
+    font-size:28px;
 }
 
-
-img{
-
-height:220px;
-
+.header p{
+    font-size:15px;
 }
 
+.card{
+    border-radius:20px;
+}
 
-.service-title{
+.card img{
+    height:240px;
+    padding:15px;
+}
 
-font-size:25px;
+.card h1{
+    font-size:25px;
+    padding:20px;
+}
 
+.description{
+    margin:0 20px;
+    padding:16px;
+    font-size:15px;
+}
+
+.card h2{
+    margin:25px 20px 15px;
+    font-size:22px;
+}
+
+ul{
+    margin:0 20px 20px;
+}
+
+li{
+    padding:15px;
+    font-size:15px;
+}
+
+.btn{
+    width:90%;
+    font-size:16px;
 }
 
 }
