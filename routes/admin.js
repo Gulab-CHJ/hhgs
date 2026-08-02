@@ -1762,43 +1762,37 @@ res.status(500).send(err.message);
 
 
 
-router.post("/edit-service/:id", async (req, res) => {
-    try {
+router.post(
+    "/edit-service/:id",
+    upload.single("image"),
+    async (req, res) => {
 
-        console.log("=== EDIT POST HIT ===");
-        console.log("PARAMS:", req.params);
+        console.log(req.body);
+        console.log(req.file);
 
-        console.log("BODY:", req.body);
+        let image = "";
+
+        const service = await Service.findById(req.params.id);
+
+        if (req.file) {
+            image = "/uploads/" + req.file.filename;
+        } else {
+            image = service.image;
+        }
 
         const features = req.body.features || [];
 
-        const updatedService = await Service.findByIdAndUpdate(
-            req.params.id,
-            {
-                title: req.body.title,
-                image: req.body.image,
-                description: req.body.description,
-                features: Array.isArray(features) ? features : [features]
-            },
-            {
-                new: true,
-                runValidators: true
-            }
-        );
-
-        if (!updatedService) {
-            return res.status(404).send("Service Not Found");
-        }
-
-        console.log("UPDATED:", updatedService);
+        await Service.findByIdAndUpdate(req.params.id, {
+            title: req.body.title,
+            description: req.body.description,
+            image,
+            features: Array.isArray(features) ? features : [features]
+        });
 
         res.redirect("/admin/manage-services");
-
-    } catch (err) {
-        console.error("EDIT SERVICE ERROR:", err);
-        res.status(500).send(err.message);
     }
-});
+);
+
 
 router.post("/delete-service/:id", async (req, res) => {
     try {
@@ -1970,6 +1964,25 @@ router.get("/admin/manageStudents", (req,res)=>{
     res.send(ManageStudents());
 
 });
+
+
+router.get("/delete-service/:id", async (req,res)=>{
+
+    try {
+
+        await Service.findByIdAndDelete(req.params.id);
+
+        res.redirect("/admin/manage-services");
+
+    } catch(err){
+
+        console.log(err);
+        res.status(500).send("Delete Error");
+
+    }
+
+});
+
 
 
 module.exports = router;
