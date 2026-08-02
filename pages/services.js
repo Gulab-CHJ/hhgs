@@ -357,63 +357,84 @@ body{
 
 @media(max-width:768px){
 
-
 .header{
-
     padding:40px 15px;
-
 }
-
 
 .logo{
-
     width:80px;
-
     height:80px;
-
 }
-
 
 .header h1{
-
     font-size:28px;
-
 }
-
 
 .header p{
-
     font-size:14px;
-
 }
 
 
-
+/* 2 CARD IN MOBILE */
 .container{
 
-    padding:25px 15px;
+    padding:25px 10px;
 
-    grid-template-columns:1fr;
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
 
 }
-
 
 
 .service-card{
 
-    max-width:320px;
+    max-width:100%;
+
+    border-radius:14px;
 
 }
-
 
 
 .image-box{
 
-    height:180px;
+    height:120px;
 
 }
 
 
+.content{
+
+    padding:10px;
+
+}
+
+
+.content h2{
+
+    font-size:15px;
+
+}
+
+
+.content p{
+
+    font-size:11px;
+
+    min-height:35px;
+
+}
+
+
+.view-btn{
+
+    padding:8px 12px;
+
+    font-size:11px;
+
+}
 
 }
 
