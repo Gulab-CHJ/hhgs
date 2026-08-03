@@ -199,6 +199,22 @@ const authRoutes = require("./routes/auth");
 app.use("/", authRoutes);
 
 
+const storeRouter = require('./routes/store'); // aapke router file ka sahi path
+
+// Agar aapne yahan '/store' likha hai, toh router.get('/') kaam karega
+app.use('/store', storeRouter);
+
+
+
+
+
+// Express ko batayein ki EJS engine use karna hai
+app.set('view engine', 'ejs');
+
+// Sub-folder 'views' ka path set karein
+app.set('views', path.join(__dirname, 'views'));
+
+
 const PORT = process.env.PORT || 3000;
 
 

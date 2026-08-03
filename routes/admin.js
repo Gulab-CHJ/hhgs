@@ -802,32 +802,127 @@ router.get("/delete-banner/:id", AdminController.deleteBanner);
 // Doctor Login
 // =============================
 
-router.get("/doctor-login", (req, res) => {
-    res.send(DoctorLogin());
+router.get("/doctor-login", (req,res)=>{
+
+    const productId = req.query.product || "";
+
+    res.send(
+        DoctorLogin("", productId)
+    );
+
 });
 
+// router.post("/doctor/login", async (req, res) => {
+//     try {
+//         const { doctorId, password } = req.body;
+
+//         const doctor = await Doctor.findOne({ doctorId });
+
+//         if (!doctor) {
+//             return res.send(DoctorLogin("Doctor ID Not Registered"));
+//         }
+
+//         if (doctor.password !== password) {
+//             return res.send(DoctorLogin("Wrong Password"));
+//         }
+
+//         const products = await Product.find().sort({ createdAt: -1 });
+
+//         res.send(DoctorDashboard(doctor, products));
+
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).send(err.message);
+//     }
+// });
+
+
 router.post("/doctor/login", async (req, res) => {
+
     try {
-        const { doctorId, password } = req.body;
+
+        const { 
+            doctorId, 
+            password,
+            productId
+        } = req.body;
+
 
         const doctor = await Doctor.findOne({ doctorId });
 
+
         if (!doctor) {
-            return res.send(DoctorLogin("Doctor ID Not Registered"));
+
+            return res.send(
+                DoctorLogin(
+                    "Doctor ID Not Registered",
+                    productId
+                )
+            );
+
         }
+
 
         if (doctor.password !== password) {
-            return res.send(DoctorLogin("Wrong Password"));
+
+            return res.send(
+                DoctorLogin(
+                    "Wrong Password",
+                    productId
+                )
+            );
+
         }
 
-        const products = await Product.find().sort({ createdAt: -1 });
 
-        res.send(DoctorDashboard(doctor, products));
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err.message);
+        let products = [];
+
+
+        // agar store se product select hua hai
+        if(productId){
+
+            const product = await Product.findById(productId);
+
+
+            if(product){
+
+                products.push(product);
+
+            }
+
+
+        }
+        else{
+
+            products = await Product.find()
+            .sort({
+                createdAt:-1
+            });
+
+        }
+
+
+
+        res.send(
+            DoctorDashboard(
+                doctor,
+                products
+            )
+        );
+
+
+
     }
+    catch(err){
+
+        console.log(err);
+
+        res.status(500)
+        .send(err.message);
+
+    }
+
 });
 
 
@@ -1529,26 +1624,74 @@ router.get("/add-product", (req, res) => {
 });
 
 router.post(
-    "/add-product",
-    upload.single("image"),
-    async (req, res) => {
-        try {
-            const product = new Product({
-                name: req.body.name,
-                price: req.body.price,
-                description: req.body.description,
-                image: req.file ? req.file.path : ""
-            });
+"/add-product",
+upload.array("images",10),
+async(req,res)=>{
 
-            await product.save();
-            res.redirect("/admin/manage-products");
+try{
 
-        } catch (err) {
-            console.log(err);
-            res.status(500).send(err.message);
-        }
-    }
-);
+const images = req.files
+? req.files.map(file=>file.path)
+:[];
+
+const product = new Product({
+
+name:req.body.name,
+
+brand:req.body.brand,
+
+category:req.body.category,
+
+manufacturer:req.body.manufacturer,
+
+mrp:req.body.mrp,
+
+price:req.body.price,
+
+stock:req.body.stock,
+
+packSize:req.body.packSize,
+
+batchNo:req.body.batchNo,
+
+mfgDate:req.body.mfgDate,
+
+expDate:req.body.expDate,
+
+composition:req.body.composition || [],
+
+uses:req.body.uses,
+
+benefits:req.body.benefits,
+
+dosage:req.body.dosage,
+
+sideEffects:req.body.sideEffects,
+
+storage:req.body.storage,
+
+description:req.body.description,
+
+images:images,
+
+image:images.length>0 ? images[0] : ""
+
+});
+
+await product.save();
+
+res.redirect("/admin/manage-products");
+
+}
+catch(err){
+
+console.log(err);
+
+res.status(500).send(err.message);
+
+}
+
+});
 
 // Delete Product
 router.get("/delete-product/:id", async (req, res) => {
@@ -1983,6 +2126,10 @@ router.get("/delete-service/:id", async (req,res)=>{
 
 });
 
+
+router.get('/', (req, res) => {
+    res.send('Welcome to the Store!');
+});
 
 
 module.exports = router;
