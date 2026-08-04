@@ -1550,23 +1550,60 @@ overflow:hidden;
 
 /* BUTTON */
 
+/* BUTTON FIX */
+
 .service-btn{
 
-display:inline-block;
+    display:inline-flex !important;
 
-margin-top:10px;
+    align-items:center;
 
-padding:6px 16px;
+    justify-content:center;
 
-border-radius:30px;
+    margin-top:15px;
 
-background:#2563eb;
+    padding:8px 18px;
 
-color:white;
+    background:#2563eb;
 
-font-size:11px;
+    color:#ffffff !important;
 
-font-weight:700;
+    border-radius:50px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    text-decoration:none;
+
+    position:relative;
+
+    z-index:5;
+
+}
+
+
+
+.service-card:hover .service-btn{
+
+    background:#1d4ed8;
+
+}
+
+
+
+/* anchor color override */
+
+.service-card{
+
+    text-decoration:none;
+
+}
+
+
+.service-card span{
+
+    color:white;
 
 }
 
