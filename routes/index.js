@@ -523,6 +523,8 @@ const Contact = require("../models/Contact");
 const Banner = require("../models/Banner");
 const Doctor = require("../models/Doctor");
 const GovernmentPerson = require("../models/GovernmentPerson");
+const Service = require("../models/Service");
+
 
 const Home = require("../pages/Homepages");
 
@@ -558,13 +560,18 @@ router.get("/", async (req,res)=>{
             createdAt:-1
         });
 
+        const services = await Service.find().sort({
+    createdAt: -1
+});
+
 
 
         res.send(
             Home(
                 banners,
                 doctors,
-                governmentPersons
+                governmentPersons,
+                services
             )
         );
 
@@ -942,6 +949,8 @@ res.status(500)
 
 
 });
+
+
 
 
 

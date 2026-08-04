@@ -802,127 +802,32 @@ router.get("/delete-banner/:id", AdminController.deleteBanner);
 // Doctor Login
 // =============================
 
-router.get("/doctor-login", (req,res)=>{
-
-    const productId = req.query.product || "";
-
-    res.send(
-        DoctorLogin("", productId)
-    );
-
+router.get("/doctor-login", (req, res) => {
+    res.send(DoctorLogin());
 });
 
-// router.post("/doctor/login", async (req, res) => {
-//     try {
-//         const { doctorId, password } = req.body;
-
-//         const doctor = await Doctor.findOne({ doctorId });
-
-//         if (!doctor) {
-//             return res.send(DoctorLogin("Doctor ID Not Registered"));
-//         }
-
-//         if (doctor.password !== password) {
-//             return res.send(DoctorLogin("Wrong Password"));
-//         }
-
-//         const products = await Product.find().sort({ createdAt: -1 });
-
-//         res.send(DoctorDashboard(doctor, products));
-
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send(err.message);
-//     }
-// });
-
-
 router.post("/doctor/login", async (req, res) => {
-
     try {
-
-        const { 
-            doctorId, 
-            password,
-            productId
-        } = req.body;
-
+        const { doctorId, password } = req.body;
 
         const doctor = await Doctor.findOne({ doctorId });
 
-
         if (!doctor) {
-
-            return res.send(
-                DoctorLogin(
-                    "Doctor ID Not Registered",
-                    productId
-                )
-            );
-
+            return res.send(DoctorLogin("Doctor ID Not Registered"));
         }
-
 
         if (doctor.password !== password) {
-
-            return res.send(
-                DoctorLogin(
-                    "Wrong Password",
-                    productId
-                )
-            );
-
+            return res.send(DoctorLogin("Wrong Password"));
         }
 
+        const products = await Product.find().sort({ createdAt: -1 });
 
+        res.send(DoctorDashboard(doctor, products));
 
-        let products = [];
-
-
-        // agar store se product select hua hai
-        if(productId){
-
-            const product = await Product.findById(productId);
-
-
-            if(product){
-
-                products.push(product);
-
-            }
-
-
-        }
-        else{
-
-            products = await Product.find()
-            .sort({
-                createdAt:-1
-            });
-
-        }
-
-
-
-        res.send(
-            DoctorDashboard(
-                doctor,
-                products
-            )
-        );
-
-
-
-    }
-    catch(err){
-
+    } catch (err) {
         console.log(err);
-
-        res.status(500)
-        .send(err.message);
-
+        res.status(500).send(err.message);
     }
-
 });
 
 
@@ -1624,74 +1529,26 @@ router.get("/add-product", (req, res) => {
 });
 
 router.post(
-"/add-product",
-upload.array("images",10),
-async(req,res)=>{
+    "/add-product",
+    upload.single("image"),
+    async (req, res) => {
+        try {
+            const product = new Product({
+                name: req.body.name,
+                price: req.body.price,
+                description: req.body.description,
+                image: req.file ? req.file.path : ""
+            });
 
-try{
+            await product.save();
+            res.redirect("/admin/manage-products");
 
-const images = req.files
-? req.files.map(file=>file.path)
-:[];
-
-const product = new Product({
-
-name:req.body.name,
-
-brand:req.body.brand,
-
-category:req.body.category,
-
-manufacturer:req.body.manufacturer,
-
-mrp:req.body.mrp,
-
-price:req.body.price,
-
-stock:req.body.stock,
-
-packSize:req.body.packSize,
-
-batchNo:req.body.batchNo,
-
-mfgDate:req.body.mfgDate,
-
-expDate:req.body.expDate,
-
-composition:req.body.composition || [],
-
-uses:req.body.uses,
-
-benefits:req.body.benefits,
-
-dosage:req.body.dosage,
-
-sideEffects:req.body.sideEffects,
-
-storage:req.body.storage,
-
-description:req.body.description,
-
-images:images,
-
-image:images.length>0 ? images[0] : ""
-
-});
-
-await product.save();
-
-res.redirect("/admin/manage-products");
-
-}
-catch(err){
-
-console.log(err);
-
-res.status(500).send(err.message);
-
-}
-
-});
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.message);
+        }
+    }
+);
 
 // Delete Product
 router.get("/delete-product/:id", async (req, res) => {
@@ -1812,325 +1669,111 @@ router.get("/manage-government", async (req, res) => {
 });
 
 
-
-
-const ManageServices = require("../pages/adminpages/manageServices");
+const ManageServices = require("../pages/services");
+// =============================
+// Manage Services
+// =============================
 
 router.get("/manage-services", async (req, res) => {
-    const services = await Service.find();
-    res.send(ManageServices(services));
-});
-
-
-
-const EditService = require("../pages/editpages/editService");
-
-router.get("/edit-service/:id", async (req,res)=>{
-
-try{
-
-const service = await Service.findById(req.params.id);
-
-console.log("EDIT SERVICE DATA:", service);
-
-
-if(!service){
-    return res.send("Service Not Found");
-}
-
-
-res.send(EditService(service));
-
-
-}
-catch(err){
-
-console.log("EDIT SERVICE ERROR:",err);
-
-res.status(500).send(err.message);
-
-}
-
-});
-
-
-
-
-
-
-// router.get("/delete-service/:id", async (req, res) => {
-//     try {
-
-//         await Service.findByIdAndDelete(req.params.id);
-
-//         res.redirect("/admin/manage-services");
-
-//     } catch (err) {
-
-//         console.error(err);
-
-//         res.status(500).send("Delete Failed");
-
-//     }
-// });
-
-// router.post("/edit-service/:id", async (req, res) => {
-
-//     try {
-
-//         await Service.findByIdAndUpdate(req.params.id, {
-
-//             title: req.body.title,
-
-//             image: req.body.image,
-
-//             description: req.body.description,
-
-//             features: req.body.features || []
-
-//         });
-
-//         res.redirect("/admin/manage-services");
-
-//     } catch (err) {
-
-//         console.log(err);
-
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-
-
-
-
-router.post(
-    "/edit-service/:id",
-    upload.single("image"),
-    async (req, res) => {
-
-        console.log(req.body);
-        console.log(req.file);
-
-        let image = "";
-
-        const service = await Service.findById(req.params.id);
-
-        if (req.file) {
-            image = "/uploads/" + req.file.filename;
-        } else {
-            image = service.image;
-        }
-
-        const features = req.body.features || [];
-
-        await Service.findByIdAndUpdate(req.params.id, {
-            title: req.body.title,
-            description: req.body.description,
-            image,
-            features: Array.isArray(features) ? features : [features]
-        });
-
-        res.redirect("/admin/manage-services");
-    }
-);
-
-
-router.post("/delete-service/:id", async (req, res) => {
     try {
-
-        await Service.findByIdAndDelete(req.params.id);
-
-        res.redirect("/admin/manage-services");
-
+        const services = await Service.find().sort({ createdAt: -1 });
+        res.send(ManageServices(services));
     } catch (err) {
-
-        console.error(err);
-
-        res.status(500).send("Delete Failed");
-
+        console.log(err);
+        res.status(500).send(err.message);
     }
 });
-
-const AddService = require("../pages/addpages/addService");
 
 // Add Service Page
 router.get("/add-service", (req, res) => {
     res.send(AddService());
 });
 
-
-
-
-// router.post(
-// "/add-service",
-// upload.single("image"),
-// async (req,res)=>{
-
-// try{
-
-
-
-
-// const service = new Service({
-
-// title:req.body.title,
-
-// image:req.file
-// ? req.file.path
-// : "",
-
-// description:req.body.description
-
-// });
-
-
-// await service.save();
-
-
-// res.redirect("/admin/manage-services");
-
-
-// }
-// catch(err){
-
-// console.log("ADD SERVICE ERROR:",err);
-
-// res.status(500).send(err.message);
-
-// }
-
-// });
-
-
+// Save Service
 router.post(
-"/add-service",
-upload.single("image"),
-async (req,res)=>{
+    "/add-service",
+    upload.single("image"),
+    async (req, res) => {
+        try {
 
-try{
+            const features = req.body.features
+                ? req.body.features.split("\n").filter(f => f.trim())
+                : [];
 
+            const service = new Service({
+                title: req.body.title,
+                description: req.body.description,
+                features,
+                image: req.file ? req.file.path : ""
+            });
 
-console.log("FILE:",req.file);
-console.log("BODY:",req.body);
+            await service.save();
 
+            res.redirect("/admin/manage-services");
 
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.message);
+        }
+    }
+);
 
-const service = new Service({
-
-title:req.body.title,
-
-image:req.file
-? req.file.path
-: "",
-
-description:req.body.description,
-
-features:req.body.features || []
-
-});
-
-
-await service.save();
-
-
-res.redirect("/admin/manage-services");
-
-
-}
-catch(err){
-
-console.log("ADD SERVICE ERROR:",err);
-
-res.status(500).send(err.message);
-
-}
-
-});
-
-const ServiceDetails = require("../pages/serviceDetails");
-router.get("/service/:id", async (req, res) => {
+// Edit Service Page
+router.get("/edit-service/:id", async (req, res) => {
     try {
         const service = await Service.findById(req.params.id);
 
         if (!service) {
-            return res.status(404).send("Service not found");
+            return res.send("Service Not Found");
         }
 
-        res.render("service-details", { service });
+        res.send(EditService(service));
+
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Server Error");
-    }
-});
-
-
-// const ServicePage = require("../pages/services");
-
-// router.get("/services", async (req,res)=>{
-
-//     try{
-
-//         const services = await Service
-//         .find()
-//         .sort({createdAt:-1});
-
-
-//         console.log("SERVICES DATA:", services);
-
-
-//         res.send(
-//             ServicePage(services)
-//         );
-
-
-//     }catch(err){
-
-//         console.log(err);
-
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-
-
-
-
-
-const ManageStudents = require("../pages/admin/manageStudents");
-
-
-router.get("/admin/manageStudents", (req,res)=>{
-
-    res.send(ManageStudents());
-
-});
-
-
-router.get("/delete-service/:id", async (req,res)=>{
-
-    try {
-
-        await Service.findByIdAndDelete(req.params.id);
-
-        res.redirect("/admin/manage-services");
-
-    } catch(err){
-
         console.log(err);
-        res.status(500).send("Delete Error");
-
+        res.status(500).send(err.message);
     }
-
 });
 
+// Update Service
+router.post(
+    "/edit-service/:id",
+    upload.single("image"),
+    async (req, res) => {
+        try {
 
-router.get('/', (req, res) => {
-    res.send('Welcome to the Store!');
+            const updateData = {
+                title: req.body.title,
+                description: req.body.description,
+                features: req.body.features
+                    ? req.body.features.split("\n").filter(f => f.trim())
+                    : []
+            };
+
+            if (req.file) {
+                updateData.image = req.file.path;
+            }
+
+            await Service.findByIdAndUpdate(req.params.id, updateData);
+
+            res.redirect("/admin/manage-services");
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).send(err.message);
+        }
+    }
+);
+
+// Delete Service
+router.get("/delete-service/:id", async (req, res) => {
+    try {
+        await Service.findByIdAndDelete(req.params.id);
+        res.redirect("/admin/manage-services");
+    } catch (err) {
+        console.log(err);
+        res.status(500).send(err.message);
+    }
 });
-
 
 module.exports = router;
-
