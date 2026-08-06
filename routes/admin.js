@@ -806,28 +806,61 @@ router.get("/doctor-login", (req, res) => {
     res.send(DoctorLogin());
 });
 
-router.post("/doctor/login", async (req, res) => {
-    try {
-        const { doctorId, password } = req.body;
+router.post("/doctor/login", async(req,res)=>{
 
-        const doctor = await Doctor.findOne({ doctorId });
+    try{
 
-        if (!doctor) {
-            return res.send(DoctorLogin("Doctor ID Not Registered"));
+        const {doctorId,password} = req.body;
+
+
+        const doctor = await Doctor.findOne({
+            doctorId: doctorId
+        });
+
+
+        if(!doctor){
+
+            return res.send(
+                DoctorLogin("Doctor Not Found")
+            );
+
         }
 
-        if (doctor.password !== password) {
-            return res.send(DoctorLogin("Wrong Password"));
+
+        if(doctor.password !== password){
+
+            return res.send(
+                DoctorLogin("Wrong Password")
+            );
+
         }
 
-        const products = await Product.find().sort({ createdAt: -1 });
 
-        res.send(DoctorDashboard(doctor, products));
 
-    } catch (err) {
-        console.log(err);
-        res.status(500).send(err.message);
+        // ⭐ IMPORTANT LINE ⭐
+        req.session.doctor = doctor;
+
+
+
+        console.log("Doctor Session Saved:");
+        console.log(req.session.doctor);
+
+
+
+        res.redirect("/doctor/dashboard");
+
+
     }
+    catch(err){
+
+        console.log(err);
+
+        res.send(
+            "Login Error"
+        );
+
+    }
+
 });
 
 
