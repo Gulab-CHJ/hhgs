@@ -1562,25 +1562,32 @@ router.get("/add-product", (req, res) => {
 });
 
 router.post(
-    "/add-product",
-    upload.single("image"),
-    async (req, res) => {
-        try {
-            const product = new Product({
-                name: req.body.name,
-                price: req.body.price,
-                description: req.body.description,
-                image: req.file ? req.file.path : ""
-            });
+  "/add-product",
+  upload.array("images", 10),
+  async (req, res) => {
+    try {
 
-            await product.save();
-            res.redirect("/admin/manage-products");
+      const product = new Product({
+        name: req.body.name,
+        price: req.body.price,
+        description: req.body.description,
 
-        } catch (err) {
-            console.log(err);
-            res.status(500).send(err.message);
-        }
+        // सभी image path save होंगे
+        images: req.files
+          ? req.files.map(file => file.path)
+          : []
+
+      });
+
+      await product.save();
+
+      res.redirect("/admin/manage-products");
+
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err.message);
     }
+  }
 );
 
 // Delete Product
