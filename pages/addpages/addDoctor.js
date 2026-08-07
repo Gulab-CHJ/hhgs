@@ -2891,6 +2891,264 @@ function AddDoctor() {
 
     return `
 
+    <style>
+
+/* =========================
+   ADD DOCTOR CSS
+========================= */
+
+
+.add-doctor-title{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-bottom:30px;
+    padding:22px;
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+    border-radius:18px;
+    color:white;
+}
+
+
+.doctor-title-icon{
+    width:60px;
+    height:60px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+}
+
+
+.doctor-form-grid{
+
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:22px;
+
+    background:#fff;
+    padding:30px;
+    border-radius:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+
+
+.form-group{
+
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+
+}
+
+
+.form-group.full{
+
+    grid-column:1/-1;
+
+}
+
+
+
+.form-group label{
+
+    font-weight:600;
+    color:#334155;
+
+}
+
+
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+
+    padding:14px;
+
+    border-radius:12px;
+
+    border:1px solid #dbeafe;
+
+    background:#f8fafc;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+
+    border-color:#2563eb;
+
+    background:white;
+
+}
+
+
+
+.time-section,
+.fee-section{
+
+    grid-column:1/-1;
+
+    background:#f8fafc;
+
+    padding:25px;
+
+    border-radius:18px;
+
+}
+
+
+
+.section-heading{
+
+    display:flex;
+
+    gap:15px;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+
+
+.section-icon{
+
+    width:45px;
+    height:45px;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+}
+
+
+
+.time-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+}
+
+
+
+.fee-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:20px;
+
+}
+
+
+
+.form-actions{
+
+    grid-column:1/-1;
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    gap:15px;
+
+}
+
+
+
+.reset-doctor-btn,
+.save-doctor-btn{
+
+    padding:14px 30px;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+
+
+.reset-doctor-btn{
+
+    background:#e2e8f0;
+
+}
+
+
+
+.save-doctor-btn{
+
+    background:linear-gradient(135deg,#2563eb,#06b6d4);
+
+    color:white;
+
+}
+
+
+
+@media(max-width:900px){
+
+
+.doctor-form-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.time-grid,
+.fee-grid{
+
+    grid-template-columns:1fr;
+
+}
+
+
+.form-actions{
+
+    flex-direction:column;
+
+}
+
+
+}
+
+
+
+</style>
+
 <form
     class="add-doctor-form"
     action="/admin/add-doctor"
