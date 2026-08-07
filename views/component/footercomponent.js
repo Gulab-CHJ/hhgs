@@ -229,14 +229,25 @@ return `
 
 <style>
 
+
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body {
+    overflow-x: hidden;
+}
+
 /* =========================
    FOOTER
 ========================= */
 
 .footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    position: relative;
+    bottom: auto;
+    left: auto;
 
     width: 100%;
     height: 20vh;
@@ -249,7 +260,7 @@ return `
     padding: 8px 15px;
     box-sizing: border-box;
 
-    z-index: 999999;
+    z-index: 1;
 
     display: flex;
     align-items: center;
