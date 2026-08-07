@@ -1560,31 +1560,23 @@ const AddProduct = require("../pages/addpages/addProduct");
 router.get("/add-product", (req, res) => {
     res.send(AddProduct());
 });
-
 router.post(
   "/add-product",
-  upload.array("images", 10),
+  upload.single("images"),
   async (req, res) => {
     try {
-
       const product = new Product({
         name: req.body.name,
         price: req.body.price,
         description: req.body.description,
-
-        // सभी image path save होंगे
-        images: req.files
-          ? req.files.map(file => file.path)
-          : []
-
+        image: req.file ? req.file.path : ""
       });
 
       await product.save();
-
       res.redirect("/admin/manage-products");
 
     } catch (err) {
-      console.log(err);
+      console.error(err);
       res.status(500).send(err.message);
     }
   }
@@ -1815,5 +1807,52 @@ router.get("/delete-service/:id", async (req, res) => {
         res.status(500).send(err.message);
     }
 });
+
+const EditProduct = require("../pages/editpages/EditProduct");
+router.get("/edit-product/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
+
+    res.send(EditProduct(product)); // या res.render("admin/edit-product", { product })
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err.message);
+  }
+});
+
+router.post(
+  "/edit-product/:id",
+  upload.single("image"),
+  async (req, res) => {
+    try {
+
+      const product = await Product.findById(req.params.id);
+
+      if (!product) {
+        return res.status(404).send("Product Not Found");
+      }
+
+      product.name = req.body.name;
+      product.price = req.body.price;
+      product.description = req.body.description;
+
+      if (req.file) {
+        product.image = req.file.path;
+      }
+
+      await product.save();
+
+      res.redirect("/admin/manage-products");
+
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(err.message);
+    }
+  }
+);
 
 module.exports = router;
