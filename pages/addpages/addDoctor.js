@@ -1382,61 +1382,77 @@ function AddDoctor() {
 
         <!-- Consultation Fee -->
 
-        <div class="fee-section">
+<div class="fee-section">
 
-            <div class="fee-grid">
+    <div class="fee-grid">
 
-                <div class="form-group">
+        <!-- Fee -->
 
-                    <label>
-                        Consultation Fee
-                    </label>
+        <div class="form-group">
 
-                    <input
-                        type="number"
-                        name="fee"
-                        placeholder="Consultation Fee (₹)"
-                        min="0"
-                        required
-                    >
+            <label>
+                Consultation Fee
+            </label>
 
-                </div>
-
-
-                <div class="form-group">
-
-                    <label>
-                        Fee Type
-                    </label>
-
-                    <select
-                        name="feeType"
-                        required
-                    >
-
-                        <option value="">
-                            Select Fee Type
-                        </option>
-
-                        <option value="Per Visit">
-                            Per Visit
-                        </option>
-
-                        <option value="Per Month">
-                            Per Month
-                        </option>
-
-                        <option value="Per Hour">
-                            Per Hour
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
+            <input
+                type="number"
+                name="fee"
+                placeholder="Consultation Fee (₹)"
+                min="0"
+                required
+            >
 
         </div>
+
+
+        <!-- Fee Type -->
+
+        <div class="form-group">
+
+            <label>
+                Fee Type
+            </label>
+
+            <select
+                name="feeType"
+                required
+            >
+
+                <option value="">
+                    Select Fee Type
+                </option>
+
+                <option value="per_visit">
+                    Per Visit
+                </option>
+
+                <option value="per_month">
+                    Per Month
+                </option>
+
+                <option value="per_hour">
+                    Per Hour
+                </option>
+
+                <option value="per_day">
+                    Per Day
+                </option>
+
+                <option value="per_week">
+                    Per Week
+                </option>
+
+                <option value="half_month">
+                    Half Month (15 Days)
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</div>
 
 
         <!-- Doctor Image -->

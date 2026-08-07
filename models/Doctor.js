@@ -374,16 +374,18 @@ const DoctorSchema = new mongoose.Schema({
         default: 0
     },
 
-    feeType: {
+feeType: {
     type: String,
+
     enum: [
         "per_visit",
+        "per_month",
         "per_hour",
         "per_day",
         "per_week",
-        "half_month",
-        "per_month"
+        "half_month"
     ],
+
     default: "per_visit"
 }
 
