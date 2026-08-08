@@ -1,11 +1,316 @@
+// // const mongoose = require("mongoose");
+
+// // const productSchema = new mongoose.Schema({
+
+// //     // Basic Details
+// //     name: {
+// //         type: String,
+// //         required: true
+// //     },
+
+// //     brand: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     category: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     manufacturer: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     // Pricing
+// //     mrp: {
+// //         type: Number,
+// //         default: 0
+// //     },
+
+// //     price: {
+// //         type: Number,
+// //         required: true
+// //     },
+
+// //     stock: {
+// //         type: Number,
+// //         default: 0
+// //     },
+
+// //     // Medicine Details
+// //     packSize: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     batchNo: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     mfgDate: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     expDate: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     // Multiple Composition
+// //     composition: [{
+// //         type: String
+// //     }],
+
+// //     // Multiple Images
+// //     images: [{
+// //         type: String
+// //     }],
+
+// //     // Main Image
+// //     image: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     // Description
+// //     description: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     uses: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     benefits: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     dosage: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     sideEffects: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     storage: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+// //     // Status
+// //     active: {
+// //         type: Boolean,
+// //         default: true
+// //     },
+
+// //     createdAt: {
+// //         type: Date,
+// //         default: Date.now
+// //     },
+
+// //     video: {
+// //     type: String,
+// //     default: ""
+// // },
+
+// // });
+
+// // module.exports =
+// // mongoose.models.Product ||
+// // mongoose.model("Product", productSchema);
+
+// const mongoose = require("mongoose");
+
+// const productSchema = new mongoose.Schema({
+
+//     // =============================
+//     // Basic Details
+//     // =============================
+
+//     name: {
+//         type: String,
+//         required: true
+//     },
+
+//     brand: {
+//         type: String,
+//         default: ""
+//     },
+
+//     category: {
+//         type: String,
+//         default: ""
+//     },
+
+//     manufacturer: {
+//         type: String,
+//         default: ""
+//     },
+
+
+//     // =============================
+//     // Pricing
+//     // =============================
+
+//     mrp: {
+//         type: Number,
+//         default: 0
+//     },
+
+//     price: {
+//         type: Number,
+//         required: true
+//     },
+
+//     stock: {
+//         type: Number,
+//         default: 0
+//     },
+
+
+//     // =============================
+//     // Medicine Details
+//     // =============================
+
+//     packSize: {
+//         type: String,
+//         default: ""
+//     },
+
+//     batchNo: {
+//         type: String,
+//         default: ""
+//     },
+
+//     mfgDate: {
+//         type: String,
+//         default: ""
+//     },
+
+//     expDate: {
+//         type: String,
+//         default: ""
+//     },
+
+
+//     // =============================
+//     // Multiple Composition
+//     // =============================
+
+//     composition: [{
+//         type: String
+//     }],
+
+
+//     // =============================
+//     // Multiple Images
+//     // =============================
+
+//     images: [{
+//         type: String
+//     }],
+
+
+//     // =============================
+//     // Main Image
+//     // =============================
+
+//     image: {
+//         type: String,
+//         default: ""
+//     },
+
+
+//     // =============================
+//     // Product Video
+//     // =============================
+
+//     video: {
+//         type: String,
+//         default: ""
+//     },
+
+
+//     // =============================
+//     // Description
+//     // =============================
+
+//     description: {
+//         type: String,
+//         default: ""
+//     },
+
+//     uses: {
+//         type: String,
+//         default: ""
+//     },
+
+//     benefits: {
+//         type: String,
+//         default: ""
+//     },
+
+//     dosage: {
+//         type: String,
+//         default: ""
+//     },
+
+//     sideEffects: {
+//         type: String,
+//         default: ""
+//     },
+
+//     storage: {
+//         type: String,
+//         default: ""
+//     },
+
+
+//     // =============================
+//     // Status
+//     // =============================
+
+//     active: {
+//         type: Boolean,
+//         default: true
+//     },
+
+//     createdAt: {
+//         type: Date,
+//         default: Date.now
+//     }
+
+// });
+
+
+// module.exports =
+//     mongoose.models.Product ||
+//     mongoose.model("Product", productSchema);
+
+
+
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
 
-    // Basic Details
+    // =============================
+    // BASIC DETAILS
+    // =============================
+
     name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
 
     brand: {
@@ -23,7 +328,11 @@ const productSchema = new mongoose.Schema({
         default: ""
     },
 
-    // Pricing
+
+    // =============================
+    // PRICING
+    // =============================
+
     mrp: {
         type: Number,
         default: 0
@@ -39,7 +348,11 @@ const productSchema = new mongoose.Schema({
         default: 0
     },
 
-    // Medicine Details
+
+    // =============================
+    // MEDICINE DETAILS
+    // =============================
+
     packSize: {
         type: String,
         default: ""
@@ -60,23 +373,49 @@ const productSchema = new mongoose.Schema({
         default: ""
     },
 
-    // Multiple Composition
+
+    // =============================
+    // COMPOSITION
+    // =============================
+
     composition: [{
         type: String
     }],
 
-    // Multiple Images
+
+    // =============================
+    // MULTIPLE IMAGES
+    // =============================
+
     images: [{
         type: String
     }],
 
-    // Main Image
+
+    // =============================
+    // MAIN IMAGE
+    // =============================
+
     image: {
         type: String,
         default: ""
     },
 
-    // Description
+
+    // =============================
+    // PRODUCT VIDEO
+    // =============================
+
+    video: {
+        type: String,
+        default: ""
+    },
+
+
+    // =============================
+    // PRODUCT DETAILS
+    // =============================
+
     description: {
         type: String,
         default: ""
@@ -107,11 +446,20 @@ const productSchema = new mongoose.Schema({
         default: ""
     },
 
-    // Status
+
+    // =============================
+    // STATUS
+    // =============================
+
     active: {
         type: Boolean,
         default: true
     },
+
+
+    // =============================
+    // CREATED DATE
+    // =============================
 
     createdAt: {
         type: Date,
@@ -120,6 +468,11 @@ const productSchema = new mongoose.Schema({
 
 });
 
+
+// =============================
+// EXPORT
+// =============================
+
 module.exports =
-mongoose.models.Product ||
-mongoose.model("Product", productSchema);
+    mongoose.models.Product ||
+    mongoose.model("Product", productSchema);

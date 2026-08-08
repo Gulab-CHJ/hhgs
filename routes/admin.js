@@ -1,692 +1,3 @@
-// require("dotenv").config();
-// const crypto = require("crypto");
-// console.log("KEY:", process.env.RAZORPAY_KEY_ID);
-// console.log("SECRET:", process.env.RAZORPAY_KEY_SECRET);
-
-// const Razorpay = require("razorpay");
-
-// const razorpay = new Razorpay({
-//     key_id: process.env.RAZORPAY_KEY_ID,
-//     key_secret: process.env.RAZORPAY_KEY_SECRET
-// });
-
-
-// const express = require("express");
-// const router = express.Router();
-
-// const dashboard = require("../pages/dashboard");
-// const AdminLogin = require("../pages/adminLogin");
-// const DoctorLogin = require("../pages/doctorLogin");
-// const ManageDoctors = require("../pages/manageDoctors");
-// const AddDoctor = require("../pages/addpages/addDoctor");
-
-// const { login } = require("../controllers/adminAuth");
-// const AdminController = require("../controllers/adminController");
-// const DoctorDashboard = require("../pages/doctorDashboard");
-
-// const AddGovernment = require("../views/component/dashboard/addGovernment");
-
-// const Banner = require("../models/Banner");
-// const Student = require("../models/Student");
-// const Service = require("../models/Service");
-
-
-
-// const Doctor = require("../models/Doctor");
-// // const upload = require("../config/multer");
-// const upload = require("../config/upload");
-// const Product = require("../models/Product");
-
-
-// // =============================
-// // Admin Login
-// // =============================
-
-// router.get("/", (req, res) => {
-//     res.send(AdminLogin());
-// });
-
-// router.post("/login", login);
-
-
-// // =============================
-// // Dashboard
-// // =============================
-
-// router.get("/admindashboard", async (req, res) => {
-
-//     try {
-
-//         const doctorCount = await Doctor.countDocuments();
-
-//         const bannerCount = await Banner.countDocuments();
-
-
-//         const data = {
-
-//             doctorCount,
-
-//             bannerCount
-
-//         };
-
-
-//         console.log("Dashboard Data:", data);
-
-
-//         res.send(dashboard(data));
-
-
-//     } catch(err){
-
-//         console.log(err);
-
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-
-
-// // =============================
-// // Banner
-// // =============================
-
-// router.get("/manage-banners", AdminController.manageBanners);
-// router.get("/manage-banner", AdminController.manageBanners);
-
-// router.get("/add-banner", AdminController.addBannerPage);
-
-// // router.post(
-// //     "/add-banner",
-// //     (req,res,next)=>{
-
-// //         upload.single("image")(req,res,function(err){
-
-// //             if(err){
-
-// //                 console.log("MULTER ERROR:",err);
-
-// //                 return res.status(500).send(err.message);
-
-// //             }
-
-// //             next();
-
-// //         });
-
-// //     },
-// //     AdminController.saveBanner
-// // );
-
-
-// router.post(
-//     "/add-banner",
-//     upload.single("image"),
-//     AdminController.saveBanner
-// );
-
-// router.get("/delete-banner/:id", AdminController.deleteBanner);
-
-
-// // =============================
-// // Doctor Login
-// // =============================
-
-// router.get("/doctor-login", (req, res) => {
-//     res.send(DoctorLogin());
-// });
-
-// router.post("/doctor/login", async (req, res) => {
-
-//     try {
-
-//         const { doctorId, password } = req.body;
-
-//         const doctor = await Doctor.findOne({ doctorId });
-
-//         if (!doctor) {
-//             return res.send(DoctorLogin("Doctor ID Not Registered"));
-//         }
-
-//         if (doctor.password !== password) {
-//             return res.send(DoctorLogin("Wrong Password"));
-//         }
-
-//         // Products MongoDB से लाओ
-//         const products = await Product.find().sort({ createdAt: -1 });
-
-//         // Dashboard भेजो
-//         res.send(DoctorDashboard(doctor, products));
-
-//     } catch (err) {
-
-//         console.log(err);
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-
-
-// // =============================
-// // Manage Doctors
-// // =============================
-
-// router.get("/manage-doctors", async (req, res) => {
-
-//     try {
-
-//         const doctors = await Doctor.find().sort({ createdAt: -1 });
-
-//         res.send(ManageDoctors(doctors));
-
-//     } catch (err) {
-
-//         console.log(err);
-
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-
-
-// // =============================
-// // Add Doctor Page
-// // =============================
-
-// router.get("/add-doctor", (req, res) => {
-//     res.send(AddDoctor());
-// });
-
-
-// // =============================
-// // Save Doctor
-// // =============================
-
-// router.post(
-//     "/add-doctor",
-//     upload.single("image"),
-//     async (req, res) => {
-
-//         try {
-
-//             console.log("BODY:", req.body);
-//             console.log("FILE:", req.file);
-
-//            const lastDoctor = await Doctor.findOne()
-// .sort({ createdAt: -1 });
-
-
-// let nextNumber = 1001;
-
-
-// if(lastDoctor && lastDoctor.doctorId){
-
-//     nextNumber =
-//     parseInt(lastDoctor.doctorId.replace("DOC","")) + 1;
-
-// }
-
-
-// const doctorId = "DOC" + nextNumber;
-
-//             const doctor = new Doctor({
-
-//                 doctorId,
-
-//                 name: req.body.name,
-
-//                 degree: req.body.qualification,
-
-//                 specialization: req.body.speciality,
-
-//                 experience: req.body.experience,
-
-//                 hospital: req.body.clinic,
-
-//                 phone: req.body.phone,
-
-//                 email: req.body.email,
-
-//                 password: req.body.password,
-
-//                 address: req.body.address,
-
-//                 description: req.body.description,
-
-//              image: req.file
-//     ? req.file.path
-//     : ""
-
-//             });
-
-//             await doctor.save();
-
-//             console.log("Doctor Saved:", doctor);
-
-//             res.redirect("/admin/manage-doctors");
-
-//         } catch (err) {
-
-//             console.log("ADD DOCTOR ERROR:", err);
-
-//             res.status(500).send(err.message);
-
-//         }
-
-//     }
-// );
-
-
-// // =============================
-// // Delete Doctor
-// // =============================
-
-// router.get("/delete-doctor/:id", async (req, res) => {
-
-//     try {
-
-//         await Doctor.findByIdAndDelete(req.params.id);
-
-//         res.redirect("/admin/manage-doctors");
-
-//     } catch (err) {
-
-//         console.log(err);
-
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-// const EditDoctor = require("../pages/editpages/editDoctor");
-// // Edit Doctor Page
-// router.get("/edit-doctor/:id", async (req, res) => {
-//     try {
-
-//         const doctor = await Doctor.findById(req.params.id);
-
-//         if (!doctor) {
-//             return res.send("Doctor Not Found");
-//         }
-
-//         res.send(EditDoctor(doctor));
-
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send(err.message);
-//     }
-// });
-
-// // Update Doctor
-// router.post(
-//     "/edit-doctor/:id",
-//     upload.single("image"),
-//     async (req, res) => {
-
-//         try {
-
-//             const updateData = {
-//                 name: req.body.name,
-//                 degree: req.body.qualification,
-//                 specialization: req.body.speciality,
-//                 experience: req.body.experience,
-//                 hospital: req.body.clinic,
-//                 phone: req.body.phone,
-//                 email: req.body.email,
-//                 password: req.body.password,
-//                 address: req.body.address,
-//                 description: req.body.description
-//             };
-
-//    if (req.file) {
-
-//     updateData.image = req.file.path;
-
-// }
-
-//             await Doctor.findByIdAndUpdate(req.params.id, updateData);
-
-//             res.redirect("/admin/manage-doctors");
-
-//         } catch (err) {
-//             console.log(err);
-//             res.status(500).send(err.message);
-//         }
-
-//     }
-// );
-
-// const ManageProducts = require("../pages/manageProducts");
-
-// router.get("/manage-products", async (req, res) => {
-
-//     try {
-
-//         const products = await Product.find().sort({ createdAt: -1 });
-
-//         res.send(ManageProducts(products));
-
-//     } catch (err) {
-
-//         console.log(err);
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-// const AddProduct = require("../pages/addpages/addProduct");
-
-// router.get("/add-product", (req, res) => {
-//     res.send(AddProduct());
-// });
-// router.post(
-//     "/add-product",
-//     upload.single("image"),
-//     async (req, res) => {
-
-//         try {
-
-//             const product = new Product({
-
-//                 name: req.body.name,
-//                 price: req.body.price,
-//                 description: req.body.description,
-
-//        image: req.file
-//     ? req.file.path
-//     : ""
-
-//             });
-
-//             await product.save();
-
-//             res.redirect("/admin/manage-products");
-
-//         } catch (err) {
-
-//             console.log(err);
-//             res.status(500).send(err.message);
-
-//         }
-
-//     }
-// );
-// // Delete Product
-// router.get("/delete-product/:id", async (req, res) => {
-
-//     try {
-
-//         await Product.findByIdAndDelete(req.params.id);
-
-//         res.redirect("/admin/manage-products");
-
-//     } catch (err) {
-
-//         console.log(err);
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-
-// // =============================
-// // Doctor Profile Page
-// // =============================
-
-// const DoctorProfile = require("../pages/doctorProfile");
-
-
-// router.get("/doctor/:id", async (req,res)=>{
-
-//     try{
-
-//         const doctor = await Doctor.findById(req.params.id);
-
-//         if(!doctor){
-//             return res.send("Doctor Not Found");
-//         }
-
-
-//         res.send(
-//             DoctorProfile(doctor)
-//         );
-
-
-//     }catch(err){
-
-//         console.log(err);
-
-//         res.status(500).send(err.message);
-
-//     }
-
-// });
-
-// // const Razorpay = require("razorpay");
-
-// // const razorpay = new Razorpay({
-// //     key_id: process.env.RAZORPAY_KEY,
-// //     key_secret: process.env.RAZORPAY_SECRET
-// // });
-// router.post("/create-phone-payment", async(req,res)=>{
-
-// try{
-
-// const order = await razorpay.orders.create({
-
-// amount:100,   // ₹1 = 100 paise
-// currency:"INR",
-// receipt:"phone_unlock"
-
-// });
-
-
-// res.json(order);
-
-
-// }catch(err){
-
-// console.log(err);
-
-// res.status(500).json({
-// error:err.message
-// });
-
-// }
-
-// });
-
-// router.post("/verify-phone-payment", async (req, res) => {
-
-//     const {
-//         paymentId,
-//         orderId,
-//         signature,
-//         doctorId
-//     } = req.body;
-
-//     const body = orderId + "|" + paymentId;
-
-//     const expectedSignature = crypto
-//         .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-//         .update(body)
-//         .digest("hex");
-
-//     if (expectedSignature !== signature) {
-//         return res.json({
-//             success: false
-//         });
-//     }
-
-//     const doctor = await Doctor.findByIdAndUpdate(
-//         doctorId,
-//         {
-//             phoneUnlocked: true
-//         },
-//         {
-//             new: true
-//         }
-//     );
-
-//     return res.json({
-//         success: true,
-//         phone: doctor.phone
-//     });
-
-// });
-
-
-// // router.get("/consultation/:id", async (req,res)=>{
-
-// //     try{
-
-// //         const doctor = await Doctor.findById(req.params.id);
-
-
-// //         if(!doctor){
-// //             return res.send("Doctor not found");
-// //         }
-
-
-// //         res.send(`
-        
-// //         <h1>
-// //         Consultation with Dr. ${doctor.name}
-// //         </h1>
-
-// //         <p>
-// //         Specialization: ${doctor.specialization}
-// //         </p>
-
-// //         <p>
-// //         Address: ${doctor.address}
-// //         </p>
-
-// //         <button>
-// //         Book Appointment
-// //         </button>
-
-// //         `);
-
-
-// //     }catch(error){
-
-// //         console.log(error);
-
-// //         res.status(500).send("Server Error");
-
-// //     }
-
-// // });
-
-// const Consultation = require("../pages/consultation");
-
-
-
-
-
-
-// router.get("/consultation/:id", Consultation);
-
-
-
-
-
-// router.get("/add-government",(req,res)=>{
-
-//     res.send(AddGovernment());
-
-// });
-
-// const GovernmentPerson = require("../models/GovernmentPerson");
-// router.post(
-// "/add-government",
-// upload.single("image"),
-// async(req,res)=>{
-
-// try{
-
-
-// const person = new GovernmentPerson({
-
-// name:req.body.name,
-
-// position:req.body.position,
-
-// department:req.body.department,
-
-// phone:req.body.phone,
-
-// address:req.body.address,
-
-// description:req.body.description,
-
-
-// image:req.file
-// ? req.file.path
-// :""
-
-// });
-
-
-// await person.save();
-
-
-// console.log("Government Person Saved:", person);
-
-
-// res.redirect("/admin/add-government");
-
-
-// }
-// catch(err){
-
-// console.log("ADD GOVERNMENT ERROR:",err);
-
-// res.status(500).send(err.message);
-
-// }
-
-
-// });
-
-// const ManageGovernment = require("../pages/manageGovernment");
-
-// router.get("/manage-government", async(req,res)=>{
-
-//     try{
-
-//         const persons = await GovernmentPerson
-//         .find()
-//         .sort({createdAt:-1});
-
-
-//         res.send(
-//             ManageGovernment(persons)
-//         );
-
-
-//     }catch(err){
-
-//         console.log("MANAGE GOVERNMENT ERROR:",err);
-
-//         res.status(500)
-//         .send(err.message);
-
-//     }
-
-// });
-
-
-
-
-// module.exports = router;
-
-
-
 require("dotenv").config();
 const crypto = require("crypto");
 console.log("KEY:", process.env.RAZORPAY_KEY_ID);
@@ -879,162 +190,7 @@ router.get("/manage-doctors", async (req, res) => {
 });
 
 
-// =============================
-// Add Doctor Page
-// =============================
 
-router.get("/add-doctor", (req, res) => {
-    res.send(AddDoctor());
-});
-
-
-// =============================
-// Save Doctor
-// =============================
-
-// router.post(
-//     "/add-doctor",
-//     upload.single("image"),
-//     async (req, res) => {
-
-//         try {
-
-//             console.log("BODY:", req.body);
-//             console.log("FILE:", req.file);
-
-
-
-//             // Duplicate Phone Check
-
-//             const existDoctor = await Doctor.findOne({
-//                 phone: req.body.phone
-//             });
-
-
-//             if (existDoctor) {
-
-//                 return res.send(
-//                     AddDoctor("Phone Number Already Registered")
-//                 );
-
-//             }
-
-
-
-//             // Generate Doctor ID
-
-//             const lastDoctor = await Doctor.findOne()
-//                 .sort({ createdAt: -1 });
-
-
-//             let nextNumber = 1001;
-
-
-//             if (lastDoctor && lastDoctor.doctorId) {
-
-//                 nextNumber =
-//                 parseInt(lastDoctor.doctorId.replace("DOC", "")) + 1;
-
-//             }
-
-
-//             const doctorId = "DOC" + nextNumber;
-
-
-
-//             // Create Doctor
-
-//             const doctor = new Doctor({
-
-//                 doctorId,
-
-
-//                 name: req.body.name,
-
-
-//                 degree: req.body.qualification,
-
-
-//                 specialization: req.body.speciality,
-
-
-//                 experience: req.body.experience,
-
-
-//                 hospital: req.body.clinic,
-
-
-//                 phone: req.body.phone,
-
-
-//                 email: req.body.email,
-
-
-//                 password: req.body.password,
-
-
-//                 address: req.body.address,
-
-
-//                 description: req.body.description,
-
-
-
-//                 // Availability
-
-//                 availableDay: req.body.availableDay,
-
-//                 timeFrom: req.body.timeFrom,
-
-//                 timeTo: req.body.timeTo,
-
-
-
-//                 // Fee
-
-//                 fee: req.body.fee,
-
-//                 feeType: req.body.feeType,
-
-
-
-//                 image: req.file ? req.file.path : ""
-
-//             });
-
-
-
-//             await doctor.save();
-
-
-//             console.log("Doctor Saved:", doctor);
-
-
-//             res.redirect("/admin/manage-doctors");
-
-
-
-//         } catch (err) {
-
-
-//             console.log("ADD DOCTOR ERROR:", err);
-
-
-//             if (err.code === 11000) {
-
-//                 return res.send(
-//                     AddDoctor("Phone Number Already Registered")
-//                 );
-
-//             }
-
-
-//             res.status(500).send(err.message);
-
-//         }
-
-//     }
-// );
 
 
 router.post(
@@ -1249,146 +405,7 @@ router.get("/edit-doctor/:id", async (req, res) => {
 
 
 
-// =============================
-// Update Doctor
-// =============================
 
-// router.post(
-//     "/edit-doctor/:id",
-//     upload.single("image"),
-//     async (req, res) => {
-
-//         try {
-
-
-//             // Phone duplicate check
-
-//             const existDoctor = await Doctor.findOne({
-
-//                 phone:req.body.phone,
-
-//                 _id:{
-//                     $ne:req.params.id
-//                 }
-
-//             });
-
-
-//             if(existDoctor){
-
-//                 return res.send(
-//                     "Phone Number Already Registered"
-//                 );
-
-//             }
-
-
-
-//             const updateData = {
-
-
-//                 name: req.body.name,
-
-
-//                 degree: req.body.qualification,
-
-
-//                 specialization: req.body.speciality,
-
-
-//                 experience: req.body.experience,
-
-
-//                 hospital: req.body.clinic,
-
-
-//                 phone: req.body.phone,
-
-
-//                 email: req.body.email,
-
-
-//                 password: req.body.password,
-
-
-//                 address: req.body.address,
-
-
-//                 description: req.body.description,
-
-
-
-//                 // ======================
-//                 // Doctor Timing
-//                 // ======================
-
-
-//                 availableDay:req.body.availableDay,
-
-
-//                 timeFrom:req.body.timeFrom,
-
-
-//                 timeTo:req.body.timeTo,
-
-
-
-//                 // ======================
-//                 // Consultation Fee
-//                 // ======================
-
-
-//                 fee:req.body.fee,
-
-
-//                 feeType:req.body.feeType
-
-
-//             };
-
-
-
-//             // New Image Upload
-
-//             if(req.file){
-
-//                 updateData.image = req.file.path;
-
-//             }
-
-
-
-//             await Doctor.findByIdAndUpdate(
-
-//                 req.params.id,
-
-//                 updateData,
-
-//                 {
-//                     new:true
-//                 }
-
-//             );
-
-
-
-//             res.redirect("/admin/manage-doctors");
-
-
-
-//         } catch(err){
-
-
-//             console.log("UPDATE DOCTOR ERROR:",err);
-
-
-//             res.status(500).send(err.message);
-
-
-//         }
-
-//     }
-// );
 
 router.post(
 "/edit-doctor/:id",
@@ -1560,41 +577,33 @@ const AddProduct = require("../pages/addpages/addProduct");
 router.get("/add-product", (req, res) => {
     res.send(AddProduct());
 });
-// =============================
-// UPDATE PRODUCT
-// =============================
+
 
 router.post(
-    "/edit-product/:id",
-    upload.array("images", 10),
+    "/add-product",
+
+    upload.fields([
+        {
+            name: "image",
+            maxCount: 1
+        },
+        {
+            name: "images",
+            maxCount: 10
+        },
+        {
+            name: "video",
+            maxCount: 1
+        }
+    ]),
+
     async (req, res) => {
 
         try {
 
-            console.log("================================");
-            console.log("EDIT PRODUCT REQUEST");
-            console.log("PRODUCT ID:", req.params.id);
+            console.log("========== ADD PRODUCT ==========");
             console.log("BODY:", req.body);
             console.log("FILES:", req.files);
-            console.log("================================");
-
-
-            // =============================
-            // FIND PRODUCT
-            // =============================
-
-            const product = await Product.findById(
-                req.params.id
-            );
-
-
-            if (!product) {
-
-                return res.status(404).send(
-                    "Product Not Found"
-                );
-
-            }
 
 
             // =============================
@@ -1607,7 +616,7 @@ router.post(
 
                 composition = req.body.composition
                     .map(item => String(item).trim())
-                    .filter(item => item !== "");
+                    .filter(Boolean);
 
             } else if (req.body.composition) {
 
@@ -1619,178 +628,137 @@ router.post(
 
 
             // =============================
-            // UPDATE BASIC INFORMATION
+            // MORE IMAGES
             // =============================
 
-            product.name =
-                req.body.name || "";
-
-            product.brand =
-                req.body.brand || "";
-
-            product.category =
-                req.body.category || "";
-
-            product.manufacturer =
-                req.body.manufacturer || "";
-
-
-            // =============================
-            // PRICE
-            // =============================
-
-            product.mrp =
-                req.body.mrp !== ""
-                    ? Number(req.body.mrp)
-                    : 0;
-
-
-            product.price =
-                req.body.price !== ""
-                    ? Number(req.body.price)
-                    : 0;
-
-
-            // =============================
-            // STOCK
-            // =============================
-
-            product.stock =
-                req.body.stock !== ""
-                    ? Number(req.body.stock)
-                    : 0;
-
-
-            // =============================
-            // PACK / BATCH
-            // =============================
-
-            product.packSize =
-                req.body.packSize || "";
-
-            product.batchNo =
-                req.body.batchNo || "";
-
-
-            // =============================
-            // DATES
-            // =============================
-
-            product.mfgDate =
-                req.body.mfgDate || "";
-
-            product.expDate =
-                req.body.expDate || "";
-
-
-            // =============================
-            // COMPOSITION
-            // =============================
-
-            product.composition =
-                composition;
-
-
-            // =============================
-            // PRODUCT DETAILS
-            // =============================
-
-            product.description =
-                req.body.description || "";
-
-            product.uses =
-                req.body.uses || "";
-
-            product.benefits =
-                req.body.benefits || "";
-
-            product.dosage =
-                req.body.dosage || "";
-
-            product.sideEffects =
-                req.body.sideEffects || "";
-
-            product.storage =
-                req.body.storage || "";
-
-
-            // =============================
-            // NEW IMAGES
-            // =============================
+            let images = [];
 
             if (
                 req.files &&
-                req.files.length > 0
+                req.files.images
             ) {
 
-                const newImages =
-                    req.files
-                        .map(file => file.path)
-                        .filter(Boolean);
-
-
-                // Existing images
-                let existingImages = [];
-
-
-                if (
-                    Array.isArray(product.images)
-                ) {
-
-                    existingImages =
-                        product.images.filter(Boolean);
-
-                }
-
-
-                // Old single image
-                if (
-                    product.image &&
-                    !existingImages.includes(product.image)
-                ) {
-
-                    existingImages.push(
-                        product.image
-                    );
-
-                }
-
-
-                // Add new images
-                product.images = [
-                    ...existingImages,
-                    ...newImages
-                ];
-
-
-                // Main image
-                if (!product.image) {
-
-                    product.image =
-                        newImages[0] || "";
-
-                }
+                images = req.files.images
+                    .map(file => file.path)
+                    .filter(Boolean);
 
             }
 
 
             // =============================
-            // SAVE PRODUCT
+            // MAIN IMAGE
             // =============================
+
+            let mainImage = "";
+
+            if (
+                req.files &&
+                req.files.image &&
+                req.files.image.length > 0
+            ) {
+
+                mainImage =
+                    req.files.image[0].path;
+
+            }
+
+
+            // =============================
+            // VIDEO
+            // =============================
+
+            let video = "";
+
+            if (
+                req.files &&
+                req.files.video &&
+                req.files.video.length > 0
+            ) {
+
+                video =
+                    req.files.video[0].path;
+
+            }
+
+
+            // =============================
+            // PRODUCT
+            // =============================
+
+            const product = new Product({
+
+                name: req.body.name || "",
+
+                brand: req.body.brand || "",
+
+                category: req.body.category || "",
+
+                manufacturer: req.body.manufacturer || "",
+
+                mrp:
+                    req.body.mrp !== ""
+                        ? Number(req.body.mrp)
+                        : 0,
+
+                price:
+                    req.body.price !== ""
+                        ? Number(req.body.price)
+                        : 0,
+
+                stock:
+                    req.body.stock !== ""
+                        ? Number(req.body.stock)
+                        : 0,
+
+                packSize:
+                    req.body.packSize || "",
+
+                batchNo:
+                    req.body.batchNo || "",
+
+                mfgDate:
+                    req.body.mfgDate || "",
+
+                expDate:
+                    req.body.expDate || "",
+
+                composition,
+
+                images,
+
+                image: mainImage,
+
+                description:
+                    req.body.description || "",
+
+                uses:
+                    req.body.uses || "",
+
+                benefits:
+                    req.body.benefits || "",
+
+                dosage:
+                    req.body.dosage || "",
+
+                sideEffects:
+                    req.body.sideEffects || "",
+
+                storage:
+                    req.body.storage || "",
+
+                video
+
+            });
+
 
             await product.save();
 
 
             console.log(
-                "PRODUCT UPDATED SUCCESSFULLY:"
+                "PRODUCT SAVED:",
+                product._id
             );
 
-            console.log(product);
-
-
-            // =============================
-            // REDIRECT
-            // =============================
 
             res.redirect(
                 "/admin/manage-products"
@@ -1800,7 +768,7 @@ router.post(
         } catch (err) {
 
             console.error(
-                "UPDATE PRODUCT ERROR:",
+                "ADD PRODUCT ERROR:",
                 err
             );
 
@@ -1812,6 +780,263 @@ router.post(
 
     }
 );
+
+
+
+
+
+// =============================
+// UPDATE PRODUCT
+// =============================
+
+// router.post(
+//     "/edit-product/:id",
+//     upload.array("images", 10),
+//     async (req, res) => {
+
+//         try {
+
+//             console.log("================================");
+//             console.log("EDIT PRODUCT REQUEST");
+//             console.log("PRODUCT ID:", req.params.id);
+//             console.log("BODY:", req.body);
+//             console.log("FILES:", req.files);
+//             console.log("================================");
+
+
+//             // =============================
+//             // FIND PRODUCT
+//             // =============================
+
+//             const product = await Product.findById(
+//                 req.params.id
+//             );
+
+
+//             if (!product) {
+
+//                 return res.status(404).send(
+//                     "Product Not Found"
+//                 );
+
+//             }
+
+
+//             // =============================
+//             // COMPOSITION
+//             // =============================
+
+//             let composition = [];
+
+//             if (Array.isArray(req.body.composition)) {
+
+//                 composition = req.body.composition
+//                     .map(item => String(item).trim())
+//                     .filter(item => item !== "");
+
+//             } else if (req.body.composition) {
+
+//                 composition = [
+//                     String(req.body.composition).trim()
+//                 ];
+
+//             }
+
+
+//             // =============================
+//             // UPDATE BASIC INFORMATION
+//             // =============================
+
+//             product.name =
+//                 req.body.name || "";
+
+//             product.brand =
+//                 req.body.brand || "";
+
+//             product.category =
+//                 req.body.category || "";
+
+//             product.manufacturer =
+//                 req.body.manufacturer || "";
+
+
+//             // =============================
+//             // PRICE
+//             // =============================
+
+//             product.mrp =
+//                 req.body.mrp !== ""
+//                     ? Number(req.body.mrp)
+//                     : 0;
+
+
+//             product.price =
+//                 req.body.price !== ""
+//                     ? Number(req.body.price)
+//                     : 0;
+
+
+//             // =============================
+//             // STOCK
+//             // =============================
+
+//             product.stock =
+//                 req.body.stock !== ""
+//                     ? Number(req.body.stock)
+//                     : 0;
+
+
+//             // =============================
+//             // PACK / BATCH
+//             // =============================
+
+//             product.packSize =
+//                 req.body.packSize || "";
+
+//             product.batchNo =
+//                 req.body.batchNo || "";
+
+
+//             // =============================
+//             // DATES
+//             // =============================
+
+//             product.mfgDate =
+//                 req.body.mfgDate || "";
+
+//             product.expDate =
+//                 req.body.expDate || "";
+
+
+//             // =============================
+//             // COMPOSITION
+//             // =============================
+
+//             product.composition =
+//                 composition;
+
+
+//             // =============================
+//             // PRODUCT DETAILS
+//             // =============================
+
+//             product.description =
+//                 req.body.description || "";
+
+//             product.uses =
+//                 req.body.uses || "";
+
+//             product.benefits =
+//                 req.body.benefits || "";
+
+//             product.dosage =
+//                 req.body.dosage || "";
+
+//             product.sideEffects =
+//                 req.body.sideEffects || "";
+
+//             product.storage =
+//                 req.body.storage || "";
+
+
+//             // =============================
+//             // NEW IMAGES
+//             // =============================
+
+//             if (
+//                 req.files &&
+//                 req.files.length > 0
+//             ) {
+
+//                 const newImages =
+//                     req.files
+//                         .map(file => file.path)
+//                         .filter(Boolean);
+
+
+//                 // Existing images
+//                 let existingImages = [];
+
+
+//                 if (
+//                     Array.isArray(product.images)
+//                 ) {
+
+//                     existingImages =
+//                         product.images.filter(Boolean);
+
+//                 }
+
+
+//                 // Old single image
+//                 if (
+//                     product.image &&
+//                     !existingImages.includes(product.image)
+//                 ) {
+
+//                     existingImages.push(
+//                         product.image
+//                     );
+
+//                 }
+
+
+//                 // Add new images
+//                 product.images = [
+//                     ...existingImages,
+//                     ...newImages
+//                 ];
+
+
+//                 // Main image
+//                 if (!product.image) {
+
+//                     product.image =
+//                         newImages[0] || "";
+
+//                 }
+
+//             }
+
+
+//             // =============================
+//             // SAVE PRODUCT
+//             // =============================
+
+//             await product.save();
+
+
+//             console.log(
+//                 "PRODUCT UPDATED SUCCESSFULLY:"
+//             );
+
+//             console.log(product);
+
+
+//             // =============================
+//             // REDIRECT
+//             // =============================
+
+//             res.redirect(
+//                 "/admin/manage-products"
+//             );
+
+
+//         } catch (err) {
+
+//             console.error(
+//                 "UPDATE PRODUCT ERROR:",
+//                 err
+//             );
+
+//             res.status(500).send(
+//                 err.message
+//             );
+
+//         }
+
+//     }
+// );
 
 // Delete Product
 router.get("/delete-product/:id", async (req, res) => {
@@ -2059,9 +1284,273 @@ router.get("/edit-product/:id", async (req, res) => {
 // UPDATE PRODUCT
 // =============================
 
+// router.post(
+//     "/edit-product/:id",
+//     upload.array("images", 10),
+//     async (req, res) => {
+
+//         try {
+
+//             console.log("========== EDIT PRODUCT ==========");
+//             console.log("PRODUCT ID:", req.params.id);
+//             console.log("BODY:", req.body);
+//             console.log("FILES:", req.files);
+
+
+//             // =============================
+//             // FIND PRODUCT
+//             // =============================
+
+//             const product = await Product.findById(
+//                 req.params.id
+//             );
+
+//             if (!product) {
+
+//                 return res.status(404).send(
+//                     "Product Not Found"
+//                 );
+
+//             }
+
+
+//             // =============================
+//             // COMPOSITION
+//             // =============================
+
+//             let composition = [];
+
+//             if (Array.isArray(req.body.composition)) {
+
+//                 composition = req.body.composition
+//                     .map(item => String(item).trim())
+//                     .filter(item => item !== "");
+
+//             } else if (req.body.composition) {
+
+//                 composition = [
+//                     String(req.body.composition).trim()
+//                 ];
+
+//             }
+
+
+//             // =============================
+//             // BASIC INFORMATION
+//             // =============================
+
+//             product.name =
+//                 req.body.name || "";
+
+//             product.brand =
+//                 req.body.brand || "";
+
+//             product.category =
+//                 req.body.category || "";
+
+//             product.manufacturer =
+//                 req.body.manufacturer || "";
+
+
+//             // =============================
+//             // PRICE
+//             // =============================
+
+//             product.mrp =
+//                 req.body.mrp !== undefined &&
+//                 req.body.mrp !== ""
+//                     ? Number(req.body.mrp)
+//                     : 0;
+
+//             product.price =
+//                 req.body.price !== undefined &&
+//                 req.body.price !== ""
+//                     ? Number(req.body.price)
+//                     : 0;
+
+
+//             // =============================
+//             // STOCK
+//             // =============================
+
+//             product.stock =
+//                 req.body.stock !== undefined &&
+//                 req.body.stock !== ""
+//                     ? Number(req.body.stock)
+//                     : 0;
+
+
+//             // =============================
+//             // PACK / BATCH
+//             // =============================
+
+//             product.packSize =
+//                 req.body.packSize || "";
+
+//             product.batchNo =
+//                 req.body.batchNo || "";
+
+
+//             // =============================
+//             // DATES
+//             // =============================
+
+//             product.mfgDate =
+//                 req.body.mfgDate || "";
+
+//             product.expDate =
+//                 req.body.expDate || "";
+
+
+//             // =============================
+//             // COMPOSITION
+//             // =============================
+
+//             product.composition =
+//                 composition;
+
+
+//             // =============================
+//             // PRODUCT DETAILS
+//             // =============================
+
+//             product.description =
+//                 req.body.description || "";
+
+//             product.uses =
+//                 req.body.uses || "";
+
+//             product.benefits =
+//                 req.body.benefits || "";
+
+//             product.dosage =
+//                 req.body.dosage || "";
+
+//             product.sideEffects =
+//                 req.body.sideEffects || "";
+
+//             product.storage =
+//                 req.body.storage || "";
+
+
+//             // =============================
+//             // NEW IMAGES
+//             // =============================
+
+//             if (
+//                 req.files &&
+//                 req.files.length > 0
+//             ) {
+
+//                 const newImages =
+//                     req.files
+//                         .map(file => file.path)
+//                         .filter(Boolean);
+
+
+//                 // Existing images
+//                 let existingImages = [];
+
+//                 if (
+//                     Array.isArray(product.images)
+//                 ) {
+
+//                     existingImages =
+//                         product.images.filter(Boolean);
+
+//                 }
+
+
+//                 // Old single image को भी preserve करें
+//                 if (
+//                     product.image &&
+//                     !existingImages.includes(product.image)
+//                 ) {
+
+//                     existingImages.push(
+//                         product.image
+//                     );
+
+//                 }
+
+
+//                 // Existing + New Images
+//                 product.images = [
+//                     ...existingImages,
+//                     ...newImages
+//                 ];
+
+
+//                 // अगर main image नहीं है
+//                 if (!product.image) {
+
+//                     product.image =
+//                         newImages[0] || "";
+
+//                 }
+
+//             }
+
+
+//             // =============================
+//             // SAVE
+//             // =============================
+
+//             await product.save();
+
+
+//             console.log(
+//                 "PRODUCT UPDATED:",
+//                 product._id
+//             );
+
+
+//             // =============================
+//             // REDIRECT
+//             // =============================
+
+//             res.redirect(
+//                 "/admin/manage-products"
+//             );
+
+
+//         } catch (err) {
+
+//             console.error(
+//                 "UPDATE PRODUCT ERROR:",
+//                 err
+//             );
+
+//             res.status(500).send(
+//                 err.message
+//             );
+
+//         }
+
+//     }
+// );
+
+
+
+
+// =============================
+// UPDATE PRODUCT
+// =============================
+
 router.post(
     "/edit-product/:id",
-    upload.array("images", 10),
+
+    upload.fields([
+        {
+            name: "images",
+            maxCount: 10
+        },
+        {
+            name: "videos",
+            maxCount: 5
+        }
+    ]),
+
     async (req, res) => {
 
         try {
@@ -2076,15 +1565,14 @@ router.post(
             // FIND PRODUCT
             // =============================
 
-            const product = await Product.findById(
-                req.params.id
-            );
+            const product =
+                await Product.findById(req.params.id);
 
             if (!product) {
 
-                return res.status(404).send(
-                    "Product Not Found"
-                );
+                return res
+                    .status(404)
+                    .send("Product Not Found");
 
             }
 
@@ -2097,14 +1585,19 @@ router.post(
 
             if (Array.isArray(req.body.composition)) {
 
-                composition = req.body.composition
-                    .map(item => String(item).trim())
-                    .filter(item => item !== "");
+                composition =
+                    req.body.composition
+                        .map(item =>
+                            String(item).trim()
+                        )
+                        .filter(Boolean);
 
             } else if (req.body.composition) {
 
                 composition = [
-                    String(req.body.composition).trim()
+                    String(
+                        req.body.composition
+                    ).trim()
                 ];
 
             }
@@ -2208,38 +1701,55 @@ router.post(
                 req.body.storage || "";
 
 
-            // =============================
+            // =================================================
             // NEW IMAGES
-            // =============================
+            // =================================================
 
-            if (
-                req.files &&
-                req.files.length > 0
-            ) {
+            const imageFiles =
+                req.files?.images || [];
+
+
+            if (imageFiles.length > 0) {
+
+                console.log(
+                    "NEW IMAGE COUNT:",
+                    imageFiles.length
+                );
+
 
                 const newImages =
-                    req.files
-                        .map(file => file.path)
+                    imageFiles
+                        .map(file =>
+                            file.path ||
+                            file.secure_url ||
+                            file.url
+                        )
                         .filter(Boolean);
 
 
                 // Existing images
+
                 let existingImages = [];
+
 
                 if (
                     Array.isArray(product.images)
                 ) {
 
                     existingImages =
-                        product.images.filter(Boolean);
+                        product.images
+                            .filter(Boolean);
 
                 }
 
 
-                // Old single image को भी preserve करें
+                // Old single image preserve
+
                 if (
                     product.image &&
-                    !existingImages.includes(product.image)
+                    !existingImages.includes(
+                        product.image
+                    )
                 ) {
 
                     existingImages.push(
@@ -2249,20 +1759,77 @@ router.post(
                 }
 
 
-                // Existing + New Images
+                // Existing + New
+
                 product.images = [
                     ...existingImages,
                     ...newImages
                 ];
 
 
-                // अगर main image नहीं है
-                if (!product.image) {
+                // Main image
+
+                if (
+                    !product.image &&
+                    newImages.length
+                ) {
 
                     product.image =
-                        newImages[0] || "";
+                        newImages[0];
 
                 }
+
+            }
+
+
+            // =================================================
+            // NEW VIDEOS
+            // =================================================
+
+            const videoFiles =
+                req.files?.videos || [];
+
+
+            if (videoFiles.length > 0) {
+
+                console.log(
+                    "NEW VIDEO COUNT:",
+                    videoFiles.length
+                );
+
+
+                const newVideos =
+                    videoFiles
+                        .map(file =>
+                            file.path ||
+                            file.secure_url ||
+                            file.url
+                        )
+                        .filter(Boolean);
+
+
+                // Existing videos
+
+                let existingVideos = [];
+
+
+                if (
+                    Array.isArray(product.videos)
+                ) {
+
+                    existingVideos =
+                        product.videos
+                            .filter(Boolean);
+
+                }
+
+
+                // Existing + New
+
+                product.videos = [
+                    ...existingVideos,
+                    ...newVideos
+                ];
 
             }
 
@@ -2280,11 +1847,22 @@ router.post(
             );
 
 
+            console.log(
+                "TOTAL IMAGES:",
+                product.images?.length || 0
+            );
+
+            console.log(
+                "TOTAL VIDEOS:",
+                product.videos?.length || 0
+            );
+
+
             // =============================
             // REDIRECT
             // =============================
 
-            res.redirect(
+            return res.redirect(
                 "/admin/manage-products"
             );
 
@@ -2296,9 +1874,13 @@ router.post(
                 err
             );
 
-            res.status(500).send(
-                err.message
-            );
+
+            return res
+                .status(500)
+                .send(
+                    "Product Update Error: " +
+                    err.message
+                );
 
         }
 
