@@ -1,5 +1,208 @@
+// // function EditProduct(product) {
+// //   return `
+// // <!DOCTYPE html>
+// // <html lang="en">
+
+// // <head>
+
+// // <meta charset="UTF-8">
+
+// // <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+// // <title>Edit Product</title>
+
+// // <style>
+
+// // *{
+// // margin:0;
+// // padding:0;
+// // box-sizing:border-box;
+// // font-family:Arial,sans-serif;
+// // }
+
+// // body{
+// // background:#f5f7fb;
+// // padding:40px;
+// // }
+
+// // .container{
+// // max-width:700px;
+// // margin:auto;
+// // background:#fff;
+// // padding:30px;
+// // border-radius:15px;
+// // box-shadow:0 10px 25px rgba(0,0,0,.12);
+// // }
+
+// // h2{
+// // text-align:center;
+// // margin-bottom:25px;
+// // color:#0d6efd;
+// // }
+
+// // .form-group{
+// // margin-bottom:18px;
+// // }
+
+// // label{
+// // display:block;
+// // margin-bottom:6px;
+// // font-weight:bold;
+// // }
+
+// // input,
+// // textarea{
+// // width:100%;
+// // padding:12px;
+// // border:1px solid #ddd;
+// // border-radius:8px;
+// // font-size:15px;
+// // }
+
+// // textarea{
+// // height:120px;
+// // resize:none;
+// // }
+
+// // .preview{
+// // width:150px;
+// // height:150px;
+// // border-radius:10px;
+// // object-fit:cover;
+// // border:2px solid #ddd;
+// // display:block;
+// // margin:15px auto;
+// // }
+
+// // button{
+// // width:100%;
+// // padding:14px;
+// // border:none;
+// // border-radius:8px;
+// // background:#0d6efd;
+// // color:#fff;
+// // font-size:16px;
+// // cursor:pointer;
+// // }
+
+// // button:hover{
+// // background:#0b5ed7;
+// // }
+
+// // .back{
+// // display:block;
+// // text-align:center;
+// // margin-top:20px;
+// // text-decoration:none;
+// // color:#0d6efd;
+// // font-weight:bold;
+// // }
+
+// // </style>
+
+// // </head>
+
+// // <body>
+
+// // <div class="container">
+
+// // <h2>✏️ Edit Product</h2>
+
+// // <form
+// // action="/admin/edit-product/${product._id}"
+// // method="POST"
+// // enctype="multipart/form-data">
+
+// // <div class="form-group">
+
+// // <label>Product Name</label>
+
+// // <input
+// // type="text"
+// // name="name"
+// // value="${product.name}"
+// // required>
+
+// // </div>
+
+// // <div class="form-group">
+
+// // <label>Price</label>
+
+// // <input
+// // type="number"
+// // name="price"
+// // value="${product.price}"
+// // required>
+
+// // </div>
+
+// // <div class="form-group">
+
+// // <label>Description</label>
+
+// // <textarea
+// // name="description">${product.description || ""}</textarea>
+
+// // </div>
+
+// // <img
+// // src="${product.image}"
+// // class="preview"
+// // alt="${product.name}">
+
+// // <div class="form-group">
+
+// // <label>Change Image</label>
+
+// // <input
+// // type="file"
+// // name="image"
+// // accept="image/*">
+
+// // </div>
+
+// // <button type="submit">
+
+// // 💾 Update Product
+
+// // </button>
+
+// // </form>
+
+// // <a
+// // href="/admin/manage-products"
+// // class="back">
+
+// // ⬅ Back
+
+// // </a>
+
+// // </div>
+
+// // </body>
+
+// // </html>
+// // `;
+// // }
+
+// // module.exports = EditProduct;
+
+
 // function EditProduct(product) {
-//   return `
+
+//     const compositions =
+//         Array.isArray(product.composition) && product.composition.length
+//             ? product.composition
+//             : [""];
+
+//     const images =
+//         Array.isArray(product.images)
+//             ? product.images
+//             : (product.image ? [product.image] : []);
+
+//     return `
+
 // <!DOCTYPE html>
 // <html lang="en">
 
@@ -7,272 +210,1443 @@
 
 // <meta charset="UTF-8">
 
-// <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// <meta
+//     name="viewport"
+//     content="width=device-width, initial-scale=1.0"
+// >
 
 // <title>Edit Product</title>
 
+
 // <style>
 
-// *{
-// margin:0;
-// padding:0;
-// box-sizing:border-box;
-// font-family:Arial,sans-serif;
+// /* =========================
+//    RESET
+// ========================= */
+
+// * {
+//     margin: 0;
+//     padding: 0;
+//     box-sizing: border-box;
+//     font-family: "Segoe UI", Arial, sans-serif;
 // }
 
-// body{
-// background:#f5f7fb;
-// padding:40px;
+
+// /* =========================
+//    BODY
+// ========================= */
+
+// body {
+
+//     background:
+//         linear-gradient(
+//             135deg,
+//             #2563eb,
+//             #06b6d4
+//         );
+
+//     min-height: 100vh;
+
+//     padding: 30px 15px;
+
 // }
 
-// .container{
-// max-width:700px;
-// margin:auto;
-// background:#fff;
-// padding:30px;
-// border-radius:15px;
-// box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+// /* =========================
+//    MAIN CONTAINER
+// ========================= */
+
+// .container {
+
+//     width: 100%;
+//     max-width: 1000px;
+
+//     margin: auto;
+
+//     background: #ffffff;
+
+//     padding: 30px;
+
+//     border-radius: 22px;
+
+//     box-shadow:
+//         0 20px 50px
+//         rgba(0,0,0,.18);
+
 // }
 
-// h2{
-// text-align:center;
-// margin-bottom:25px;
-// color:#0d6efd;
+
+// /* =========================
+//    HEADER
+// ========================= */
+
+// .header {
+
+//     text-align: center;
+
+//     margin-bottom: 30px;
+
 // }
 
-// .form-group{
-// margin-bottom:18px;
+
+// .header h2 {
+
+//     color: #1e40af;
+
+//     font-size: 28px;
+
+//     margin-bottom: 6px;
+
 // }
 
-// label{
-// display:block;
-// margin-bottom:6px;
-// font-weight:bold;
+
+// .header p {
+
+//     color: #64748b;
+
+//     font-size: 14px;
+
 // }
+
+
+// /* =========================
+//    FORM GRID
+// ========================= */
+
+// .form-grid {
+
+//     display: grid;
+
+//     grid-template-columns:
+//         repeat(2, 1fr);
+
+//     gap: 18px;
+
+// }
+
+
+// /* =========================
+//    FORM GROUP
+// ========================= */
+
+// .form-group {
+
+//     display: flex;
+
+//     flex-direction: column;
+
+// }
+
+
+// .form-group.full {
+
+//     grid-column: 1 / -1;
+
+// }
+
+
+// label {
+
+//     font-weight: 700;
+
+//     color: #1e293b;
+
+//     margin-bottom: 7px;
+
+//     font-size: 14px;
+
+// }
+
+
+// /* =========================
+//    INPUTS
+// ========================= */
 
 // input,
-// textarea{
-// width:100%;
-// padding:12px;
-// border:1px solid #ddd;
-// border-radius:8px;
-// font-size:15px;
+// select,
+// textarea {
+
+//     width: 100%;
+
+//     padding: 12px 13px;
+
+//     border: 1px solid #d1d5db;
+
+//     border-radius: 10px;
+
+//     background: #fff;
+
+//     color: #111827;
+
+//     font-size: 15px;
+
+//     outline: none;
+
+//     transition: .2s;
+
 // }
 
-// textarea{
-// height:120px;
-// resize:none;
+
+// input:focus,
+// select:focus,
+// textarea:focus {
+
+//     border-color: #2563eb;
+
+//     box-shadow:
+//         0 0 0 3px
+//         rgba(37,99,235,.10);
+
 // }
 
-// .preview{
-// width:150px;
-// height:150px;
-// border-radius:10px;
-// object-fit:cover;
-// border:2px solid #ddd;
-// display:block;
-// margin:15px auto;
+
+// textarea {
+
+//     min-height: 120px;
+
+//     resize: vertical;
+
 // }
 
-// button{
-// width:100%;
-// padding:14px;
-// border:none;
-// border-radius:8px;
-// background:#0d6efd;
-// color:#fff;
-// font-size:16px;
-// cursor:pointer;
+
+// /* =========================
+//    SECTION
+// ========================= */
+
+// .section {
+
+//     margin-top: 28px;
+
+//     padding-top: 22px;
+
+//     border-top:
+//         1px solid #e5e7eb;
+
 // }
 
-// button:hover{
-// background:#0b5ed7;
+
+// .section-title {
+
+//     display: flex;
+
+//     align-items: center;
+
+//     gap: 8px;
+
+//     margin-bottom: 15px;
+
+//     color: #1e40af;
+
+//     font-size: 19px;
+
+//     font-weight: 700;
+
 // }
 
-// .back{
-// display:block;
-// text-align:center;
-// margin-top:20px;
-// text-decoration:none;
-// color:#0d6efd;
-// font-weight:bold;
+
+// /* =========================
+//    COMPOSITION
+// ========================= */
+
+// .composition-row {
+
+//     display: flex;
+
+//     gap: 10px;
+
+//     margin-bottom: 10px;
+
+// }
+
+
+// .composition-row input {
+
+//     flex: 1;
+
+// }
+
+
+// .remove-btn {
+
+//     width: 45px;
+
+//     padding: 0;
+
+//     margin: 0;
+
+//     border: none;
+
+//     border-radius: 9px;
+
+//     background: #dc2626;
+
+//     color: white;
+
+//     font-size: 18px;
+
+//     cursor: pointer;
+
+// }
+
+
+// .remove-btn:hover {
+
+//     background: #b91c1c;
+
+// }
+
+
+// .add-btn {
+
+//     width: auto;
+
+//     padding: 11px 18px;
+
+//     margin-top: 5px;
+
+//     border: none;
+
+//     border-radius: 9px;
+
+//     background: #16a34a;
+
+//     color: white;
+
+//     font-weight: 700;
+
+//     cursor: pointer;
+
+// }
+
+
+// .add-btn:hover {
+
+//     background: #15803d;
+
+// }
+
+
+// /* =========================
+//    EXISTING IMAGES
+// ========================= */
+
+// .image-grid {
+
+//     display: grid;
+
+//     grid-template-columns:
+//         repeat(4, 1fr);
+
+//     gap: 15px;
+
+// }
+
+
+// .image-card {
+
+//     position: relative;
+
+//     border:
+//         1px solid #e5e7eb;
+
+//     border-radius: 12px;
+
+//     padding: 8px;
+
+//     background: #f8fafc;
+
+// }
+
+
+// .image-card img {
+
+//     width: 100%;
+
+//     height: 140px;
+
+//     object-fit: cover;
+
+//     border-radius: 8px;
+
+//     display: block;
+
+// }
+
+
+// .image-number {
+
+//     text-align: center;
+
+//     margin-top: 6px;
+
+//     font-size: 12px;
+
+//     color: #64748b;
+
+// }
+
+
+// /* =========================
+//    NO IMAGE
+// ========================= */
+
+// .no-image {
+
+//     padding: 30px;
+
+//     text-align: center;
+
+//     background: #f8fafc;
+
+//     border-radius: 10px;
+
+//     color: #64748b;
+
+// }
+
+
+// /* =========================
+//    UPDATE BUTTON
+// ========================= */
+
+// .update-btn {
+
+//     width: 100%;
+
+//     padding: 15px;
+
+//     margin-top: 30px;
+
+//     border: none;
+
+//     border-radius: 12px;
+
+//     background:
+//         linear-gradient(
+//             135deg,
+//             #2563eb,
+//             #1d4ed8
+//         );
+
+//     color: white;
+
+//     font-size: 17px;
+
+//     font-weight: 700;
+
+//     cursor: pointer;
+
+//     transition: .2s;
+
+// }
+
+
+// .update-btn:hover {
+
+//     transform: translateY(-1px);
+
+//     box-shadow:
+//         0 8px 20px
+//         rgba(37,99,235,.25);
+
+// }
+
+
+// /* =========================
+//    BACK BUTTON
+// ========================= */
+
+// .back {
+
+//     display: block;
+
+//     text-align: center;
+
+//     margin-top: 18px;
+
+//     padding: 12px;
+
+//     border-radius: 10px;
+
+//     background: #f1f5f9;
+
+//     color: #1e40af;
+
+//     text-decoration: none;
+
+//     font-weight: 700;
+
+// }
+
+
+// .back:hover {
+
+//     background: #e2e8f0;
+
+// }
+
+
+// /* =========================
+//    MOBILE
+// ========================= */
+
+// @media (max-width: 700px) {
+
+//     body {
+
+//         padding: 10px;
+
+//     }
+
+
+//     .container {
+
+//         padding: 18px;
+
+//         border-radius: 16px;
+
+//     }
+
+
+//     .header h2 {
+
+//         font-size: 22px;
+
+//     }
+
+
+//     .form-grid {
+
+//         grid-template-columns: 1fr;
+
+//         gap: 15px;
+
+//     }
+
+
+//     .form-group.full {
+
+//         grid-column: auto;
+
+//     }
+
+
+//     .image-grid {
+
+//         grid-template-columns:
+//             repeat(2, 1fr);
+
+//     }
+
+
+//     .image-card img {
+
+//         height: 120px;
+
+//     }
+
+
+//     .composition-row {
+
+//         gap: 7px;
+
+//     }
+
+// }
+
+
+// /* =========================
+//    SMALL MOBILE
+// ========================= */
+
+// @media (max-width: 400px) {
+
+//     .container {
+
+//         padding: 14px;
+
+//     }
+
+
+//     input,
+//     select,
+//     textarea {
+
+//         font-size: 14px;
+
+//         padding: 11px;
+
+//     }
+
+
+//     .image-grid {
+
+//         grid-template-columns: 1fr 1fr;
+
+//         gap: 8px;
+
+//     }
+
+
+//     .image-card img {
+
+//         height: 100px;
+
+//     }
+
 // }
 
 // </style>
 
 // </head>
 
+
 // <body>
+
 
 // <div class="container">
 
-// <h2>✏️ Edit Product</h2>
 
-// <form
-// action="/admin/edit-product/${product._id}"
-// method="POST"
-// enctype="multipart/form-data">
+//     <!-- =========================
+//          HEADER
+//     ========================== -->
 
-// <div class="form-group">
+//     <div class="header">
 
-// <label>Product Name</label>
+//         <h2>✏️ Edit Pharma Product</h2>
 
-// <input
-// type="text"
-// name="name"
-// value="${product.name}"
-// required>
+//         <p>
+//             Update product information and images
+//         </p>
+
+//     </div>
+
+
+//     <!-- =========================
+//          FORM
+//     ========================== -->
+
+//     <form
+
+//         action="/admin/edit-product/${product._id}"
+
+//         method="POST"
+
+//         enctype="multipart/form-data"
+//     >
+
+
+//         <!-- =========================
+//              BASIC INFORMATION
+//         ========================== -->
+
+//         <div class="form-grid">
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Product Name *
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="name"
+//                     value="${product.name || ""}"
+//                     required
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Brand Name
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="brand"
+//                     value="${product.brand || ""}"
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Category
+//                 </label>
+
+//                 <select name="category">
+
+//                     <option value="">
+//                         Select Category
+//                     </option>
+
+//                     <option
+//                         value="Tablet"
+//                         ${product.category === "Tablet" ? "selected" : ""}
+//                     >
+//                         Tablet
+//                     </option>
+
+//                     <option
+//                         value="Capsule"
+//                         ${product.category === "Capsule" ? "selected" : ""}
+//                     >
+//                         Capsule
+//                     </option>
+
+//                     <option
+//                         value="Syrup"
+//                         ${product.category === "Syrup" ? "selected" : ""}
+//                     >
+//                         Syrup
+//                     </option>
+
+//                     <option
+//                         value="Drops"
+//                         ${product.category === "Drops" ? "selected" : ""}
+//                     >
+//                         Drops
+//                     </option>
+
+//                     <option
+//                         value="Injection"
+//                         ${product.category === "Injection" ? "selected" : ""}
+//                     >
+//                         Injection
+//                     </option>
+
+//                     <option
+//                         value="Cream"
+//                         ${product.category === "Cream" ? "selected" : ""}
+//                     >
+//                         Cream
+//                     </option>
+
+//                     <option
+//                         value="Other"
+//                         ${product.category === "Other" ? "selected" : ""}
+//                     >
+//                         Other
+//                     </option>
+
+//                 </select>
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Manufacturer
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="manufacturer"
+//                     value="${product.manufacturer || ""}"
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     MRP
+//                 </label>
+
+//                 <input
+//                     type="number"
+//                     name="mrp"
+//                     value="${product.mrp ?? ""}"
+//                     min="0"
+//                     step="0.01"
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Selling Price *
+//                 </label>
+
+//                 <input
+//                     type="number"
+//                     name="price"
+//                     value="${product.price ?? ""}"
+//                     min="0"
+//                     step="0.01"
+//                     required
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Stock Quantity
+//                 </label>
+
+//                 <input
+//                     type="number"
+//                     name="stock"
+//                     value="${product.stock ?? ""}"
+//                     min="0"
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Pack Size
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="packSize"
+//                     value="${product.packSize || ""}"
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Batch Number
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="batchNo"
+//                     value="${product.batchNo || ""}"
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Manufacturing Date
+//                 </label>
+
+//                 <input
+//                     type="date"
+//                     name="mfgDate"
+//                     value="${
+//                         product.mfgDate
+//                             ? new Date(product.mfgDate)
+//                                 .toISOString()
+//                                 .split("T")[0]
+//                             : ""
+//                     }"
+//                 >
+
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Expiry Date
+//                 </label>
+
+//                 <input
+//                     type="date"
+//                     name="expDate"
+//                     value="${
+//                         product.expDate
+//                             ? new Date(product.expDate)
+//                                 .toISOString()
+//                                 .split("T")[0]
+//                             : ""
+//                     }"
+//                 >
+
+//             </div>
+
+
+//         </div>
+
+
+//         <!-- =========================
+//              COMPOSITION
+//         ========================== -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+
+//                 💊 Composition
+
+//             </div>
+
+
+//             <div id="compositionBox">
+
+//                 ${compositions.map((item, index) => `
+
+//                     <div class="composition-row">
+
+//                         <input
+//                             type="text"
+//                             name="composition[]"
+//                             value="${item || ""}"
+//                             placeholder="Composition ${index + 1}"
+//                         >
+
+//                         ${
+//                             index > 0
+//                             ? `
+//                             <button
+//                                 type="button"
+//                                 class="remove-btn"
+//                                 onclick="this.parentElement.remove()"
+//                             >
+//                                 ×
+//                             </button>
+//                             `
+//                             : ""
+//                         }
+
+//                     </div>
+
+//                 `).join("")}
+
+//             </div>
+
+
+//             <button
+//                 type="button"
+//                 class="add-btn"
+//                 onclick="addComposition()"
+//             >
+//                 + Add Composition
+//             </button>
+
+//         </div>
+
+
+//         <!-- =========================
+//              PRODUCT DETAILS
+//         ========================== -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+
+//                 📋 Product Details
+
+//             </div>
+
+
+//             <div class="form-grid">
+
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Uses
+//                     </label>
+
+//                     <textarea
+//                         name="uses"
+//                         placeholder="Uses"
+//                     >${product.uses || ""}</textarea>
+
+//                 </div>
+
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Benefits
+//                     </label>
+
+//                     <textarea
+//                         name="benefits"
+//                         placeholder="Benefits"
+//                     >${product.benefits || ""}</textarea>
+
+//                 </div>
+
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Dosage
+//                     </label>
+
+//                     <textarea
+//                         name="dosage"
+//                         placeholder="Dosage"
+//                     >${product.dosage || ""}</textarea>
+
+//                 </div>
+
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Side Effects
+//                     </label>
+
+//                     <textarea
+//                         name="sideEffects"
+//                         placeholder="Side Effects"
+//                     >${product.sideEffects || ""}</textarea>
+
+//                 </div>
+
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Storage Instructions
+//                     </label>
+
+//                     <textarea
+//                         name="storage"
+//                         placeholder="Storage Instructions"
+//                     >${product.storage || ""}</textarea>
+
+//                 </div>
+
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Full Description
+//                     </label>
+
+//                     <textarea
+//                         name="description"
+//                         placeholder="Full Description"
+//                     >${product.description || ""}</textarea>
+
+//                 </div>
+
+
+//             </div>
+
+//         </div>
+
+
+//         <!-- =========================
+//              EXISTING IMAGES
+//         ========================== -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+
+//                 🖼 Existing Product Images
+
+//             </div>
+
+
+//             ${
+//                 images.length
+//                 ?
+
+//                 `<div class="image-grid">
+
+//                     ${images.map((img, index) => `
+
+//                         <div class="image-card">
+
+//                             <img
+//                                 src="${img}"
+//                                 alt="Product Image ${index + 1}"
+//                             >
+
+//                             <div class="image-number">
+
+//                                 Image ${index + 1}
+
+//                             </div>
+
+//                         </div>
+
+//                     `).join("")}
+
+//                 </div>`
+
+//                 :
+
+//                 `<div class="no-image">
+
+//                     No existing product image
+
+//                 </div>`
+//             }
+
+//         </div>
+
+
+//         <!-- =========================
+//              NEW IMAGES
+//         ========================== -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+
+//                 📷 Add New Product Images
+
+//             </div>
+
+
+//             <div id="imageBox">
+
+//                 <input
+//                     type="file"
+//                     name="images"
+//                     accept="image/*"
+//                     multiple
+//                 >
+
+//             </div>
+
+
+//             <p
+//                 style="
+//                     margin-top:8px;
+//                     color:#64748b;
+//                     font-size:13px;
+//                 "
+//             >
+//                 You can select multiple new images.
+//             </p>
+
+//         </div>
+
+
+//         <!-- =========================
+//              UPDATE
+//         ========================== -->
+
+//         <button
+//             type="submit"
+//             class="update-btn"
+//         >
+
+//             💾 Update Product
+
+//         </button>
+
+
+//     </form>
+
+
+//     <!-- =========================
+//          BACK
+//     ========================== -->
+
+//     <a
+//         href="/admin/manage-products"
+//         class="back"
+//     >
+
+//         ⬅ Back to Manage Products
+
+//     </a>
+
 
 // </div>
 
-// <div class="form-group">
 
-// <label>Price</label>
+// <script>
 
-// <input
-// type="number"
-// name="price"
-// value="${product.price}"
-// required>
 
-// </div>
+// /* =========================
+//    ADD COMPOSITION
+// ========================= */
 
-// <div class="form-group">
+// function addComposition() {
 
-// <label>Description</label>
+//     const box =
+//         document.getElementById("compositionBox");
 
-// <textarea
-// name="description">${product.description || ""}</textarea>
 
-// </div>
+//     const row =
+//         document.createElement("div");
 
-// <img
-// src="${product.image}"
-// class="preview"
-// alt="${product.name}">
 
-// <div class="form-group">
+//     row.className =
+//         "composition-row";
 
-// <label>Change Image</label>
 
-// <input
-// type="file"
-// name="image"
-// accept="image/*">
+//     row.innerHTML = \`
 
-// </div>
+//         <input
+//             type="text"
+//             name="composition[]"
+//             placeholder="Composition"
+//         >
 
-// <button type="submit">
+//         <button
+//             type="button"
+//             class="remove-btn"
+//             onclick="this.parentElement.remove()"
+//         >
+//             ×
+//         </button>
 
-// 💾 Update Product
+//     \`;
 
-// </button>
 
-// </form>
+//     box.appendChild(row);
 
-// <a
-// href="/admin/manage-products"
-// class="back">
+// }
 
-// ⬅ Back
 
-// </a>
+// /* =========================
+//    IMAGE VALIDATION
+// ========================= */
 
-// </div>
+// const imageInput =
+//     document.querySelector(
+//         'input[name="images"]'
+//     );
+
+
+// if (imageInput) {
+
+//     imageInput.addEventListener(
+//         "change",
+//         function () {
+
+//             const files =
+//                 this.files;
+
+
+//             for (const file of files) {
+
+//                 if (
+//                     !file.type.startsWith("image/")
+//                 ) {
+
+//                     alert(
+//                         "Please select only image files."
+//                     );
+
+//                     this.value = "";
+
+//                     return;
+
+//                 }
+
+//             }
+
+//         }
+//     );
+
+// }
+
+// </script>
+
 
 // </body>
 
 // </html>
+
 // `;
+
 // }
+
 
 // module.exports = EditProduct;
 
 
+
 function EditProduct(product) {
 
-    const compositions =
-        Array.isArray(product.composition) && product.composition.length
-            ? product.composition
-            : [""];
+    // =========================
+    // SAFE HTML ESCAPE
+    // =========================
 
-    const images =
-        Array.isArray(product.images)
-            ? product.images
-            : (product.image ? [product.image] : []);
+    const escapeHTML = (value) => {
+        if (value === null || value === undefined) return "";
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    };
+
+
+    // =========================
+    // DATE FORMAT
+    // =========================
+
+    const formatDate = (value) => {
+
+        if (!value) return "";
+
+        try {
+
+            const date = new Date(value);
+
+            if (isNaN(date.getTime())) {
+                return "";
+            }
+
+            return date.toISOString().split("T")[0];
+
+        } catch (error) {
+
+            return "";
+
+        }
+
+    };
+
+
+    // =========================
+    // COMPOSITION
+    // =========================
+
+    let compositions = [];
+
+    if (Array.isArray(product.composition)) {
+
+        compositions = product.composition
+            .filter(item => item !== null && item !== undefined)
+            .map(item => {
+
+                // अगर composition object है
+                if (typeof item === "object") {
+
+                    if (item.name && item.strength) {
+                        return `${item.name} ${item.strength}`;
+                    }
+
+                    if (item.name) {
+                        return item.name;
+                    }
+
+                    return "";
+                }
+
+                return String(item);
+
+            });
+
+    } else if (product.composition) {
+
+        compositions = [String(product.composition)];
+
+    }
+
+
+    if (!compositions.length) {
+        compositions = [""];
+    }
+
+
+    // =========================
+    // IMAGES
+    // =========================
+
+    let images = [];
+
+    if (Array.isArray(product.images)) {
+
+        images = product.images.filter(Boolean);
+
+    }
+
+
+    // पुराने database में image field है
+    if (product.image && !images.includes(product.image)) {
+
+        images.unshift(product.image);
+
+    }
+
+
+    // Remove duplicate images
+    images = [...new Set(images)];
+
+
+    // =========================
+    // IMAGE URL CLEANER
+    // =========================
+
+    const cleanImageUrl = (url) => {
+
+        if (!url) return "";
+
+        let clean = String(url).trim();
+
+        // Markdown format:
+        // [https://example.com/image.jpg](https://example.com/image.jpg)
+
+        const markdownMatch =
+            clean.match(/\]\((https?:\/\/[^)]+)\)/);
+
+        if (markdownMatch) {
+
+            return markdownMatch[1];
+
+        }
+
+
+        // [https://example.com/image.jpg]
+        if (
+            clean.startsWith("[") &&
+            clean.endsWith("]")
+        ) {
+
+            clean = clean.slice(1, -1);
+
+        }
+
+        return clean;
+
+    };
+
+
+    images = images
+        .map(cleanImageUrl)
+        .filter(Boolean);
+
 
     return `
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Edit Product</title>
-
-
 <style>
 
-/* =========================
-   RESET
-========================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", Arial, sans-serif;
+*{
+    box-sizing:border-box;
 }
 
-
-/* =========================
-   BODY
-========================= */
-
-body {
-
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #06b6d4
-        );
-
-    min-height: 100vh;
-
-    padding: 30px 15px;
-
+body{
+    margin:0;
+    font-family:Segoe UI,Arial,sans-serif;
+    background:#f1f5f9;
+    color:#1e293b;
 }
 
-
-/* =========================
-   MAIN CONTAINER
-========================= */
-
-.container {
-
-    width: 100%;
-    max-width: 1000px;
-
-    margin: auto;
-
-    background: #ffffff;
-
-    padding: 30px;
-
-    border-radius: 22px;
-
-    box-shadow:
-        0 20px 50px
-        rgba(0,0,0,.18);
-
+.edit-product-page{
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    padding:20px;
 }
 
 
@@ -280,47 +1654,78 @@ body {
    HEADER
 ========================= */
 
-.header {
+.header{
 
-    text-align: center;
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
 
-    margin-bottom: 30px;
+    color:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(37,99,235,.20);
 
 }
 
+.header h2{
 
-.header h2 {
+    margin:0 0 7px;
 
-    color: #1e40af;
-
-    font-size: 28px;
-
-    margin-bottom: 6px;
+    font-size:26px;
 
 }
 
+.header p{
 
-.header p {
+    margin:0;
 
-    color: #64748b;
+    opacity:.9;
 
-    font-size: 14px;
+    font-size:14px;
 
 }
 
 
 /* =========================
-   FORM GRID
+   FORM
 ========================= */
 
-.form-grid {
+.product-form{
 
-    display: grid;
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(15,23,42,.08);
+
+}
+
+
+/* =========================
+   GRID
+========================= */
+
+.form-grid{
+
+    display:grid;
 
     grid-template-columns:
-        repeat(2, 1fr);
+        repeat(2,1fr);
 
-    gap: 18px;
+    gap:18px;
 
 }
 
@@ -329,69 +1734,64 @@ body {
    FORM GROUP
 ========================= */
 
-.form-group {
+.form-group{
 
-    display: flex;
+    display:flex;
 
-    flex-direction: column;
+    flex-direction:column;
 
-}
-
-
-.form-group.full {
-
-    grid-column: 1 / -1;
+    gap:7px;
 
 }
 
+.form-group.full{
 
-label {
+    grid-column:1/-1;
 
-    font-weight: 700;
+}
 
-    color: #1e293b;
+.form-group label{
 
-    margin-bottom: 7px;
+    font-size:14px;
 
-    font-size: 14px;
+    font-weight:700;
+
+    color:#334155;
 
 }
 
 
 /* =========================
-   INPUTS
+   INPUT
 ========================= */
 
-input,
-select,
-textarea {
+.form-group input,
+.form-group select,
+.form-group textarea{
 
-    width: 100%;
+    width:100%;
 
-    padding: 12px 13px;
+    border:1px solid #cbd5e1;
 
-    border: 1px solid #d1d5db;
+    border-radius:10px;
 
-    border-radius: 10px;
+    padding:12px 13px;
 
-    background: #fff;
+    font-size:15px;
 
-    color: #111827;
+    outline:none;
 
-    font-size: 15px;
+    background:#fff;
 
-    outline: none;
-
-    transition: .2s;
+    transition:.2s;
 
 }
 
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
 
-input:focus,
-select:focus,
-textarea:focus {
-
-    border-color: #2563eb;
+    border-color:#2563eb;
 
     box-shadow:
         0 0 0 3px
@@ -399,12 +1799,11 @@ textarea:focus {
 
 }
 
+.form-group textarea{
 
-textarea {
+    min-height:110px;
 
-    min-height: 120px;
-
-    resize: vertical;
+    resize:vertical;
 
 }
 
@@ -413,33 +1812,25 @@ textarea {
    SECTION
 ========================= */
 
-.section {
+.section{
 
-    margin-top: 28px;
+    margin-top:28px;
 
-    padding-top: 22px;
+    padding-top:22px;
 
-    border-top:
-        1px solid #e5e7eb;
+    border-top:1px solid #e2e8f0;
 
 }
 
+.section-title{
 
-.section-title {
+    font-size:19px;
 
-    display: flex;
+    font-weight:800;
 
-    align-items: center;
+    color:#1e3a8a;
 
-    gap: 8px;
-
-    margin-bottom: 15px;
-
-    color: #1e40af;
-
-    font-size: 19px;
-
-    font-weight: 700;
+    margin-bottom:15px;
 
 }
 
@@ -448,80 +1839,86 @@ textarea {
    COMPOSITION
 ========================= */
 
-.composition-row {
+.composition-row{
 
-    display: flex;
+    display:grid;
 
-    gap: 10px;
+    grid-template-columns:
+        1fr auto;
 
-    margin-bottom: 10px;
+    gap:10px;
 
-}
-
-
-.composition-row input {
-
-    flex: 1;
+    margin-bottom:10px;
 
 }
 
+.composition-row input{
 
-.remove-btn {
+    width:100%;
 
-    width: 45px;
+    padding:12px;
 
-    padding: 0;
+    border:1px solid #cbd5e1;
 
-    margin: 0;
+    border-radius:10px;
 
-    border: none;
+    font-size:14px;
 
-    border-radius: 9px;
-
-    background: #dc2626;
-
-    color: white;
-
-    font-size: 18px;
-
-    cursor: pointer;
+    outline:none;
 
 }
 
+.composition-row input:focus{
 
-.remove-btn:hover {
-
-    background: #b91c1c;
-
-}
-
-
-.add-btn {
-
-    width: auto;
-
-    padding: 11px 18px;
-
-    margin-top: 5px;
-
-    border: none;
-
-    border-radius: 9px;
-
-    background: #16a34a;
-
-    color: white;
-
-    font-weight: 700;
-
-    cursor: pointer;
+    border-color:#2563eb;
 
 }
 
+.remove-btn{
 
-.add-btn:hover {
+    width:45px;
 
-    background: #15803d;
+    border:none;
+
+    border-radius:9px;
+
+    background:#dc2626;
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+}
+
+.remove-btn:hover{
+
+    background:#b91c1c;
+
+}
+
+.add-btn{
+
+    border:none;
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:11px 17px;
+
+    border-radius:9px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+}
+
+.add-btn:hover{
+
+    background:#1d4ed8;
 
 }
 
@@ -530,77 +1927,85 @@ textarea {
    EXISTING IMAGES
 ========================= */
 
-.image-grid {
+.image-grid{
 
-    display: grid;
+    display:grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        repeat(4,1fr);
 
-    gap: 15px;
-
-}
-
-
-.image-card {
-
-    position: relative;
-
-    border:
-        1px solid #e5e7eb;
-
-    border-radius: 12px;
-
-    padding: 8px;
-
-    background: #f8fafc;
+    gap:15px;
 
 }
 
+.image-card{
 
-.image-card img {
+    border:1px solid #e2e8f0;
 
-    width: 100%;
+    border-radius:12px;
 
-    height: 140px;
+    overflow:hidden;
 
-    object-fit: cover;
-
-    border-radius: 8px;
-
-    display: block;
+    background:#f8fafc;
 
 }
 
+.image-card img{
 
-.image-number {
+    width:100%;
 
-    text-align: center;
+    height:160px;
 
-    margin-top: 6px;
+    display:block;
 
-    font-size: 12px;
+    object-fit:contain;
 
-    color: #64748b;
+    background:#fff;
+
+}
+
+.image-number{
+
+    padding:8px;
+
+    text-align:center;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:#475569;
+
+}
+
+.no-image{
+
+    padding:20px;
+
+    background:#f8fafc;
+
+    border:1px dashed #cbd5e1;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    color:#64748b;
 
 }
 
 
 /* =========================
-   NO IMAGE
+   FILE INPUT
 ========================= */
 
-.no-image {
+input[type="file"]{
 
-    padding: 30px;
+    padding:10px;
 
-    text-align: center;
+    background:#f8fafc;
 
-    background: #f8fafc;
-
-    border-radius: 10px;
-
-    color: #64748b;
+    cursor:pointer;
 
 }
 
@@ -609,17 +2014,17 @@ textarea {
    UPDATE BUTTON
 ========================= */
 
-.update-btn {
+.update-btn{
 
-    width: 100%;
+    width:100%;
 
-    padding: 15px;
+    margin-top:30px;
 
-    margin-top: 30px;
+    padding:15px;
 
-    border: none;
+    border:none;
 
-    border-radius: 12px;
+    border-radius:12px;
 
     background:
         linear-gradient(
@@ -628,26 +2033,23 @@ textarea {
             #1d4ed8
         );
 
-    color: white;
+    color:white;
 
-    font-size: 17px;
+    font-size:17px;
 
-    font-weight: 700;
+    font-weight:800;
 
-    cursor: pointer;
-
-    transition: .2s;
-
-}
-
-
-.update-btn:hover {
-
-    transform: translateY(-1px);
+    cursor:pointer;
 
     box-shadow:
         0 8px 20px
-        rgba(37,99,235,.25);
+        rgba(37,99,235,.20);
+
+}
+
+.update-btn:hover{
+
+    transform:translateY(-1px);
 
 }
 
@@ -656,32 +2058,19 @@ textarea {
    BACK BUTTON
 ========================= */
 
-.back {
+.back{
 
-    display: block;
+    display:block;
 
-    text-align: center;
+    width:max-content;
 
-    margin-top: 18px;
+    margin:20px auto;
 
-    padding: 12px;
+    text-decoration:none;
 
-    border-radius: 10px;
+    color:#2563eb;
 
-    background: #f1f5f9;
-
-    color: #1e40af;
-
-    text-decoration: none;
-
-    font-weight: 700;
-
-}
-
-
-.back:hover {
-
-    background: #e2e8f0;
+    font-weight:700;
 
 }
 
@@ -690,65 +2079,58 @@ textarea {
    MOBILE
 ========================= */
 
-@media (max-width: 700px) {
+@media(max-width:700px){
 
-    body {
+    .edit-product-page{
 
-        padding: 10px;
-
-    }
-
-
-    .container {
-
-        padding: 18px;
-
-        border-radius: 16px;
+        padding:10px;
 
     }
 
+    .header{
 
-    .header h2 {
+        padding:20px;
 
-        font-size: 22px;
-
-    }
-
-
-    .form-grid {
-
-        grid-template-columns: 1fr;
-
-        gap: 15px;
+        border-radius:14px;
 
     }
 
+    .header h2{
 
-    .form-group.full {
-
-        grid-column: auto;
+        font-size:21px;
 
     }
 
+    .product-form{
 
-    .image-grid {
+        padding:16px;
+
+        border-radius:14px;
+
+    }
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .form-group.full{
+
+        grid-column:auto;
+
+    }
+
+    .image-grid{
 
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(2,1fr);
 
     }
 
+    .image-card img{
 
-    .image-card img {
-
-        height: 120px;
-
-    }
-
-
-    .composition-row {
-
-        gap: 7px;
+        height:130px;
 
     }
 
@@ -759,38 +2141,17 @@ textarea {
    SMALL MOBILE
 ========================= */
 
-@media (max-width: 400px) {
+@media(max-width:400px){
 
-    .container {
+    .image-grid{
 
-        padding: 14px;
-
-    }
-
-
-    input,
-    select,
-    textarea {
-
-        font-size: 14px;
-
-        padding: 11px;
+        grid-template-columns:1fr;
 
     }
 
+    .image-card img{
 
-    .image-grid {
-
-        grid-template-columns: 1fr 1fr;
-
-        gap: 8px;
-
-    }
-
-
-    .image-card img {
-
-        height: 100px;
+        height:180px;
 
     }
 
@@ -798,571 +2159,559 @@ textarea {
 
 </style>
 
-</head>
+
+<div class="edit-product-page">
 
 
-<body>
+<!-- =========================
+     HEADER
+========================= -->
+
+<div class="header">
+
+    <h2>✏️ Edit Pharma Product</h2>
+
+    <p>
+        Update product information and images
+    </p>
+
+</div>
 
 
-<div class="container">
+<!-- =========================
+     FORM
+========================= -->
+
+<form
+    class="product-form"
+    action="/admin/edit-product/${escapeHTML(product._id)}"
+    method="POST"
+    enctype="multipart/form-data"
+>
 
 
-    <!-- =========================
-         HEADER
-    ========================== -->
+<!-- =========================
+     BASIC INFORMATION
+========================= -->
 
-    <div class="header">
+<div class="form-grid">
 
-        <h2>✏️ Edit Pharma Product</h2>
 
-        <p>
-            Update product information and images
-        </p>
+    <div class="form-group">
+
+        <label>
+            Product Name *
+        </label>
+
+        <input
+            type="text"
+            name="name"
+            value="${escapeHTML(product.name)}"
+            required
+        >
 
     </div>
 
 
-    <!-- =========================
-         FORM
-    ========================== -->
+    <div class="form-group">
 
-    <form
+        <label>
+            Brand Name
+        </label>
 
-        action="/admin/edit-product/${product._id}"
+        <input
+            type="text"
+            name="brand"
+            value="${escapeHTML(product.brand)}"
+        >
 
-        method="POST"
+    </div>
 
-        enctype="multipart/form-data"
+
+    <div class="form-group">
+
+        <label>
+            Category
+        </label>
+
+        <select name="category">
+
+            <option value="">
+                Select Category
+            </option>
+
+            <option
+                value="Tablet"
+                ${product.category === "Tablet" ? "selected" : ""}
+            >
+                Tablet
+            </option>
+
+            <option
+                value="Capsule"
+                ${product.category === "Capsule" ? "selected" : ""}
+            >
+                Capsule
+            </option>
+
+            <option
+                value="Syrup"
+                ${product.category === "Syrup" ? "selected" : ""}
+            >
+                Syrup
+            </option>
+
+            <option
+                value="Drops"
+                ${product.category === "Drops" ? "selected" : ""}
+            >
+                Drops
+            </option>
+
+            <option
+                value="Injection"
+                ${product.category === "Injection" ? "selected" : ""}
+            >
+                Injection
+            </option>
+
+            <option
+                value="Cream"
+                ${product.category === "Cream" ? "selected" : ""}
+            >
+                Cream
+            </option>
+
+            <option
+                value="Other"
+                ${product.category === "Other" ? "selected" : ""}
+            >
+                Other
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Manufacturer
+        </label>
+
+        <input
+            type="text"
+            name="manufacturer"
+            value="${escapeHTML(product.manufacturer)}"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            MRP ₹
+        </label>
+
+        <input
+            type="number"
+            name="mrp"
+            value="${product.mrp ?? ""}"
+            min="0"
+            step="0.01"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Selling Price ₹ *
+        </label>
+
+        <input
+            type="number"
+            name="price"
+            value="${product.price ?? ""}"
+            min="0"
+            step="0.01"
+            required
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Stock Quantity
+        </label>
+
+        <input
+            type="number"
+            name="stock"
+            value="${product.stock ?? 0}"
+            min="0"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Pack Size
+        </label>
+
+        <input
+            type="text"
+            name="packSize"
+            value="${escapeHTML(product.packSize)}"
+            placeholder="e.g. 200 ml"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Batch Number
+        </label>
+
+        <input
+            type="text"
+            name="batchNo"
+            value="${escapeHTML(product.batchNo)}"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Manufacturing Date
+        </label>
+
+        <input
+            type="date"
+            name="mfgDate"
+            value="${formatDate(product.mfgDate)}"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>
+            Expiry Date
+        </label>
+
+        <input
+            type="date"
+            name="expDate"
+            value="${formatDate(product.expDate)}"
+        >
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================
+     COMPOSITION
+========================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        💊 Composition
+    </div>
+
+
+    <div id="compositionBox">
+
+        ${compositions.map((item, index) => `
+
+            <div class="composition-row">
+
+                <input
+                    type="text"
+                    name="composition[]"
+                    value="${escapeHTML(item)}"
+                    placeholder="Composition ${index + 1}"
+                >
+
+                ${
+                    index > 0
+                    ? `
+                    <button
+                        type="button"
+                        class="remove-btn"
+                        onclick="removeComposition(this)"
+                    >
+                        ×
+                    </button>
+                    `
+                    : `
+                    <button
+                        type="button"
+                        class="remove-btn"
+                        onclick="removeComposition(this)"
+                        style="visibility:hidden"
+                    >
+                        ×
+                    </button>
+                    `
+                }
+
+            </div>
+
+        `).join("")}
+
+    </div>
+
+
+    <button
+        type="button"
+        class="add-btn"
+        onclick="addComposition()"
     >
+        + Add Composition
+    </button>
 
+</div>
 
-        <!-- =========================
-             BASIC INFORMATION
-        ========================== -->
 
-        <div class="form-grid">
+<!-- =========================
+     PRODUCT DETAILS
+========================= -->
 
+<div class="section">
 
-            <div class="form-group">
+    <div class="section-title">
+        📋 Product Details
+    </div>
 
-                <label>
-                    Product Name *
-                </label>
 
-                <input
-                    type="text"
-                    name="name"
-                    value="${product.name || ""}"
-                    required
-                >
+    <div class="form-grid">
 
-            </div>
 
+        <div class="form-group full">
 
-            <div class="form-group">
+            <label>
+                Uses
+            </label>
 
-                <label>
-                    Brand Name
-                </label>
-
-                <input
-                    type="text"
-                    name="brand"
-                    value="${product.brand || ""}"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Category
-                </label>
-
-                <select name="category">
-
-                    <option value="">
-                        Select Category
-                    </option>
-
-                    <option
-                        value="Tablet"
-                        ${product.category === "Tablet" ? "selected" : ""}
-                    >
-                        Tablet
-                    </option>
-
-                    <option
-                        value="Capsule"
-                        ${product.category === "Capsule" ? "selected" : ""}
-                    >
-                        Capsule
-                    </option>
-
-                    <option
-                        value="Syrup"
-                        ${product.category === "Syrup" ? "selected" : ""}
-                    >
-                        Syrup
-                    </option>
-
-                    <option
-                        value="Drops"
-                        ${product.category === "Drops" ? "selected" : ""}
-                    >
-                        Drops
-                    </option>
-
-                    <option
-                        value="Injection"
-                        ${product.category === "Injection" ? "selected" : ""}
-                    >
-                        Injection
-                    </option>
-
-                    <option
-                        value="Cream"
-                        ${product.category === "Cream" ? "selected" : ""}
-                    >
-                        Cream
-                    </option>
-
-                    <option
-                        value="Other"
-                        ${product.category === "Other" ? "selected" : ""}
-                    >
-                        Other
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Manufacturer
-                </label>
-
-                <input
-                    type="text"
-                    name="manufacturer"
-                    value="${product.manufacturer || ""}"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    MRP
-                </label>
-
-                <input
-                    type="number"
-                    name="mrp"
-                    value="${product.mrp ?? ""}"
-                    min="0"
-                    step="0.01"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Selling Price *
-                </label>
-
-                <input
-                    type="number"
-                    name="price"
-                    value="${product.price ?? ""}"
-                    min="0"
-                    step="0.01"
-                    required
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Stock Quantity
-                </label>
-
-                <input
-                    type="number"
-                    name="stock"
-                    value="${product.stock ?? ""}"
-                    min="0"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Pack Size
-                </label>
-
-                <input
-                    type="text"
-                    name="packSize"
-                    value="${product.packSize || ""}"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Batch Number
-                </label>
-
-                <input
-                    type="text"
-                    name="batchNo"
-                    value="${product.batchNo || ""}"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Manufacturing Date
-                </label>
-
-                <input
-                    type="date"
-                    name="mfgDate"
-                    value="${
-                        product.mfgDate
-                            ? new Date(product.mfgDate)
-                                .toISOString()
-                                .split("T")[0]
-                            : ""
-                    }"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label>
-                    Expiry Date
-                </label>
-
-                <input
-                    type="date"
-                    name="expDate"
-                    value="${
-                        product.expDate
-                            ? new Date(product.expDate)
-                                .toISOString()
-                                .split("T")[0]
-                            : ""
-                    }"
-                >
-
-            </div>
-
+            <textarea
+                name="uses"
+                placeholder="Enter product uses"
+            >${escapeHTML(product.uses)}</textarea>
 
         </div>
 
 
-        <!-- =========================
-             COMPOSITION
-        ========================== -->
+        <div class="form-group full">
 
-        <div class="section">
+            <label>
+                Benefits
+            </label>
 
-            <div class="section-title">
+            <textarea
+                name="benefits"
+                placeholder="Enter product benefits"
+            >${escapeHTML(product.benefits)}</textarea>
 
-                💊 Composition
-
-            </div>
+        </div>
 
 
-            <div id="compositionBox">
+        <div class="form-group full">
 
-                ${compositions.map((item, index) => `
+            <label>
+                Dosage
+            </label>
 
-                    <div class="composition-row">
+            <textarea
+                name="dosage"
+                placeholder="Enter dosage"
+            >${escapeHTML(product.dosage)}</textarea>
 
-                        <input
-                            type="text"
-                            name="composition[]"
-                            value="${item || ""}"
-                            placeholder="Composition ${index + 1}"
+        </div>
+
+
+        <div class="form-group full">
+
+            <label>
+                Side Effects
+            </label>
+
+            <textarea
+                name="sideEffects"
+                placeholder="Enter side effects"
+            >${escapeHTML(product.sideEffects)}</textarea>
+
+        </div>
+
+
+        <div class="form-group full">
+
+            <label>
+                Storage Instructions
+            </label>
+
+            <textarea
+                name="storage"
+                placeholder="Enter storage instructions"
+            >${escapeHTML(product.storage)}</textarea>
+
+        </div>
+
+
+        <div class="form-group full">
+
+            <label>
+                Full Description
+            </label>
+
+            <textarea
+                name="description"
+                placeholder="Enter full product description"
+            >${escapeHTML(product.description)}</textarea>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     EXISTING IMAGES
+========================= -->
+
+<div class="section">
+
+    <div class="section-title">
+        🖼 Existing Product Images
+    </div>
+
+
+    ${
+        images.length
+
+        ?
+
+        `<div class="image-grid">
+
+            ${images.map((img, index) => {
+
+                const safeImg = cleanImageUrl(img);
+
+                return `
+
+                    <div class="image-card">
+
+                        <img
+                            src="${escapeHTML(safeImg)}"
+                            alt="Product Image ${index + 1}"
+                            loading="lazy"
+                            onerror="this.style.display='none'"
                         >
 
-                        ${
-                            index > 0
-                            ? `
-                            <button
-                                type="button"
-                                class="remove-btn"
-                                onclick="this.parentElement.remove()"
-                            >
-                                ×
-                            </button>
-                            `
-                            : ""
-                        }
+                        <div class="image-number">
+                            Image ${index + 1}
+                        </div>
 
                     </div>
 
-                `).join("")}
+                `;
 
-            </div>
+            }).join("")}
 
+        </div>`
 
-            <button
-                type="button"
-                class="add-btn"
-                onclick="addComposition()"
-            >
-                + Add Composition
-            </button>
+        :
 
-        </div>
+        `<div class="no-image">
+            No existing product image
+        </div>`
+    }
 
+</div>
 
-        <!-- =========================
-             PRODUCT DETAILS
-        ========================== -->
 
-        <div class="section">
+<!-- =========================
+     NEW IMAGES
+========================= -->
 
-            <div class="section-title">
+<div class="section">
 
-                📋 Product Details
+    <div class="section-title">
+        📷 Add New Product Images
+    </div>
 
-            </div>
 
+    <div class="form-group">
 
-            <div class="form-grid">
+        <label>
+            Select New Images
+        </label>
 
-
-                <div class="form-group full">
-
-                    <label>
-                        Uses
-                    </label>
-
-                    <textarea
-                        name="uses"
-                        placeholder="Uses"
-                    >${product.uses || ""}</textarea>
-
-                </div>
-
-
-                <div class="form-group full">
-
-                    <label>
-                        Benefits
-                    </label>
-
-                    <textarea
-                        name="benefits"
-                        placeholder="Benefits"
-                    >${product.benefits || ""}</textarea>
-
-                </div>
-
-
-                <div class="form-group full">
-
-                    <label>
-                        Dosage
-                    </label>
-
-                    <textarea
-                        name="dosage"
-                        placeholder="Dosage"
-                    >${product.dosage || ""}</textarea>
-
-                </div>
-
-
-                <div class="form-group full">
-
-                    <label>
-                        Side Effects
-                    </label>
-
-                    <textarea
-                        name="sideEffects"
-                        placeholder="Side Effects"
-                    >${product.sideEffects || ""}</textarea>
-
-                </div>
-
-
-                <div class="form-group full">
-
-                    <label>
-                        Storage Instructions
-                    </label>
-
-                    <textarea
-                        name="storage"
-                        placeholder="Storage Instructions"
-                    >${product.storage || ""}</textarea>
-
-                </div>
-
-
-                <div class="form-group full">
-
-                    <label>
-                        Full Description
-                    </label>
-
-                    <textarea
-                        name="description"
-                        placeholder="Full Description"
-                    >${product.description || ""}</textarea>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-
-        <!-- =========================
-             EXISTING IMAGES
-        ========================== -->
-
-        <div class="section">
-
-            <div class="section-title">
-
-                🖼 Existing Product Images
-
-            </div>
-
-
-            ${
-                images.length
-                ?
-
-                `<div class="image-grid">
-
-                    ${images.map((img, index) => `
-
-                        <div class="image-card">
-
-                            <img
-                                src="${img}"
-                                alt="Product Image ${index + 1}"
-                            >
-
-                            <div class="image-number">
-
-                                Image ${index + 1}
-
-                            </div>
-
-                        </div>
-
-                    `).join("")}
-
-                </div>`
-
-                :
-
-                `<div class="no-image">
-
-                    No existing product image
-
-                </div>`
-            }
-
-        </div>
-
-
-        <!-- =========================
-             NEW IMAGES
-        ========================== -->
-
-        <div class="section">
-
-            <div class="section-title">
-
-                📷 Add New Product Images
-
-            </div>
-
-
-            <div id="imageBox">
-
-                <input
-                    type="file"
-                    name="images"
-                    accept="image/*"
-                    multiple
-                >
-
-            </div>
-
-
-            <p
-                style="
-                    margin-top:8px;
-                    color:#64748b;
-                    font-size:13px;
-                "
-            >
-                You can select multiple new images.
-            </p>
-
-        </div>
-
-
-        <!-- =========================
-             UPDATE
-        ========================== -->
-
-        <button
-            type="submit"
-            class="update-btn"
+        <input
+            type="file"
+            name="images"
+            accept="image/*"
+            multiple
         >
 
-            💾 Update Product
-
-        </button>
+    </div>
 
 
-    </form>
-
-
-    <!-- =========================
-         BACK
-    ========================== -->
-
-    <a
-        href="/admin/manage-products"
-        class="back"
+    <p
+        style="
+            margin-top:8px;
+            color:#64748b;
+            font-size:13px;
+        "
     >
+        You can select multiple new images.
+    </p>
 
-        ⬅ Back to Manage Products
+</div>
 
-    </a>
+
+<!-- =========================
+     UPDATE
+========================= -->
+
+<button
+    type="submit"
+    class="update-btn"
+>
+    💾 Update Product
+</button>
+
+
+</form>
+
+
+<!-- =========================
+     BACK
+========================= -->
+
+<a
+    href="/admin/manage-products"
+    class="back"
+>
+    ⬅ Back to Manage Products
+</a>
 
 
 </div>
@@ -1370,20 +2719,16 @@ textarea {
 
 <script>
 
-
-/* =========================
-   ADD COMPOSITION
-========================= */
-
-function addComposition() {
+function addComposition(){
 
     const box =
         document.getElementById("compositionBox");
 
+    if(!box) return;
+
 
     const row =
         document.createElement("div");
-
 
     row.className =
         "composition-row";
@@ -1400,7 +2745,7 @@ function addComposition() {
         <button
             type="button"
             class="remove-btn"
-            onclick="this.parentElement.remove()"
+            onclick="removeComposition(this)"
         >
             ×
         </button>
@@ -1413,58 +2758,31 @@ function addComposition() {
 }
 
 
-/* =========================
-   IMAGE VALIDATION
-========================= */
+function removeComposition(button){
 
-const imageInput =
-    document.querySelector(
-        'input[name="images"]'
-    );
+    if(!button) return;
 
 
-if (imageInput) {
+    const box =
+        document.getElementById("compositionBox");
 
-    imageInput.addEventListener(
-        "change",
-        function () {
-
-            const files =
-                this.files;
+    const rows =
+        box.querySelectorAll(".composition-row");
 
 
-            for (const file of files) {
+    if(rows.length > 1){
 
-                if (
-                    !file.type.startsWith("image/")
-                ) {
+        button
+            .parentElement
+            .remove();
 
-                    alert(
-                        "Please select only image files."
-                    );
-
-                    this.value = "";
-
-                    return;
-
-                }
-
-            }
-
-        }
-    );
+    }
 
 }
 
 </script>
 
-
-</body>
-
-</html>
-
 `;
-
 }
 
 
