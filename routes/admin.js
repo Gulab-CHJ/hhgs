@@ -1560,26 +1560,257 @@ const AddProduct = require("../pages/addpages/addProduct");
 router.get("/add-product", (req, res) => {
     res.send(AddProduct());
 });
+// =============================
+// UPDATE PRODUCT
+// =============================
+
 router.post(
-  "/add-product",
-  upload.single("images"),
-  async (req, res) => {
-    try {
-      const product = new Product({
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description,
-        image: req.file ? req.file.path : ""
-      });
+    "/edit-product/:id",
+    upload.array("images", 10),
+    async (req, res) => {
 
-      await product.save();
-      res.redirect("/admin/manage-products");
+        try {
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send(err.message);
+            console.log("================================");
+            console.log("EDIT PRODUCT REQUEST");
+            console.log("PRODUCT ID:", req.params.id);
+            console.log("BODY:", req.body);
+            console.log("FILES:", req.files);
+            console.log("================================");
+
+
+            // =============================
+            // FIND PRODUCT
+            // =============================
+
+            const product = await Product.findById(
+                req.params.id
+            );
+
+
+            if (!product) {
+
+                return res.status(404).send(
+                    "Product Not Found"
+                );
+
+            }
+
+
+            // =============================
+            // COMPOSITION
+            // =============================
+
+            let composition = [];
+
+            if (Array.isArray(req.body.composition)) {
+
+                composition = req.body.composition
+                    .map(item => String(item).trim())
+                    .filter(item => item !== "");
+
+            } else if (req.body.composition) {
+
+                composition = [
+                    String(req.body.composition).trim()
+                ];
+
+            }
+
+
+            // =============================
+            // UPDATE BASIC INFORMATION
+            // =============================
+
+            product.name =
+                req.body.name || "";
+
+            product.brand =
+                req.body.brand || "";
+
+            product.category =
+                req.body.category || "";
+
+            product.manufacturer =
+                req.body.manufacturer || "";
+
+
+            // =============================
+            // PRICE
+            // =============================
+
+            product.mrp =
+                req.body.mrp !== ""
+                    ? Number(req.body.mrp)
+                    : 0;
+
+
+            product.price =
+                req.body.price !== ""
+                    ? Number(req.body.price)
+                    : 0;
+
+
+            // =============================
+            // STOCK
+            // =============================
+
+            product.stock =
+                req.body.stock !== ""
+                    ? Number(req.body.stock)
+                    : 0;
+
+
+            // =============================
+            // PACK / BATCH
+            // =============================
+
+            product.packSize =
+                req.body.packSize || "";
+
+            product.batchNo =
+                req.body.batchNo || "";
+
+
+            // =============================
+            // DATES
+            // =============================
+
+            product.mfgDate =
+                req.body.mfgDate || "";
+
+            product.expDate =
+                req.body.expDate || "";
+
+
+            // =============================
+            // COMPOSITION
+            // =============================
+
+            product.composition =
+                composition;
+
+
+            // =============================
+            // PRODUCT DETAILS
+            // =============================
+
+            product.description =
+                req.body.description || "";
+
+            product.uses =
+                req.body.uses || "";
+
+            product.benefits =
+                req.body.benefits || "";
+
+            product.dosage =
+                req.body.dosage || "";
+
+            product.sideEffects =
+                req.body.sideEffects || "";
+
+            product.storage =
+                req.body.storage || "";
+
+
+            // =============================
+            // NEW IMAGES
+            // =============================
+
+            if (
+                req.files &&
+                req.files.length > 0
+            ) {
+
+                const newImages =
+                    req.files
+                        .map(file => file.path)
+                        .filter(Boolean);
+
+
+                // Existing images
+                let existingImages = [];
+
+
+                if (
+                    Array.isArray(product.images)
+                ) {
+
+                    existingImages =
+                        product.images.filter(Boolean);
+
+                }
+
+
+                // Old single image
+                if (
+                    product.image &&
+                    !existingImages.includes(product.image)
+                ) {
+
+                    existingImages.push(
+                        product.image
+                    );
+
+                }
+
+
+                // Add new images
+                product.images = [
+                    ...existingImages,
+                    ...newImages
+                ];
+
+
+                // Main image
+                if (!product.image) {
+
+                    product.image =
+                        newImages[0] || "";
+
+                }
+
+            }
+
+
+            // =============================
+            // SAVE PRODUCT
+            // =============================
+
+            await product.save();
+
+
+            console.log(
+                "PRODUCT UPDATED SUCCESSFULLY:"
+            );
+
+            console.log(product);
+
+
+            // =============================
+            // REDIRECT
+            // =============================
+
+            res.redirect(
+                "/admin/manage-products"
+            );
+
+
+        } catch (err) {
+
+            console.error(
+                "UPDATE PRODUCT ERROR:",
+                err
+            );
+
+            res.status(500).send(
+                err.message
+            );
+
+        }
+
     }
-  }
 );
 
 // Delete Product
@@ -1824,35 +2055,254 @@ router.get("/edit-product/:id", async (req, res) => {
   }
 });
 
+// =============================
+// UPDATE PRODUCT
+// =============================
+
 router.post(
-  "/edit-product/:id",
-  upload.single("image"),
-  async (req, res) => {
-    try {
+    "/edit-product/:id",
+    upload.array("images", 10),
+    async (req, res) => {
 
-      const product = await Product.findById(req.params.id);
+        try {
 
-      if (!product) {
-        return res.status(404).send("Product Not Found");
-      }
+            console.log("========== EDIT PRODUCT ==========");
+            console.log("PRODUCT ID:", req.params.id);
+            console.log("BODY:", req.body);
+            console.log("FILES:", req.files);
 
-      product.name = req.body.name;
-      product.price = req.body.price;
-      product.description = req.body.description;
 
-      if (req.file) {
-        product.image = req.file.path;
-      }
+            // =============================
+            // FIND PRODUCT
+            // =============================
 
-      await product.save();
+            const product = await Product.findById(
+                req.params.id
+            );
 
-      res.redirect("/admin/manage-products");
+            if (!product) {
 
-    } catch (err) {
-      console.error(err);
-      res.status(500).send(err.message);
+                return res.status(404).send(
+                    "Product Not Found"
+                );
+
+            }
+
+
+            // =============================
+            // COMPOSITION
+            // =============================
+
+            let composition = [];
+
+            if (Array.isArray(req.body.composition)) {
+
+                composition = req.body.composition
+                    .map(item => String(item).trim())
+                    .filter(item => item !== "");
+
+            } else if (req.body.composition) {
+
+                composition = [
+                    String(req.body.composition).trim()
+                ];
+
+            }
+
+
+            // =============================
+            // BASIC INFORMATION
+            // =============================
+
+            product.name =
+                req.body.name || "";
+
+            product.brand =
+                req.body.brand || "";
+
+            product.category =
+                req.body.category || "";
+
+            product.manufacturer =
+                req.body.manufacturer || "";
+
+
+            // =============================
+            // PRICE
+            // =============================
+
+            product.mrp =
+                req.body.mrp !== undefined &&
+                req.body.mrp !== ""
+                    ? Number(req.body.mrp)
+                    : 0;
+
+            product.price =
+                req.body.price !== undefined &&
+                req.body.price !== ""
+                    ? Number(req.body.price)
+                    : 0;
+
+
+            // =============================
+            // STOCK
+            // =============================
+
+            product.stock =
+                req.body.stock !== undefined &&
+                req.body.stock !== ""
+                    ? Number(req.body.stock)
+                    : 0;
+
+
+            // =============================
+            // PACK / BATCH
+            // =============================
+
+            product.packSize =
+                req.body.packSize || "";
+
+            product.batchNo =
+                req.body.batchNo || "";
+
+
+            // =============================
+            // DATES
+            // =============================
+
+            product.mfgDate =
+                req.body.mfgDate || "";
+
+            product.expDate =
+                req.body.expDate || "";
+
+
+            // =============================
+            // COMPOSITION
+            // =============================
+
+            product.composition =
+                composition;
+
+
+            // =============================
+            // PRODUCT DETAILS
+            // =============================
+
+            product.description =
+                req.body.description || "";
+
+            product.uses =
+                req.body.uses || "";
+
+            product.benefits =
+                req.body.benefits || "";
+
+            product.dosage =
+                req.body.dosage || "";
+
+            product.sideEffects =
+                req.body.sideEffects || "";
+
+            product.storage =
+                req.body.storage || "";
+
+
+            // =============================
+            // NEW IMAGES
+            // =============================
+
+            if (
+                req.files &&
+                req.files.length > 0
+            ) {
+
+                const newImages =
+                    req.files
+                        .map(file => file.path)
+                        .filter(Boolean);
+
+
+                // Existing images
+                let existingImages = [];
+
+                if (
+                    Array.isArray(product.images)
+                ) {
+
+                    existingImages =
+                        product.images.filter(Boolean);
+
+                }
+
+
+                // Old single image को भी preserve करें
+                if (
+                    product.image &&
+                    !existingImages.includes(product.image)
+                ) {
+
+                    existingImages.push(
+                        product.image
+                    );
+
+                }
+
+
+                // Existing + New Images
+                product.images = [
+                    ...existingImages,
+                    ...newImages
+                ];
+
+
+                // अगर main image नहीं है
+                if (!product.image) {
+
+                    product.image =
+                        newImages[0] || "";
+
+                }
+
+            }
+
+
+            // =============================
+            // SAVE
+            // =============================
+
+            await product.save();
+
+
+            console.log(
+                "PRODUCT UPDATED:",
+                product._id
+            );
+
+
+            // =============================
+            // REDIRECT
+            // =============================
+
+            res.redirect(
+                "/admin/manage-products"
+            );
+
+
+        } catch (err) {
+
+            console.error(
+                "UPDATE PRODUCT ERROR:",
+                err
+            );
+
+            res.status(500).send(
+                err.message
+            );
+
+        }
+
     }
-  }
 );
 
 module.exports = router;
