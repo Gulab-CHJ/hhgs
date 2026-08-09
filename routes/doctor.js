@@ -4240,7 +4240,7 @@ router.get(
 
             const DoctorDashboard =
                 require(
-                    "../pages/DoctorDashboard"
+                    "../pages/doctorDashboard"
                 );
 
 

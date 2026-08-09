@@ -20,7 +20,7 @@ const AddDoctor = require("../pages/addpages/addDoctor");
 
 const { login } = require("../controllers/adminAuth");
 const AdminController = require("../controllers/adminController");
-const DoctorDashboard = require("../pages/DoctorDashboard");
+const DoctorDashboard = require("../pages/doctorDashboard");
 
 const AddGovernment = require("../views/component/dashboard/addGovernment");
 
