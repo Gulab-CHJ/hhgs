@@ -404,159 +404,370 @@ router.get("/edit-doctor/:id", async (req, res) => {
 
 
 
+// =============================
+// UPDATE PRODUCT
+// =============================
 
 router.post(
-"/edit-doctor/:id",
-upload.single("image"),
-async(req,res)=>{
+    "/edit-product/:id",
 
-try{
+    upload.fields([
+        {
+            name: "images",
+            maxCount: 10
+        },
+        {
+            name: "videos",
+            maxCount: 1
+        }
+    ]),
+
+    async (req, res) => {
+
+        try {
+
+            console.log("\n========== EDIT PRODUCT ==========");
+
+            console.log(
+                "PRODUCT ID:",
+                req.params.id
+            );
+
+            console.log(
+                "BODY:",
+                req.body
+            );
+
+            console.log(
+                "FILES:",
+                req.files
+            );
 
 
-const existDoctor = await Doctor.findOne({
+            // ==========================================
+            // FIND PRODUCT
+            // ==========================================
 
-phone:req.body.phone,
-
-_id:{
-$ne:req.params.id
-}
-
-});
+            const product =
+                await Product.findById(req.params.id);
 
 
-if(existDoctor){
+            if (!product) {
 
-return res.send(
-"Phone Number Already Registered"
+                return res
+                    .status(404)
+                    .send("Product Not Found");
+
+            }
+
+
+            // ==========================================
+            // BASIC DETAILS
+            // ==========================================
+
+            product.name =
+                req.body.name || "";
+
+            product.brand =
+                req.body.brand || "";
+
+            product.category =
+                req.body.category || "";
+
+            product.manufacturer =
+                req.body.manufacturer || "";
+
+
+            // ==========================================
+            // PRICE
+            // ==========================================
+
+            product.mrp =
+                req.body.mrp !== undefined &&
+                req.body.mrp !== ""
+                    ? Number(req.body.mrp)
+                    : 0;
+
+
+            product.price =
+                req.body.price !== undefined &&
+                req.body.price !== ""
+                    ? Number(req.body.price)
+                    : 0;
+
+
+            product.stock =
+                req.body.stock !== undefined &&
+                req.body.stock !== ""
+                    ? Number(req.body.stock)
+                    : 0;
+
+
+            // ==========================================
+            // MEDICINE DETAILS
+            // ==========================================
+
+            product.packSize =
+                req.body.packSize || "";
+
+            product.batchNo =
+                req.body.batchNo || "";
+
+            product.mfgDate =
+                req.body.mfgDate || "";
+
+            product.expDate =
+                req.body.expDate || "";
+
+
+            // ==========================================
+            // COMPOSITION
+            // ==========================================
+
+            let composition = [];
+
+
+            if (Array.isArray(req.body.composition)) {
+
+                composition =
+                    req.body.composition
+                        .map(item =>
+                            String(item).trim()
+                        )
+                        .filter(Boolean);
+
+            }
+
+            else if (req.body.composition) {
+
+                composition = [
+                    String(
+                        req.body.composition
+                    ).trim()
+                ];
+
+            }
+
+
+            product.composition =
+                composition;
+
+
+            // ==========================================
+            // PRODUCT DETAILS
+            // ==========================================
+
+            product.description =
+                req.body.description || "";
+
+            product.uses =
+                req.body.uses || "";
+
+            product.benefits =
+                req.body.benefits || "";
+
+            product.dosage =
+                req.body.dosage || "";
+
+            product.sideEffects =
+                req.body.sideEffects || "";
+
+            product.storage =
+                req.body.storage || "";
+
+
+            // ==========================================
+            // IMAGES
+            // ==========================================
+
+            const imageFiles =
+                req.files?.images || [];
+
+
+            if (imageFiles.length > 0) {
+
+                console.log(
+                    "NEW IMAGE COUNT:",
+                    imageFiles.length
+                );
+
+
+                const newImages =
+                    imageFiles
+                        .map(file =>
+                            file.path ||
+                            file.secure_url ||
+                            file.url
+                        )
+                        .filter(Boolean);
+
+
+                let existingImages = [];
+
+
+                if (Array.isArray(product.images)) {
+
+                    existingImages =
+                        product.images
+                            .filter(Boolean);
+
+                }
+
+
+                // पुराने main image को भी preserve करें
+
+                if (
+                    product.image &&
+                    !existingImages.includes(
+                        product.image
+                    )
+                ) {
+
+                    existingImages.push(
+                        product.image
+                    );
+
+                }
+
+
+                // पुराने + नए images
+
+                product.images = [
+                    ...existingImages,
+                    ...newImages
+                ];
+
+
+                // अगर main image नहीं है
+
+                if (
+                    !product.image &&
+                    newImages.length > 0
+                ) {
+
+                    product.image =
+                        newImages[0];
+
+                }
+
+            }
+
+
+            // ==========================================
+            // VIDEO
+            // ==========================================
+
+            const videoFiles =
+                req.files?.videos || [];
+
+
+            if (videoFiles.length > 0) {
+
+                console.log(
+                    "NEW VIDEO COUNT:",
+                    videoFiles.length
+                );
+
+
+                const newVideoUrl =
+                    videoFiles[0].path ||
+                    videoFiles[0].secure_url ||
+                    videoFiles[0].url;
+
+
+                console.log(
+                    "NEW VIDEO URL:",
+                    newVideoUrl
+                );
+
+
+                if (newVideoUrl) {
+
+                    // IMPORTANT:
+                    // Schema field is "video"
+                    // NOT "videos"
+
+                    product.video =
+                        newVideoUrl;
+
+                }
+
+            }
+
+            else {
+
+                console.log(
+                    "NO NEW VIDEO - OLD VIDEO KEPT"
+                );
+
+            }
+
+
+            // ==========================================
+            // SAVE PRODUCT
+            // ==========================================
+
+            await product.save();
+
+
+            // ==========================================
+            // FINAL LOG
+            // ==========================================
+
+            console.log(
+                "================================="
+            );
+
+            console.log(
+                "PRODUCT UPDATED:",
+                product._id
+            );
+
+            console.log(
+                "TOTAL IMAGES:",
+                product.images?.length || 0
+            );
+
+            console.log(
+                "SAVED VIDEO:",
+                product.video
+            );
+
+            console.log(
+                "================================="
+            );
+
+
+            // ==========================================
+            // REDIRECT
+            // ==========================================
+
+            return res.redirect(
+                "/admin/manage-products"
+            );
+
+
+        }
+
+        catch (err) {
+
+            console.error(
+                "UPDATE PRODUCT ERROR:",
+                err
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Product Update Error: " +
+                    err.message
+                );
+
+        }
+
+    }
 );
-
-}
-
-
-
-const updateData={
-
-
-
-name:req.body.name,
-
-
-degree:req.body.qualification,
-
-
-specialization:req.body.speciality,
-
-
-experience:req.body.experience,
-
-
-hospital:req.body.clinic,
-
-
-phone:req.body.phone,
-
-
-email:req.body.email,
-
-
-password:req.body.password,
-
-
-address:req.body.address,
-
-
-description:req.body.description,
-
-
-
-// ======================
-// AVAILABILITY
-// ======================
-
-
-availableDay:req.body.availableDay,
-
-
-timeFrom:req.body.timeFrom,
-
-
-timeTo:req.body.timeTo,
-
-
-
-// ======================
-// APPOINTMENT SLOT
-// ======================
-
-
-slotDuration:req.body.slotDuration,
-
-
-
-// ======================
-// FEE
-// ======================
-
-
-fee:req.body.fee,
-
-
-feeType:req.body.feeType
-
-
-};
-
-
-
-
-
-if(req.file){
-
-updateData.image=req.file.path;
-
-}
-
-
-
-
-
-await Doctor.findByIdAndUpdate(
-
-req.params.id,
-
-updateData,
-
-{
-new:true
-}
-
-);
-
-
-
-res.redirect(
-"/admin/manage-doctors"
-);
-
-
-
-}
-catch(err){
-
-console.log(
-"UPDATE ERROR:",
-err
-);
-
-
-res.status(500)
-.send(err.message);
-
-
-}
-
-
-});
 
 const ManageProducts = require("../pages/manageProducts");
 

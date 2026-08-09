@@ -1,11 +1,316 @@
+// // // // const mongoose = require("mongoose");
+
+// // // // const productSchema = new mongoose.Schema({
+
+// // // //     // Basic Details
+// // // //     name: {
+// // // //         type: String,
+// // // //         required: true
+// // // //     },
+
+// // // //     brand: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     category: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     manufacturer: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     // Pricing
+// // // //     mrp: {
+// // // //         type: Number,
+// // // //         default: 0
+// // // //     },
+
+// // // //     price: {
+// // // //         type: Number,
+// // // //         required: true
+// // // //     },
+
+// // // //     stock: {
+// // // //         type: Number,
+// // // //         default: 0
+// // // //     },
+
+// // // //     // Medicine Details
+// // // //     packSize: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     batchNo: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     mfgDate: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     expDate: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     // Multiple Composition
+// // // //     composition: [{
+// // // //         type: String
+// // // //     }],
+
+// // // //     // Multiple Images
+// // // //     images: [{
+// // // //         type: String
+// // // //     }],
+
+// // // //     // Main Image
+// // // //     image: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     // Description
+// // // //     description: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     uses: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     benefits: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     dosage: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     sideEffects: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     storage: {
+// // // //         type: String,
+// // // //         default: ""
+// // // //     },
+
+// // // //     // Status
+// // // //     active: {
+// // // //         type: Boolean,
+// // // //         default: true
+// // // //     },
+
+// // // //     createdAt: {
+// // // //         type: Date,
+// // // //         default: Date.now
+// // // //     },
+
+// // // //     video: {
+// // // //     type: String,
+// // // //     default: ""
+// // // // },
+
+// // // // });
+
+// // // // module.exports =
+// // // // mongoose.models.Product ||
+// // // // mongoose.model("Product", productSchema);
+
+// // // const mongoose = require("mongoose");
+
+// // // const productSchema = new mongoose.Schema({
+
+// // //     // =============================
+// // //     // Basic Details
+// // //     // =============================
+
+// // //     name: {
+// // //         type: String,
+// // //         required: true
+// // //     },
+
+// // //     brand: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     category: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     manufacturer: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+
+// // //     // =============================
+// // //     // Pricing
+// // //     // =============================
+
+// // //     mrp: {
+// // //         type: Number,
+// // //         default: 0
+// // //     },
+
+// // //     price: {
+// // //         type: Number,
+// // //         required: true
+// // //     },
+
+// // //     stock: {
+// // //         type: Number,
+// // //         default: 0
+// // //     },
+
+
+// // //     // =============================
+// // //     // Medicine Details
+// // //     // =============================
+
+// // //     packSize: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     batchNo: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     mfgDate: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     expDate: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+
+// // //     // =============================
+// // //     // Multiple Composition
+// // //     // =============================
+
+// // //     composition: [{
+// // //         type: String
+// // //     }],
+
+
+// // //     // =============================
+// // //     // Multiple Images
+// // //     // =============================
+
+// // //     images: [{
+// // //         type: String
+// // //     }],
+
+
+// // //     // =============================
+// // //     // Main Image
+// // //     // =============================
+
+// // //     image: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+
+// // //     // =============================
+// // //     // Product Video
+// // //     // =============================
+
+// // //     video: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+
+// // //     // =============================
+// // //     // Description
+// // //     // =============================
+
+// // //     description: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     uses: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     benefits: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     dosage: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     sideEffects: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+// // //     storage: {
+// // //         type: String,
+// // //         default: ""
+// // //     },
+
+
+// // //     // =============================
+// // //     // Status
+// // //     // =============================
+
+// // //     active: {
+// // //         type: Boolean,
+// // //         default: true
+// // //     },
+
+// // //     createdAt: {
+// // //         type: Date,
+// // //         default: Date.now
+// // //     }
+
+// // // });
+
+
+// // // module.exports =
+// // //     mongoose.models.Product ||
+// // //     mongoose.model("Product", productSchema);
+
+
+
 // // const mongoose = require("mongoose");
 
 // // const productSchema = new mongoose.Schema({
 
-// //     // Basic Details
+// //     // =============================
+// //     // BASIC DETAILS
+// //     // =============================
+
 // //     name: {
 // //         type: String,
-// //         required: true
+// //         required: true,
+// //         trim: true
 // //     },
 
 // //     brand: {
@@ -23,7 +328,11 @@
 // //         default: ""
 // //     },
 
-// //     // Pricing
+
+// //     // =============================
+// //     // PRICING
+// //     // =============================
+
 // //     mrp: {
 // //         type: Number,
 // //         default: 0
@@ -39,7 +348,11 @@
 // //         default: 0
 // //     },
 
-// //     // Medicine Details
+
+// //     // =============================
+// //     // MEDICINE DETAILS
+// //     // =============================
+
 // //     packSize: {
 // //         type: String,
 // //         default: ""
@@ -60,23 +373,49 @@
 // //         default: ""
 // //     },
 
-// //     // Multiple Composition
+
+// //     // =============================
+// //     // COMPOSITION
+// //     // =============================
+
 // //     composition: [{
 // //         type: String
 // //     }],
 
-// //     // Multiple Images
+
+// //     // =============================
+// //     // MULTIPLE IMAGES
+// //     // =============================
+
 // //     images: [{
 // //         type: String
 // //     }],
 
-// //     // Main Image
+
+// //     // =============================
+// //     // MAIN IMAGE
+// //     // =============================
+
 // //     image: {
 // //         type: String,
 // //         default: ""
 // //     },
 
-// //     // Description
+
+// //     // =============================
+// //     // PRODUCT VIDEO
+// //     // =============================
+
+// //     video: {
+// //         type: String,
+// //         default: ""
+// //     },
+
+
+// //     // =============================
+// //     // PRODUCT DETAILS
+// //     // =============================
+
 // //     description: {
 // //         type: String,
 // //         default: ""
@@ -107,39 +446,49 @@
 // //         default: ""
 // //     },
 
-// //     // Status
+
+// //     // =============================
+// //     // STATUS
+// //     // =============================
+
 // //     active: {
 // //         type: Boolean,
 // //         default: true
 // //     },
 
+
+// //     // =============================
+// //     // CREATED DATE
+// //     // =============================
+
 // //     createdAt: {
 // //         type: Date,
 // //         default: Date.now
-// //     },
-
-// //     video: {
-// //     type: String,
-// //     default: ""
-// // },
+// //     }
 
 // // });
 
+
+// // // =============================
+// // // EXPORT
+// // // =============================
+
 // // module.exports =
-// // mongoose.models.Product ||
-// // mongoose.model("Product", productSchema);
+// //     mongoose.models.Product ||
+// //     mongoose.model("Product", productSchema);
 
 // const mongoose = require("mongoose");
 
 // const productSchema = new mongoose.Schema({
 
 //     // =============================
-//     // Basic Details
+//     // BASIC DETAILS
 //     // =============================
 
 //     name: {
 //         type: String,
-//         required: true
+//         required: true,
+//         trim: true
 //     },
 
 //     brand: {
@@ -159,7 +508,7 @@
 
 
 //     // =============================
-//     // Pricing
+//     // PRICING
 //     // =============================
 
 //     mrp: {
@@ -179,7 +528,7 @@
 
 
 //     // =============================
-//     // Medicine Details
+//     // MEDICINE DETAILS
 //     // =============================
 
 //     packSize: {
@@ -204,7 +553,7 @@
 
 
 //     // =============================
-//     // Multiple Composition
+//     // COMPOSITION
 //     // =============================
 
 //     composition: [{
@@ -213,7 +562,7 @@
 
 
 //     // =============================
-//     // Multiple Images
+//     // MULTIPLE IMAGES
 //     // =============================
 
 //     images: [{
@@ -222,7 +571,7 @@
 
 
 //     // =============================
-//     // Main Image
+//     // MAIN IMAGE
 //     // =============================
 
 //     image: {
@@ -232,17 +581,16 @@
 
 
 //     // =============================
-//     // Product Video
+//     // PRODUCT VIDEOS
 //     // =============================
 
-//     video: {
-//         type: String,
-//         default: ""
-//     },
+//     videos: [{
+//         type: String
+//     }],
 
 
 //     // =============================
-//     // Description
+//     // PRODUCT DETAILS
 //     // =============================
 
 //     description: {
@@ -277,13 +625,18 @@
 
 
 //     // =============================
-//     // Status
+//     // STATUS
 //     // =============================
 
 //     active: {
 //         type: Boolean,
 //         default: true
 //     },
+
+
+//     // =============================
+//     // CREATED DATE
+//     // =============================
 
 //     createdAt: {
 //         type: Date,
@@ -293,11 +646,13 @@
 // });
 
 
+// // =============================
+// // EXPORT
+// // =============================
+
 // module.exports =
 //     mongoose.models.Product ||
 //     mongoose.model("Product", productSchema);
-
-
 
 const mongoose = require("mongoose");
 
@@ -328,7 +683,6 @@ const productSchema = new mongoose.Schema({
         default: ""
     },
 
-
     // =============================
     // PRICING
     // =============================
@@ -347,7 +701,6 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-
 
     // =============================
     // MEDICINE DETAILS
@@ -373,7 +726,6 @@ const productSchema = new mongoose.Schema({
         default: ""
     },
 
-
     // =============================
     // COMPOSITION
     // =============================
@@ -382,7 +734,6 @@ const productSchema = new mongoose.Schema({
         type: String
     }],
 
-
     // =============================
     // MULTIPLE IMAGES
     // =============================
@@ -390,7 +741,6 @@ const productSchema = new mongoose.Schema({
     images: [{
         type: String
     }],
-
 
     // =============================
     // MAIN IMAGE
@@ -401,7 +751,6 @@ const productSchema = new mongoose.Schema({
         default: ""
     },
 
-
     // =============================
     // PRODUCT VIDEO
     // =============================
@@ -410,7 +759,6 @@ const productSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-
 
     // =============================
     // PRODUCT DETAILS
@@ -446,7 +794,6 @@ const productSchema = new mongoose.Schema({
         default: ""
     },
 
-
     // =============================
     // STATUS
     // =============================
@@ -456,22 +803,12 @@ const productSchema = new mongoose.Schema({
         default: true
     },
 
-
-    // =============================
-    // CREATED DATE
-    // =============================
-
     createdAt: {
         type: Date,
         default: Date.now
     }
 
 });
-
-
-// =============================
-// EXPORT
-// =============================
 
 module.exports =
     mongoose.models.Product ||
