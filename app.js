@@ -270,6 +270,10 @@ ${err.stack || err.message}
 // }
 // );
 
+const cartRoutes = require("./routes/cart");
+
+app.use(cartRoutes);
+
 // ===============================
 // SERVER START
 // ===============================

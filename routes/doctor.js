@@ -4273,6 +4273,1005 @@ router.get(
     }
 );
 
+// ========================================
+// DOCTOR CHECKOUT PAGE
+// ========================================
+
+const Checkout = require("../pages/checkout");
+
+router.get("/checkout", async (req, res) => {
+
+    try {
+
+        // ==================================
+        // LOGIN CHECK
+        // ==================================
+
+        if (!req.session.doctor) {
+
+            return res.redirect(
+                "/admin/doctor-login"
+            );
+
+        }
+
+        // ==================================
+        // SESSION DOCTOR ID
+        // ==================================
+
+        const sessionDoctor =
+            req.session.doctor;
+
+        const doctorId =
+            sessionDoctor._id ||
+            sessionDoctor.id ||
+            sessionDoctor.doctorId;
+
+        console.log(
+            "CHECKOUT SESSION DOCTOR:",
+            sessionDoctor
+        );
+
+        console.log(
+            "CHECKOUT DOCTOR ID:",
+            doctorId
+        );
+
+        // ==================================
+        // ID CHECK
+        // ==================================
+
+        if (!doctorId) {
+
+            return res.status(400).send(
+                "Doctor ID is missing from session."
+            );
+
+        }
+
+        // ==================================
+        // DATABASE SE DOCTOR FETCH
+        // ==================================
+
+        const doctor =
+            await Doctor.findById(
+                doctorId
+            ).lean();
+
+        // ==================================
+        // DOCTOR NOT FOUND
+        // ==================================
+
+        if (!doctor) {
+
+            return res.status(404).send(
+                "Doctor not found in database."
+            );
+
+        }
+
+        console.log(
+            "CHECKOUT DOCTOR FROM DATABASE:",
+            doctor
+        );
+
+        // ==================================
+        // SEND CHECKOUT PAGE
+        // ==================================
+
+        res.send(
+            Checkout(doctor)
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Doctor Checkout Error:",
+            error
+        );
+
+        res.status(500).send(
+            "Server Error. Please try again."
+        );
+
+    }
+
+});
+
+
+// ========================================
+// CASH ON DELIVERY
+// ========================================
+// ========================================
+// CASH ON DELIVERY ORDER
+// ========================================
+
+// ========================================
+// DOCTOR CHECKOUT PAGE
+// ========================================
+
+router.get("/checkout/:id", async (req, res) => {
+
+    try {
+
+        const id = req.params.id;
+
+        console.log("CHECKOUT ID:", id);
+
+
+        // ==================================
+        // FIND DOCTOR
+        // ==================================
+
+        let doctor = null;
+
+
+        // पहले custom doctorId से खोजें
+        doctor = await Doctor.findOne({
+            doctorId: id
+        }).lean();
+
+
+        // अगर नहीं मिला तो MongoDB _id से खोजें
+        if (!doctor) {
+
+            // ObjectId valid है तभी findById करें
+            if (
+                /^[0-9a-fA-F]{24}$/.test(id)
+            ) {
+
+                doctor =
+                    await Doctor.findById(id).lean();
+
+            }
+
+        }
+
+
+        // ==================================
+        // DOCTOR NOT FOUND
+        // ==================================
+
+        if (!doctor) {
+
+            console.log(
+                "DOCTOR NOT FOUND:",
+                id
+            );
+
+            return res.status(404).send(
+                "Doctor not found"
+            );
+
+        }
+
+
+        // ==================================
+        // SUCCESS
+        // ==================================
+
+        console.log(
+            "CHECKOUT DOCTOR:",
+            doctor
+        );
+
+
+        const Checkout =
+            require("../pages/checkout");
+
+
+        res.send(
+            Checkout(doctor)
+        );
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Doctor Checkout Error:",
+            error
+        );
+
+        res.status(500).send(
+            "Server Error"
+        );
+
+    }
+
+});
+
+// ========================================
+// CHECKOUT SUCCESS PAGE
+// ========================================
+
+router.get(
+    "/checkout-success/:id",
+    async (req, res) => {
+
+        try {
+
+            const doctorId = req.params.id;
+
+            // ================================
+            // FETCH DOCTOR
+            // ================================
+
+            const doctor =
+                await Doctor
+                    .findById(doctorId)
+                    .lean();
+
+            if (!doctor) {
+
+                return res.status(404).send(
+                    "Doctor not found"
+                );
+
+            }
+
+            // ================================
+            // DOCTOR DETAILS
+            // ================================
+
+            const doctorName =
+                doctor.name ||
+                doctor.doctorName ||
+                "Doctor";
+
+            const doctorPhone =
+                doctor.phone ||
+                doctor.mobile ||
+                "";
+
+            const doctorEmail =
+                doctor.email ||
+                "";
+
+            // ================================
+            // SUCCESS PAGE
+            // ================================
+
+            res.send(`
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Order Successful
+</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+body{
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eff6ff,
+            #f0fdf4
+        );
+
+}
+
+.success-card{
+
+    width:100%;
+
+    max-width:500px;
+
+    background:#fff;
+
+    border-radius:28px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.12);
+
+}
+
+.success-icon{
+
+    width:90px;
+
+    height:90px;
+
+    margin:0 auto 20px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#dcfce7;
+
+    color:#16a34a;
+
+    font-size:48px;
+
+}
+
+h1{
+
+    color:#15803d;
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+}
+
+.subtitle{
+
+    color:#64748b;
+
+    font-size:15px;
+
+    line-height:1.6;
+
+    margin-bottom:25px;
+
+}
+
+.doctor-box{
+
+    background:#f8fafc;
+
+    border:1px solid #e2e8f0;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    text-align:left;
+
+    margin-bottom:20px;
+
+}
+
+.row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:15px;
+
+    padding:9px 0;
+
+    border-bottom:1px solid #e5e7eb;
+
+}
+
+.row:last-child{
+
+    border-bottom:none;
+
+}
+
+.label{
+
+    color:#64748b;
+
+    font-size:14px;
+
+}
+
+.value{
+
+    font-weight:700;
+
+    color:#0f172a;
+
+    text-align:right;
+
+}
+
+.cod-box{
+
+    background:#fff7ed;
+
+    border:1px solid #fed7aa;
+
+    border-radius:18px;
+
+    padding:18px;
+
+    margin-bottom:25px;
+
+}
+
+.cod-title{
+
+    color:#c2410c;
+
+    font-weight:800;
+
+    font-size:17px;
+
+    margin-bottom:7px;
+
+}
+
+.cod-text{
+
+    color:#7c2d12;
+
+    font-size:14px;
+
+    line-height:1.5;
+
+}
+
+.buttons{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.btn{
+
+    display:block;
+
+    width:100%;
+
+    padding:14px 20px;
+
+    border-radius:14px;
+
+    text-decoration:none;
+
+    font-weight:800;
+
+}
+
+.dashboard{
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #4f46e5
+        );
+
+    color:#fff;
+
+}
+
+.orders{
+
+    background:#eff6ff;
+
+    color:#2563eb;
+
+}
+
+.footer{
+
+    margin-top:25px;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="success-card">
+
+    <div class="success-icon">
+        ✓
+    </div>
+
+    <h1>
+        Order Placed Successfully
+    </h1>
+
+    <p class="subtitle">
+
+        Your Cash on Delivery order has been
+        successfully placed.
+
+    </p>
+
+
+    <div class="doctor-box">
+
+        <div class="row">
+
+            <span class="label">
+                Doctor ID
+            </span>
+
+            <span class="value">
+                ${doctor.doctorId || doctor._id}
+            </span>
+
+        </div>
+
+
+        <div class="row">
+
+            <span class="label">
+                Doctor Name
+            </span>
+
+            <span class="value">
+                Dr. ${doctorName}
+            </span>
+
+        </div>
+
+
+        ${
+            doctorPhone
+            ?
+            `
+            <div class="row">
+
+                <span class="label">
+                    Mobile
+                </span>
+
+                <span class="value">
+                    ${doctorPhone}
+                </span>
+
+            </div>
+            `
+            :
+            ""
+        }
+
+
+        ${
+            doctorEmail
+            ?
+            `
+            <div class="row">
+
+                <span class="label">
+                    Email
+                </span>
+
+                <span class="value">
+                    ${doctorEmail}
+                </span>
+
+            </div>
+            `
+            :
+            ""
+        }
+
+    </div>
+
+
+    <div class="cod-box">
+
+        <div class="cod-title">
+
+            💵 Cash on Delivery
+
+        </div>
+
+        <div class="cod-text">
+
+            You have selected Cash on Delivery.
+            Payment will be collected when
+            your order is delivered.
+
+        </div>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <a
+            href="/doctor/orders"
+            class="btn orders"
+        >
+
+            📦 View My Orders
+
+        </a>
+
+
+        <a
+            href="/doctor/dashboard"
+            class="btn dashboard"
+        >
+
+            🏠 Go to Dashboard
+
+        </a>
+
+    </div>
+
+
+    <div class="footer">
+
+        🔒 Secure order • GLOBAL HEALTHCARE
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+
+            `);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Checkout Success Error:",
+                error
+            );
+
+            res.status(500).send(
+                "Checkout Success Page Error"
+            );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// CASH ON DELIVERY ORDER
+// ======================================================
+// ======================================================
+// CASH ON DELIVERY ORDER
+// ======================================================
+
+router.post("/checkout/cod", async (req, res) => {
+
+    try {
+
+        // ==========================================
+        // LOGIN CHECK
+        // ==========================================
+
+        if (!req.session.doctor) {
+
+            return res.status(401).json({
+
+                success: false,
+                message: "Doctor login required"
+
+            });
+
+        }
+
+
+        // ==========================================
+        // SESSION DOCTOR
+        // ==========================================
+
+        const sessionDoctor =
+            req.session.doctor;
+
+
+        const doctorId =
+            sessionDoctor._id ||
+            sessionDoctor.id ||
+            sessionDoctor.doctorId;
+
+
+        if (!doctorId) {
+
+            return res.status(400).json({
+
+                success: false,
+                message: "Doctor ID missing from session"
+
+            });
+
+        }
+
+
+        // ==========================================
+        // FETCH DOCTOR
+        // ==========================================
+
+        let doctor = null;
+
+
+        // MongoDB _id
+        if (
+            /^[0-9a-fA-F]{24}$/.test(
+                String(doctorId)
+            )
+        ) {
+
+            doctor =
+                await Doctor.findById(
+                    doctorId
+                ).lean();
+
+        }
+
+
+        // Custom doctorId fallback
+        if (!doctor) {
+
+            doctor =
+                await Doctor.findOne({
+
+                    doctorId:
+                        String(doctorId)
+
+                }).lean();
+
+        }
+
+
+        if (!doctor) {
+
+            console.log(
+                "COD DOCTOR NOT FOUND:",
+                doctorId
+            );
+
+            return res.status(404).json({
+
+                success: false,
+                message: "Doctor not found"
+
+            });
+
+        }
+
+
+        // ==========================================
+        // CART
+        // ==========================================
+
+        const cart =
+            Array.isArray(req.body.cart)
+                ? req.body.cart
+                : [];
+
+
+        console.log(
+            "COD CART:",
+            cart
+        );
+
+
+        if (cart.length === 0) {
+
+            return res.status(400).json({
+
+                success: false,
+                message: "Cart is Empty"
+
+            });
+
+        }
+
+
+        // ==========================================
+        // PREPARE ITEMS
+        // ==========================================
+
+        const items =
+            cart.map(item => {
+
+                const price =
+                    Number(item.price || 0);
+
+                const qty =
+                    Number(item.qty || 0);
+
+
+                return {
+
+                    productId:
+                        item.productId ||
+                        item.id ||
+                        null,
+
+                    name:
+                        item.name ||
+                        "Product",
+
+                    price:
+                        price,
+
+                    image:
+                        item.image ||
+                        "",
+
+                    qty:
+                        qty
+
+                };
+
+            });
+
+
+        // ==========================================
+        // TOTAL
+        // ==========================================
+
+        let totalAmount = 0;
+
+
+        items.forEach(item => {
+
+            totalAmount +=
+                Number(item.price) *
+                Number(item.qty);
+
+        });
+
+
+        // ==========================================
+        // VALIDATE TOTAL
+        // ==========================================
+
+        if (totalAmount <= 0) {
+
+            return res.status(400).json({
+
+                success: false,
+                message: "Invalid cart amount"
+
+            });
+
+        }
+
+
+        // ==========================================
+        // CREATE ORDER
+        // ==========================================
+
+        const order =
+            await DoctorOrder.create({
+
+                doctorId:
+                    doctor._id,
+
+                doctorName:
+                    doctor.name ||
+                    doctor.doctorName ||
+                    "",
+
+                doctorPhone:
+                    doctor.phone ||
+                    doctor.mobile ||
+                    "",
+
+                doctorEmail:
+                    doctor.email ||
+                    "",
+
+                items:
+                    items,
+
+                totalAmount:
+                    totalAmount,
+
+                paymentMethod:
+                    "cod",
+
+                paymentStatus:
+                    "pending",
+
+                status:
+                    "Pending",
+
+                createdAt:
+                    new Date()
+
+            });
+
+
+        console.log(
+            "COD ORDER CREATED:",
+            order._id
+        );
+
+
+        // ==========================================
+        // SUCCESS
+        // ==========================================
+
+        return res.status(200).json({
+
+            success: true,
+
+            message:
+                "Cash on Delivery order placed successfully",
+
+            orderId:
+                order._id.toString(),
+
+            redirect:
+                `/doctor/checkout-success/${order._id}`
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "COD ORDER ERROR:",
+            error
+        );
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                "Unable to place COD order",
+
+            error:
+                error.message
+
+        });
+
+    }
+
+});
 
 // ======================================================
 // EXPORT

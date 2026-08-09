@@ -1,89 +1,245 @@
+// const mongoose = require("mongoose");
+
+
+// const DoctorOrderSchema = new mongoose.Schema({
+
+
+// doctorId:{
+
+
+// type:mongoose.Schema.Types.ObjectId,
+
+// ref:"Doctor",
+
+// required:true
+
+
+// },
+
+
+
+// items:[{
+
+
+// productId:String,
+
+
+// name:String,
+
+
+// price:Number,
+
+
+// image:String,
+
+
+// qty:Number
+
+
+
+// }],
+
+
+
+// totalAmount:{
+
+
+// type:Number,
+
+
+// required:true
+
+
+// },
+
+
+
+// status:{
+
+
+// type:String,
+
+// default:"Pending"
+
+
+// },
+
+
+
+// createdAt:{
+
+
+// type:Date,
+
+// default:Date.now
+
+
+// }
+
+
+
+// });
+
+
+
+// module.exports =
+// mongoose.model(
+// "DoctorOrder",
+// DoctorOrderSchema
+// );
+
 const mongoose = require("mongoose");
 
+const DoctorOrderSchema =
+    new mongoose.Schema({
 
-const DoctorOrderSchema = new mongoose.Schema({
+        doctorId: {
 
+            type:
+                mongoose.Schema.Types.ObjectId,
 
-doctorId:{
+            ref:
+                "Doctor",
 
+            required:true
 
-type:mongoose.Schema.Types.ObjectId,
-
-ref:"Doctor",
-
-required:true
-
-
-},
-
+        },
 
 
-items:[{
+        doctorName: {
+
+            type:String,
+
+            default:""
+
+        },
 
 
-productId:String,
+        doctorPhone: {
+
+            type:String,
+
+            default:""
+
+        },
 
 
-name:String,
+        doctorEmail: {
+
+            type:String,
+
+            default:""
+
+        },
 
 
-price:Number,
+        items: [
+
+            {
+
+                productId: {
+
+                    type:
+                        mongoose.Schema.Types.ObjectId,
+
+                    ref:
+                        "Product",
+
+                    default:null
+
+                },
 
 
-image:String,
+                name: {
+
+                    type:String,
+
+                    default:""
+
+                },
 
 
-qty:Number
+                price: {
+
+                    type:Number,
+
+                    default:0
+
+                },
 
 
+                image: {
 
-}],
+                    type:String,
 
+                    default:""
 
-
-totalAmount:{
-
-
-type:Number,
+                },
 
 
-required:true
+                qty: {
+
+                    type:Number,
+
+                    default:1
+
+                }
+
+            }
+
+        ],
 
 
-},
+        totalAmount: {
+
+            type:Number,
+
+            default:0
+
+        },
 
 
+        paymentMethod: {
 
-status:{
+            type:String,
 
+            default:"cod"
 
-type:String,
-
-default:"Pending"
-
-
-},
+        },
 
 
+        paymentStatus: {
 
-createdAt:{
+            type:String,
 
+            default:"pending"
 
-type:Date,
-
-default:Date.now
-
-
-}
+        },
 
 
+        status: {
 
-});
+            type:String,
 
+            default:"Pending"
+
+        },
+
+
+        createdAt: {
+
+            type:Date,
+
+            default:Date.now
+
+        }
+
+    });
 
 
 module.exports =
-mongoose.model(
-"DoctorOrder",
-DoctorOrderSchema
-);
+    mongoose.models.DoctorOrder ||
+    mongoose.model(
+        "DoctorOrder",
+        DoctorOrderSchema
+    );

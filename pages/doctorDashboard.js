@@ -21288,44 +21288,76 @@ let doctorCart = [];
 /* =========================================================
    LOAD CART
 ========================================================= */
-
-function loadCart() {
+async function loadCart() {
 
     try {
 
-        const saved =
-            localStorage.getItem("doctorCart");
+        const response =
+            await fetch(
+                "/api/cart",
+                {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                }
+            );
 
-        if (saved) {
 
-            const parsed =
-                JSON.parse(saved);
+        const data =
+            await response.json();
 
-            if (Array.isArray(parsed)) {
 
-                doctorCart = parsed;
+        console.log(
+            "DATABASE CART:",
+            data
+        );
 
-            }
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message ||
+                "Cart load failed"
+            );
 
         }
+
+
+        // MongoDB से cart
+        if (Array.isArray(data.cart)) {
+
+            doctorCart =
+                data.cart;
+
+        } else {
+
+            doctorCart = [];
+
+        }
+
+
+        // Cart count update
+        updateCartCount();
+
 
     } catch (error) {
 
         console.error(
-            "Cart load error:",
+            "Database Cart Load Error:",
             error
         );
 
+
         doctorCart = [];
+
+
+        updateCartCount();
 
     }
 
-
-    updateCartCount();
-
 }
-
-
 /* =========================================================
    SAVE CART
 ========================================================= */
