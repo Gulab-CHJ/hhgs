@@ -9086,72 +9086,78 @@ function EditProduct(product) {
             </div>
 
 
-            <!-- CATEGORY -->
+           <div class="form-group">
 
-            <div class="form-group">
+    <label>
+        Category
+    </label>
 
-                <label>
-                    Category
-                </label>
+    <select name="category">
 
-                <select name="category">
+        <option value="">
+            Select Category
+        </option>
 
-                    <option value="">
-                        Select Category
-                    </option>
+        <option
+            value="Tablet"
+            ${product.category === "Tablet" ? "selected" : ""}
+        >
+            Tablet
+        </option>
 
-                    <option
-                        value="Tablet"
-                        ${product.category === "Tablet" ? "selected" : ""}
-                    >
-                        Tablet
-                    </option>
+        <option
+            value="Capsule"
+            ${product.category === "Capsule" ? "selected" : ""}
+        >
+            Capsule
+        </option>
 
-                    <option
-                        value="Capsule"
-                        ${product.category === "Capsule" ? "selected" : ""}
-                    >
-                        Capsule
-                    </option>
+        <option
+            value="Syrup"
+            ${product.category === "Syrup" ? "selected" : ""}
+        >
+            Syrup
+        </option>
 
-                    <option
-                        value="Syrup"
-                        ${product.category === "Syrup" ? "selected" : ""}
-                    >
-                        Syrup
-                    </option>
+        <option
+            value="Drops"
+            ${product.category === "Drops" ? "selected" : ""}
+        >
+            Drops
+        </option>
 
-                    <option
-                        value="Drops"
-                        ${product.category === "Drops" ? "selected" : ""}
-                    >
-                        Drops
-                    </option>
+        <option
+            value="Injection"
+            ${product.category === "Injection" ? "selected" : ""}
+        >
+            Injection
+        </option>
 
-                    <option
-                        value="Injection"
-                        ${product.category === "Injection" ? "selected" : ""}
-                    >
-                        Injection
-                    </option>
+        <option
+            value="Cream"
+            ${product.category === "Cream" ? "selected" : ""}
+        >
+            Cream
+        </option>
 
-                    <option
-                        value="Cream"
-                        ${product.category === "Cream" ? "selected" : ""}
-                    >
-                        Cream
-                    </option>
+        <!-- SOAP -->
+        <option
+            value="Soap"
+            ${product.category === "Soap" ? "selected" : ""}
+        >
+            Soap
+        </option>
 
-                    <option
-                        value="Other"
-                        ${product.category === "Other" ? "selected" : ""}
-                    >
-                        Other
-                    </option>
+        <option
+            value="Other"
+            ${product.category === "Other" ? "selected" : ""}
+        >
+            Other
+        </option>
 
-                </select>
+    </select>
 
-            </div>
+</div>
 
 
             <!-- MANUFACTURER -->
