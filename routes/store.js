@@ -8663,4 +8663,246 @@ router.get("/my-orders", async (req, res) => {
     }
 });
 
+
+
+
+// ======================================================
+// STORE PAGE
+// ======================================================
+router.get("/store", async (req, res) => {
+    try {
+
+        res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Store | GLOBAL HEALTHCARE</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .header {
+            background: #1e3a8a;
+            color: white;
+            padding: 18px 20px;
+        }
+
+        .header h2 {
+            font-size: 20px;
+        }
+
+        .header p {
+            color: #bfdbfe;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .title {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        .title h1 {
+            color: #1e3a8a;
+            font-size: 25px;
+        }
+
+        .title p {
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .store-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow:
+                0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        .product-image {
+            height: 160px;
+            background: #eff6ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 55px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            color: #16a34a;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 11px;
+            text-align: center;
+            background: #2563eb;
+            color: white;
+            border-radius: 9px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            background: #e2e8f0;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <h2>🩺 GLOBAL HEALTHCARE</h2>
+
+    <p>SAFE & SECURE Healthcare</p>
+
+</header>
+
+
+<main class="container">
+
+    <div class="title">
+
+        <h1>🛍️ Healthcare Store</h1>
+
+        <p>
+            Browse our healthcare products
+        </p>
+
+    </div>
+
+
+    <div class="store-grid">
+
+        <div class="product-card">
+
+            <div class="product-image">
+                💊
+            </div>
+
+            <h3>
+                ZYMIUM-LC SYRUP
+            </h3>
+
+            <div class="price">
+                ₹79
+            </div>
+
+            <a href="/doctor/cart"
+               class="btn">
+                🛒 Add to Cart
+            </a>
+
+        </div>
+
+
+        <div class="product-card">
+
+            <div class="product-image">
+                💊
+            </div>
+
+            <h3>
+                HEPIUM-OA SYRUP
+            </h3>
+
+            <div class="price">
+                ₹0
+            </div>
+
+            <a href="/doctor/cart"
+               class="btn">
+                🛒 Add to Cart
+            </a>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+<footer class="footer">
+
+    © 2026 GLOBAL HEALTHCARE
+    <br>
+    Powered by Osium Biogenix
+
+</footer>
+
+</body>
+</html>
+        `);
+
+    } catch (error) {
+
+        console.error("STORE ERROR:", error);
+
+        res.status(500).send(
+            "Server Error Loading Store"
+        );
+
+    }
+});
+
+
+
+
 module.exports = router;
