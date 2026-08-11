@@ -2308,16 +2308,37 @@ router.get("/orders", async (req, res) => {
 
                         <div class="order-actions">
 
-                            <a
-                                class="btn invoice-btn"
-                                href="/doctor/invoice/${order._id}"
-                            >
+    <a
+        class="btn invoice-btn"
+        href="/doctor/invoice/${order._id}"
+    >
 
-                                📄 Download Invoice
+        📄 Download Invoice
 
-                            </a>
+    </a>
 
-                        </div>
+
+    ${
+        String(status).toLowerCase() !== "cancelled"
+        &&
+        String(status).toLowerCase() !== "delivered"
+        ?
+        `
+        <button
+            type="button"
+            class="btn cancel-btn"
+            onclick="cancelOrder('${order._id}')"
+        >
+
+            ❌ Cancel Order
+
+        </button>
+        `
+        :
+        ""
+    }
+
+</div>
 
 
                     </div>
@@ -2452,6 +2473,69 @@ body{
     box-shadow:
         0 18px 45px
         rgba(0,91,234,.22);
+
+}
+
+.cancel-btn{
+
+    border:none;
+
+    cursor:pointer;
+
+    color:#dc2626;
+
+    background:#fee2e2;
+
+    border:1px solid #fecaca;
+
+    padding:13px 20px;
+
+    border-radius:14px;
+
+    font-weight:800;
+
+    transition:.25s;
+
+}
+
+.cancel-btn:hover{
+
+    background:#fecaca;
+
+    transform:translateY(-2px);
+
+}
+
+.order-actions{
+
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+}
+
+
+@media(max-width:700px){
+
+    .order-actions{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .order-actions .btn{
+
+        width:100%;
+
+    }
 
 }
 
@@ -4487,6 +4571,9 @@ router.get("/checkout/:id", async (req, res) => {
 // ========================================
 // CHECKOUT SUCCESS PAGE
 // ========================================
+// ======================================================
+// CHECKOUT SUCCESS PAGE
+// ======================================================
 
 router.get(
     "/checkout-success/:id",
@@ -4494,46 +4581,167 @@ router.get(
 
         try {
 
-            const doctorId = req.params.id;
+            // ==========================================
+            // LOGIN CHECK
+            // ==========================================
 
-            // ================================
-            // FETCH DOCTOR
-            // ================================
+            if (!req.session.doctor) {
 
-            const doctor =
-                await Doctor
-                    .findById(doctorId)
-                    .lean();
-
-            if (!doctor) {
-
-                return res.status(404).send(
-                    "Doctor not found"
+                return res.redirect(
+                    "/admin/doctor-login"
                 );
 
             }
 
-            // ================================
+
+            // ==========================================
+            // ORDER ID
+            // ==========================================
+
+            const orderId =
+                req.params.id;
+
+
+            console.log(
+                "SUCCESS ORDER ID:",
+                orderId
+            );
+
+
+            // ==========================================
+            // FIND ORDER
+            // ==========================================
+
+            const order =
+                await DoctorOrder
+                    .findById(orderId)
+                    .lean();
+
+
+            if (!order) {
+
+                console.log(
+                    "SUCCESS ORDER NOT FOUND:",
+                    orderId
+                );
+
+                return res.status(404).send(
+                    "Order not found"
+                );
+
+            }
+
+
+            // ==========================================
+            // FIND DOCTOR
+            // ==========================================
+
+            let doctor = null;
+
+
+            if (order.doctorId) {
+
+                // MongoDB ObjectId
+                if (
+                    /^[0-9a-fA-F]{24}$/.test(
+                        String(order.doctorId)
+                    )
+                ) {
+
+                    doctor =
+                        await Doctor
+                            .findById(
+                                order.doctorId
+                            )
+                            .lean();
+
+                }
+
+
+                // Custom doctorId fallback
+                if (!doctor) {
+
+                    doctor =
+                        await Doctor
+                            .findOne({
+                                doctorId:
+                                    String(
+                                        order.doctorId
+                                    )
+                            })
+                            .lean();
+
+                }
+
+            }
+
+
+            // ==========================================
+            // SESSION DOCTOR FALLBACK
+            // ==========================================
+
+            if (!doctor) {
+
+                doctor =
+                    req.session.doctor || {};
+
+            }
+
+
+            // ==========================================
             // DOCTOR DETAILS
-            // ================================
+            // ==========================================
 
             const doctorName =
                 doctor.name ||
                 doctor.doctorName ||
+                order.doctorName ||
                 "Doctor";
+
 
             const doctorPhone =
                 doctor.phone ||
                 doctor.mobile ||
+                order.doctorPhone ||
                 "";
+
 
             const doctorEmail =
                 doctor.email ||
+                order.doctorEmail ||
                 "";
 
-            // ================================
+
+            const doctorDisplayId =
+                doctor.doctorId ||
+                doctor._id ||
+                order.doctorId ||
+                "";
+
+
+            // ==========================================
+            // ORDER TOTAL
+            // ==========================================
+
+            const totalAmount =
+                Number(
+                    order.totalAmount || 0
+                );
+
+
+            // ==========================================
+            // ITEMS
+            // ==========================================
+
+            const items =
+                Array.isArray(order.items)
+                    ? order.items
+                    : [];
+
+
+            // ==========================================
             // SUCCESS PAGE
-            // ================================
+            // ==========================================
 
             res.send(`
 
@@ -4551,7 +4759,7 @@ router.get(
 >
 
 <title>
-    Order Successful
+    Order Successful | GLOBAL HEALTHCARE
 </title>
 
 <style>
@@ -4591,7 +4799,7 @@ body{
 
     width:100%;
 
-    max-width:500px;
+    max-width:550px;
 
     background:#fff;
 
@@ -4653,6 +4861,30 @@ h1{
 
 }
 
+.order-box{
+
+    background:#eff6ff;
+
+    border:1px solid #bfdbfe;
+
+    border-radius:18px;
+
+    padding:16px;
+
+    margin-bottom:20px;
+
+}
+
+.order-number{
+
+    color:#2563eb;
+
+    font-size:16px;
+
+    font-weight:900;
+
+}
+
 .doctor-box{
 
     background:#f8fafc;
@@ -4704,6 +4936,45 @@ h1{
     color:#0f172a;
 
     text-align:right;
+
+}
+
+.amount-box{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px;
+
+    margin-bottom:20px;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #16a34a,
+            #22c55e
+        );
+
+    color:white;
+
+}
+
+.amount-label{
+
+    font-weight:700;
+
+}
+
+.amount{
+
+    font-size:24px;
+
+    font-weight:900;
 
 }
 
@@ -4808,13 +5079,16 @@ h1{
 
 <div class="success-card">
 
+
     <div class="success-icon">
         ✓
     </div>
 
+
     <h1>
         Order Placed Successfully
     </h1>
+
 
     <p class="subtitle">
 
@@ -4824,7 +5098,23 @@ h1{
     </p>
 
 
+    <!-- ORDER -->
+
+    <div class="order-box">
+
+        <div class="order-number">
+
+            Order #${String(order._id).slice(-8)}
+
+        </div>
+
+    </div>
+
+
+    <!-- DOCTOR -->
+
     <div class="doctor-box">
+
 
         <div class="row">
 
@@ -4833,7 +5123,9 @@ h1{
             </span>
 
             <span class="value">
-                ${doctor.doctorId || doctor._id}
+                ${escapeHTML(
+                    String(doctorDisplayId)
+                )}
             </span>
 
         </div>
@@ -4846,7 +5138,9 @@ h1{
             </span>
 
             <span class="value">
-                Dr. ${doctorName}
+                Dr. ${escapeHTML(
+                    doctorName
+                )}
             </span>
 
         </div>
@@ -4863,7 +5157,9 @@ h1{
                 </span>
 
                 <span class="value">
-                    ${doctorPhone}
+                    ${escapeHTML(
+                        doctorPhone
+                    )}
                 </span>
 
             </div>
@@ -4884,7 +5180,9 @@ h1{
                 </span>
 
                 <span class="value">
-                    ${doctorEmail}
+                    ${escapeHTML(
+                        doctorEmail
+                    )}
                 </span>
 
             </div>
@@ -4893,8 +5191,26 @@ h1{
             ""
         }
 
+
     </div>
 
+
+    <!-- TOTAL -->
+
+    <div class="amount-box">
+
+        <span class="amount-label">
+            Order Amount
+        </span>
+
+        <span class="amount">
+            ₹${totalAmount.toFixed(2)}
+        </span>
+
+    </div>
+
+
+    <!-- COD -->
 
     <div class="cod-box">
 
@@ -4915,7 +5231,10 @@ h1{
     </div>
 
 
+    <!-- BUTTONS -->
+
     <div class="buttons">
+
 
         <a
             href="/doctor/orders"
@@ -4936,6 +5255,7 @@ h1{
 
         </a>
 
+
     </div>
 
 
@@ -4944,6 +5264,7 @@ h1{
         🔒 Secure order • GLOBAL HEALTHCARE
 
     </div>
+
 
 </div>
 
@@ -4970,7 +5291,6 @@ h1{
 
     }
 );
-
 
 // ======================================================
 // CASH ON DELIVERY ORDER

@@ -270,9 +270,13 @@ ${err.stack || err.message}
 // }
 // );
 
+// Cart
 const cartRoutes = require("./routes/cart");
 
-app.use(cartRoutes);
+app.use(
+    "/api/cart",
+    cartRoutes
+);
 
 // ===============================
 // SERVER START

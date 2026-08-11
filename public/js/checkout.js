@@ -1,6 +1,6 @@
 // ============================================
 // public/js/checkout.js
-// DOCTOR CHECKOUT CART
+// DOCTOR CHECKOUT JAVASCRIPT
 // ============================================
 
 (function () {
@@ -8,446 +8,61 @@
     "use strict";
 
 
-    // ========================================
-    // DOCTOR ID
-    // ========================================
+    // ==========================================
+    // GLOBAL STATE
+    // ==========================================
 
-    const doctor =
-        window.checkoutDoctor || {};
+    let cart = [];
 
+    let selectedPayment = "cod";
 
-    const doctorId =
-        doctor._id ||
-        doctor.id ||
-        doctor.doctorId ||
-        "";
+    let placingOrder = false;
 
 
-    console.log(
-        "CHECKOUT DOCTOR:",
-        doctor
-    );
-
-    console.log(
-        "CHECKOUT DOCTOR ID:",
-        doctorId
-    );
-
-
-    // ========================================
+    // ==========================================
     // ELEMENTS
-    // ========================================
+    // ==========================================
 
-    const cartItems =
-        document.getElementById(
-            "cartItems"
-        );
+    const cartItemsEl =
+        document.getElementById("cartItems");
 
-    const cartTotal =
-        document.getElementById(
-            "cartTotal"
-        );
+    const cartEmptyEl =
+        document.getElementById("cartEmpty");
+
+    const cartErrorEl =
+        document.getElementById("cartError");
+
+    const cartErrorTextEl =
+        document.getElementById("cartErrorText");
+
+    const cartSubtotalEl =
+        document.getElementById("cartSubtotal");
+
+    const cartTotalEl =
+        document.getElementById("cartTotal");
 
     const checkoutBtn =
-        document.getElementById(
-            "checkoutBtn"
-        );
+        document.getElementById("checkoutBtn");
+
+    const checkoutBtnText =
+        document.getElementById("checkoutBtnText");
 
     const errorMessage =
-        document.getElementById(
-            "errorMessage"
-        );
+        document.getElementById("errorMessage");
 
     const successMessage =
-        document.getElementById(
-            "successMessage"
-        );
+        document.getElementById("successMessage");
 
+    const codMessage =
+        document.getElementById("codMessage");
 
-    // ========================================
-    // LOAD CART
-    // ========================================
+    const paymentNotice =
+        document.getElementById("paymentNotice");
 
-    async function loadCart() {
 
-        try {
-
-            if (!cartItems) {
-
-                console.error(
-                    "cartItems element not found"
-                );
-
-                return;
-
-            }
-
-
-            cartItems.innerHTML = `
-
-                <div class="loading-cart">
-                    Loading products...
-                </div>
-
-            `;
-
-
-            // ==================================
-            // CART URL
-            // ==================================
-
-            const cartUrl =
-                "/api/cart?doctorId=" +
-                encodeURIComponent(
-                    doctorId
-                );
-
-
-            console.log(
-                "CART REQUEST URL:",
-                cartUrl
-            );
-
-
-            // ==================================
-            // FETCH
-            // ==================================
-
-            const response =
-                await fetch(
-                    cartUrl,
-                    {
-                        method: "GET",
-
-                        headers: {
-                            "Accept":
-                                "application/json"
-                        },
-
-                        credentials:
-                            "same-origin"
-                    }
-                );
-
-
-            console.log(
-                "CART STATUS:",
-                response.status
-            );
-
-            console.log(
-                "CART CONTENT TYPE:",
-                response.headers.get(
-                    "content-type"
-                )
-            );
-
-
-            // ==================================
-            // GET RAW RESPONSE FIRST
-            // ==================================
-
-            const text =
-                await response.text();
-
-
-            console.log(
-                "CART RAW RESPONSE:",
-                text.substring(
-                    0,
-                    500
-                )
-            );
-
-
-            // ==================================
-            // CHECK HTTP ERROR
-            // ==================================
-
-            if (!response.ok) {
-
-                throw new Error(
-
-                    "Cart API returned HTTP " +
-                    response.status
-
-                );
-
-            }
-
-
-            // ==================================
-            // CHECK JSON
-            // ==================================
-
-            let data;
-
-            try {
-
-                data =
-                    JSON.parse(text);
-
-            } catch (jsonError) {
-
-                console.error(
-                    "CART JSON ERROR:",
-                    jsonError
-                );
-
-
-                throw new Error(
-
-                    "Cart API JSON नहीं भेज रहा है. " +
-                    "Server ने HTML भेजा है."
-
-                );
-
-            }
-
-
-            console.log(
-                "CART JSON:",
-                data
-            );
-
-
-            // ==================================
-            // API SUCCESS CHECK
-            // ==================================
-
-            if (
-                !data ||
-                data.success !== true
-            ) {
-
-                throw new Error(
-
-                    data?.message ||
-                    "Unable to load cart"
-
-                );
-
-            }
-
-
-            // ==================================
-            // CART DATA
-            // ==================================
-
-            const items =
-                Array.isArray(data.cart)
-                    ? data.cart
-                    : [];
-
-
-            // ==================================
-            // EMPTY CART
-            // ==================================
-
-            if (items.length === 0) {
-
-                cartItems.innerHTML = `
-
-                    <div class="empty-cart">
-
-                        <div
-                            style="
-                                font-size:40px;
-                                margin-bottom:10px;
-                            "
-                        >
-                            🛒
-                        </div>
-
-                        <strong>
-                            Cart is empty
-                        </strong>
-
-                        <p>
-                            No products found
-                            in your cart.
-                        </p>
-
-                    </div>
-
-                `;
-
-
-                if (cartTotal) {
-
-                    cartTotal.textContent =
-                        "₹0.00";
-
-                }
-
-
-                return;
-
-            }
-
-
-            // ==================================
-            // DISPLAY CART
-            // ==================================
-
-            let total = 0;
-
-
-            cartItems.innerHTML =
-                items.map(
-                    item => {
-
-                        const price =
-                            Number(
-                                item.price
-                            ) || 0;
-
-
-                        const quantity =
-                            Number(
-                                item.quantity
-                            ) || 1;
-
-
-                        const itemTotal =
-                            price *
-                            quantity;
-
-
-                        total +=
-                            itemTotal;
-
-
-                        const name =
-                            escapeHTML(
-                                item.name ||
-                                "Product"
-                            );
-
-
-                        const image =
-                            item.image ||
-                            "";
-
-
-                        return `
-
-                            <div
-                                class="cart-item"
-                            >
-
-                                <div
-                                    class="cart-product-info"
-                                >
-
-                                    ${
-                                        image
-                                            ? `
-                                                <img
-                                                    src="${escapeAttribute(image)}"
-                                                    style="
-                                                        width:55px;
-                                                        height:55px;
-                                                        object-fit:cover;
-                                                        border-radius:10px;
-                                                        margin-right:10px;
-                                                        vertical-align:middle;
-                                                    "
-                                                    onerror="
-                                                        this.style.display='none'
-                                                    "
-                                                >
-                                            `
-                                            : ""
-                                    }
-
-                                    <strong>
-                                        ${name}
-                                    </strong>
-
-                                    <small>
-                                        ₹${price.toFixed(2)}
-                                        ×
-                                        ${quantity}
-                                    </small>
-
-                                </div>
-
-
-                                <div
-                                    class="cart-product-price"
-                                >
-                                    ₹${itemTotal.toFixed(2)}
-                                </div>
-
-                            </div>
-
-                        `;
-
-                    }
-                ).join("");
-
-
-            // ==================================
-            // TOTAL
-            // ==================================
-
-            if (cartTotal) {
-
-                cartTotal.textContent =
-                    "₹" +
-                    total.toFixed(2);
-
-            }
-
-
-        } catch (error) {
-
-            console.error(
-                "LOAD CART ERROR:",
-                error
-            );
-
-
-            if (cartItems) {
-
-                cartItems.innerHTML = `
-
-                    <div class="empty-cart">
-
-                        <div
-                            style="
-                                font-size:40px;
-                                margin-bottom:10px;
-                            "
-                        >
-                            ⚠️
-                        </div>
-
-                        <strong>
-                            Unable to load cart
-                        </strong>
-
-                        <p>
-                            ${escapeHTML(
-                                error.message
-                            )}
-                        </p>
-
-                    </div>
-
-                `;
-
-            }
-
-        }
-
-    }
-
-
-    // ========================================
+    // ==========================================
     // ESCAPE HTML
-    // ========================================
+    // ==========================================
 
     function escapeHTML(value) {
 
@@ -455,162 +70,912 @@
             value === null ||
             value === undefined
         ) {
-
             return "";
+        }
 
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    // ==========================================
+    // MONEY
+    // ==========================================
+
+    function money(value) {
+
+        const amount =
+            Number(value) || 0;
+
+        return "₹" +
+            amount.toFixed(2);
+
+    }
+
+
+    // ==========================================
+    // NORMALIZE CART
+    // ==========================================
+
+    function normalizeCart(items) {
+
+        if (!Array.isArray(items)) {
+            return [];
         }
 
 
-        return String(value)
+        return items
+            .map(item => {
 
-            .replace(
-                /&/g,
-                "&amp;"
-            )
+                const quantity =
+                    Number(
+                        item.qty ??
+                        item.quantity ??
+                        1
+                    );
 
-            .replace(
-                /</g,
-                "&lt;"
-            )
 
-            .replace(
-                />/g,
-                "&gt;"
-            )
+                const price =
+                    Number(
+                        item.price || 0
+                    );
 
-            .replace(
-                /"/g,
-                "&quot;"
-            )
 
-            .replace(
-                /'/g,
-                "&#039;"
+                return {
+
+                    id:
+                        String(
+                            item.id ||
+                            item.productId ||
+                            ""
+                        ),
+
+                    productId:
+                        String(
+                            item.productId ||
+                            item.id ||
+                            ""
+                        ),
+
+                    name:
+                        item.name ||
+                        "Product",
+
+                    price:
+                        price,
+
+                    image:
+                        item.image ||
+                        "",
+
+                    qty:
+                        quantity > 0
+                            ? quantity
+                            : 1
+
+                };
+
+            })
+            .filter(item =>
+                item.productId
             );
 
     }
 
 
-    // ========================================
-    // ESCAPE ATTRIBUTE
-    // ========================================
+    // ==========================================
+    // LOAD CART
+    // ==========================================
 
-    function escapeAttribute(value) {
+    window.loadCart =
+        async function loadCart() {
 
-        return escapeHTML(value);
+            hideMessages();
+
+            showLoading();
+
+            disableCheckout(
+                "Loading Cart..."
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/cart",
+                        {
+
+                            method:
+                                "GET",
+
+                            credentials:
+                                "include",
+
+                            headers: {
+
+                                "Accept":
+                                    "application/json"
+
+                            },
+
+                            cache:
+                                "no-store"
+
+                        }
+                    );
+
+
+                let data = null;
+
+
+                try {
+
+                    data =
+                        await response.json();
+
+                }
+
+                catch (jsonError) {
+
+                    throw new Error(
+                        "Cart API returned invalid JSON"
+                    );
+
+                }
+
+
+                console.log(
+                    "CART API RESPONSE:",
+                    data
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data?.message ||
+                        `Cart API returned HTTP ${response.status}`
+                    );
+
+                }
+
+
+                if (
+                    data &&
+                    data.success === false
+                ) {
+
+                    throw new Error(
+                        data.message ||
+                        "Unable to load cart"
+                    );
+
+                }
+
+
+                cart =
+                    normalizeCart(
+                        data?.cart ||
+                        data?.items ||
+                        []
+                    );
+
+
+                renderCart();
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "CHECKOUT CART ERROR:",
+                    error
+                );
+
+
+                cart = [];
+
+                renderEmptyTotals();
+
+                showCartError(
+                    error.message ||
+                    "Unable to load cart"
+                );
+
+            }
+
+        };
+
+
+    // ==========================================
+    // LOADING
+    // ==========================================
+
+    function showLoading() {
+
+        cartItemsEl.style.display =
+            "block";
+
+        cartEmptyEl.style.display =
+            "none";
+
+        cartErrorEl.style.display =
+            "none";
+
+
+        cartItemsEl.innerHTML = `
+
+            <div class="loading-box">
+
+                <div class="loader"></div>
+
+                <span>
+                    Loading products...
+                </span>
+
+            </div>
+
+        `;
 
     }
 
 
-    // ========================================
-    // PAYMENT
-    // ========================================
+    // ==========================================
+    // CART ERROR
+    // ==========================================
 
-    const paymentOptions =
-        document.querySelectorAll(
-            'input[name="payment"]'
+    function showCartError(message) {
+
+        cartItemsEl.style.display =
+            "none";
+
+        cartEmptyEl.style.display =
+            "none";
+
+        cartErrorEl.style.display =
+            "flex";
+
+
+        cartErrorTextEl.textContent =
+            message;
+
+
+        disableCheckout(
+            "Cart Unavailable"
         );
 
+    }
 
-    paymentOptions.forEach(
-        radio => {
 
-            radio.addEventListener(
-                "change",
+    // ==========================================
+    // RENDER CART
+    // ==========================================
+
+    function renderCart() {
+
+        if (!cart.length) {
+
+            renderEmptyTotals();
+
+            cartItemsEl.style.display =
+                "none";
+
+            cartEmptyEl.style.display =
+                "block";
+
+            cartErrorEl.style.display =
+                "none";
+
+
+            disableCheckout(
+                "Cart is Empty"
+            );
+
+            return;
+
+        }
+
+
+        cartItemsEl.style.display =
+            "block";
+
+        cartEmptyEl.style.display =
+            "none";
+
+        cartErrorEl.style.display =
+            "none";
+
+
+        let subtotal = 0;
+
+
+        const html =
+            cart.map(item => {
+
+                const quantity =
+                    Number(item.qty) || 1;
+
+                const price =
+                    Number(item.price) || 0;
+
+                const amount =
+                    price * quantity;
+
+
+                subtotal += amount;
+
+
+                const image =
+                    item.image
+                        ? `
+                            <img
+                                src="${escapeHTML(item.image)}"
+                                alt="${escapeHTML(item.name)}"
+                                class="cart-product-image"
+                                onerror="
+                                    this.style.display='none';
+                                    this.nextElementSibling.style.display='flex';
+                                "
+                            >
+
+                            <div
+                                class="cart-image-fallback"
+                                style="display:none;"
+                            >
+                                📦
+                            </div>
+                        `
+                        : `
+                            <div class="cart-image-fallback">
+                                📦
+                            </div>
+                        `;
+
+
+                return `
+
+                    <div class="cart-product">
+
+                        <div class="cart-product-image-wrap">
+
+                            ${image}
+
+                        </div>
+
+
+                        <div class="cart-product-info">
+
+                            <h3>
+                                ${escapeHTML(item.name)}
+                            </h3>
+
+                            <div class="cart-product-meta">
+
+                                <span>
+                                    ${money(price)}
+                                </span>
+
+                                <span>
+                                    × ${quantity}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="cart-product-total">
+
+                            ${money(amount)}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+
+        cartItemsEl.innerHTML =
+            html;
+
+
+        cartSubtotalEl.textContent =
+            money(subtotal);
+
+        cartTotalEl.textContent =
+            money(subtotal);
+
+
+        enableCheckout();
+
+
+    }
+
+
+    // ==========================================
+    // EMPTY TOTALS
+    // ==========================================
+
+    function renderEmptyTotals() {
+
+        cartSubtotalEl.textContent =
+            "₹0.00";
+
+        cartTotalEl.textContent =
+            "₹0.00";
+
+    }
+
+
+    // ==========================================
+    // ENABLE
+    // ==========================================
+
+    function enableCheckout() {
+
+        checkoutBtn.disabled =
+            false;
+
+        checkoutBtnText.textContent =
+            selectedPayment === "cod"
+                ? "Place COD Order"
+                : "Continue to Payment";
+
+    }
+
+
+    // ==========================================
+    // DISABLE
+    // ==========================================
+
+    function disableCheckout(text) {
+
+        checkoutBtn.disabled =
+            true;
+
+        checkoutBtnText.textContent =
+            text;
+
+    }
+
+
+    // ==========================================
+    // PAYMENT
+    // ==========================================
+
+    function setupPaymentOptions() {
+
+        const options =
+            document.querySelectorAll(
+                ".payment-option"
+            );
+
+
+        options.forEach(option => {
+
+            option.addEventListener(
+                "click",
                 function () {
 
-                    document
-                        .querySelectorAll(
-                            ".payment-option"
-                        )
-                        .forEach(
-                            option => {
-
-                                option.classList
-                                    .remove(
-                                        "selected"
-                                    );
-
-                            }
+                    const radio =
+                        option.querySelector(
+                            'input[type="radio"]'
                         );
 
 
-                    const parent =
-                        this.closest(
-                            ".payment-option"
-                        );
-
-
-                    if (parent) {
-
-                        parent.classList.add(
-                            "selected"
-                        );
-
+                    if (!radio) {
+                        return;
                     }
 
 
-                    if (
-                        this.value ===
-                        "cod"
-                    ) {
-
-                        const codMessage =
-                            document.getElementById(
-                                "codMessage"
-                            );
+                    radio.checked =
+                        true;
 
 
-                        if (codMessage) {
-
-                            codMessage.style.display =
-                                "block";
-
-                        }
+                    selectedPayment =
+                        radio.value;
 
 
-                        if (checkoutBtn) {
-
-                            checkoutBtn.textContent =
-                                "Place COD Order";
-
-                        }
-
-                    } else {
-
-                        const codMessage =
-                            document.getElementById(
-                                "codMessage"
-                            );
+                    options.forEach(
+                        item =>
+                            item.classList.remove(
+                                "selected"
+                            )
+                    );
 
 
-                        if (codMessage) {
-
-                            codMessage.style.display =
-                                "none";
-
-                        }
+                    option.classList.add(
+                        "selected"
+                    );
 
 
-                        if (checkoutBtn) {
-
-                            checkoutBtn.textContent =
-                                "Continue to Payment";
-
-                        }
-
-                    }
+                    updatePaymentUI();
 
                 }
             );
 
+        });
+
+
+        document
+            .querySelectorAll(
+                'input[name="payment"]'
+            )
+            .forEach(radio => {
+
+                radio.addEventListener(
+                    "change",
+                    function () {
+
+                        selectedPayment =
+                            this.value;
+
+                        updatePaymentUI();
+
+                    }
+                );
+
+            });
+
+
+        updatePaymentUI();
+
+    }
+
+
+    // ==========================================
+    // PAYMENT UI
+    // ==========================================
+
+    function updatePaymentUI() {
+
+        if (
+            selectedPayment ===
+            "cod"
+        ) {
+
+            codMessage.style.display =
+                "block";
+
+            paymentNotice.style.display =
+                "none";
+
+
+            if (cart.length) {
+
+                enableCheckout();
+
+            }
+
         }
+
+        else {
+
+            codMessage.style.display =
+                "none";
+
+            paymentNotice.style.display =
+                "block";
+
+            paymentNotice.textContent =
+                "Online payment will be available soon. Please select Cash on Delivery.";
+
+            disableCheckout(
+                "Online Payment Coming Soon"
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // PLACE ORDER
+    // ==========================================
+
+    checkoutBtn.addEventListener(
+        "click",
+        placeOrder
     );
 
 
-    // ========================================
+    async function placeOrder() {
+
+        if (placingOrder) {
+            return;
+        }
+
+
+        if (!cart.length) {
+
+            showError(
+                "Your cart is empty."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            selectedPayment !==
+            "cod"
+        ) {
+
+            showError(
+                "Please select Cash on Delivery."
+            );
+
+            return;
+
+        }
+
+
+        placingOrder =
+            true;
+
+
+        hideMessages();
+
+        checkoutBtn.disabled =
+            true;
+
+        checkoutBtnText.textContent =
+            "Placing Order...";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/doctor/checkout/cod",
+                    {
+
+                        method:
+                            "POST",
+
+                        credentials:
+                            "include",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Accept":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                cart:
+                                    cart,
+
+                                paymentMethod:
+                                    "cod"
+
+                            })
+
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            console.log(
+                "COD RESPONSE:",
+                data
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    data?.message ||
+                    `Order failed (${response.status})`
+                );
+
+            }
+
+
+            if (
+                !data ||
+                !data.success
+            ) {
+
+                throw new Error(
+                    data?.message ||
+                    "Unable to place order"
+                );
+
+            }
+
+
+            showSuccess(
+                data.message ||
+                "Order placed successfully."
+            );
+
+
+            checkoutBtnText.textContent =
+                "Order Placed ✓";
+
+
+            // --------------------------------------
+            // Clear database cart
+            // --------------------------------------
+
+            try {
+
+                await fetch(
+                    "/api/cart/clear",
+                    {
+
+                        method:
+                            "DELETE",
+
+                        credentials:
+                            "include",
+
+                        headers: {
+
+                            "Accept":
+                                "application/json"
+
+                        }
+
+                    }
+                );
+
+            }
+
+            catch (clearError) {
+
+                console.warn(
+                    "Cart clear warning:",
+                    clearError
+                );
+
+            }
+
+
+            // --------------------------------------
+            // Redirect
+            // --------------------------------------
+
+           setTimeout(
+    function () {
+
+        if (data.redirect) {
+
+            window.location.href =
+                data.redirect;
+
+        }
+
+        else if (data.orderId) {
+
+            window.location.href =
+                "/doctor/checkout-success/" +
+                data.orderId;
+
+        }
+
+        else {
+
+            window.location.href =
+                "/doctor/orders";
+
+        }
+
+    },
+    700
+);
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "PLACE ORDER ERROR:",
+                error
+            );
+
+
+            showError(
+                error.message ||
+                "Unable to place order."
+            );
+
+
+            checkoutBtn.disabled =
+                false;
+
+            checkoutBtnText.textContent =
+                "Place COD Order";
+
+        }
+
+        finally {
+
+            placingOrder =
+                false;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // ERROR
+    // ==========================================
+
+    function showError(message) {
+
+        errorMessage.textContent =
+            "⚠️ " + message;
+
+        errorMessage.style.display =
+            "block";
+
+        successMessage.style.display =
+            "none";
+
+    }
+
+
+    // ==========================================
+    // SUCCESS
+    // ==========================================
+
+    function showSuccess(message) {
+
+        successMessage.textContent =
+            "✓ " + message;
+
+        successMessage.style.display =
+            "block";
+
+        errorMessage.style.display =
+            "none";
+
+    }
+
+
+    // ==========================================
+    // HIDE MESSAGES
+    // ==========================================
+
+    function hideMessages() {
+
+        errorMessage.style.display =
+            "none";
+
+        successMessage.style.display =
+            "none";
+
+    }
+
+
+    // ==========================================
     // START
-    // ========================================
+    // ==========================================
+
+    setupPaymentOptions();
 
     loadCart();
 
