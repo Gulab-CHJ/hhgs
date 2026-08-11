@@ -180,19 +180,22 @@ authRoutes
 
 
 
-// Store
-
-const storeRouter =
-require("./routes/store");
-
+const storeRouter = require("./doctor/dhhpb/store");
 
 app.use(
-"/store",
-storeRouter
+    "/doctor/public",
+    express.static(
+        path.join(
+            __dirname,
+            "doctor",
+            "public"
+        )
+    )
 );
-
-
-
+app.use(
+    "/doctor",
+    storeRouter
+);
 
 
 // ===============================

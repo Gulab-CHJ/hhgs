@@ -465,7 +465,7 @@ return `
             </a>
 
 
-            <a href="/store">
+            <a href="/doctor/store">
 
                 <i class="fa-solid fa-store"></i>
 
