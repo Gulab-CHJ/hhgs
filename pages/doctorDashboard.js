@@ -1899,7 +1899,6 @@ select:focus {
 
 }
 
-
 /* =====================================================
    MOBILE
 ===================================================== */
@@ -1911,6 +1910,8 @@ select:focus {
         grid-template-columns:
             repeat(2, 1fr);
 
+        gap: 10px;
+
     }
 
     .filters {
@@ -1921,7 +1922,6 @@ select:focus {
     }
 
 }
-
 
 @media(max-width:700px) {
 
