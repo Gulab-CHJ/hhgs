@@ -1906,27 +1906,23 @@ select:focus {
 @media(max-width:950px) {
 
     .products-grid {
-
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(2, minmax(0, 1fr));
 
-        gap: 10px;
-
+        gap:12px;
     }
 
     .filters {
-
         grid-template-columns:
             1fr 1fr;
-
     }
 
 }
 
+
 @media(max-width:700px) {
 
     .header {
-
         position:relative;
 
         flex-direction:column;
@@ -1934,107 +1930,177 @@ select:focus {
         align-items:stretch;
 
         padding:15px;
-
     }
 
 
     .logo {
-
         justify-content:center;
-
     }
 
 
     .nav {
-
         justify-content:center;
-
     }
 
 
     .nav a {
-
         font-size:11px;
 
         padding:8px 9px;
-
     }
 
 
     .hero {
-
         margin:15px 12px;
 
         padding:22px;
 
         border-radius:22px;
-
     }
 
 
     .hero h1 {
-
         font-size:24px;
-
     }
 
 
     .doctor-avatar {
-
         width:58px;
 
         height:58px;
 
         font-size:28px;
-
     }
 
 
     .container {
-
         padding:
-            0 12px 30px;
-
+            0 10px 30px;
     }
 
 
     .filters {
-
         grid-template-columns:1fr;
-
     }
 
 
     .section-header {
-
         align-items:flex-start;
-
     }
 
 
     .section-title h2 {
-
         font-size:20px;
-
     }
 
 
+    /* =================================================
+       2 CARDS IN ONE ROW
+    ================================================= */
+
     .products-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
 
-        grid-template-columns:1fr;
+        gap:10px;
+    }
 
+
+    .product-card {
+        min-width:0;
+
+        border-radius:16px;
     }
 
 
     .product-image {
+        height:145px;
+    }
 
-        height:230px;
 
+    .product-image img {
+        padding:10px;
+    }
+
+
+    .product-content {
+        padding:11px;
+    }
+
+
+    .product-name {
+        font-size:14px;
+
+        line-height:1.3;
+    }
+
+
+    .product-description {
+        font-size:10px;
+
+        min-height:30px;
+    }
+
+
+    .product-category {
+        font-size:10px;
+    }
+
+
+    .company {
+        font-size:10px;
+    }
+
+
+    .brand {
+        font-size:9px;
+    }
+
+
+    .sale-price {
+        font-size:17px;
+    }
+
+
+    .old-price {
+        font-size:10px;
+    }
+
+
+    .discount {
+        font-size:8px;
+
+        padding:4px 5px;
+    }
+
+
+    .stock {
+        font-size:10px;
+    }
+
+
+    .cart-btn {
+        height:38px;
+
+        margin-top:10px;
+
+        font-size:10px;
+
+        border-radius:10px;
+    }
+
+
+    .product-badge {
+        top:7px;
+
+        left:7px;
+
+        padding:5px 7px;
+
+        font-size:8px;
     }
 
 }
-
-
 </style>
 
 </head>
