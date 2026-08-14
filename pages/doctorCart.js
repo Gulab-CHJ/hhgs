@@ -16,10 +16,10 @@ function DoctorCart(doctor) {
 
 
     const doctorName =
-    doctor && doctor.name
-        ? String(doctor.name)
-            .replace(/^Dr\.\s*/i, "")
-        : "Doctor";
+        doctor && doctor.name
+            ? String(doctor.name)
+                .replace(/^Dr\.\s*/i, "")
+            : "Doctor";
 
 
     return `<!DOCTYPE html>
@@ -35,9 +35,7 @@ function DoctorCart(doctor) {
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>
-    Doctor Cart - GLOBAL HEALTHCARE
-</title>
+<title>Doctor Cart - GLOBAL HEALTHCARE</title>
 
 
 <style>
@@ -88,6 +86,27 @@ body {
 .nav a:hover {
     background: rgba(255,255,255,.18);
 }
+
+
+/* CART COUNT */
+
+.cart-count {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    margin-left: 4px;
+    border-radius: 20px;
+    background: #dc2626;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+
+/* MAIN */
 
 .main {
     max-width: 1400px;
@@ -353,6 +372,9 @@ body {
     font-weight: 700;
 }
 
+
+/* MOBILE */
+
 @media(max-width: 950px) {
 
     .cart-wrapper {
@@ -363,6 +385,7 @@ body {
         position: static;
     }
 }
+
 
 @media(max-width: 650px) {
 
@@ -412,6 +435,7 @@ body {
         🩺 GLOBAL HEALTHCARE
     </div>
 
+
     <nav class="nav">
 
         <a href="/doctor/dashboard">
@@ -424,6 +448,10 @@ body {
 
         <a href="/doctor/cart">
             🛒 Cart
+            <span
+                id="headerCartCount"
+                class="cart-count"
+            >0</span>
         </a>
 
         <a href="/admin/doctor/logout">
@@ -561,476 +589,12 @@ body {
 
 </main>
 
-
-<script>
-
-function getCart() {
-
-    try {
-
-        const data =
-            localStorage.getItem("doctorCart");
-
-        if (!data) {
-            return [];
-        }
-
-        const cart =
-            JSON.parse(data);
-
-        return Array.isArray(cart)
-            ? cart
-            : [];
-
-    } catch (error) {
-
-        console.error(
-            "Cart error:",
-            error
-        );
-
-        return [];
-    }
-}
-
-
-function saveCart(cart) {
-
-    localStorage.setItem(
-        "doctorCart",
-        JSON.stringify(cart)
-    );
-}
-
-
-function safeText(value) {
-
-    if (
-        value === null ||
-        value === undefined
-    ) {
-        return "";
-    }
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-function renderCart() {
-
-    const container =
-        document.getElementById(
-            "cartItems"
-        );
-
-    if (!container) {
-        return;
-    }
-
-
-    const cart =
-        getCart();
-
-
-    if (cart.length === 0) {
-
-        container.innerHTML = \`
-
-            <div class="empty-cart">
-
-                <div class="empty-cart-icon">
-                    🛒
-                </div>
-
-                <h3>
-                    Your Cart is Empty
-                </h3>
-
-                <p>
-                    Add healthcare products
-                    from the dashboard.
-                </p>
-
-                <a
-                    href="/doctor/dashboard"
-                    class="shop-btn"
-                >
-                    Browse Products
-                </a>
-
-            </div>
-
-        \`;
-
-        updateSummary([]);
-
-        return;
-    }
-
-
-    let html = "";
-
-
-    cart.forEach(function(item, index) {
-
-        const name =
-            safeText(
-                item.name || "Product"
-            );
-
-
-        const image =
-            safeText(
-                item.image ||
-                "/images/no-image.png"
-            );
-
-
-        const id =
-            safeText(
-                item.id || "-"
-            );
-
-
-        const price =
-            Number(item.price || 0);
-
-
-        const qty =
-            Math.max(
-                1,
-                Number(item.qty || 1)
-            );
-
-
-        const total =
-            price * qty;
-
-
-        html += \`
-
-            <article class="cart-item">
-
-
-                <div class="cart-item-image">
-
-                    <img
-                        src="\${image}"
-                        alt="\${name}"
-                        onerror="
-                            this.onerror=null;
-                            this.src='/images/no-image.png';
-                        "
-                    >
-
-                </div>
-
-
-                <div class="cart-item-info">
-
-                    <h3>
-                        \${name}
-                    </h3>
-
-                    <p>
-                        Product ID:
-                        \${id}
-                    </p>
-
-                    <div class="item-price">
-                        ₹\${price.toFixed(2)}
-                    </div>
-
-                </div>
-
-
-                <div class="item-actions">
-
-
-                    <div class="qty-box">
-
-                        <button
-                            type="button"
-                            class="qty-btn"
-                            onclick="changeQty(\${index}, -1)"
-                        >
-                            −
-                        </button>
-
-
-                        <span class="qty-value">
-                            \${qty}
-                        </span>
-
-
-                        <button
-                            type="button"
-                            class="qty-btn"
-                            onclick="changeQty(\${index}, 1)"
-                        >
-                            +
-                        </button>
-
-                    </div>
-
-
-                    <strong class="item-total">
-                        ₹\${total.toFixed(2)}
-                    </strong>
-
-
-                    <button
-                        type="button"
-                        class="remove-btn"
-                        onclick="removeItem(\${index})"
-                    >
-                        🗑 Remove
-                    </button>
-
-                </div>
-
-
-            </article>
-
-        \`;
-    });
-
-
-    container.innerHTML =
-        html;
-
-
-    updateSummary(cart);
-}
-
-
-function updateSummary(cart) {
-
-    let count = 0;
-
-    let subtotal = 0;
-
-
-    cart.forEach(function(item) {
-
-        const price =
-            Number(item.price || 0);
-
-        const qty =
-            Math.max(
-                1,
-                Number(item.qty || 1)
-            );
-
-        count += qty;
-
-        subtotal +=
-            price * qty;
-    });
-
-
-    const delivery = 0;
-
-    const total =
-        subtotal + delivery;
-
-
-    const countElement =
-        document.getElementById(
-            "cartCount"
-        );
-
-    const subtotalElement =
-        document.getElementById(
-            "subtotal"
-        );
-
-    const deliveryElement =
-        document.getElementById(
-            "delivery"
-        );
-
-    const totalElement =
-        document.getElementById(
-            "total"
-        );
-
-    const checkoutButton =
-        document.getElementById(
-            "checkoutBtn"
-        );
-
-
-    if (countElement) {
-        countElement.textContent =
-            count;
-    }
-
-    if (subtotalElement) {
-        subtotalElement.textContent =
-            subtotal.toFixed(2);
-    }
-
-    if (deliveryElement) {
-        deliveryElement.textContent =
-            delivery.toFixed(2);
-    }
-
-    if (totalElement) {
-        totalElement.textContent =
-            total.toFixed(2);
-    }
-
-    if (checkoutButton) {
-        checkoutButton.disabled =
-            cart.length === 0;
-    }
-}
-
-
-window.changeQty =
-    function(index, change) {
-
-        const cart =
-            getCart();
-
-
-        if (
-            index < 0 ||
-            index >= cart.length
-        ) {
-            return;
-        }
-
-
-        let qty =
-            Number(
-                cart[index].qty || 1
-            );
-
-
-        qty +=
-            Number(change);
-
-
-        if (qty <= 0) {
-
-            cart.splice(index, 1);
-
-        } else {
-
-            cart[index].qty =
-                qty;
-        }
-
-
-        saveCart(cart);
-
-        renderCart();
-    };
-
-
-window.removeItem =
-    function(index) {
-
-        const cart =
-            getCart();
-
-
-        if (
-            index < 0 ||
-            index >= cart.length
-        ) {
-            return;
-        }
-
-
-        cart.splice(index, 1);
-
-        saveCart(cart);
-
-        renderCart();
-    };
-
-
-window.clearCart =
-    function() {
-
-        const cart =
-            getCart();
-
-
-        if (cart.length === 0) {
-            return;
-        }
-
-
-        if (
-            !window.confirm(
-                "Are you sure you want to clear the cart?"
-            )
-        ) {
-            return;
-        }
-
-
-        localStorage.removeItem(
-            "doctorCart"
-        );
-
-        renderCart();
-    };
-
-
-window.checkout =
-    function() {
-
-        const cart =
-            getCart();
-
-
-        if (cart.length === 0) {
-
-            alert(
-                "Your cart is empty."
-            );
-
-            return;
-        }
-
-
-        window.location.href =
-            "/doctor/checkout";
-    };
-
-
-if (
-    document.readyState === "loading"
-) {
-
-    document.addEventListener(
-        "DOMContentLoaded",
-        renderCart
-    );
-
-} else {
-
-    renderCart();
-
-}
-
-</script>
+<script src="/js/cart.js"></script>
 
 
 </body>
 
 </html>`;
-
 }
 
 

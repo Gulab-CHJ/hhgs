@@ -1,55 +1,67 @@
+
+
+
 // const path = require("path");
 // const express = require("express");
 // const router = express.Router();
 
 // const Product = require("../models/Product");
 // const DoctorOrder = require("../models/DoctorOrder");
+// const Doctor = require("../models/Doctor");
 
 // const PDFDocument = require("pdfkit");
 
 
+// // ======================================================
+// // SAFE HTML
+// // ======================================================
+
+// function escapeHTML(value) {
+
+//     if (value === null || value === undefined) {
+//         return "";
+//     }
+
+//     return String(value)
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;")
+//         .replace(/"/g, "&quot;")
+//         .replace(/'/g, "&#039;");
+// }
 
 
-// // =================================
+// // ======================================================
 // // DOCTOR ORDERS
-// // =================================
+// // ======================================================
 
 // router.get("/orders", async (req, res) => {
 
 //     try {
 
-//         // ===============================
-//         // DOCTOR LOGIN CHECK
-//         // ===============================
+//         // ==============================================
+//         // LOGIN CHECK
+//         // ==============================================
 
 //         if (!req.session.doctor) {
-//             return res.redirect("/admin/doctor-login");
+
+//             return res.redirect(
+//                 "/admin/doctor-login"
+//             );
+
 //         }
 
 
-//         // ===============================
-//         // LOGGED-IN DOCTOR
-//         // ===============================
+//         // ==============================================
+//         // LOGGED IN DOCTOR
+//         // ==============================================
 
 //         const doctor = req.session.doctor;
 
 
-//         // ===============================
-//         // GET ORDERS
-//         // ===============================
-
-//         const orders = await DoctorOrder.find()
-//             .sort({
-//                 createdAt: -1
-//             });
-
-
-//         // ===============================
-//         // DOCTOR NAME
-//         // ===============================
-
 //         const doctorName =
 //             doctor.name ||
+//             doctor.doctorName ||
 //             "Doctor";
 
 
@@ -58,70 +70,89 @@
 //             "General Physician";
 
 
-//         // ===============================
+//         // ==============================================
+//         // GET ORDERS
+//         // ==============================================
+
+//         const orders =
+//             await DoctorOrder.find({
+//                 doctorId: doctor._id
+//             })
+//             .sort({
+//                 createdAt: -1
+//             });
+
+
+//         // ==============================================
 //         // ORDER HTML
-//         // ===============================
+//         // ==============================================
 
-//         const orderHTML = orders.length
+//         let orderHTML = "";
 
-//             ?
 
-//             orders.map(order => {
+//         if (orders.length > 0) {
+
+//             orderHTML = orders.map(order => {
+
 
 //                 const itemsHTML =
 //                     Array.isArray(order.items)
 
 //                         ?
 
-//                         order.items.map(item => {
+//                     order.items.map(item => {
 
-//                             const qty =
-//                                 Number(item.qty || 0);
+//                         const qty =
+//                             Number(item.qty || 0);
 
-//                             const price =
-//                                 Number(item.price || 0);
+//                         const price =
+//                             Number(item.price || 0);
 
-//                             const amount =
-//                                 qty * price;
+//                         const amount =
+//                             qty * price;
 
 
-//                             return `
+//                         return `
 
-//                                 <div class="product">
+//                             <div class="product">
 
-//                                     <div class="product-info">
+//                                 <div class="product-info">
 
-//                                         <b>
-//                                             ${item.name || "Product"}
-//                                         </b>
-
-//                                         <span>
-//                                             Qty: ${qty}
-//                                         </span>
-
+//                                     <div class="product-name">
+//                                         ${escapeHTML(
+//                                             item.name || "Product"
+//                                         )}
 //                                     </div>
 
-
-//                                     <div class="product-price">
-
-//                                         ₹${amount.toFixed(2)}
-
+//                                     <div class="product-meta">
+//                                         Quantity: ${qty}
+//                                         &nbsp; × &nbsp;
+//                                         ₹${price.toFixed(2)}
 //                                     </div>
 
 //                                 </div>
 
-//                             `;
 
-//                         }).join("")
+//                                 <div class="product-price">
+
+//                                     ₹${amount.toFixed(2)}
+
+//                                 </div>
+
+//                             </div>
+
+//                         `;
+
+//                     }).join("")
 
 //                         :
 
-//                         "";
+//                     "";
 
 
-//                 // ===========================
+//                 // ======================================
 //                 // TOTAL
-//                 // ===========================
+//                 // ======================================
 
 //                 const totalAmount =
 //                     Number(
@@ -129,9 +160,9 @@
 //                     );
 
 
-//                 // ===========================
+//                 // ======================================
 //                 // STATUS
-//                 // ===========================
+//                 // ======================================
 
 //                 const status =
 //                     order.status ||
@@ -143,21 +174,22 @@
 //                     <div class="order-card">
 
 
-//                         <!-- ORDER HEADER -->
-
 //                         <div class="order-top">
 
 //                             <div>
 
 //                                 <div class="order-id">
 
-//                                     Order #${String(order._id).slice(-8)}
+//                                     Order #
+//                                     ${String(order._id).slice(-8)}
 
 //                                 </div>
+
 
 //                                 <div class="order-date">
 
 //                                     📅
+
 //                                     ${new Date(
 //                                         order.createdAt
 //                                     ).toLocaleDateString(
@@ -176,15 +208,13 @@
 
 //                             <span class="status">
 
-//                                 ${status}
+//                                 ${escapeHTML(status)}
 
 //                             </span>
 
 //                         </div>
 
 
-
-//                         <!-- PRODUCTS -->
 
 //                         <div class="product-box">
 
@@ -194,13 +224,12 @@
 
 //                             </div>
 
+
 //                             ${itemsHTML}
 
 //                         </div>
 
 
-
-//                         <!-- TOTAL -->
 
 //                         <div class="total-row">
 
@@ -216,31 +245,52 @@
 
 
 
-//                         <!-- INVOICE -->
-
 //                         <div class="order-actions">
 
-//                             <a
-//                                 class="btn invoice-btn"
-//                                 href="/doctor/invoice/${order._id}"
-//                             >
+//     <a
+//         class="btn invoice-btn"
+//         href="/doctor/invoice/${order._id}"
+//     >
 
-//                                 📄 Download Invoice
+//         📄 Download Invoice
 
-//                             </a>
+//     </a>
 
-//                         </div>
+
+//     ${
+//         String(status).toLowerCase() !== "cancelled"
+//         &&
+//         String(status).toLowerCase() !== "delivered"
+//         ?
+//         `
+//         <button
+//             type="button"
+//             class="btn cancel-btn"
+//             onclick="cancelOrder('${order._id}')"
+//         >
+
+//             ❌ Cancel Order
+
+//         </button>
+//         `
+//         :
+//         ""
+//     }
+
+// </div>
 
 
 //                     </div>
 
 //                 `;
 
-//             }).join("")
+//             }).join("");
 
-//             :
+//         }
 
-//             `
+//         else {
+
+//             orderHTML = `
 
 //                 <div class="empty-orders">
 
@@ -269,10 +319,12 @@
 
 //             `;
 
+//         }
 
-//         // ===============================
-//         // SEND PAGE
-//         // ===============================
+
+//         // ==============================================
+//         // PAGE
+//         // ==============================================
 
 //         res.send(`
 
@@ -296,18 +348,15 @@
 
 // <style>
 
-
 // *{
-
 //     margin:0;
 //     padding:0;
 //     box-sizing:border-box;
-
 //     font-family:
+//         "Poppins",
+//         "Segoe UI",
 //         Arial,
-//         Helvetica,
 //         sans-serif;
-
 // }
 
 
@@ -329,24 +378,19 @@
 // }
 
 
-// /* =================================
-//    MAIN CONTAINER
-// ================================= */
+// /* =========================================
+//    HEADER
+// ========================================= */
 
-// .container{
+// .header{
 
-//     max-width:1200px;
+//     max-width:1250px;
 
 //     margin:auto;
 
-// }
+//     padding:22px 28px;
 
-
-// /* =================================
-//    HEADER
-// ================================= */
-
-// .header{
+//     border-radius:24px;
 
 //     background:
 //         linear-gradient(
@@ -355,25 +399,82 @@
 //             #00c6fb
 //         );
 
-//     padding:25px 30px;
-
-//     border-radius:25px;
-
 //     color:white;
 
 //     display:flex;
 
-//     justify-content:space-between;
-
 //     align-items:center;
+
+//     justify-content:space-between;
 
 //     gap:20px;
 
-//     margin-bottom:25px;
-
 //     box-shadow:
-//         0 15px 40px
-//         rgba(0,0,0,.15);
+//         0 18px 45px
+//         rgba(0,91,234,.22);
+
+// }
+
+// .cancel-btn{
+
+//     border:none;
+
+//     cursor:pointer;
+
+//     color:#dc2626;
+
+//     background:#fee2e2;
+
+//     border:1px solid #fecaca;
+
+//     padding:13px 20px;
+
+//     border-radius:14px;
+
+//     font-weight:800;
+
+//     transition:.25s;
+
+// }
+
+// .cancel-btn:hover{
+
+//     background:#fecaca;
+
+//     transform:translateY(-2px);
+
+// }
+
+// .order-actions{
+
+//     display:flex;
+
+//     justify-content:flex-end;
+
+//     align-items:center;
+
+//     gap:12px;
+
+//     flex-wrap:wrap;
+
+// }
+
+
+// @media(max-width:700px){
+
+//     .order-actions{
+
+//         flex-direction:column;
+
+//         align-items:stretch;
+
+//     }
+
+//     .order-actions .btn{
+
+//         width:100%;
+
+//     }
 
 // }
 
@@ -384,36 +485,40 @@
 
 //     align-items:center;
 
-//     gap:12px;
+//     gap:14px;
 
 // }
 
 
 // .logo-icon{
 
-//     width:50px;
-//     height:50px;
+//     width:55px;
 
-//     display:flex;
+//     height:55px;
 
-//     align-items:center;
-//     justify-content:center;
+//     border-radius:18px;
 
 //     background:
 //         rgba(255,255,255,.18);
 
-//     border-radius:15px;
+//     display:flex;
 
-//     font-size:25px;
+//     align-items:center;
+
+//     justify-content:center;
+
+//     font-size:28px;
 
 // }
 
 
 // .logo-text{
 
-//     font-size:25px;
+//     font-size:24px;
 
 //     font-weight:900;
+
+//     letter-spacing:.5px;
 
 // }
 
@@ -429,19 +534,53 @@
 // }
 
 
-// /* =================================
-//    DOCTOR INFO
-// ================================= */
+// .dashboard-btn{
 
-// .doctor-info{
+//     text-decoration:none;
+
+//     color:#2563eb;
 
 //     background:white;
 
-//     padding:20px 25px;
+//     padding:12px 20px;
 
-//     border-radius:20px;
+//     border-radius:14px;
 
-//     margin-bottom:25px;
+//     font-weight:800;
+
+//     box-shadow:
+//         0 8px 20px
+//         rgba(0,0,0,.12);
+
+//     transition:.25s;
+
+// }
+
+
+// .dashboard-btn:hover{
+
+//     transform:translateY(-2px);
+
+// }
+
+
+// /* =========================================
+//    DOCTOR
+// ========================================= */
+
+// .doctor-info{
+
+//     max-width:1250px;
+
+//     margin:25px auto 18px;
+
+//     background:white;
+
+//     border:1px solid #e2e8f0;
+
+//     border-radius:22px;
+
+//     padding:20px 24px;
 
 //     display:flex;
 
@@ -450,100 +589,74 @@
 //     gap:18px;
 
 //     box-shadow:
-//         0 10px 30px
-//         rgba(0,0,0,.07);
-
-//     border:1px solid #e2e8f0;
+//         0 12px 35px
+//         rgba(15,23,42,.07);
 
 // }
 
 
 // .doctor-avatar{
 
-//     width:58px;
-//     height:58px;
+//     width:65px;
 
-//     border-radius:50%;
+//     height:65px;
+
+//     border-radius:20px;
 
 //     display:flex;
 
 //     align-items:center;
+
 //     justify-content:center;
+
+//     font-size:34px;
 
 //     background:
 //         linear-gradient(
 //             135deg,
 //             #dbeafe,
-//             #e0f2fe
+//             #eff6ff
 //         );
-
-//     font-size:28px;
 
 // }
 
 
 // .doctor-info h2{
 
-//     font-size:21px;
-
-//     margin-bottom:5px;
+//     font-size:22px;
 
 // }
 
 
 // .doctor-info p{
 
+//     margin-top:5px;
+
 //     color:#64748b;
 
-//     font-size:14px;
+//     font-weight:600;
 
 // }
 
 
-// /* =================================
-//    HEADER BUTTON
-// ================================= */
-
-// .dashboard-btn{
-
-//     background:white;
-
-//     color:#2563eb;
-
-//     padding:12px 20px;
-
-//     border-radius:14px;
-
-//     text-decoration:none;
-
-//     font-weight:800;
-
-//     white-space:nowrap;
-
-// }
-
-
-// .dashboard-btn:hover{
-
-//     background:#eff6ff;
-
-// }
-
-
-// /* =================================
+// /* =========================================
 //    PAGE TITLE
-// ================================= */
+// ========================================= */
 
 // .page-title{
 
-//     margin:10px 0 20px;
+//     max-width:1250px;
+
+//     margin:25px auto;
 
 // }
 
 
 // .page-title h1{
 
-//     font-size:30px;
+//     font-size:32px;
+
+//     font-weight:900;
 
 // }
 
@@ -552,29 +665,31 @@
 
 //     color:#64748b;
 
-//     margin-top:5px;
+//     margin-top:7px;
 
 // }
 
 
-// /* =================================
+// /* =========================================
 //    ORDER CARD
-// ================================= */
+// ========================================= */
 
 // .order-card{
 
-//     background:white;
+//     max-width:1250px;
 
-//     padding:25px;
+//     margin:0 auto 22px;
+
+//     background:white;
 
 //     border-radius:24px;
 
-//     margin-bottom:22px;
+//     padding:24px;
 
 //     border:1px solid #e2e8f0;
 
 //     box-shadow:
-//         0 12px 35px
+//         0 15px 40px
 //         rgba(15,23,42,.07);
 
 //     transition:.3s;
@@ -584,18 +699,18 @@
 
 // .order-card:hover{
 
-//     transform:translateY(-3px);
+//     transform:translateY(-4px);
 
 //     box-shadow:
-//         0 18px 45px
+//         0 20px 50px
 //         rgba(15,23,42,.12);
 
 // }
 
 
-// /* =================================
+// /* =========================================
 //    ORDER TOP
-// ================================= */
+// ========================================= */
 
 // .order-top{
 
@@ -605,11 +720,11 @@
 
 //     align-items:center;
 
-//     gap:15px;
+//     gap:20px;
 
 //     padding-bottom:18px;
 
-//     border-bottom:1px solid #e5e7eb;
+//     border-bottom:1px solid #eef2f7;
 
 // }
 
@@ -629,37 +744,33 @@
 
 //     color:#64748b;
 
-//     font-size:13px;
+//     font-size:14px;
 
 //     margin-top:6px;
 
 // }
 
 
-// /* =================================
-//    STATUS
-// ================================= */
-
 // .status{
 
-//     padding:8px 16px;
+//     padding:9px 16px;
 
-//     border-radius:30px;
+//     border-radius:50px;
 
 //     background:#fef3c7;
 
 //     color:#92400e;
 
-//     font-size:13px;
-
 //     font-weight:800;
+
+//     font-size:13px;
 
 // }
 
 
-// /* =================================
+// /* =========================================
 //    PRODUCTS
-// ================================= */
+// ========================================= */
 
 // .product-box{
 
@@ -670,7 +781,7 @@
 
 // .section-title{
 
-//     font-size:16px;
+//     font-size:17px;
 
 //     font-weight:900;
 
@@ -683,48 +794,41 @@
 
 //     display:flex;
 
-//     justify-content:space-between;
-
 //     align-items:center;
 
-//     gap:15px;
+//     justify-content:space-between;
 
-//     background:#f8fafc;
+//     gap:20px;
 
 //     padding:16px;
 
-//     border-radius:15px;
+//     margin:10px 0;
 
-//     margin-bottom:10px;
+//     background:#f8fafc;
 
 //     border:1px solid #e2e8f0;
 
-// }
-
-
-// .product-info{
-
-//     display:flex;
-
-//     flex-direction:column;
-
-//     gap:5px;
+//     border-radius:16px;
 
 // }
 
 
-// .product-info b{
+// .product-name{
 
 //     font-size:16px;
 
+//     font-weight:800;
+
 // }
 
 
-// .product-info span{
+// .product-meta{
 
 //     color:#64748b;
 
 //     font-size:13px;
+
+//     margin-top:5px;
 
 // }
 
@@ -735,42 +839,44 @@
 
 //     color:#16a34a;
 
+//     font-size:17px;
+
 //     white-space:nowrap;
 
 // }
 
 
-// /* =================================
+// /* =========================================
 //    TOTAL
-// ================================= */
+// ========================================= */
 
 // .total-row{
 
-//     margin-top:18px;
+//     margin-top:20px;
 
-//     padding:18px;
+//     padding:18px 20px;
 
-//     border-radius:17px;
+//     border-radius:18px;
 
 //     background:
 //         linear-gradient(
 //             135deg,
-//             #ecfdf5,
-//             #f0fdf4
+//             #16a34a,
+//             #22c55e
 //         );
+
+//     color:white;
 
 //     display:flex;
 
-//     justify-content:space-between;
-
 //     align-items:center;
+
+//     justify-content:space-between;
 
 // }
 
 
 // .total-row span{
-
-//     color:#475569;
 
 //     font-weight:700;
 
@@ -779,24 +885,18 @@
 
 // .total-row strong{
 
-//     color:#15803d;
-
 //     font-size:25px;
 
 // }
 
 
-// /* =================================
-//    ACTIONS
-// ================================= */
+// /* =========================================
+//    ACTION
+// ========================================= */
 
 // .order-actions{
 
 //     margin-top:18px;
-
-//     display:flex;
-
-//     justify-content:flex-end;
 
 // }
 
@@ -809,13 +909,11 @@
 
 //     justify-content:center;
 
-//     gap:8px;
+//     text-decoration:none;
 
 //     padding:13px 20px;
 
 //     border-radius:14px;
-
-//     text-decoration:none;
 
 //     font-weight:800;
 
@@ -824,6 +922,8 @@
 
 // .invoice-btn{
 
+//     color:white;
+
 //     background:
 //         linear-gradient(
 //             135deg,
@@ -831,11 +931,9 @@
 //             #4f46e5
 //         );
 
-//     color:white;
-
 //     box-shadow:
-//         0 8px 20px
-//         rgba(37,99,235,.25);
+//         0 10px 25px
+//         rgba(37,99,235,.22);
 
 // }
 
@@ -847,22 +945,26 @@
 // }
 
 
-// /* =================================
+// /* =========================================
 //    EMPTY
-// ================================= */
+// ========================================= */
 
 // .empty-orders{
 
-//     background:white;
+//     max-width:700px;
 
-//     padding:70px 25px;
-
-//     border-radius:25px;
+//     margin:50px auto;
 
 //     text-align:center;
 
+//     background:white;
+
+//     padding:50px 25px;
+
+//     border-radius:25px;
+
 //     box-shadow:
-//         0 12px 35px
+//         0 15px 40px
 //         rgba(0,0,0,.07);
 
 // }
@@ -870,16 +972,9 @@
 
 // .empty-icon{
 
-//     font-size:55px;
+//     font-size:60px;
 
 //     margin-bottom:15px;
-
-// }
-
-
-// .empty-orders h2{
-
-//     margin-bottom:8px;
 
 // }
 
@@ -888,7 +983,7 @@
 
 //     color:#64748b;
 
-//     margin-bottom:25px;
+//     margin:10px 0 20px;
 
 // }
 
@@ -896,6 +991,8 @@
 // .shop-btn{
 
 //     display:inline-block;
+
+//     text-decoration:none;
 
 //     background:
 //         linear-gradient(
@@ -906,30 +1003,32 @@
 
 //     color:white;
 
-//     padding:13px 22px;
+//     padding:14px 24px;
 
 //     border-radius:14px;
-
-//     text-decoration:none;
 
 //     font-weight:800;
 
 // }
 
 
-// /* =================================
+// /* =========================================
 //    FOOTER
-// ================================= */
+// ========================================= */
 
 // .footer{
 
+//     max-width:1250px;
+
+//     margin:35px auto 10px;
+
 //     text-align:center;
+
+//     padding:25px;
 
 //     color:#64748b;
 
-//     padding:30px 10px;
-
-//     font-size:13px;
+//     line-height:1.8;
 
 // }
 
@@ -941,36 +1040,37 @@
 // }
 
 
-// /* =================================
+// /* =========================================
 //    MOBILE
-// ================================= */
+// ========================================= */
 
 // @media(max-width:700px){
 
 //     body{
-
 //         padding:12px;
-
 //     }
-
 
 //     .header{
 
 //         flex-direction:column;
 
-//         align-items:flex-start;
+//         align-items:stretch;
 
-//         padding:20px;
-
-//     }
-
-
-//     .logo-text{
-
-//         font-size:21px;
+//         text-align:center;
 
 //     }
 
+//     .logo{
+
+//         justify-content:center;
+
+//     }
+
+//     .dashboard-btn{
+
+//         text-align:center;
+
+//     }
 
 //     .doctor-info{
 
@@ -978,75 +1078,45 @@
 
 //     }
 
-
 //     .page-title h1{
 
-//         font-size:25px;
+//         font-size:26px;
 
 //     }
-
 
 //     .order-card{
 
-//         padding:18px;
-
-//         border-radius:19px;
+//         padding:16px;
 
 //     }
-
 
 //     .order-top{
 
 //         align-items:flex-start;
 
-//     }
-
-
-//     .status{
-
-//         font-size:11px;
-
-//         padding:7px 11px;
+//         flex-direction:column;
 
 //     }
-
 
 //     .product{
 
-//         padding:13px;
+//         align-items:flex-start;
 
 //     }
 
+//     .total-row{
 
-//     .product-price{
-
-//         font-size:14px;
+//         gap:10px;
 
 //     }
-
 
 //     .total-row strong{
 
-//         font-size:21px;
-
-//     }
-
-
-//     .order-actions{
-
-//         justify-content:stretch;
-
-//     }
-
-
-//     .invoice-btn{
-
-//         width:100%;
+//         font-size:20px;
 
 //     }
 
 // }
-
 
 // </style>
 
@@ -1056,118 +1126,100 @@
 // <body>
 
 
-// <div class="container">
+// <header class="header">
 
 
-//     <!-- HEADER -->
+//     <div class="logo">
 
-//     <header class="header">
-
-
-//         <div class="logo">
-
-//             <div class="logo-icon">
-//                 🩺
-//             </div>
-
-
-//             <div>
-
-//                 <div class="logo-text">
-//                     GLOBAL HEALTHCARE
-//                 </div>
-
-//                 <div class="logo-sub">
-//                     SAFE & SECURE Healthcare
-//                 </div>
-
-//             </div>
-
+//         <div class="logo-icon">
+//             🩺
 //         </div>
-
-
-//         <a
-//             href="/doctor/dashboard"
-//             class="dashboard-btn"
-//         >
-
-//             🏠 Dashboard
-
-//         </a>
-
-//     </header>
-
-
-
-//     <!-- DOCTOR -->
-
-//     <section class="doctor-info">
-
-
-//         <div class="doctor-avatar">
-//             👨‍⚕️
-//         </div>
-
 
 //         <div>
 
-//             <h2>
-//                 Dr. ${doctorName}
-//             </h2>
+//             <div class="logo-text">
+//                 GLOBAL HEALTHCARE
+//             </div>
 
-//             <p>
-//                 ${doctorSpecialization}
-//             </p>
+//             <div class="logo-sub">
+//                 SAFE & SECURE Healthcare
+//             </div>
 
 //         </div>
 
-
-//     </section>
-
+//     </div>
 
 
-//     <!-- TITLE -->
+//     <a
+//         href="/doctor/dashboard"
+//         class="dashboard-btn"
+//     >
 
-//     <section class="page-title">
+//         🏠 Dashboard
 
-//         <h1>
-//             📦 My Orders
-//         </h1>
+//     </a>
+
+// </header>
+
+
+
+// <section class="doctor-info">
+
+//     <div class="doctor-avatar">
+//         👨‍⚕️
+//     </div>
+
+//     <div>
+
+//         <h2>
+//             Dr. ${escapeHTML(doctorName)}
+//         </h2>
 
 //         <p>
-//             View your complete order history and invoices.
+//             ${escapeHTML(doctorSpecialization)}
 //         </p>
 
-//     </section>
+//     </div>
+
+// </section>
 
 
 
-//     <!-- ORDERS -->
+// <section class="page-title">
 
-//     ${orderHTML}
+//     <h1>
+//         📦 My Orders
+//     </h1>
 
+//     <p>
+//         View your complete order history and invoices.
+//     </p>
 
-
-//     <!-- FOOTER -->
-
-//     <footer class="footer">
-
-//         © 2026
-//         <strong>
-//             GLOBAL HEALTHCARE
-//         </strong>
-
-//         <br>
-
-//         Powered by
-//         <strong>
-//             Osium Biogenix
-//         </strong>
-
-//     </footer>
+// </section>
 
 
-// </div>
+
+// ${orderHTML}
+
+
+
+// <footer class="footer">
+
+//     © 2026
+
+//     <strong>
+//         GLOBAL HEALTHCARE
+//     </strong>
+
+//     <br>
+
+//     Powered by
+
+//     <strong>
+//         Osium Biogenix
+//     </strong>
+
+// </footer>
 
 
 // </body>
@@ -1176,12 +1228,14 @@
 
 //         `);
 
-
 //     }
 
 //     catch (err) {
 
-//         console.log(err);
+//         console.log(
+//             "Orders Error:",
+//             err
+//         );
 
 //         res.status(500)
 //             .send("Orders Page Error");
@@ -1191,710 +1245,910 @@
 // });
 
 
-
-
-
-// // =================================
+// // ======================================================
 // // CREATE ORDER
-// // =================================
-
+// // ======================================================
 
 // router.post(
-// "/create-order",
-// async(req,res)=>{
+//     "/create-order",
+//     async (req, res) => {
 
+//         try {
 
-// try{
+//             // ==========================================
+//             // LOGIN
+//             // ==========================================
 
+//             if (!req.session.doctor) {
 
-// if(!req.session.doctor){
+//                 return res.status(401).json({
 
+//                     success: false,
 
-// return res.status(401)
-// .json({
+//                     message: "Unauthorized"
 
-// success:false,
+//                 });
 
-// message:"Unauthorized"
+//             }
 
-// });
 
+//             // ==========================================
+//             // CART
+//             // ==========================================
 
-// }
+//             const cart =
+//                 Array.isArray(req.body.cart)
+//                     ? req.body.cart
+//                     : [];
 
 
+//             if (cart.length === 0) {
 
+//                 return res.status(400).json({
 
-// const cart =
-// req.body.cart;
+//                     success: false,
 
+//                     message: "Cart is Empty"
 
+//                 });
 
-// let total = 0;
+//             }
 
-// cart.forEach(item=>{
 
+//             // ==========================================
+//             // TOTAL
+//             // ==========================================
 
-// total +=
-// Number(item.price) *
-// Number(item.qty);
+//             let total = 0;
 
 
-// });
+//             cart.forEach(item => {
 
+//                 const price =
+//                     Number(item.price || 0);
 
+//                 const qty =
+//                     Number(item.qty || 0);
 
+//                 total += price * qty;
 
+//             });
 
-// const order =
-// await DoctorOrder.create({
 
-// doctorId:
-// req.session.doctor._id,
+//             // ==========================================
+//             // CREATE ORDER
+//             // ==========================================
 
-// items:
-// cart.map(item=>({
+//             const order =
+//                 await DoctorOrder.create({
 
-// productId:item.id,
+//                     doctorId:
+//                         req.session.doctor._id,
 
-// name:item.name,
+//                     items:
+//                         cart.map(item => ({
 
-// price:Number(item.price),
+//                             productId:
+//                                 item.id,
 
-// image:item.image,
+//                             name:
+//                                 item.name,
 
-// qty:Number(item.qty)
+//                             price:
+//                                 Number(item.price || 0),
 
-// })),
+//                             image:
+//                                 item.image || "",
 
-// totalAmount:
-// total,
+//                             qty:
+//                                 Number(item.qty || 0)
 
-// status:
-// "Pending"
+//                         })),
 
-// });
+//                     totalAmount:
+//                         total,
 
+//                     status:
+//                         "Pending"
 
+//                 });
 
 
+//             // ==========================================
+//             // RESPONSE
+//             // ==========================================
 
-// res.json({
+//             res.json({
 
+//                 success: true,
 
-// success:true,
+//                 message:
+//                     "Order Created Successfully",
 
+//                 orderId:
+//                     order._id
 
-// message:"Order Created",
+//             });
 
+//         }
 
-// orderId:
-// order._id
+//         catch (err) {
 
+//             console.log(
+//                 "Create Order Error:",
+//                 err
+//             );
 
+//             res.status(500).json({
 
-// });
+//                 success: false,
 
+//                 message:
+//                     "Order Failed"
 
+//             });
 
+//         }
 
-// }
+//     }
+// );
 
-// catch(err){
 
-
-// console.log(err);
-
-
-// res.status(500)
-// .json({
-
-
-// success:false,
-
-
-// message:
-// "Order Failed"
-
-
-// });
-
-
-// }
-
-
-// });
-
-
-
-
-
-
-
-
-
-// // =================================
+// // ======================================================
 // // GENERATE INVOICE PDF
-// // =================================
-
+// // ======================================================
 
 // router.get(
-// "/invoice/:id",
-// async(req,res)=>{
+//     "/invoice/:id",
+//     async (req, res) => {
 
-// try{
+//         try {
 
+//             // ==========================================
+//             // LOGIN CHECK
+//             // ==========================================
 
-// const order =
-// await DoctorOrder.findById(req.params.id);
+//             if (!req.session.doctor) {
 
+//                 return res.redirect(
+//                     "/admin/doctor-login"
+//                 );
 
-
-// if(!order){
-
-// return res.send("Order Not Found");
-
-// }
-
-
+//             }
 
 
-// res.setHeader(
-// "Content-Type",
-// "application/pdf"
-// );
+//             // ==========================================
+//             // FIND ORDER
+//             // ==========================================
+
+//             const order =
+//                 await DoctorOrder.findById(
+//                     req.params.id
+//                 );
 
 
-// res.setHeader(
-// "Content-Disposition",
-// `attachment; filename=Estimate-${order._id}.pdf`
-// );
+//             if (!order) {
+
+//                 return res
+//                     .status(404)
+//                     .send("Order Not Found");
+
+//             }
 
 
-// const doc = new PDFDocument({
-//     size: "A4",
-//     margins: {
-//         top: 40,
-//         bottom: 40,
-//         left: 40,
-//         right: 40
-//     }
-// });
+//             // ==========================================
+//             // DOCTOR
+//             // ==========================================
+
+//             let doctor = null;
 
 
-// // =========================================
-// // FONT
-// // =========================================
+//             try {
 
-// doc.font(
-//     path.join(
-//         __dirname,
-//         "../fonts/DejaVuSans.ttf"
-//     )
-// );
+//                 if (order.doctorId) {
 
+//                     doctor =
+//                         await Doctor.findById(
+//                             order.doctorId
+//                         );
 
-// // =========================================
-// // PIPE
-// // =========================================
+//                 }
 
-// doc.pipe(res);
+//             }
 
+//             catch (doctorError) {
 
-// // =========================================
-// // HELPER
-// // =========================================
+//                 console.log(
+//                     "Doctor Fetch Error:",
+//                     doctorError
+//                 );
 
-// const rupee = (amount) => {
-//     return `Rs.${Number(amount || 0).toFixed(2)}`;
-// };
+//             }
 
 
-// // =========================================
-// // HEADER
-// // =========================================
+//             // ==========================================
+//             // FALLBACK SESSION DOCTOR
+//             // ==========================================
 
-// doc
-//     .fontSize(20)
-//     .text(
-//         "GLOBAL HEALTHCARE",
-//         {
-//             align: "center"
+//             const sessionDoctor =
+//                 req.session.doctor || {};
+
+
+//             const doctorName =
+//                 (doctor && (
+//                     doctor.name ||
+//                     doctor.doctorName
+//                 )) ||
+//                 sessionDoctor.name ||
+//                 sessionDoctor.doctorName ||
+//                 "Doctor";
+
+
+//             const doctorId =
+//                 (doctor && (
+//                     doctor.doctorId ||
+//                     doctor._id
+//                 )) ||
+//                 sessionDoctor.doctorId ||
+//                 sessionDoctor._id ||
+//                 "";
+
+
+//             const doctorPhone =
+//                 (doctor && (
+//                     doctor.phone ||
+//                     doctor.mobile
+//                 )) ||
+//                 sessionDoctor.phone ||
+//                 sessionDoctor.mobile ||
+//                 "";
+
+
+//             const specialization =
+//                 (doctor && doctor.specialization) ||
+//                 sessionDoctor.specialization ||
+//                 "General Physician";
+
+
+//             // ==========================================
+//             // PDF HEADER
+//             // ==========================================
+
+//             res.setHeader(
+//                 "Content-Type",
+//                 "application/pdf"
+//             );
+
+
+//             res.setHeader(
+//                 "Content-Disposition",
+//                 `attachment; filename=Estimate-${order._id}.pdf`
+//             );
+
+
+//             const doc =
+//                 new PDFDocument({
+
+//                     size: "A4",
+
+//                     margins: {
+
+//                         top: 40,
+
+//                         bottom: 40,
+
+//                         left: 40,
+
+//                         right: 40
+
+//                     }
+
+//                 });
+
+
+//             // ==========================================
+//             // FONT
+//             // ==========================================
+
+//             const fontPath =
+//                 path.join(
+//                     __dirname,
+//                     "../fonts/DejaVuSans.ttf"
+//                 );
+
+
+//             try {
+
+//                 doc.font(fontPath);
+
+//             }
+
+//             catch (fontError) {
+
+//                 console.log(
+//                     "Font Error:",
+//                     fontError
+//                 );
+
+//             }
+
+
+//             // ==========================================
+//             // PIPE
+//             // ==========================================
+
+//             doc.pipe(res);
+
+
+//             // ==========================================
+//             // HELPER
+//             // ==========================================
+
+//             const money = amount => {
+
+//                 return `Rs.${Number(
+//                     amount || 0
+//                 ).toFixed(2)}`;
+
+//             };
+
+
+//             // ==========================================
+//             // HEADER
+//             // ==========================================
+
+//             doc
+//                 .fontSize(20)
+//                 .text(
+//                     "GLOBAL HEALTHCARE",
+//                     {
+//                         align: "center"
+//                     }
+//                 );
+
+
+//             doc
+//                 .fontSize(10)
+//                 .text(
+//                     "SAFE & SECURE Healthcare",
+//                     {
+//                         align: "center"
+//                     }
+//                 );
+
+
+//             doc.moveDown(1);
+
+
+//             doc
+//                 .fontSize(16)
+//                 .text(
+//                     "ROUGH ESTIMATE",
+//                     {
+//                         align: "center"
+//                     }
+//                 );
+
+
+//             doc.moveDown(1.5);
+
+
+//             // ==========================================
+//             // DOCTOR DETAILS
+//             // ==========================================
+
+//             doc.fontSize(11);
+
+
+//             doc.text(
+//                 `DOCTOR : Dr. ${doctorName}`
+//             );
+
+
+//             if (specialization) {
+
+//                 doc.text(
+//                     `SPECIALIZATION : ${specialization}`
+//                 );
+
+//             }
+
+
+//             if (doctorId) {
+
+//                 doc.text(
+//                     `DOCTOR ID : ${doctorId}`
+//                 );
+
+//             }
+
+
+//             if (doctorPhone) {
+
+//                 doc.text(
+//                     `PHONE : ${doctorPhone}`
+//                 );
+
+//             }
+
+
+//             doc.text(
+//                 `BILL NO : A${order._id
+//                     .toString()
+//                     .slice(-6)}`
+//             );
+
+
+//             doc.text(
+//                 `DATE : ${
+//                     new Date(
+//                         order.createdAt
+//                     ).toLocaleDateString(
+//                         "en-GB"
+//                     )
+//                 }`
+//             );
+
+
+//             doc.text(
+//                 "TYPE : CREDIT"
+//             );
+
+
+//             doc.moveDown(1);
+
+
+//             // ==========================================
+//             // TABLE TOP LINE
+//             // ==========================================
+
+//             doc
+//                 .fontSize(9)
+//                 .text(
+//                     "--------------------------------------------------------------------------------",
+//                     40
+//                 );
+
+
+//             doc.moveDown(.5);
+
+
+//             // ==========================================
+//             // TABLE HEADER
+//             // ==========================================
+
+//             let tableY = doc.y;
+
+
+//             doc
+//                 .fontSize(10)
+//                 .text(
+//                     "SL",
+//                     40,
+//                     tableY
+//                 );
+
+
+//             doc.text(
+//                 "PRODUCT DESCRIPTION",
+//                 70,
+//                 tableY
+//             );
+
+
+//             doc.text(
+//                 "QTY",
+//                 300,
+//                 tableY
+//             );
+
+
+//             doc.text(
+//                 "RATE",
+//                 350,
+//                 tableY
+//             );
+
+
+//             doc.text(
+//                 "AMOUNT",
+//                 430,
+//                 tableY
+//             );
+
+
+//             // ==========================================
+//             // HEADER LINE
+//             // ==========================================
+
+//             tableY += 20;
+
+
+//             doc.text(
+//                 "--------------------------------------------------------------------------------",
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 10;
+
+
+//             // ==========================================
+//             // PRODUCTS
+//             // ==========================================
+
+//             let total = 0;
+
+//             let totalQty = 0;
+
+
+//             const items =
+//                 Array.isArray(order.items)
+//                     ? order.items
+//                     : [];
+
+
+//             items.forEach(
+//                 (item, index) => {
+
+//                     const qty =
+//                         Number(
+//                             item.qty || 0
+//                         );
+
+
+//                     const rate =
+//                         Number(
+//                             item.price || 0
+//                         );
+
+
+//                     const amount =
+//                         qty * rate;
+
+
+//                     total += amount;
+
+//                     totalQty += qty;
+
+
+//                     let productName =
+//                         item.name ||
+//                         "Product";
+
+
+//                     // Long name control
+
+//                     if (
+//                         productName.length > 35
+//                     ) {
+
+//                         productName =
+//                             productName.substring(
+//                                 0,
+//                                 35
+//                             ) + "...";
+
+//                     }
+
+
+//                     // ==================================
+//                     // PAGE BREAK
+//                     // ==================================
+
+//                     if (tableY > 700) {
+
+//                         doc.addPage();
+
+//                         tableY = 50;
+
+
+//                         doc
+//                             .fontSize(10)
+//                             .text(
+//                                 "SL",
+//                                 40,
+//                                 tableY
+//                             );
+
+
+//                         doc.text(
+//                             "PRODUCT DESCRIPTION",
+//                             70,
+//                             tableY
+//                         );
+
+
+//                         doc.text(
+//                             "QTY",
+//                             300,
+//                             tableY
+//                         );
+
+
+//                         doc.text(
+//                             "RATE",
+//                             350,
+//                             tableY
+//                         );
+
+
+//                         doc.text(
+//                             "AMOUNT",
+//                             430,
+//                             tableY
+//                         );
+
+
+//                         tableY += 20;
+
+//                     }
+
+
+//                     // ==================================
+//                     // ROW
+//                     // ==================================
+
+//                     doc
+//                         .fontSize(9)
+//                         .text(
+//                             `${index + 1}`,
+//                             40,
+//                             tableY
+//                         );
+
+
+//                     doc.text(
+//                         productName,
+//                         70,
+//                         tableY,
+//                         {
+//                             width: 215
+//                         }
+//                     );
+
+
+//                     doc.text(
+//                         `${qty}`,
+//                         300,
+//                         tableY
+//                     );
+
+
+//                     doc.text(
+//                         money(rate),
+//                         350,
+//                         tableY
+//                     );
+
+
+//                     doc.text(
+//                         money(amount),
+//                         430,
+//                         tableY
+//                     );
+
+
+//                     tableY += 25;
+
+//                 }
+//             );
+
+
+//             // ==========================================
+//             // TABLE BOTTOM
+//             // ==========================================
+
+//             doc.text(
+//                 "--------------------------------------------------------------------------------",
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 25;
+
+
+//             // ==========================================
+//             // SUMMARY
+//             // ==========================================
+
+//             doc
+//                 .fontSize(11)
+//                 .text(
+//                     `NO OF ITEMS : ${items.length}`,
+//                     40,
+//                     tableY
+//                 );
+
+
+//             tableY += 20;
+
+
+//             doc.text(
+//                 `TOTAL QUANTITY : ${totalQty}`,
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 25;
+
+
+//             // ==========================================
+//             // GRAND TOTAL
+//             // ==========================================
+
+//             doc
+//                 .fontSize(13)
+//                 .text(
+//                     `GRAND TOTAL : ${money(total)}`,
+//                     40,
+//                     tableY
+//                 );
+
+
+//             tableY += 25;
+
+
+//             // ==========================================
+//             // BILL SUMMARY
+//             // ==========================================
+
+//             doc
+//                 .fontSize(11)
+//                 .text(
+//                     "--------------------------------------------------------------------------------",
+//                     40,
+//                     tableY
+//                 );
+
+
+//             tableY += 20;
+
+
+//             doc.text(
+//                 `CURRENT BILL AMOUNT : ${money(total)}`,
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 20;
+
+
+//             const backDues =
+//                 Number(
+//                     order.backDues || 0
+//                 );
+
+
+//             const totalBalance =
+//                 total + backDues;
+
+
+//             doc.text(
+//                 `BACK DUES AMOUNT    : ${money(backDues)}`,
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 20;
+
+
+//             doc.text(
+//                 `TOTAL BALANCE       : ${money(totalBalance)}`,
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 25;
+
+
+//             doc.text(
+//                 "--------------------------------------------------------------------------------",
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 30;
+
+
+//             // ==========================================
+//             // FOOTER
+//             // ==========================================
+
+//             doc
+//                 .fontSize(10)
+//                 .text(
+//                     "Import Purchase ONLINE : No",
+//                     40,
+//                     tableY
+//                 );
+
+
+//             tableY += 20;
+
+
+//             doc
+//                 .fontSize(12)
+//                 .text(
+//                     "GLOBAL HEALTHCARE",
+//                     40,
+//                     tableY
+//                 );
+
+
+//             tableY += 18;
+
+
+//             doc
+//                 .fontSize(9)
+//                 .text(
+//                     "Powered by Osium Biogenix",
+//                     40,
+//                     tableY
+//                 );
+
+
+//             tableY += 18;
+
+
+//             doc.text(
+//                 "Call : 7488033368",
+//                 40,
+//                 tableY
+//             );
+
+
+//             tableY += 25;
+
+
+//             doc.text(
+//                 "============================================================",
+//                 40,
+//                 tableY
+//             );
+
+
+//             // ==========================================
+//             // END PDF
+//             // ==========================================
+
+//             doc.end();
+
 //         }
-//     );
 
-// doc
-//     .fontSize(10)
-//     .text(
-//         "SAFE & SECURE Healthcare",
-//         {
-//             align: "center"
+//         catch (err) {
+
+//             console.log(
+//                 "Invoice Error:",
+//                 err
+//             );
+
+
+//             if (!res.headersSent) {
+
+//                 res.status(500)
+//                     .send(
+//                         "Invoice Generate Error"
+//                     );
+
+//             }
+
 //         }
-//     );
-
-// doc.moveDown(1);
-
-
-// doc
-//     .fontSize(16)
-//     .text(
-//         "ROUGH ESTIMATE",
-//         {
-//             align: "center"
-//         }
-//     );
-
-// doc.moveDown(1.5);
-
-
-// // =========================================
-// // DOCTOR DETAILS
-// // =========================================
-
-// // Doctor name different fields se safely nikalega
-
-// const doctorName =
-//     order.doctorName ||
-//     order.doctor?.name ||
-//     order.doctor?.doctorName ||
-//     order.customerName ||
-//     order.name ||
-//     "Doctor";
-
-
-// // Doctor ID
-
-// const doctorId =
-//     order.doctorId ||
-//     order.doctor?.doctorId ||
-//     "";
-
-
-// // Phone
-
-// const doctorPhone =
-//     order.doctorPhone ||
-//     order.doctor?.phone ||
-//     "";
-
-
-// // =========================================
-// // BILL DETAILS
-// // =========================================
-
-// doc.fontSize(11);
-
-// doc.text(
-//     `DOCTOR : Dr. ${doctorName}`
-// );
-
-// if (doctorId) {
-
-//     doc.text(
-//         `DOCTOR ID : ${doctorId}`
-//     );
-
-// }
-
-// if (doctorPhone) {
-
-//     doc.text(
-//         `PHONE : ${doctorPhone}`
-//     );
-
-// }
-
-// doc.text(
-//     `BILL NO : A${order._id.toString().slice(-6)}`
-// );
-
-// doc.text(
-//     `DATE : ${
-//         new Date(order.createdAt)
-//             .toLocaleDateString("en-GB")
-//     }`
-// );
-
-// doc.text(
-//     "TYPE : CREDIT"
-// );
-
-
-// doc.moveDown(1);
-
-
-// // =========================================
-// // TABLE TOP LINE
-// // =========================================
-
-// doc
-//     .fontSize(9)
-//     .text(
-//         "--------------------------------------------------------------------------------",
-//         40
-//     );
-
-// doc.moveDown(0.5);
-
-
-// // =========================================
-// // TABLE HEADER
-// // =========================================
-
-// let tableY = doc.y;
-
-// doc
-//     .fontSize(10)
-//     .text(
-//         "SL",
-//         40,
-//         tableY
-//     );
-
-// doc.text(
-//     "PRODUCT DESCRIPTION",
-//     70,
-//     tableY
-// );
-
-// doc.text(
-//     "QTY",
-//     300,
-//     tableY
-// );
-
-// doc.text(
-//     "RATE",
-//     350,
-//     tableY
-// );
-
-// doc.text(
-//     "AMOUNT",
-//     430,
-//     tableY
-// );
-
-
-// // =========================================
-// // HEADER LINE
-// // =========================================
-
-// tableY += 20;
-
-// doc.text(
-//     "--------------------------------------------------------------------------------",
-//     40,
-//     tableY
-// );
-
-// tableY += 10;
-
-
-// // =========================================
-// // PRODUCTS
-// // =========================================
-
-// let total = 0;
-
-// let totalQty = 0;
-
-
-// order.items.forEach((item, index) => {
-
-//     const qty =
-//         Number(item.qty || 0);
-
-//     const rate =
-//         Number(item.price || 0);
-
-//     const amount =
-//         qty * rate;
-
-
-//     total += amount;
-
-//     totalQty += qty;
-
-
-//     // -------------------------------------
-//     // PRODUCT NAME
-//     // -------------------------------------
-
-//     let productName =
-//         item.name || "Product";
-
-
-//     // Long product name control
-
-//     if (productName.length > 34) {
-
-//         productName =
-//             productName.substring(0, 34) + "...";
 
 //     }
-
-
-//     // -------------------------------------
-//     // ROW
-//     // -------------------------------------
-
-//     doc
-//         .fontSize(9)
-//         .text(
-//             `${index + 1}`,
-//             40,
-//             tableY
-//         );
-
-
-//     doc.text(
-//         productName,
-//         70,
-//         tableY,
-//         {
-//             width: 215
-//         }
-//     );
-
-
-//     doc.text(
-//         `${qty}`,
-//         300,
-//         tableY
-//     );
-
-
-//     doc.text(
-//         rupee(rate),
-//         350,
-//         tableY
-//     );
-
-
-//     doc.text(
-//         rupee(amount),
-//         430,
-//         tableY
-//     );
-
-
-//     // -------------------------------------
-//     // NEXT ROW
-//     // -------------------------------------
-
-//     tableY += 25;
-
-
-//     // Page overflow protection
-
-//     if (tableY > 730) {
-
-//         doc.addPage();
-
-//         tableY = 50;
-
-//     }
-
-// });
-
-
-// // =========================================
-// // TABLE BOTTOM LINE
-// // =========================================
-
-// doc.text(
-//     "--------------------------------------------------------------------------------",
-//     40,
-//     tableY
-// );
-
-// tableY += 25;
-
-
-// // =========================================
-// // SUMMARY
-// // =========================================
-
-// doc
-//     .fontSize(11)
-//     .text(
-//         `NO OF ITEMS : ${order.items.length}`,
-//         40,
-//         tableY
-//     );
-
-// tableY += 20;
-
-
-// doc.text(
-//     `TOTAL QUANTITY : ${totalQty}`,
-//     40,
-//     tableY
-// );
-
-// tableY += 25;
-
-
-// // =========================================
-// // GRAND TOTAL
-// // =========================================
-
-// doc
-//     .fontSize(13)
-//     .text(
-//         `GRAND TOTAL : ${rupee(total)}`,
-//         40,
-//         tableY
-//     );
-
-// tableY += 25;
-
-
-// // =========================================
-// // BILL SUMMARY
-// // =========================================
-
-// doc
-//     .fontSize(11)
-//     .text(
-//         "--------------------------------------------------------------------------------",
-//         40,
-//         tableY
-//     );
-
-// tableY += 20;
-
-
-// doc.text(
-//     `CURRENT BILL AMOUNT : ${rupee(total)}`,
-//     40,
-//     tableY
-// );
-
-// tableY += 20;
-
-
-// const backDues =
-//     Number(order.backDues || 0);
-
-
-// const totalBalance =
-//     total + backDues;
-
-
-// doc.text(
-//     `BACK DUES AMOUNT    : ${rupee(backDues)}`,
-//     40,
-//     tableY
-// );
-
-// tableY += 20;
-
-
-// doc.text(
-//     `TOTAL BALANCE       : ${rupee(totalBalance)}`,
-//     40,
-//     tableY
-// );
-
-// tableY += 25;
-
-
-// doc.text(
-//     "--------------------------------------------------------------------------------",
-//     40,
-//     tableY
-// );
-
-// tableY += 30;
-
-
-// // =========================================
-// // FOOTER
-// // =========================================
-
-// doc
-//     .fontSize(10)
-//     .text(
-//         "Import Purchase ONLINE : No",
-//         40,
-//         tableY
-//     );
-
-// tableY += 20;
-
-
-// doc
-//     .fontSize(12)
-//     .text(
-//         "GLOBAL HEALTHCARE",
-//         40,
-//         tableY
-//     );
-
-// tableY += 18;
-
-
-// doc
-//     .fontSize(9)
-//     .text(
-//         "Powered by Osium Biogenix",
-//         40,
-//         tableY
-//     );
-
-// tableY += 18;
-
-
-// doc.text(
-//     "Call : 7488033368",
-//     40,
-//     tableY
-// );
-
-// tableY += 25;
-
-
-// doc.text(
-//     "============================================================",
-//     40,
-//     tableY
 // );
 
 
-// // =========================================
-// // END PDF
-// // =========================================
-
-// doc.end();
-
-
-
-
-// // =========================================
-// // INVOICE ERROR HANDLER
-// // =========================================
-
-// }
-
-// catch (err) {
-
-//     console.log("Invoice Error:", err);
-
-//     if (!res.headersSent) {
-
-//         res.status(500)
-//             .send("Invoice Generate Error");
-
-//     }
-
-// }
-
-
-// // =================================
+// // ======================================================
 // // LOGOUT
-// // =================================
+// // ======================================================
 
 // router.get(
 //     "/logout",
@@ -1914,9 +2168,64 @@
 // );
 
 
-// // =================================
+// // ======================================================
+// // DOCTOR CART PAGE
+// // ======================================================
+
+// router.get(
+//     "/cart",
+//     async (req, res) => {
+
+//         try {
+
+//             // ==========================================
+//             // LOGIN CHECK
+//             // ==========================================
+
+//             if (!req.session.doctor) {
+
+//                 return res.redirect(
+//                     "/admin/doctor-login"
+//                 );
+
+//             }
+
+//             // ==========================================
+//             // DOCTOR CART PAGE
+//             // ==========================================
+
+//             const DoctorCart =
+//                 require(
+//                     "../pages/doctorCart"
+//                 );
+
+//             res.send(
+//                 DoctorCart(
+//                     req.session.doctor
+//                 )
+//             );
+
+//         }
+
+//         catch (err) {
+
+//             console.log(
+//                 "Doctor Cart Error:",
+//                 err
+//             );
+
+//             res.status(500).send(
+//                 "Doctor Cart Page Error"
+//             );
+
+//         }
+
+//     }
+// );
+
+// // ======================================================
 // // DOCTOR DASHBOARD
-// // =================================
+// // ======================================================
 
 // router.get(
 //     "/dashboard",
@@ -1924,9 +2233,9 @@
 
 //         try {
 
-//             // =========================
+//             // ==========================================
 //             // LOGIN CHECK
-//             // =========================
+//             // ==========================================
 
 //             if (!req.session.doctor) {
 
@@ -1937,9 +2246,9 @@
 //             }
 
 
-//             // =========================
-//             // GET PRODUCTS
-//             // =========================
+//             // ==========================================
+//             // PRODUCTS
+//             // ==========================================
 
 //             const products =
 //                 await Product.find()
@@ -1948,13 +2257,13 @@
 //                     });
 
 
-//             // =========================
-//             // DASHBOARD PAGE
-//             // =========================
+//             // ==========================================
+//             // DASHBOARD
+//             // ==========================================
 
 //             const DoctorDashboard =
 //                 require(
-//                     "../pages/DoctorDashboard"
+//                     "../pages/doctorDashboard"
 //                 );
 
 
@@ -1976,6 +2285,7 @@
 //                 err
 //             );
 
+
 //             res.status(500)
 //                 .send(
 //                     "Dashboard Error"
@@ -1986,81 +2296,1717 @@
 //     }
 // );
 
+// // ========================================
+// // DOCTOR CHECKOUT PAGE
+// // ========================================
 
+// const Checkout = require("../pages/checkout");
 
+// router.get("/checkout", async (req, res) => {
 
-// // =================================
-// // LOGOUT
-// // =================================
+//     try {
 
+//         // ==================================
+//         // LOGIN CHECK
+//         // ==================================
 
-// router.get(
-// "/logout",
-// (req,res)=>{
+//         if (!req.session.doctor) {
 
+//             return res.redirect(
+//                 "/admin/doctor-login"
+//             );
 
-// req.session.destroy(
-// ()=>{
+//         }
 
+//         // ==================================
+//         // SESSION DOCTOR ID
+//         // ==================================
 
-// res.redirect(
-// "/admin/doctor-login"
-// );
+//         const sessionDoctor =
+//             req.session.doctor;
 
+//         const doctorId =
+//             sessionDoctor._id ||
+//             sessionDoctor.id ||
+//             sessionDoctor.doctorId;
+
+//         console.log(
+//             "CHECKOUT SESSION DOCTOR:",
+//             sessionDoctor
+//         );
+
+//         console.log(
+//             "CHECKOUT DOCTOR ID:",
+//             doctorId
+//         );
+
+//         // ==================================
+//         // ID CHECK
+//         // ==================================
+
+//         if (!doctorId) {
+
+//             return res.status(400).send(
+//                 "Doctor ID is missing from session."
+//             );
+
+//         }
+
+//         // ==================================
+//         // DATABASE SE DOCTOR FETCH
+//         // ==================================
+
+//         const doctor =
+//             await Doctor.findById(
+//                 doctorId
+//             ).lean();
+
+//         // ==================================
+//         // DOCTOR NOT FOUND
+//         // ==================================
+
+//         if (!doctor) {
+
+//             return res.status(404).send(
+//                 "Doctor not found in database."
+//             );
+
+//         }
+
+//         console.log(
+//             "CHECKOUT DOCTOR FROM DATABASE:",
+//             doctor
+//         );
+
+//         // ==================================
+//         // SEND CHECKOUT PAGE
+//         // ==================================
+
+//         res.send(
+//             Checkout(doctor)
+//         );
+
+//     }
+
+//     catch (error) {
+
+//         console.error(
+//             "Doctor Checkout Error:",
+//             error
+//         );
+
+//         res.status(500).send(
+//             "Server Error. Please try again."
+//         );
+
+//     }
 
 // });
 
 
-// });
+// // ========================================
+// // CASH ON DELIVERY
+// // ========================================
+// // ========================================
+// // CASH ON DELIVERY ORDER
+// // ========================================
+
+// // ========================================
+// // DOCTOR CHECKOUT PAGE
+// // ========================================
+
+// router.get("/checkout/:id", async (req, res) => {
+
+//     try {
+
+//         const id = req.params.id;
+
+//         console.log("CHECKOUT ID:", id);
 
 
+//         // ==================================
+//         // FIND DOCTOR
+//         // ==================================
+
+//         let doctor = null;
 
 
-// router.get("/dashboard", async(req,res)=>{
+//         // पहले custom doctorId से खोजें
+//         doctor = await Doctor.findOne({
+//             doctorId: id
+//         }).lean();
 
-//     try{
 
-//         if(!req.session.doctor){
+//         // अगर नहीं मिला तो MongoDB _id से खोजें
+//         if (!doctor) {
 
-//             return res.redirect("/admin/doctor-login");
+//             // ObjectId valid है तभी findById करें
+//             if (
+//                 /^[0-9a-fA-F]{24}$/.test(id)
+//             ) {
+
+//                 doctor =
+//                     await Doctor.findById(id).lean();
+
+//             }
 
 //         }
 
 
-//         const products = await Product.find()
-//         .sort({
-//             createdAt:-1
-//         });
+//         // ==================================
+//         // DOCTOR NOT FOUND
+//         // ==================================
+
+//         if (!doctor) {
+
+//             console.log(
+//                 "DOCTOR NOT FOUND:",
+//                 id
+//             );
+
+//             return res.status(404).send(
+//                 "Doctor not found"
+//             );
+
+//         }
 
 
-//         const DoctorDashboard = require("../pages/DoctorDashboard");
+//         // ==================================
+//         // SUCCESS
+//         // ==================================
+
+//         console.log(
+//             "CHECKOUT DOCTOR:",
+//             doctor
+//         );
+
+
+//         const Checkout =
+//             require("../pages/checkout");
 
 
 //         res.send(
-//             DoctorDashboard(
-//                 req.session.doctor,
-//                 products
-//             )
+//             Checkout(doctor)
 //         );
 
 
 //     }
-//     catch(err){
 
-//         console.log(err);
+//     catch (error) {
 
-//         res.status(500)
-//         .send("Dashboard Error");
+//         console.error(
+//             "Doctor Checkout Error:",
+//             error
+//         );
+
+//         res.status(500).send(
+//             "Server Error"
+//         );
+
+//     }
+
+// });
+
+// // ========================================
+// // CHECKOUT SUCCESS PAGE
+// // ========================================
+// // ======================================================
+// // CHECKOUT SUCCESS PAGE
+// // ======================================================
+
+// router.get(
+//     "/checkout-success/:id",
+//     async (req, res) => {
+
+//         try {
+
+//             // ==========================================
+//             // LOGIN CHECK
+//             // ==========================================
+
+//             if (!req.session.doctor) {
+
+//                 return res.redirect(
+//                     "/admin/doctor-login"
+//                 );
+
+//             }
+
+
+//             // ==========================================
+//             // ORDER ID
+//             // ==========================================
+
+//             const orderId =
+//                 req.params.id;
+
+
+//             console.log(
+//                 "SUCCESS ORDER ID:",
+//                 orderId
+//             );
+
+
+//             // ==========================================
+//             // FIND ORDER
+//             // ==========================================
+
+//             const order =
+//                 await DoctorOrder
+//                     .findById(orderId)
+//                     .lean();
+
+
+//             if (!order) {
+
+//                 console.log(
+//                     "SUCCESS ORDER NOT FOUND:",
+//                     orderId
+//                 );
+
+//                 return res.status(404).send(
+//                     "Order not found"
+//                 );
+
+//             }
+
+
+//             // ==========================================
+//             // FIND DOCTOR
+//             // ==========================================
+
+//             let doctor = null;
+
+
+//             if (order.doctorId) {
+
+//                 // MongoDB ObjectId
+//                 if (
+//                     /^[0-9a-fA-F]{24}$/.test(
+//                         String(order.doctorId)
+//                     )
+//                 ) {
+
+//                     doctor =
+//                         await Doctor
+//                             .findById(
+//                                 order.doctorId
+//                             )
+//                             .lean();
+
+//                 }
+
+
+//                 // Custom doctorId fallback
+//                 if (!doctor) {
+
+//                     doctor =
+//                         await Doctor
+//                             .findOne({
+//                                 doctorId:
+//                                     String(
+//                                         order.doctorId
+//                                     )
+//                             })
+//                             .lean();
+
+//                 }
+
+//             }
+
+
+//             // ==========================================
+//             // SESSION DOCTOR FALLBACK
+//             // ==========================================
+
+//             if (!doctor) {
+
+//                 doctor =
+//                     req.session.doctor || {};
+
+//             }
+
+
+//             // ==========================================
+//             // DOCTOR DETAILS
+//             // ==========================================
+
+//             const doctorName =
+//                 doctor.name ||
+//                 doctor.doctorName ||
+//                 order.doctorName ||
+//                 "Doctor";
+
+
+//             const doctorPhone =
+//                 doctor.phone ||
+//                 doctor.mobile ||
+//                 order.doctorPhone ||
+//                 "";
+
+
+//             const doctorEmail =
+//                 doctor.email ||
+//                 order.doctorEmail ||
+//                 "";
+
+
+//             const doctorDisplayId =
+//                 doctor.doctorId ||
+//                 doctor._id ||
+//                 order.doctorId ||
+//                 "";
+
+
+//             // ==========================================
+//             // ORDER TOTAL
+//             // ==========================================
+
+//             const totalAmount =
+//                 Number(
+//                     order.totalAmount || 0
+//                 );
+
+
+//             // ==========================================
+//             // ITEMS
+//             // ==========================================
+
+//             const items =
+//                 Array.isArray(order.items)
+//                     ? order.items
+//                     : [];
+
+
+//             // ==========================================
+//             // SUCCESS PAGE
+//             // ==========================================
+
+//             res.send(`
+
+// <!DOCTYPE html>
+
+// <html lang="en">
+
+// <head>
+
+// <meta charset="UTF-8">
+
+// <meta
+//     name="viewport"
+//     content="width=device-width, initial-scale=1.0"
+// >
+
+// <title>
+//     Order Successful | GLOBAL HEALTHCARE
+// </title>
+
+// <style>
+
+// *{
+//     margin:0;
+//     padding:0;
+//     box-sizing:border-box;
+//     font-family:
+//         Arial,
+//         Helvetica,
+//         sans-serif;
+// }
+
+// body{
+
+//     min-height:100vh;
+
+//     display:flex;
+
+//     align-items:center;
+
+//     justify-content:center;
+
+//     padding:20px;
+
+//     background:
+//         linear-gradient(
+//             135deg,
+//             #eff6ff,
+//             #f0fdf4
+//         );
+
+// }
+
+// .success-card{
+
+//     width:100%;
+
+//     max-width:550px;
+
+//     background:#fff;
+
+//     border-radius:28px;
+
+//     padding:35px 25px;
+
+//     text-align:center;
+
+//     box-shadow:
+//         0 20px 60px
+//         rgba(0,0,0,.12);
+
+// }
+
+// .success-icon{
+
+//     width:90px;
+
+//     height:90px;
+
+//     margin:0 auto 20px;
+
+//     border-radius:50%;
+
+//     display:flex;
+
+//     align-items:center;
+
+//     justify-content:center;
+
+//     background:#dcfce7;
+
+//     color:#16a34a;
+
+//     font-size:48px;
+
+// }
+
+// h1{
+
+//     color:#15803d;
+
+//     font-size:28px;
+
+//     margin-bottom:10px;
+
+// }
+
+// .subtitle{
+
+//     color:#64748b;
+
+//     font-size:15px;
+
+//     line-height:1.6;
+
+//     margin-bottom:25px;
+
+// }
+
+// .order-box{
+
+//     background:#eff6ff;
+
+//     border:1px solid #bfdbfe;
+
+//     border-radius:18px;
+
+//     padding:16px;
+
+//     margin-bottom:20px;
+
+// }
+
+// .order-number{
+
+//     color:#2563eb;
+
+//     font-size:16px;
+
+//     font-weight:900;
+
+// }
+
+// .doctor-box{
+
+//     background:#f8fafc;
+
+//     border:1px solid #e2e8f0;
+
+//     border-radius:18px;
+
+//     padding:18px;
+
+//     text-align:left;
+
+//     margin-bottom:20px;
+
+// }
+
+// .row{
+
+//     display:flex;
+
+//     justify-content:space-between;
+
+//     gap:15px;
+
+//     padding:9px 0;
+
+//     border-bottom:1px solid #e5e7eb;
+
+// }
+
+// .row:last-child{
+
+//     border-bottom:none;
+
+// }
+
+// .label{
+
+//     color:#64748b;
+
+//     font-size:14px;
+
+// }
+
+// .value{
+
+//     font-weight:700;
+
+//     color:#0f172a;
+
+//     text-align:right;
+
+// }
+
+// .amount-box{
+
+//     display:flex;
+
+//     justify-content:space-between;
+
+//     align-items:center;
+
+//     padding:18px;
+
+//     margin-bottom:20px;
+
+//     border-radius:18px;
+
+//     background:
+//         linear-gradient(
+//             135deg,
+//             #16a34a,
+//             #22c55e
+//         );
+
+//     color:white;
+
+// }
+
+// .amount-label{
+
+//     font-weight:700;
+
+// }
+
+// .amount{
+
+//     font-size:24px;
+
+//     font-weight:900;
+
+// }
+
+// .cod-box{
+
+//     background:#fff7ed;
+
+//     border:1px solid #fed7aa;
+
+//     border-radius:18px;
+
+//     padding:18px;
+
+//     margin-bottom:25px;
+
+// }
+
+// .cod-title{
+
+//     color:#c2410c;
+
+//     font-weight:800;
+
+//     font-size:17px;
+
+//     margin-bottom:7px;
+
+// }
+
+// .cod-text{
+
+//     color:#7c2d12;
+
+//     font-size:14px;
+
+//     line-height:1.5;
+
+// }
+
+// .buttons{
+
+//     display:flex;
+
+//     flex-direction:column;
+
+//     gap:12px;
+
+// }
+
+// .btn{
+
+//     display:block;
+
+//     width:100%;
+
+//     padding:14px 20px;
+
+//     border-radius:14px;
+
+//     text-decoration:none;
+
+//     font-weight:800;
+
+// }
+
+// .dashboard{
+
+//     background:
+//         linear-gradient(
+//             135deg,
+//             #2563eb,
+//             #4f46e5
+//         );
+
+//     color:#fff;
+
+// }
+
+// .orders{
+
+//     background:#eff6ff;
+
+//     color:#2563eb;
+
+// }
+
+// .footer{
+
+//     margin-top:25px;
+
+//     color:#94a3b8;
+
+//     font-size:12px;
+
+// }
+
+// </style>
+
+// </head>
+
+// <body>
+
+// <div class="success-card">
+
+
+//     <div class="success-icon">
+//         ✓
+//     </div>
+
+
+//     <h1>
+//         Order Placed Successfully
+//     </h1>
+
+
+//     <p class="subtitle">
+
+//         Your Cash on Delivery order has been
+//         successfully placed.
+
+//     </p>
+
+
+//     <!-- ORDER -->
+
+//     <div class="order-box">
+
+//         <div class="order-number">
+
+//             Order #${String(order._id).slice(-8)}
+
+//         </div>
+
+//     </div>
+
+
+//     <!-- DOCTOR -->
+
+//     <div class="doctor-box">
+
+
+//         <div class="row">
+
+//             <span class="label">
+//                 Doctor ID
+//             </span>
+
+//             <span class="value">
+//                 ${escapeHTML(
+//                     String(doctorDisplayId)
+//                 )}
+//             </span>
+
+//         </div>
+
+
+//         <div class="row">
+
+//             <span class="label">
+//                 Doctor Name
+//             </span>
+
+//             <span class="value">
+//                 Dr. ${escapeHTML(
+//                     doctorName
+//                 )}
+//             </span>
+
+//         </div>
+
+
+//         ${
+//             doctorPhone
+//             ?
+//             `
+//             <div class="row">
+
+//                 <span class="label">
+//                     Mobile
+//                 </span>
+
+//                 <span class="value">
+//                     ${escapeHTML(
+//                         doctorPhone
+//                     )}
+//                 </span>
+
+//             </div>
+//             `
+//             :
+//             ""
+//         }
+
+
+//         ${
+//             doctorEmail
+//             ?
+//             `
+//             <div class="row">
+
+//                 <span class="label">
+//                     Email
+//                 </span>
+
+//                 <span class="value">
+//                     ${escapeHTML(
+//                         doctorEmail
+//                     )}
+//                 </span>
+
+//             </div>
+//             `
+//             :
+//             ""
+//         }
+
+
+//     </div>
+
+
+//     <!-- TOTAL -->
+
+//     <div class="amount-box">
+
+//         <span class="amount-label">
+//             Order Amount
+//         </span>
+
+//         <span class="amount">
+//             ₹${totalAmount.toFixed(2)}
+//         </span>
+
+//     </div>
+
+
+//     <!-- COD -->
+
+//     <div class="cod-box">
+
+//         <div class="cod-title">
+
+//             💵 Cash on Delivery
+
+//         </div>
+
+//         <div class="cod-text">
+
+//             You have selected Cash on Delivery.
+//             Payment will be collected when
+//             your order is delivered.
+
+//         </div>
+
+//     </div>
+
+
+//     <!-- BUTTONS -->
+
+//     <div class="buttons">
+
+
+//         <a
+//             href="/doctor/orders"
+//             class="btn orders"
+//         >
+
+//             📦 View My Orders
+
+//         </a>
+
+
+//         <a
+//             href="/doctor/dashboard"
+//             class="btn dashboard"
+//         >
+
+//             🏠 Go to Dashboard
+
+//         </a>
+
+
+//     </div>
+
+
+//     <div class="footer">
+
+//         🔒 Secure order • GLOBAL HEALTHCARE
+
+//     </div>
+
+
+// </div>
+
+// </body>
+
+// </html>
+
+//             `);
+
+//         }
+
+//         catch (error) {
+
+//             console.error(
+//                 "Checkout Success Error:",
+//                 error
+//             );
+
+//             res.status(500).send(
+//                 "Checkout Success Page Error"
+//             );
+
+//         }
+
+//     }
+// );
+
+// // ======================================================
+// // CASH ON DELIVERY ORDER
+// // ======================================================
+// // ======================================================
+// // CASH ON DELIVERY ORDER
+// // ======================================================
+
+// router.post("/checkout/cod", async (req, res) => {
+
+//     try {
+
+//         // ==========================================
+//         // LOGIN CHECK
+//         // ==========================================
+
+//         if (!req.session.doctor) {
+
+//             return res.status(401).json({
+
+//                 success: false,
+//                 message: "Doctor login required"
+
+//             });
+
+//         }
+
+
+//         // ==========================================
+//         // SESSION DOCTOR
+//         // ==========================================
+
+//         const sessionDoctor =
+//             req.session.doctor;
+
+
+//         const doctorId =
+//             sessionDoctor._id ||
+//             sessionDoctor.id ||
+//             sessionDoctor.doctorId;
+
+
+//         if (!doctorId) {
+
+//             return res.status(400).json({
+
+//                 success: false,
+//                 message: "Doctor ID missing from session"
+
+//             });
+
+//         }
+
+
+//         // ==========================================
+//         // FETCH DOCTOR
+//         // ==========================================
+
+//         let doctor = null;
+
+
+//         // MongoDB _id
+//         if (
+//             /^[0-9a-fA-F]{24}$/.test(
+//                 String(doctorId)
+//             )
+//         ) {
+
+//             doctor =
+//                 await Doctor.findById(
+//                     doctorId
+//                 ).lean();
+
+//         }
+
+
+//         // Custom doctorId fallback
+//         if (!doctor) {
+
+//             doctor =
+//                 await Doctor.findOne({
+
+//                     doctorId:
+//                         String(doctorId)
+
+//                 }).lean();
+
+//         }
+
+
+//         if (!doctor) {
+
+//             console.log(
+//                 "COD DOCTOR NOT FOUND:",
+//                 doctorId
+//             );
+
+//             return res.status(404).json({
+
+//                 success: false,
+//                 message: "Doctor not found"
+
+//             });
+
+//         }
+
+
+//         // ==========================================
+//         // CART
+//         // ==========================================
+
+//         const cart =
+//             Array.isArray(req.body.cart)
+//                 ? req.body.cart
+//                 : [];
+
+
+//         console.log(
+//             "COD CART:",
+//             cart
+//         );
+
+
+//         if (cart.length === 0) {
+
+//             return res.status(400).json({
+
+//                 success: false,
+//                 message: "Cart is Empty"
+
+//             });
+
+//         }
+
+
+//         // ==========================================
+//         // PREPARE ITEMS
+//         // ==========================================
+
+//         const items =
+//             cart.map(item => {
+
+//                 const price =
+//                     Number(item.price || 0);
+
+//                 const qty =
+//                     Number(item.qty || 0);
+
+
+//                 return {
+
+//                     productId:
+//                         item.productId ||
+//                         item.id ||
+//                         null,
+
+//                     name:
+//                         item.name ||
+//                         "Product",
+
+//                     price:
+//                         price,
+
+//                     image:
+//                         item.image ||
+//                         "",
+
+//                     qty:
+//                         qty
+
+//                 };
+
+//             });
+
+
+//         // ==========================================
+//         // TOTAL
+//         // ==========================================
+
+//         let totalAmount = 0;
+
+
+//         items.forEach(item => {
+
+//             totalAmount +=
+//                 Number(item.price) *
+//                 Number(item.qty);
+
+//         });
+
+
+//         // ==========================================
+//         // VALIDATE TOTAL
+//         // ==========================================
+
+//         if (totalAmount <= 0) {
+
+//             return res.status(400).json({
+
+//                 success: false,
+//                 message: "Invalid cart amount"
+
+//             });
+
+//         }
+
+
+//         // ==========================================
+//         // CREATE ORDER
+//         // ==========================================
+
+//         const order =
+//             await DoctorOrder.create({
+
+//                 doctorId:
+//                     doctor._id,
+
+//                 doctorName:
+//                     doctor.name ||
+//                     doctor.doctorName ||
+//                     "",
+
+//                 doctorPhone:
+//                     doctor.phone ||
+//                     doctor.mobile ||
+//                     "",
+
+//                 doctorEmail:
+//                     doctor.email ||
+//                     "",
+
+//                 items:
+//                     items,
+
+//                 totalAmount:
+//                     totalAmount,
+
+//                 paymentMethod:
+//                     "cod",
+
+//                 paymentStatus:
+//                     "pending",
+
+//                 status:
+//                     "Pending",
+
+//                 createdAt:
+//                     new Date()
+
+//             });
+
+
+//         console.log(
+//             "COD ORDER CREATED:",
+//             order._id
+//         );
+
+
+//         // ==========================================
+//         // SUCCESS
+//         // ==========================================
+
+//         return res.status(200).json({
+
+//             success: true,
+
+//             message:
+//                 "Cash on Delivery order placed successfully",
+
+//             orderId:
+//                 order._id.toString(),
+
+//             redirect:
+//                 `/doctor/checkout-success/${order._id}`
+
+//         });
+
+//     }
+
+//     catch (error) {
+
+//         console.error(
+//             "COD ORDER ERROR:",
+//             error
+//         );
+
+//         return res.status(500).json({
+
+//             success: false,
+
+//             message:
+//                 "Unable to place COD order",
+
+//             error:
+//                 error.message
+
+//         });
 
 //     }
 
 // });
 
 
+// /// ======================================================
+// // CANCEL DOCTOR ORDER
+// // ======================================================
 
+// router.post(
+//     "/cancel-order/:id",
+//     async (req, res) => {
+
+//         try {
+
+//             // ==========================================
+//             // LOGIN CHECK
+//             // ==========================================
+
+//             if (!req.session.doctor) {
+
+//                 return res.status(401).json({
+
+//                     success: false,
+
+//                     message:
+//                         "Doctor login required"
+
+//                 });
+
+//             }
+
+
+//             // ==========================================
+//             // ORDER ID
+//             // ==========================================
+
+//             const orderId =
+//                 String(
+//                     req.params.id || ""
+//                 ).trim();
+
+
+//             if (!orderId) {
+
+//                 return res.status(400).json({
+
+//                     success: false,
+
+//                     message:
+//                         "Order ID is required"
+
+//                 });
+
+//             }
+
+
+//             // ==========================================
+//             // SESSION DOCTOR
+//             // ==========================================
+
+//             const sessionDoctor =
+//                 req.session.doctor;
+
+
+//             const sessionMongoId =
+//                 sessionDoctor._id ||
+//                 sessionDoctor.id ||
+//                 "";
+
+
+//             const sessionDoctorId =
+//                 sessionDoctor.doctorId ||
+//                 "";
+
+
+//             console.log(
+//                 "================================="
+//             );
+
+//             console.log(
+//                 "CANCEL ORDER REQUEST"
+//             );
+
+//             console.log(
+//                 "ORDER ID:",
+//                 orderId
+//             );
+
+//             console.log(
+//                 "SESSION DOCTOR:",
+//                 sessionDoctor
+//             );
+
+//             console.log(
+//                 "SESSION MONGO ID:",
+//                 sessionMongoId
+//             );
+
+//             console.log(
+//                 "SESSION DOCTOR ID:",
+//                 sessionDoctorId
+//             );
+
+
+//             // ==========================================
+//             // FIND ORDER
+//             // ==========================================
+
+//             let order = null;
+
+
+//             if (
+//                 /^[0-9a-fA-F]{24}$/.test(
+//                     orderId
+//                 )
+//             ) {
+
+//                 order =
+//                     await DoctorOrder.findById(
+//                         orderId
+//                     );
+
+//             }
+
+
+//             // ==========================================
+//             // ORDER NOT FOUND
+//             // ==========================================
+
+//             if (!order) {
+
+//                 console.log(
+//                     "ORDER NOT FOUND:",
+//                     orderId
+//                 );
+
+//                 return res.status(404).json({
+
+//                     success: false,
+
+//                     message:
+//                         "Order not found"
+
+//                 });
+
+//             }
+
+
+//             // ==========================================
+//             // ORDER DOCTOR ID
+//             // ==========================================
+
+//             const orderDoctorId =
+//                 order.doctorId
+//                     ? String(
+//                         order.doctorId
+//                     )
+//                     : "";
+
+
+//             console.log(
+//                 "ORDER DOCTOR ID:",
+//                 orderDoctorId
+//             );
+
+
+//             // ==========================================
+//             // VERIFY DOCTOR
+//             // ==========================================
+
+//             let doctorMatched = false;
+
+
+//             // ------------------------------------------
+//             // Direct MongoDB ID match
+//             // ------------------------------------------
+
+//             if (
+//                 sessionMongoId &&
+//                 orderDoctorId ===
+//                 String(sessionMongoId)
+//             ) {
+
+//                 doctorMatched = true;
+
+//             }
+
+
+//             // ------------------------------------------
+//             // Custom doctorId match
+//             // ------------------------------------------
+
+//             if (
+//                 sessionDoctorId &&
+//                 orderDoctorId ===
+//                 String(sessionDoctorId)
+//             ) {
+
+//                 doctorMatched = true;
+
+//             }
+
+
+//             // ==========================================
+//             // DATABASE DOCTOR VERIFICATION
+//             // ==========================================
+
+//             if (!doctorMatched) {
+
+//                 let doctor = null;
+
+
+//                 // MongoDB ObjectId
+//                 if (
+//                     /^[0-9a-fA-F]{24}$/.test(
+//                         orderDoctorId
+//                     )
+//                 ) {
+
+//                     doctor =
+//                         await Doctor.findById(
+//                             orderDoctorId
+//                         ).lean();
+
+//                 }
+
+
+//                 // Custom doctorId
+//                 if (!doctor) {
+
+//                     doctor =
+//                         await Doctor.findOne({
+
+//                             doctorId:
+//                                 orderDoctorId
+
+//                         }).lean();
+
+//                 }
+
+
+//                 if (doctor) {
+
+//                     console.log(
+//                         "ORDER DOCTOR FOUND:",
+//                         doctor._id,
+//                         doctor.doctorId
+//                     );
+
+
+//                     // MongoDB ID
+//                     if (
+//                         sessionMongoId &&
+//                         String(doctor._id) ===
+//                         String(sessionMongoId)
+//                     ) {
+
+//                         doctorMatched = true;
+
+//                     }
+
+
+//                     // Custom ID
+//                     if (
+//                         sessionDoctorId &&
+//                         String(doctor.doctorId) ===
+//                         String(sessionDoctorId)
+//                     ) {
+
+//                         doctorMatched = true;
+
+//                     }
+
+//                 }
+
+//             }
+
+
+//             // ==========================================
+//             // SECURITY CHECK
+//             // ==========================================
+
+//             if (!doctorMatched) {
+
+//                 console.log(
+//                     "UNAUTHORIZED CANCEL ATTEMPT"
+//                 );
+
+//                 return res.status(403).json({
+
+//                     success: false,
+
+//                     message:
+//                         "You cannot cancel this order"
+
+//                 });
+
+//             }
+
+
+//             // ==========================================
+//             // CURRENT STATUS
+//             // ==========================================
+
+//             const currentStatus =
+//                 String(
+//                     order.status || "Pending"
+//                 )
+//                 .trim()
+//                 .toLowerCase();
+
+
+//             console.log(
+//                 "CURRENT ORDER STATUS:",
+//                 currentStatus
+//             );
+
+
+//             // ==========================================
+//             // ALREADY CANCELLED
+//             // ==========================================
+
+//             if (
+//                 currentStatus ===
+//                 "cancelled"
+//             ) {
+
+//                 return res.status(400).json({
+
+//                     success: false,
+
+//                     message:
+//                         "Order is already cancelled"
+
+//                 });
+
+//             }
+
+
+//             // ==========================================
+//             // DELIVERED
+//             // ==========================================
+
+//             if (
+//                 currentStatus ===
+//                 "delivered"
+//             ) {
+
+//                 return res.status(400).json({
+
+//                     success: false,
+
+//                     message:
+//                         "Delivered order cannot be cancelled"
+
+//                 });
+
+//             }
+
+
+//             // ==========================================
+//             // SHIPPED
+//             // ==========================================
+
+//             if (
+//                 currentStatus ===
+//                 "shipped"
+//             ) {
+
+//                 return res.status(400).json({
+
+//                     success: false,
+
+//                     message:
+//                         "Shipped order cannot be cancelled"
+
+//                 });
+
+//             }
+
+
+//             // ==========================================
+//             // CANCEL ORDER
+//             // ==========================================
+
+//             order.status =
+//                 "Cancelled";
+
+
+//             order.cancelledAt =
+//                 new Date();
+
+
+//             await order.save();
+
+
+//             console.log(
+//                 "================================="
+//             );
+
+//             console.log(
+//                 "ORDER CANCELLED SUCCESSFULLY"
+//             );
+
+//             console.log(
+//                 "ORDER:",
+//                 order._id.toString()
+//             );
+
+//             console.log(
+//                 "STATUS:",
+//                 order.status
+//             );
+
+//             console.log(
+//                 "================================="
+//             );
+
+
+//             // ==========================================
+//             // SUCCESS RESPONSE
+//             // ==========================================
+
+//             return res.status(200).json({
+
+//                 success: true,
+
+//                 message:
+//                     "Order cancelled successfully",
+
+//                 orderId:
+//                     order._id.toString(),
+
+//                 status:
+//                     "Cancelled"
+
+//             });
+
+//         }
+
+//         catch (error) {
+
+//             console.error(
+//                 "================================="
+//             );
+
+//             console.error(
+//                 "CANCEL ORDER ERROR:",
+//                 error
+//             );
+
+//             console.error(
+//                 "================================="
+//             );
+
+
+//             return res.status(500).json({
+
+//                 success: false,
+
+//                 message:
+//                     "Unable to cancel order",
+
+//                 error:
+//                     error.message
+
+//             });
+
+//         }
+
+//     }
+// );
+
+// // ======================================================
+// // EXPORT
+// // ======================================================
 
 // module.exports = router;
-
 
 const path = require("path");
 const express = require("express");
@@ -2093,6 +4039,72 @@ function escapeHTML(value) {
 
 
 // ======================================================
+// DOCTOR ID HELPER
+// ======================================================
+
+function getSessionDoctorId(doctor = {}) {
+
+    return (
+        doctor._id ||
+        doctor.id ||
+        doctor.doctorId ||
+        ""
+    );
+
+}
+
+
+// ======================================================
+// FIND DOCTOR
+// ======================================================
+
+async function findDoctorByAnyId(id) {
+
+    if (!id) {
+        return null;
+    }
+
+    const value = String(id);
+
+    let doctor = null;
+
+    // MongoDB ObjectId
+    if (/^[0-9a-fA-F]{24}$/.test(value)) {
+
+        try {
+
+            doctor = await Doctor
+                .findById(value)
+                .lean();
+
+        } catch (error) {
+
+            console.log(
+                "findById error:",
+                error.message
+            );
+
+        }
+
+    }
+
+    // Custom doctorId
+    if (!doctor) {
+
+        doctor = await Doctor
+            .findOne({
+                doctorId: value
+            })
+            .lean();
+
+    }
+
+    return doctor;
+
+}
+
+
+// ======================================================
 // DOCTOR ORDERS
 // ======================================================
 
@@ -2100,10 +4112,7 @@ router.get("/orders", async (req, res) => {
 
     try {
 
-        // ==============================================
         // LOGIN CHECK
-        // ==============================================
-
         if (!req.session.doctor) {
 
             return res.redirect(
@@ -2113,239 +4122,327 @@ router.get("/orders", async (req, res) => {
         }
 
 
-        // ==============================================
-        // LOGGED IN DOCTOR
-        // ==============================================
-
-        const doctor = req.session.doctor;
+        const sessionDoctor =
+            req.session.doctor;
 
 
         const doctorName =
-            doctor.name ||
-            doctor.doctorName ||
+            sessionDoctor.name ||
+            sessionDoctor.doctorName ||
             "Doctor";
 
 
         const doctorSpecialization =
-            doctor.specialization ||
+            sessionDoctor.specialization ||
             "General Physician";
 
 
-        // ==============================================
         // GET ORDERS
-        // ==============================================
-
-        const orders =
-            await DoctorOrder.find({
-                doctorId: doctor._id
-            })
-            .sort({
-                createdAt: -1
-            });
+        const doctorId =
+            getSessionDoctorId(
+                sessionDoctor
+            );
 
 
-        // ==============================================
+        let orders = [];
+
+
+        if (doctorId) {
+
+            const doctor =
+                await findDoctorByAnyId(
+                    doctorId
+                );
+
+
+            if (doctor) {
+
+                orders =
+                    await DoctorOrder
+                        .find({
+                            doctorId: doctor._id
+                        })
+                        .sort({
+                            createdAt: -1
+                        });
+
+            } else {
+
+                // fallback
+                orders =
+                    await DoctorOrder
+                        .find({
+                            doctorId: doctorId
+                        })
+                        .sort({
+                            createdAt: -1
+                        });
+
+            }
+
+        }
+
+
+        // ==================================================
         // ORDER HTML
-        // ==============================================
+        // ==================================================
 
         let orderHTML = "";
 
 
         if (orders.length > 0) {
 
-            orderHTML = orders.map(order => {
+            orderHTML =
+                orders.map(order => {
 
+                    const itemsHTML =
+                        Array.isArray(order.items)
 
-                const itemsHTML =
-                    Array.isArray(order.items)
+                            ?
 
-                        ?
+                        order.items.map(item => {
 
-                    order.items.map(item => {
+                            const qty =
+                                Number(
+                                    item.qty || 0
+                                );
 
-                        const qty =
-                            Number(item.qty || 0);
+                            const price =
+                                Number(
+                                    item.price || 0
+                                );
 
-                        const price =
-                            Number(item.price || 0);
+                            const amount =
+                                qty * price;
 
-                        const amount =
-                            qty * price;
 
+                            return `
 
-                        return `
+<div class="product">
 
-                            <div class="product">
+    <div class="product-info">
 
-                                <div class="product-info">
+        <div class="product-name">
+            ${escapeHTML(
+                item.name || "Product"
+            )}
+        </div>
 
-                                    <div class="product-name">
-                                        ${escapeHTML(
-                                            item.name || "Product"
-                                        )}
-                                    </div>
+        <div class="product-meta">
+            Quantity: ${qty}
+            &nbsp; × &nbsp;
+            ₹${price.toFixed(2)}
+        </div>
 
-                                    <div class="product-meta">
-                                        Quantity: ${qty}
-                                        &nbsp; × &nbsp;
-                                        ₹${price.toFixed(2)}
-                                    </div>
+    </div>
 
-                                </div>
-
-
-                                <div class="product-price">
-
-                                    ₹${amount.toFixed(2)}
-
-                                </div>
-
-                            </div>
-
-                        `;
-
-                    }).join("")
-
-                        :
-
-                    "";
-
-
-                // ======================================
-                // TOTAL
-                // ======================================
-
-                const totalAmount =
-                    Number(
-                        order.totalAmount || 0
-                    );
-
-
-                // ======================================
-                // STATUS
-                // ======================================
-
-                const status =
-                    order.status ||
-                    "Pending";
-
-
-                return `
-
-                    <div class="order-card">
-
-
-                        <div class="order-top">
-
-                            <div>
-
-                                <div class="order-id">
-
-                                    Order #
-                                    ${String(order._id).slice(-8)}
-
-                                </div>
-
-
-                                <div class="order-date">
-
-                                    📅
-
-                                    ${new Date(
-                                        order.createdAt
-                                    ).toLocaleDateString(
-                                        "en-IN",
-                                        {
-                                            day: "2-digit",
-                                            month: "short",
-                                            year: "numeric"
-                                        }
-                                    )}
-
-                                </div>
-
-                            </div>
-
-
-                            <span class="status">
-
-                                ${escapeHTML(status)}
-
-                            </span>
-
-                        </div>
-
-
-
-                        <div class="product-box">
-
-                            <div class="section-title">
-
-                                🛒 Ordered Products
-
-                            </div>
-
-
-                            ${itemsHTML}
-
-                        </div>
-
-
-
-                        <div class="total-row">
-
-                            <span>
-                                Total Amount
-                            </span>
-
-                            <strong>
-                                ₹${totalAmount.toFixed(2)}
-                            </strong>
-
-                        </div>
-
-
-
-                        <div class="order-actions">
-
-    <a
-        class="btn invoice-btn"
-        href="/doctor/invoice/${order._id}"
-    >
-
-        📄 Download Invoice
-
-    </a>
-
-
-    ${
-        String(status).toLowerCase() !== "cancelled"
-        &&
-        String(status).toLowerCase() !== "delivered"
-        ?
-        `
-        <button
-            type="button"
-            class="btn cancel-btn"
-            onclick="cancelOrder('${order._id}')"
-        >
-
-            ❌ Cancel Order
-
-        </button>
-        `
-        :
-        ""
-    }
+    <div class="product-price">
+        ₹${amount.toFixed(2)}
+    </div>
 
 </div>
 
+`;
 
-                    </div>
+                        }).join("")
 
-                `;
+                            :
 
-            }).join("");
+                        "";
+
+
+                    const totalAmount =
+                        Number(
+                            order.totalAmount || 0
+                        );
+
+
+                    const status =
+                        order.status ||
+                        "Pending";
+
+
+                    const normalizedStatus =
+                        String(status)
+                            .trim()
+                            .toLowerCase();
+
+
+                    const canCancel =
+                        ![
+                            "cancelled",
+                            "delivered",
+                            "shipped"
+                        ].includes(
+                            normalizedStatus
+                        );
+
+
+                    return `
+
+<div
+    class="order-card"
+    id="order-${escapeHTML(
+        String(order._id)
+    )}"
+>
+
+
+    <div class="order-top">
+
+        <div>
+
+            <div class="order-id">
+
+                Order #
+                ${escapeHTML(
+                    String(order._id)
+                        .slice(-8)
+                )}
+
+            </div>
+
+
+            <div class="order-date">
+
+                📅
+
+                ${new Date(
+                    order.createdAt
+                ).toLocaleDateString(
+                    "en-IN",
+                    {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric"
+                    }
+                )}
+
+            </div>
+
+        </div>
+
+
+        <span
+            class="status status-${normalizedStatus}"
+        >
+
+            ${escapeHTML(status)}
+
+        </span>
+
+    </div>
+
+
+
+    <div class="product-box">
+
+        <div class="section-title">
+
+            🛒 Ordered Products
+
+        </div>
+
+
+        ${itemsHTML}
+
+    </div>
+
+
+
+    <div class="total-row">
+
+        <span>
+            Total Amount
+        </span>
+
+        <strong>
+            ₹${totalAmount.toFixed(2)}
+        </strong>
+
+    </div>
+
+
+
+    <div class="order-actions">
+
+
+        <a
+            class="btn invoice-btn"
+            href="/doctor/invoice/${order._id}"
+        >
+
+            📄 Download Invoice
+
+        </a>
+
+
+        ${
+            canCancel
+
+                ?
+
+`
+<button
+    type="button"
+    class="btn cancel-btn"
+    data-order-id="${escapeHTML(
+        String(order._id)
+    )}"
+    onclick="cancelOrder(this)"
+>
+
+    ❌ Cancel Order
+
+</button>
+`
+
+                :
+
+`
+<span class="cancel-disabled">
+
+    ${
+        normalizedStatus === "cancelled"
+
+            ?
+
+        "❌ Order Cancelled"
+
+            :
+
+        normalizedStatus === "shipped"
+
+            ?
+
+        "🚚 Order Shipped"
+
+            :
+
+        normalizedStatus === "delivered"
+
+            ?
+
+        "✅ Order Delivered"
+
+            :
+
+        ""
+    }
+
+</span>
+`
+        }
+
+
+    </div>
+
+
+</div>
+
+`;
+
+                }).join("");
 
         }
 
@@ -2353,39 +4450,39 @@ router.get("/orders", async (req, res) => {
 
             orderHTML = `
 
-                <div class="empty-orders">
+<div class="empty-orders">
 
-                    <div class="empty-icon">
-                        📦
-                    </div>
+    <div class="empty-icon">
+        📦
+    </div>
 
-                    <h2>
-                        No Orders Found
-                    </h2>
+    <h2>
+        No Orders Found
+    </h2>
 
-                    <p>
-                        Your orders will appear here.
-                    </p>
+    <p>
+        Your orders will appear here.
+    </p>
 
-                    <a
-                        href="/doctor/dashboard"
-                        class="shop-btn"
-                    >
+    <a
+        href="/doctor/dashboard"
+        class="shop-btn"
+    >
 
-                        🛒 Shop Products
+        🛒 Shop Products
 
-                    </a>
+    </a>
 
-                </div>
+</div>
 
-            `;
+`;
 
         }
 
 
-        // ==============================================
+        // ==================================================
         // PAGE
-        // ==============================================
+        // ==================================================
 
         res.send(`
 
@@ -2439,9 +4536,9 @@ body{
 }
 
 
-/* =========================================
-   HEADER
-========================================= */
+/* =====================================================
+HEADER
+===================================================== */
 
 .header{
 
@@ -2476,69 +4573,6 @@ body{
 
 }
 
-.cancel-btn{
-
-    border:none;
-
-    cursor:pointer;
-
-    color:#dc2626;
-
-    background:#fee2e2;
-
-    border:1px solid #fecaca;
-
-    padding:13px 20px;
-
-    border-radius:14px;
-
-    font-weight:800;
-
-    transition:.25s;
-
-}
-
-.cancel-btn:hover{
-
-    background:#fecaca;
-
-    transform:translateY(-2px);
-
-}
-
-.order-actions{
-
-    display:flex;
-
-    justify-content:flex-end;
-
-    align-items:center;
-
-    gap:12px;
-
-    flex-wrap:wrap;
-
-}
-
-
-@media(max-width:700px){
-
-    .order-actions{
-
-        flex-direction:column;
-
-        align-items:stretch;
-
-    }
-
-    .order-actions .btn{
-
-        width:100%;
-
-    }
-
-}
-
 
 .logo{
 
@@ -2554,7 +4588,6 @@ body{
 .logo-icon{
 
     width:55px;
-
     height:55px;
 
     border-radius:18px;
@@ -2578,8 +4611,6 @@ body{
     font-size:24px;
 
     font-weight:900;
-
-    letter-spacing:.5px;
 
 }
 
@@ -2625,9 +4656,9 @@ body{
 }
 
 
-/* =========================================
-   DOCTOR
-========================================= */
+/* =====================================================
+DOCTOR
+===================================================== */
 
 .doctor-info{
 
@@ -2659,7 +4690,6 @@ body{
 .doctor-avatar{
 
     width:65px;
-
     height:65px;
 
     border-radius:20px;
@@ -2700,9 +4730,9 @@ body{
 }
 
 
-/* =========================================
-   PAGE TITLE
-========================================= */
+/* =====================================================
+TITLE
+===================================================== */
 
 .page-title{
 
@@ -2731,9 +4761,9 @@ body{
 }
 
 
-/* =========================================
-   ORDER CARD
-========================================= */
+/* =====================================================
+ORDER CARD
+===================================================== */
 
 .order-card{
 
@@ -2760,7 +4790,7 @@ body{
 
 .order-card:hover{
 
-    transform:translateY(-4px);
+    transform:translateY(-3px);
 
     box-shadow:
         0 20px 50px
@@ -2769,9 +4799,9 @@ body{
 }
 
 
-/* =========================================
-   ORDER TOP
-========================================= */
+/* =====================================================
+ORDER TOP
+===================================================== */
 
 .order-top{
 
@@ -2818,10 +4848,6 @@ body{
 
     border-radius:50px;
 
-    background:#fef3c7;
-
-    color:#92400e;
-
     font-weight:800;
 
     font-size:13px;
@@ -2829,9 +4855,63 @@ body{
 }
 
 
-/* =========================================
-   PRODUCTS
-========================================= */
+.status-pending{
+
+    background:#fef3c7;
+
+    color:#92400e;
+
+}
+
+
+.status-processing{
+
+    background:#dbeafe;
+
+    color:#1d4ed8;
+
+}
+
+
+.status-confirmed{
+
+    background:#dcfce7;
+
+    color:#166534;
+
+}
+
+
+.status-shipped{
+
+    background:#e0e7ff;
+
+    color:#3730a3;
+
+}
+
+
+.status-delivered{
+
+    background:#dcfce7;
+
+    color:#15803d;
+
+}
+
+
+.status-cancelled{
+
+    background:#fee2e2;
+
+    color:#b91c1c;
+
+}
+
+
+/* =====================================================
+PRODUCT
+===================================================== */
 
 .product-box{
 
@@ -2907,9 +4987,9 @@ body{
 }
 
 
-/* =========================================
-   TOTAL
-========================================= */
+/* =====================================================
+TOTAL
+===================================================== */
 
 .total-row{
 
@@ -2951,18 +5031,30 @@ body{
 }
 
 
-/* =========================================
-   ACTION
-========================================= */
+/* =====================================================
+ACTIONS
+===================================================== */
 
 .order-actions{
 
     margin-top:18px;
 
+    display:flex;
+
+    justify-content:flex-end;
+
+    align-items:center;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
 }
 
 
 .btn{
+
+    border:none;
 
     display:inline-flex;
 
@@ -2977,6 +5069,10 @@ body{
     border-radius:14px;
 
     font-weight:800;
+
+    cursor:pointer;
+
+    transition:.25s;
 
 }
 
@@ -3006,9 +5102,65 @@ body{
 }
 
 
-/* =========================================
-   EMPTY
-========================================= */
+/* =====================================================
+CANCEL
+===================================================== */
+
+.cancel-btn{
+
+    color:#dc2626;
+
+    background:#fee2e2;
+
+    border:1px solid #fecaca;
+
+}
+
+
+.cancel-btn:hover{
+
+    background:#fecaca;
+
+    transform:translateY(-2px);
+
+}
+
+
+.cancel-btn:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+    transform:none;
+
+}
+
+
+.cancel-disabled{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:13px 20px;
+
+    border-radius:14px;
+
+    background:#f1f5f9;
+
+    color:#64748b;
+
+    font-weight:800;
+
+}
+
+
+/* =====================================================
+EMPTY
+===================================================== */
 
 .empty-orders{
 
@@ -3073,9 +5225,9 @@ body{
 }
 
 
-/* =========================================
-   FOOTER
-========================================= */
+/* =====================================================
+FOOTER
+===================================================== */
 
 .footer{
 
@@ -3101,15 +5253,16 @@ body{
 }
 
 
-/* =========================================
-   MOBILE
-========================================= */
+/* =====================================================
+MOBILE
+===================================================== */
 
 @media(max-width:700px){
 
     body{
         padding:12px;
     }
+
 
     .header{
 
@@ -3121,11 +5274,13 @@ body{
 
     }
 
+
     .logo{
 
         justify-content:center;
 
     }
+
 
     .dashboard-btn{
 
@@ -3133,11 +5288,13 @@ body{
 
     }
 
+
     .doctor-info{
 
         padding:18px;
 
     }
+
 
     .page-title h1{
 
@@ -3145,11 +5302,13 @@ body{
 
     }
 
+
     .order-card{
 
         padding:16px;
 
     }
+
 
     .order-top{
 
@@ -3159,11 +5318,13 @@ body{
 
     }
 
+
     .product{
 
         align-items:flex-start;
 
     }
+
 
     .total-row{
 
@@ -3171,9 +5332,29 @@ body{
 
     }
 
+
     .total-row strong{
 
         font-size:20px;
+
+    }
+
+
+    .order-actions{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+
+    .order-actions .btn,
+    .order-actions .cancel-disabled{
+
+        width:100%;
+
+        text-align:center;
 
     }
 
@@ -3188,7 +5369,6 @@ body{
 
 
 <header class="header">
-
 
     <div class="logo">
 
@@ -3237,7 +5417,9 @@ body{
         </h2>
 
         <p>
-            ${escapeHTML(doctorSpecialization)}
+            ${escapeHTML(
+                doctorSpecialization
+            )}
         </p>
 
     </div>
@@ -3283,6 +5465,192 @@ ${orderHTML}
 </footer>
 
 
+
+<script>
+
+/* =====================================================
+CANCEL ORDER
+===================================================== */
+
+async function cancelOrder(button) {
+
+    if (!button) {
+        return;
+    }
+
+
+    const orderId =
+        button.dataset.orderId;
+
+
+    if (!orderId) {
+
+        alert(
+            "Order ID is missing."
+        );
+
+        return;
+
+    }
+
+
+    // =========================================
+    // CONFIRM
+    // =========================================
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to cancel this order?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    // =========================================
+    // DISABLE BUTTON
+    // =========================================
+
+    button.disabled = true;
+
+    button.innerHTML =
+        "⏳ Cancelling...";
+
+
+    try {
+
+        // =====================================
+        // API
+        // =====================================
+
+        const response =
+            await fetch(
+                "/doctor/cancel-order/" +
+                encodeURIComponent(orderId),
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "application/json",
+
+                        "Accept":
+                            "application/json"
+                    },
+
+                    credentials:
+                        "same-origin"
+                }
+            );
+
+
+        // =====================================
+        // RESPONSE
+        // =====================================
+
+        let data = null;
+
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "Response JSON Error:",
+                error
+            );
+
+        }
+
+
+        console.log(
+            "Cancel Response:",
+            data
+        );
+
+
+        // =====================================
+        // SUCCESS
+        // =====================================
+
+        if (
+            response.ok &&
+            data &&
+            data.success
+        ) {
+
+            alert(
+                data.message ||
+                "Order cancelled successfully."
+            );
+
+
+            // Reload
+            window.location.reload();
+
+            return;
+
+        }
+
+
+        // =====================================
+        // ERROR
+        // =====================================
+
+        alert(
+            data &&
+            data.message
+
+                ?
+
+            data.message
+
+                :
+
+            "Unable to cancel order."
+        );
+
+
+        button.disabled = false;
+
+        button.innerHTML =
+            "❌ Cancel Order";
+
+    }
+
+
+    catch(error) {
+
+        console.error(
+            "Cancel Order Error:",
+            error
+        );
+
+
+        alert(
+            "Server error. Please try again."
+        );
+
+
+        button.disabled = false;
+
+        button.innerHTML =
+            "❌ Cancel Order";
+
+    }
+
+}
+
+</script>
+
+
 </body>
 
 </html>
@@ -3293,13 +5661,15 @@ ${orderHTML}
 
     catch (err) {
 
-        console.log(
+        console.error(
             "Orders Error:",
             err
         );
 
         res.status(500)
-            .send("Orders Page Error");
+            .send(
+                "Orders Page Error"
+            );
 
     }
 
@@ -3316,26 +5686,15 @@ router.post(
 
         try {
 
-            // ==========================================
-            // LOGIN
-            // ==========================================
-
             if (!req.session.doctor) {
 
                 return res.status(401).json({
-
-                    success: false,
-
-                    message: "Unauthorized"
-
+                    success:false,
+                    message:"Unauthorized"
                 });
 
             }
 
-
-            // ==========================================
-            // CART
-            // ==========================================
 
             const cart =
                 Array.isArray(req.body.cart)
@@ -3346,103 +5705,148 @@ router.post(
             if (cart.length === 0) {
 
                 return res.status(400).json({
-
-                    success: false,
-
-                    message: "Cart is Empty"
-
+                    success:false,
+                    message:"Cart is Empty"
                 });
 
             }
 
 
-            // ==========================================
-            // TOTAL
-            // ==========================================
-
             let total = 0;
 
 
-            cart.forEach(item => {
+            const items =
+                cart.map(item => {
 
-                const price =
-                    Number(item.price || 0);
+                    const price =
+                        Number(item.price || 0);
 
-                const qty =
-                    Number(item.qty || 0);
-
-                total += price * qty;
-
-            });
+                    const qty =
+                        Number(item.qty || 0);
 
 
-            // ==========================================
-            // CREATE ORDER
-            // ==========================================
+                    total +=
+                        price * qty;
+
+
+                    return {
+
+                        productId:
+                            item.productId ||
+                            item.id ||
+                            null,
+
+                        name:
+                            item.name ||
+                            "Product",
+
+                        price,
+
+                        image:
+                            item.image || "",
+
+                        qty
+
+                    };
+
+                });
+
+
+            if (total <= 0) {
+
+                return res.status(400).json({
+                    success:false,
+                    message:"Invalid cart amount"
+                });
+
+            }
+
+
+            const doctor =
+                await findDoctorByAnyId(
+                    getSessionDoctorId(
+                        req.session.doctor
+                    )
+                );
+
+
+            if (!doctor) {
+
+                return res.status(404).json({
+                    success:false,
+                    message:"Doctor not found"
+                });
+
+            }
+
 
             const order =
                 await DoctorOrder.create({
 
                     doctorId:
-                        req.session.doctor._id,
+                        doctor._id,
 
-                    items:
-                        cart.map(item => ({
+                    doctorName:
+                        doctor.name ||
+                        doctor.doctorName ||
+                        "",
 
-                            productId:
-                                item.id,
+                    doctorPhone:
+                        doctor.phone ||
+                        doctor.mobile ||
+                        "",
 
-                            name:
-                                item.name,
+                    doctorEmail:
+                        doctor.email ||
+                        "",
 
-                            price:
-                                Number(item.price || 0),
-
-                            image:
-                                item.image || "",
-
-                            qty:
-                                Number(item.qty || 0)
-
-                        })),
+                    items,
 
                     totalAmount:
                         total,
 
+                    paymentMethod:
+                        "cod",
+
+                    paymentStatus:
+                        "pending",
+
                     status:
-                        "Pending"
+                        "Pending",
+
+                    createdAt:
+                        new Date()
 
                 });
 
 
-            // ==========================================
-            // RESPONSE
-            // ==========================================
+            return res.json({
 
-            res.json({
-
-                success: true,
+                success:true,
 
                 message:
                     "Order Created Successfully",
 
                 orderId:
-                    order._id
+                    order._id.toString(),
+
+                redirect:
+                    `/doctor/checkout-success/${order._id}`
 
             });
 
         }
 
-        catch (err) {
+        catch (error) {
 
-            console.log(
+            console.error(
                 "Create Order Error:",
-                err
+                error
             );
 
-            res.status(500).json({
+            return res.status(500).json({
 
-                success: false,
+                success:false,
 
                 message:
                     "Order Failed"
@@ -3456,7 +5860,7 @@ router.post(
 
 
 // ======================================================
-// GENERATE INVOICE PDF
+// INVOICE PDF
 // ======================================================
 
 router.get(
@@ -3464,10 +5868,6 @@ router.get(
     async (req, res) => {
 
         try {
-
-            // ==========================================
-            // LOGIN CHECK
-            // ==========================================
 
             if (!req.session.doctor) {
 
@@ -3477,10 +5877,6 @@ router.get(
 
             }
 
-
-            // ==========================================
-            // FIND ORDER
-            // ==========================================
 
             const order =
                 await DoctorOrder.findById(
@@ -3498,82 +5894,81 @@ router.get(
 
 
             // ==========================================
-            // DOCTOR
+            // SECURITY
             // ==========================================
+
+            const sessionDoctor =
+                req.session.doctor;
+
+
+            const sessionDoctorId =
+                getSessionDoctorId(
+                    sessionDoctor
+                );
+
+
+            const loggedDoctor =
+                await findDoctorByAnyId(
+                    sessionDoctorId
+                );
+
+
+            if (
+                loggedDoctor &&
+                order.doctorId &&
+                String(order.doctorId) !==
+                String(loggedDoctor._id)
+            ) {
+
+                return res
+                    .status(403)
+                    .send(
+                        "You cannot access this invoice."
+                    );
+
+            }
+
 
             let doctor = null;
 
 
-            try {
+            if (order.doctorId) {
 
-                if (order.doctorId) {
-
-                    doctor =
-                        await Doctor.findById(
-                            order.doctorId
-                        );
-
-                }
-
-            }
-
-            catch (doctorError) {
-
-                console.log(
-                    "Doctor Fetch Error:",
-                    doctorError
-                );
+                doctor =
+                    await findDoctorByAnyId(
+                        order.doctorId
+                    );
 
             }
 
 
-            // ==========================================
-            // FALLBACK SESSION DOCTOR
-            // ==========================================
-
-            const sessionDoctor =
-                req.session.doctor || {};
+            if (!doctor) {
+                doctor = sessionDoctor;
+            }
 
 
             const doctorName =
-                (doctor && (
-                    doctor.name ||
-                    doctor.doctorName
-                )) ||
-                sessionDoctor.name ||
-                sessionDoctor.doctorName ||
+                doctor.name ||
+                doctor.doctorName ||
                 "Doctor";
 
 
             const doctorId =
-                (doctor && (
-                    doctor.doctorId ||
-                    doctor._id
-                )) ||
-                sessionDoctor.doctorId ||
-                sessionDoctor._id ||
+                doctor.doctorId ||
+                doctor._id ||
                 "";
 
 
             const doctorPhone =
-                (doctor && (
-                    doctor.phone ||
-                    doctor.mobile
-                )) ||
-                sessionDoctor.phone ||
-                sessionDoctor.mobile ||
+                doctor.phone ||
+                doctor.mobile ||
                 "";
 
 
             const specialization =
-                (doctor && doctor.specialization) ||
-                sessionDoctor.specialization ||
+                doctor.specialization ||
                 "General Physician";
 
-
-            // ==========================================
-            // PDF HEADER
-            // ==========================================
 
             res.setHeader(
                 "Content-Type",
@@ -3590,26 +5985,17 @@ router.get(
             const doc =
                 new PDFDocument({
 
-                    size: "A4",
+                    size:"A4",
 
-                    margins: {
-
-                        top: 40,
-
-                        bottom: 40,
-
-                        left: 40,
-
-                        right: 40
-
+                    margins:{
+                        top:40,
+                        bottom:40,
+                        left:40,
+                        right:40
                     }
 
                 });
 
-
-            // ==========================================
-            // FONT
-            // ==========================================
 
             const fontPath =
                 path.join(
@@ -3624,26 +6010,18 @@ router.get(
 
             }
 
-            catch (fontError) {
+            catch(error) {
 
                 console.log(
                     "Font Error:",
-                    fontError
+                    error.message
                 );
 
             }
 
 
-            // ==========================================
-            // PIPE
-            // ==========================================
-
             doc.pipe(res);
 
-
-            // ==========================================
-            // HELPER
-            // ==========================================
 
             const money = amount => {
 
@@ -3654,16 +6032,12 @@ router.get(
             };
 
 
-            // ==========================================
-            // HEADER
-            // ==========================================
-
             doc
                 .fontSize(20)
                 .text(
                     "GLOBAL HEALTHCARE",
                     {
-                        align: "center"
+                        align:"center"
                     }
                 );
 
@@ -3673,7 +6047,7 @@ router.get(
                 .text(
                     "SAFE & SECURE Healthcare",
                     {
-                        align: "center"
+                        align:"center"
                     }
                 );
 
@@ -3686,17 +6060,13 @@ router.get(
                 .text(
                     "ROUGH ESTIMATE",
                     {
-                        align: "center"
+                        align:"center"
                     }
                 );
 
 
             doc.moveDown(1.5);
 
-
-            // ==========================================
-            // DOCTOR DETAILS
-            // ==========================================
 
             doc.fontSize(11);
 
@@ -3706,13 +6076,9 @@ router.get(
             );
 
 
-            if (specialization) {
-
-                doc.text(
-                    `SPECIALIZATION : ${specialization}`
-                );
-
-            }
+            doc.text(
+                `SPECIALIZATION : ${specialization}`
+            );
 
 
             if (doctorId) {
@@ -3734,20 +6100,18 @@ router.get(
 
 
             doc.text(
-                `BILL NO : A${order._id
-                    .toString()
-                    .slice(-6)}`
+                `BILL NO : A${String(
+                    order._id
+                ).slice(-6)}`
             );
 
 
             doc.text(
-                `DATE : ${
-                    new Date(
-                        order.createdAt
-                    ).toLocaleDateString(
-                        "en-GB"
-                    )
-                }`
+                `DATE : ${new Date(
+                    order.createdAt
+                ).toLocaleDateString(
+                    "en-GB"
+                )}`
             );
 
 
@@ -3759,10 +6123,6 @@ router.get(
             doc.moveDown(1);
 
 
-            // ==========================================
-            // TABLE TOP LINE
-            // ==========================================
-
             doc
                 .fontSize(9)
                 .text(
@@ -3773,10 +6133,6 @@ router.get(
 
             doc.moveDown(.5);
 
-
-            // ==========================================
-            // TABLE HEADER
-            // ==========================================
 
             let tableY = doc.y;
 
@@ -3818,10 +6174,6 @@ router.get(
             );
 
 
-            // ==========================================
-            // HEADER LINE
-            // ==========================================
-
             tableY += 20;
 
 
@@ -3835,10 +6187,6 @@ router.get(
             tableY += 10;
 
 
-            // ==========================================
-            // PRODUCTS
-            // ==========================================
-
             let total = 0;
 
             let totalQty = 0;
@@ -3851,7 +6199,7 @@ router.get(
 
 
             items.forEach(
-                (item, index) => {
+                (item,index) => {
 
                     const qty =
                         Number(
@@ -3879,8 +6227,6 @@ router.get(
                         "Product";
 
 
-                    // Long name control
-
                     if (
                         productName.length > 35
                     ) {
@@ -3894,62 +6240,14 @@ router.get(
                     }
 
 
-                    // ==================================
-                    // PAGE BREAK
-                    // ==================================
-
                     if (tableY > 700) {
 
                         doc.addPage();
 
                         tableY = 50;
 
-
-                        doc
-                            .fontSize(10)
-                            .text(
-                                "SL",
-                                40,
-                                tableY
-                            );
-
-
-                        doc.text(
-                            "PRODUCT DESCRIPTION",
-                            70,
-                            tableY
-                        );
-
-
-                        doc.text(
-                            "QTY",
-                            300,
-                            tableY
-                        );
-
-
-                        doc.text(
-                            "RATE",
-                            350,
-                            tableY
-                        );
-
-
-                        doc.text(
-                            "AMOUNT",
-                            430,
-                            tableY
-                        );
-
-
-                        tableY += 20;
-
                     }
 
-
-                    // ==================================
-                    // ROW
-                    // ==================================
 
                     doc
                         .fontSize(9)
@@ -3965,7 +6263,7 @@ router.get(
                         70,
                         tableY,
                         {
-                            width: 215
+                            width:215
                         }
                     );
 
@@ -3997,10 +6295,6 @@ router.get(
             );
 
 
-            // ==========================================
-            // TABLE BOTTOM
-            // ==========================================
-
             doc.text(
                 "--------------------------------------------------------------------------------",
                 40,
@@ -4010,10 +6304,6 @@ router.get(
 
             tableY += 25;
 
-
-            // ==========================================
-            // SUMMARY
-            // ==========================================
 
             doc
                 .fontSize(11)
@@ -4037,10 +6327,6 @@ router.get(
             tableY += 25;
 
 
-            // ==========================================
-            // GRAND TOTAL
-            // ==========================================
-
             doc
                 .fontSize(13)
                 .text(
@@ -4052,10 +6338,6 @@ router.get(
 
             tableY += 25;
 
-
-            // ==========================================
-            // BILL SUMMARY
-            // ==========================================
 
             doc
                 .fontSize(11)
@@ -4119,10 +6401,6 @@ router.get(
             tableY += 30;
 
 
-            // ==========================================
-            // FOOTER
-            // ==========================================
-
             doc
                 .fontSize(10)
                 .text(
@@ -4176,19 +6454,15 @@ router.get(
             );
 
 
-            // ==========================================
-            // END PDF
-            // ==========================================
-
             doc.end();
 
         }
 
-        catch (err) {
+        catch (error) {
 
-            console.log(
+            console.error(
                 "Invoice Error:",
-                err
+                error
             );
 
 
@@ -4213,7 +6487,7 @@ router.get(
 
 router.get(
     "/logout",
-    (req, res) => {
+    (req,res) => {
 
         req.session.destroy(
             () => {
@@ -4230,18 +6504,14 @@ router.get(
 
 
 // ======================================================
-// DOCTOR CART PAGE
+// DOCTOR CART
 // ======================================================
 
 router.get(
     "/cart",
-    async (req, res) => {
+    async (req,res) => {
 
         try {
-
-            // ==========================================
-            // LOGIN CHECK
-            // ==========================================
 
             if (!req.session.doctor) {
 
@@ -4251,14 +6521,12 @@ router.get(
 
             }
 
-            // ==========================================
-            // DOCTOR CART PAGE
-            // ==========================================
 
             const DoctorCart =
                 require(
                     "../pages/doctorCart"
                 );
+
 
             res.send(
                 DoctorCart(
@@ -4268,21 +6536,23 @@ router.get(
 
         }
 
-        catch (err) {
+        catch(error) {
 
-            console.log(
+            console.error(
                 "Doctor Cart Error:",
-                err
+                error
             );
 
-            res.status(500).send(
-                "Doctor Cart Page Error"
-            );
+            res.status(500)
+                .send(
+                    "Doctor Cart Page Error"
+                );
 
         }
 
     }
 );
+
 
 // ======================================================
 // DOCTOR DASHBOARD
@@ -4290,13 +6560,9 @@ router.get(
 
 router.get(
     "/dashboard",
-    async (req, res) => {
+    async (req,res) => {
 
         try {
-
-            // ==========================================
-            // LOGIN CHECK
-            // ==========================================
 
             if (!req.session.doctor) {
 
@@ -4307,20 +6573,12 @@ router.get(
             }
 
 
-            // ==========================================
-            // PRODUCTS
-            // ==========================================
-
             const products =
                 await Product.find()
                     .sort({
-                        createdAt: -1
+                        createdAt:-1
                     });
 
-
-            // ==========================================
-            // DASHBOARD
-            // ==========================================
 
             const DoctorDashboard =
                 require(
@@ -4329,23 +6587,20 @@ router.get(
 
 
             res.send(
-
                 DoctorDashboard(
                     req.session.doctor,
                     products
                 )
-
             );
 
         }
 
-        catch (err) {
+        catch(error) {
 
-            console.log(
+            console.error(
                 "Dashboard Error:",
-                err
+                error
             );
-
 
             res.status(500)
                 .send(
@@ -4357,233 +6612,20 @@ router.get(
     }
 );
 
-// ========================================
-// DOCTOR CHECKOUT PAGE
-// ========================================
 
-const Checkout = require("../pages/checkout");
-
-router.get("/checkout", async (req, res) => {
-
-    try {
-
-        // ==================================
-        // LOGIN CHECK
-        // ==================================
-
-        if (!req.session.doctor) {
-
-            return res.redirect(
-                "/admin/doctor-login"
-            );
-
-        }
-
-        // ==================================
-        // SESSION DOCTOR ID
-        // ==================================
-
-        const sessionDoctor =
-            req.session.doctor;
-
-        const doctorId =
-            sessionDoctor._id ||
-            sessionDoctor.id ||
-            sessionDoctor.doctorId;
-
-        console.log(
-            "CHECKOUT SESSION DOCTOR:",
-            sessionDoctor
-        );
-
-        console.log(
-            "CHECKOUT DOCTOR ID:",
-            doctorId
-        );
-
-        // ==================================
-        // ID CHECK
-        // ==================================
-
-        if (!doctorId) {
-
-            return res.status(400).send(
-                "Doctor ID is missing from session."
-            );
-
-        }
-
-        // ==================================
-        // DATABASE SE DOCTOR FETCH
-        // ==================================
-
-        const doctor =
-            await Doctor.findById(
-                doctorId
-            ).lean();
-
-        // ==================================
-        // DOCTOR NOT FOUND
-        // ==================================
-
-        if (!doctor) {
-
-            return res.status(404).send(
-                "Doctor not found in database."
-            );
-
-        }
-
-        console.log(
-            "CHECKOUT DOCTOR FROM DATABASE:",
-            doctor
-        );
-
-        // ==================================
-        // SEND CHECKOUT PAGE
-        // ==================================
-
-        res.send(
-            Checkout(doctor)
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Doctor Checkout Error:",
-            error
-        );
-
-        res.status(500).send(
-            "Server Error. Please try again."
-        );
-
-    }
-
-});
-
-
-// ========================================
-// CASH ON DELIVERY
-// ========================================
-// ========================================
-// CASH ON DELIVERY ORDER
-// ========================================
-
-// ========================================
-// DOCTOR CHECKOUT PAGE
-// ========================================
-
-router.get("/checkout/:id", async (req, res) => {
-
-    try {
-
-        const id = req.params.id;
-
-        console.log("CHECKOUT ID:", id);
-
-
-        // ==================================
-        // FIND DOCTOR
-        // ==================================
-
-        let doctor = null;
-
-
-        // पहले custom doctorId से खोजें
-        doctor = await Doctor.findOne({
-            doctorId: id
-        }).lean();
-
-
-        // अगर नहीं मिला तो MongoDB _id से खोजें
-        if (!doctor) {
-
-            // ObjectId valid है तभी findById करें
-            if (
-                /^[0-9a-fA-F]{24}$/.test(id)
-            ) {
-
-                doctor =
-                    await Doctor.findById(id).lean();
-
-            }
-
-        }
-
-
-        // ==================================
-        // DOCTOR NOT FOUND
-        // ==================================
-
-        if (!doctor) {
-
-            console.log(
-                "DOCTOR NOT FOUND:",
-                id
-            );
-
-            return res.status(404).send(
-                "Doctor not found"
-            );
-
-        }
-
-
-        // ==================================
-        // SUCCESS
-        // ==================================
-
-        console.log(
-            "CHECKOUT DOCTOR:",
-            doctor
-        );
-
-
-        const Checkout =
-            require("../pages/checkout");
-
-
-        res.send(
-            Checkout(doctor)
-        );
-
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Doctor Checkout Error:",
-            error
-        );
-
-        res.status(500).send(
-            "Server Error"
-        );
-
-    }
-
-});
-
-// ========================================
-// CHECKOUT SUCCESS PAGE
-// ========================================
 // ======================================================
-// CHECKOUT SUCCESS PAGE
+// CHECKOUT PAGE
 // ======================================================
+
+const Checkout =
+    require("../pages/checkout");
+
 
 router.get(
-    "/checkout-success/:id",
-    async (req, res) => {
+    "/checkout",
+    async (req,res) => {
 
         try {
-
-            // ==========================================
-            // LOGIN CHECK
-            // ==========================================
 
             if (!req.session.doctor) {
 
@@ -4594,103 +6636,200 @@ router.get(
             }
 
 
-            // ==========================================
-            // ORDER ID
-            // ==========================================
-
-            const orderId =
-                req.params.id;
+            const sessionDoctor =
+                req.session.doctor;
 
 
-            console.log(
-                "SUCCESS ORDER ID:",
-                orderId
-            );
-
-
-            // ==========================================
-            // FIND ORDER
-            // ==========================================
-
-            const order =
-                await DoctorOrder
-                    .findById(orderId)
-                    .lean();
-
-
-            if (!order) {
-
-                console.log(
-                    "SUCCESS ORDER NOT FOUND:",
-                    orderId
+            const doctorId =
+                getSessionDoctorId(
+                    sessionDoctor
                 );
 
-                return res.status(404).send(
-                    "Order not found"
+
+            if (!doctorId) {
+
+                return res.status(400)
+                    .send(
+                        "Doctor ID is missing from session."
+                    );
+
+            }
+
+
+            const doctor =
+                await findDoctorByAnyId(
+                    doctorId
+                );
+
+
+            if (!doctor) {
+
+                return res.status(404)
+                    .send(
+                        "Doctor not found in database."
+                    );
+
+            }
+
+
+            res.send(
+                Checkout(doctor)
+            );
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "Doctor Checkout Error:",
+                error
+            );
+
+            res.status(500)
+                .send(
+                    "Server Error. Please try again."
+                );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// CHECKOUT BY DOCTOR ID
+// ======================================================
+
+router.get(
+    "/checkout/:id",
+    async (req,res) => {
+
+        try {
+
+            const doctor =
+                await findDoctorByAnyId(
+                    req.params.id
+                );
+
+
+            if (!doctor) {
+
+                return res.status(404)
+                    .send(
+                        "Doctor not found"
+                    );
+
+            }
+
+
+            res.send(
+                Checkout(doctor)
+            );
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "Doctor Checkout Error:",
+                error
+            );
+
+            res.status(500)
+                .send(
+                    "Server Error"
+                );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// CHECKOUT SUCCESS
+// ======================================================
+
+router.get(
+    "/checkout-success/:id",
+    async (req,res) => {
+
+        try {
+
+            if (!req.session.doctor) {
+
+                return res.redirect(
+                    "/admin/doctor-login"
                 );
 
             }
 
 
-            // ==========================================
-            // FIND DOCTOR
-            // ==========================================
+            const order =
+                await DoctorOrder
+                    .findById(
+                        req.params.id
+                    )
+                    .lean();
+
+
+            if (!order) {
+
+                return res.status(404)
+                    .send(
+                        "Order not found"
+                    );
+
+            }
+
+
+            const sessionDoctor =
+                req.session.doctor;
+
+
+            const loggedDoctor =
+                await findDoctorByAnyId(
+                    getSessionDoctorId(
+                        sessionDoctor
+                    )
+                );
+
+
+            if (
+                loggedDoctor &&
+                order.doctorId &&
+                String(order.doctorId) !==
+                String(loggedDoctor._id)
+            ) {
+
+                return res.status(403)
+                    .send(
+                        "You cannot access this order."
+                    );
+
+            }
+
 
             let doctor = null;
 
 
             if (order.doctorId) {
 
-                // MongoDB ObjectId
-                if (
-                    /^[0-9a-fA-F]{24}$/.test(
-                        String(order.doctorId)
-                    )
-                ) {
-
-                    doctor =
-                        await Doctor
-                            .findById(
-                                order.doctorId
-                            )
-                            .lean();
-
-                }
-
-
-                // Custom doctorId fallback
-                if (!doctor) {
-
-                    doctor =
-                        await Doctor
-                            .findOne({
-                                doctorId:
-                                    String(
-                                        order.doctorId
-                                    )
-                            })
-                            .lean();
-
-                }
+                doctor =
+                    await findDoctorByAnyId(
+                        order.doctorId
+                    );
 
             }
 
-
-            // ==========================================
-            // SESSION DOCTOR FALLBACK
-            // ==========================================
 
             if (!doctor) {
 
                 doctor =
-                    req.session.doctor || {};
+                    sessionDoctor;
 
             }
 
-
-            // ==========================================
-            // DOCTOR DETAILS
-            // ==========================================
 
             const doctorName =
                 doctor.name ||
@@ -4719,29 +6858,11 @@ router.get(
                 "";
 
 
-            // ==========================================
-            // ORDER TOTAL
-            // ==========================================
-
             const totalAmount =
                 Number(
                     order.totalAmount || 0
                 );
 
-
-            // ==========================================
-            // ITEMS
-            // ==========================================
-
-            const items =
-                Array.isArray(order.items)
-                    ? order.items
-                    : [];
-
-
-            // ==========================================
-            // SUCCESS PAGE
-            // ==========================================
 
             res.send(`
 
@@ -4759,8 +6880,9 @@ router.get(
 >
 
 <title>
-    Order Successful | GLOBAL HEALTHCARE
+Order Successful | GLOBAL HEALTHCARE
 </title>
+
 
 <style>
 
@@ -4773,6 +6895,7 @@ router.get(
         Helvetica,
         sans-serif;
 }
+
 
 body{
 
@@ -4795,6 +6918,7 @@ body{
 
 }
 
+
 .success-card{
 
     width:100%;
@@ -4815,10 +6939,10 @@ body{
 
 }
 
+
 .success-icon{
 
     width:90px;
-
     height:90px;
 
     margin:0 auto 20px;
@@ -4839,6 +6963,7 @@ body{
 
 }
 
+
 h1{
 
     color:#15803d;
@@ -4848,6 +6973,7 @@ h1{
     margin-bottom:10px;
 
 }
+
 
 .subtitle{
 
@@ -4860,6 +6986,7 @@ h1{
     margin-bottom:25px;
 
 }
+
 
 .order-box{
 
@@ -4875,6 +7002,7 @@ h1{
 
 }
 
+
 .order-number{
 
     color:#2563eb;
@@ -4884,6 +7012,7 @@ h1{
     font-weight:900;
 
 }
+
 
 .doctor-box{
 
@@ -4901,6 +7030,7 @@ h1{
 
 }
 
+
 .row{
 
     display:flex;
@@ -4915,11 +7045,13 @@ h1{
 
 }
 
+
 .row:last-child{
 
     border-bottom:none;
 
 }
+
 
 .label{
 
@@ -4928,6 +7060,7 @@ h1{
     font-size:14px;
 
 }
+
 
 .value{
 
@@ -4938,6 +7071,7 @@ h1{
     text-align:right;
 
 }
+
 
 .amount-box{
 
@@ -4964,11 +7098,13 @@ h1{
 
 }
 
+
 .amount-label{
 
     font-weight:700;
 
 }
+
 
 .amount{
 
@@ -4977,6 +7113,7 @@ h1{
     font-weight:900;
 
 }
+
 
 .cod-box{
 
@@ -4992,6 +7129,7 @@ h1{
 
 }
 
+
 .cod-title{
 
     color:#c2410c;
@@ -5004,6 +7142,7 @@ h1{
 
 }
 
+
 .cod-text{
 
     color:#7c2d12;
@@ -5014,6 +7153,7 @@ h1{
 
 }
 
+
 .buttons{
 
     display:flex;
@@ -5023,6 +7163,7 @@ h1{
     gap:12px;
 
 }
+
 
 .btn{
 
@@ -5040,6 +7181,7 @@ h1{
 
 }
 
+
 .dashboard{
 
     background:
@@ -5053,6 +7195,7 @@ h1{
 
 }
 
+
 .orders{
 
     background:#eff6ff;
@@ -5060,6 +7203,7 @@ h1{
     color:#2563eb;
 
 }
+
 
 .footer{
 
@@ -5075,7 +7219,9 @@ h1{
 
 </head>
 
+
 <body>
+
 
 <div class="success-card">
 
@@ -5098,20 +7244,19 @@ h1{
     </p>
 
 
-    <!-- ORDER -->
-
     <div class="order-box">
 
         <div class="order-number">
 
-            Order #${String(order._id).slice(-8)}
+            Order #
+            ${escapeHTML(
+                String(order._id).slice(-8)
+            )}
 
         </div>
 
     </div>
 
-
-    <!-- DOCTOR -->
 
     <div class="doctor-box">
 
@@ -5123,9 +7268,11 @@ h1{
             </span>
 
             <span class="value">
+
                 ${escapeHTML(
                     String(doctorDisplayId)
                 )}
+
             </span>
 
         </div>
@@ -5138,9 +7285,12 @@ h1{
             </span>
 
             <span class="value">
-                Dr. ${escapeHTML(
+
+                Dr.
+                ${escapeHTML(
                     doctorName
                 )}
+
             </span>
 
         </div>
@@ -5148,54 +7298,52 @@ h1{
 
         ${
             doctorPhone
-            ?
-            `
-            <div class="row">
+                ?
+`
+<div class="row">
 
-                <span class="label">
-                    Mobile
-                </span>
+    <span class="label">
+        Mobile
+    </span>
 
-                <span class="value">
-                    ${escapeHTML(
-                        doctorPhone
-                    )}
-                </span>
+    <span class="value">
+        ${escapeHTML(
+            doctorPhone
+        )}
+    </span>
 
-            </div>
-            `
-            :
-            ""
+</div>
+`
+                :
+""
         }
 
 
         ${
             doctorEmail
-            ?
-            `
-            <div class="row">
+                ?
+`
+<div class="row">
 
-                <span class="label">
-                    Email
-                </span>
+    <span class="label">
+        Email
+    </span>
 
-                <span class="value">
-                    ${escapeHTML(
-                        doctorEmail
-                    )}
-                </span>
+    <span class="value">
+        ${escapeHTML(
+            doctorEmail
+        )}
+    </span>
 
-            </div>
-            `
-            :
-            ""
+</div>
+`
+                :
+""
         }
 
 
     </div>
 
-
-    <!-- TOTAL -->
 
     <div class="amount-box">
 
@@ -5204,20 +7352,18 @@ h1{
         </span>
 
         <span class="amount">
+
             ₹${totalAmount.toFixed(2)}
+
         </span>
 
     </div>
 
 
-    <!-- COD -->
-
     <div class="cod-box">
 
         <div class="cod-title">
-
             💵 Cash on Delivery
-
         </div>
 
         <div class="cod-text">
@@ -5231,10 +7377,7 @@ h1{
     </div>
 
 
-    <!-- BUTTONS -->
-
     <div class="buttons">
-
 
         <a
             href="/doctor/orders"
@@ -5255,7 +7398,6 @@ h1{
 
         </a>
 
-
     </div>
 
 
@@ -5268,330 +7410,558 @@ h1{
 
 </div>
 
+
 </body>
 
 </html>
 
-            `);
+`);
 
         }
 
-        catch (error) {
+        catch(error) {
 
             console.error(
                 "Checkout Success Error:",
                 error
             );
 
-            res.status(500).send(
-                "Checkout Success Page Error"
-            );
+            res.status(500)
+                .send(
+                    "Checkout Success Page Error"
+                );
 
         }
 
     }
 );
 
+
 // ======================================================
-// CASH ON DELIVERY ORDER
-// ======================================================
-// ======================================================
-// CASH ON DELIVERY ORDER
+// CASH ON DELIVERY
 // ======================================================
 
-router.post("/checkout/cod", async (req, res) => {
+router.post(
+    "/checkout/cod",
+    async (req,res) => {
 
-    try {
+        try {
 
-        // ==========================================
-        // LOGIN CHECK
-        // ==========================================
+            if (!req.session.doctor) {
 
-        if (!req.session.doctor) {
+                return res.status(401).json({
 
-            return res.status(401).json({
+                    success:false,
 
-                success: false,
-                message: "Doctor login required"
+                    message:
+                        "Doctor login required"
 
-            });
+                });
 
-        }
-
-
-        // ==========================================
-        // SESSION DOCTOR
-        // ==========================================
-
-        const sessionDoctor =
-            req.session.doctor;
+            }
 
 
-        const doctorId =
-            sessionDoctor._id ||
-            sessionDoctor.id ||
-            sessionDoctor.doctorId;
+            const sessionDoctor =
+                req.session.doctor;
 
 
-        if (!doctorId) {
-
-            return res.status(400).json({
-
-                success: false,
-                message: "Doctor ID missing from session"
-
-            });
-
-        }
+            const sessionDoctorId =
+                getSessionDoctorId(
+                    sessionDoctor
+                );
 
 
-        // ==========================================
-        // FETCH DOCTOR
-        // ==========================================
+            if (!sessionDoctorId) {
 
-        let doctor = null;
+                return res.status(400).json({
 
+                    success:false,
 
-        // MongoDB _id
-        if (
-            /^[0-9a-fA-F]{24}$/.test(
-                String(doctorId)
-            )
-        ) {
+                    message:
+                        "Doctor ID missing from session"
 
-            doctor =
-                await Doctor.findById(
-                    doctorId
-                ).lean();
+                });
 
-        }
+            }
 
 
-        // Custom doctorId fallback
-        if (!doctor) {
-
-            doctor =
-                await Doctor.findOne({
-
-                    doctorId:
-                        String(doctorId)
-
-                }).lean();
-
-        }
+            const doctor =
+                await findDoctorByAnyId(
+                    sessionDoctorId
+                );
 
 
-        if (!doctor) {
+            if (!doctor) {
 
-            console.log(
-                "COD DOCTOR NOT FOUND:",
-                doctorId
-            );
+                return res.status(404).json({
 
-            return res.status(404).json({
+                    success:false,
 
-                success: false,
-                message: "Doctor not found"
+                    message:
+                        "Doctor not found"
 
-            });
+                });
 
-        }
+            }
 
 
-        // ==========================================
-        // CART
-        // ==========================================
-
-        const cart =
-            Array.isArray(req.body.cart)
-                ? req.body.cart
-                : [];
+            const cart =
+                Array.isArray(req.body.cart)
+                    ? req.body.cart
+                    : [];
 
 
-        console.log(
-            "COD CART:",
-            cart
-        );
+            if (cart.length === 0) {
+
+                return res.status(400).json({
+
+                    success:false,
+
+                    message:
+                        "Cart is Empty"
+
+                });
+
+            }
 
 
-        if (cart.length === 0) {
+            const items =
+                cart.map(item => {
 
-            return res.status(400).json({
-
-                success: false,
-                message: "Cart is Empty"
-
-            });
-
-        }
+                    const price =
+                        Number(
+                            item.price || 0
+                        );
 
 
-        // ==========================================
-        // PREPARE ITEMS
-        // ==========================================
-
-        const items =
-            cart.map(item => {
-
-                const price =
-                    Number(item.price || 0);
-
-                const qty =
-                    Number(item.qty || 0);
+                    const qty =
+                        Number(
+                            item.qty || 0
+                        );
 
 
-                return {
+                    return {
 
-                    productId:
-                        item.productId ||
-                        item.id ||
-                        null,
+                        productId:
+                            item.productId ||
+                            item.id ||
+                            null,
 
-                    name:
-                        item.name ||
-                        "Product",
+                        name:
+                            item.name ||
+                            "Product",
 
-                    price:
                         price,
 
-                    image:
-                        item.image ||
-                        "",
+                        image:
+                            item.image ||
+                            "",
 
-                    qty:
                         qty
 
-                };
+                    };
+
+                });
+
+
+            let totalAmount = 0;
+
+
+            items.forEach(item => {
+
+                totalAmount +=
+                    Number(item.price) *
+                    Number(item.qty);
 
             });
 
 
-        // ==========================================
-        // TOTAL
-        // ==========================================
+            if (totalAmount <= 0) {
 
-        let totalAmount = 0;
+                return res.status(400).json({
 
+                    success:false,
 
-        items.forEach(item => {
+                    message:
+                        "Invalid cart amount"
 
-            totalAmount +=
-                Number(item.price) *
-                Number(item.qty);
+                });
 
-        });
+            }
 
 
-        // ==========================================
-        // VALIDATE TOTAL
-        // ==========================================
+            const order =
+                await DoctorOrder.create({
 
-        if (totalAmount <= 0) {
+                    doctorId:
+                        doctor._id,
 
-            return res.status(400).json({
+                    doctorName:
+                        doctor.name ||
+                        doctor.doctorName ||
+                        "",
 
-                success: false,
-                message: "Invalid cart amount"
+                    doctorPhone:
+                        doctor.phone ||
+                        doctor.mobile ||
+                        "",
+
+                    doctorEmail:
+                        doctor.email ||
+                        "",
+
+                    items,
+
+                    totalAmount,
+
+                    paymentMethod:
+                        "cod",
+
+                    paymentStatus:
+                        "pending",
+
+                    status:
+                        "Pending",
+
+                    createdAt:
+                        new Date()
+
+                });
+
+
+            console.log(
+                "COD ORDER CREATED:",
+                order._id
+            );
+
+
+            return res.status(200).json({
+
+                success:true,
+
+                message:
+                    "Cash on Delivery order placed successfully",
+
+                orderId:
+                    order._id.toString(),
+
+                redirect:
+                    `/doctor/checkout-success/${order._id}`
 
             });
 
         }
 
+        catch(error) {
 
-        // ==========================================
-        // CREATE ORDER
-        // ==========================================
+            console.error(
+                "COD ORDER ERROR:",
+                error
+            );
 
-        const order =
-            await DoctorOrder.create({
+            return res.status(500).json({
 
-                doctorId:
-                    doctor._id,
+                success:false,
 
-                doctorName:
-                    doctor.name ||
-                    doctor.doctorName ||
-                    "",
+                message:
+                    "Unable to place COD order",
 
-                doctorPhone:
-                    doctor.phone ||
-                    doctor.mobile ||
-                    "",
-
-                doctorEmail:
-                    doctor.email ||
-                    "",
-
-                items:
-                    items,
-
-                totalAmount:
-                    totalAmount,
-
-                paymentMethod:
-                    "cod",
-
-                paymentStatus:
-                    "pending",
-
-                status:
-                    "Pending",
-
-                createdAt:
-                    new Date()
+                error:
+                    error.message
 
             });
 
-
-        console.log(
-            "COD ORDER CREATED:",
-            order._id
-        );
-
-
-        // ==========================================
-        // SUCCESS
-        // ==========================================
-
-        return res.status(200).json({
-
-            success: true,
-
-            message:
-                "Cash on Delivery order placed successfully",
-
-            orderId:
-                order._id.toString(),
-
-            redirect:
-                `/doctor/checkout-success/${order._id}`
-
-        });
+        }
 
     }
+);
 
-    catch (error) {
 
-        console.error(
-            "COD ORDER ERROR:",
-            error
-        );
+// ======================================================
+// CANCEL DOCTOR ORDER
+// ======================================================
 
-        return res.status(500).json({
+router.post(
+    "/cancel-order/:id",
+    async (req,res) => {
 
-            success: false,
+        try {
 
-            message:
-                "Unable to place COD order",
+            // ==========================================
+            // LOGIN
+            // ==========================================
 
-            error:
-                error.message
+            if (!req.session.doctor) {
 
-        });
+                return res.status(401).json({
+
+                    success:false,
+
+                    message:
+                        "Doctor login required"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // ORDER ID
+            // ==========================================
+
+            const orderId =
+                String(
+                    req.params.id || ""
+                ).trim();
+
+
+            if (
+                !/^[0-9a-fA-F]{24}$/.test(
+                    orderId
+                )
+            ) {
+
+                return res.status(400).json({
+
+                    success:false,
+
+                    message:
+                        "Invalid Order ID"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // SESSION DOCTOR
+            // ==========================================
+
+            const sessionDoctor =
+                req.session.doctor;
+
+
+            const sessionMongoId =
+                sessionDoctor._id ||
+                sessionDoctor.id ||
+                "";
+
+
+            const sessionCustomDoctorId =
+                sessionDoctor.doctorId ||
+                "";
+
+
+            // ==========================================
+            // FIND ORDER
+            // ==========================================
+
+            const order =
+                await DoctorOrder.findById(
+                    orderId
+                );
+
+
+            if (!order) {
+
+                return res.status(404).json({
+
+                    success:false,
+
+                    message:
+                        "Order not found"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // FIND LOGGED DOCTOR
+            // ==========================================
+
+            const loggedDoctor =
+                await findDoctorByAnyId(
+                    sessionMongoId ||
+                    sessionCustomDoctorId
+                );
+
+
+            if (!loggedDoctor) {
+
+                return res.status(403).json({
+
+                    success:false,
+
+                    message:
+                        "Doctor verification failed"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // SECURITY
+            // ==========================================
+
+            if (
+                !order.doctorId ||
+                String(order.doctorId) !==
+                String(loggedDoctor._id)
+            ) {
+
+                return res.status(403).json({
+
+                    success:false,
+
+                    message:
+                        "You cannot cancel this order"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // STATUS
+            // ==========================================
+
+            const currentStatus =
+                String(
+                    order.status ||
+                    "Pending"
+                )
+                    .trim()
+                    .toLowerCase();
+
+
+            // ==========================================
+            // ALREADY CANCELLED
+            // ==========================================
+
+            if (
+                currentStatus ===
+                "cancelled"
+            ) {
+
+                return res.status(400).json({
+
+                    success:false,
+
+                    message:
+                        "Order is already cancelled"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // DELIVERED
+            // ==========================================
+
+            if (
+                currentStatus ===
+                "delivered"
+            ) {
+
+                return res.status(400).json({
+
+                    success:false,
+
+                    message:
+                        "Delivered order cannot be cancelled"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // SHIPPED
+            // ==========================================
+
+            if (
+                currentStatus ===
+                "shipped"
+            ) {
+
+                return res.status(400).json({
+
+                    success:false,
+
+                    message:
+                        "Shipped order cannot be cancelled"
+
+                });
+
+            }
+
+
+            // ==========================================
+            // CANCEL
+            // ==========================================
+
+            order.status =
+                "Cancelled";
+
+
+            order.cancelledAt =
+                new Date();
+
+
+            await order.save();
+
+
+            console.log(
+                "ORDER CANCELLED:",
+                order._id.toString()
+            );
+
+
+            return res.status(200).json({
+
+                success:true,
+
+                message:
+                    "Order cancelled successfully",
+
+                orderId:
+                    order._id.toString(),
+
+                status:
+                    "Cancelled"
+
+            });
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "CANCEL ORDER ERROR:",
+                error
+            );
+
+
+            return res.status(500).json({
+
+                success:false,
+
+                message:
+                    "Unable to cancel order",
+
+                error:
+                    error.message
+
+            });
+
+        }
 
     }
+);
 
-});
 
 // ======================================================
 // EXPORT

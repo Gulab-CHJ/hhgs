@@ -206,290 +206,770 @@ function DoctorDashboard(doctor = {}, products = []) {
     // =====================================================
     // PRODUCT CARD
     // =====================================================
+function productCard(product, type = "") {
 
-    function productCard(product, type = "") {
+    const price = Number(product.price || 0);
+    const mrp = Number(product.mrp || 0);
+    const stock = Number(product.stock || 0);
 
-        const price =
-            Number(product.price || 0);
+    const inStock = stock > 0;
 
-        const mrp =
-            Number(product.mrp || 0);
+    const discount = Number(product.discount || 0);
 
-        const stock =
-            Number(product.stock || 0);
+    let badge = "";
 
-        const inStock =
-            stock > 0;
+    if (type === "trending") {
 
-        const discount =
-            Number(product.discount || 0);
-
-
-        let badge = "";
-
-        if (type === "trending") {
-
-            badge = `
-                <div class="product-badge trending-badge">
-                    🔥 TRENDING
-                </div>
-            `;
-
-        }
-        else if (type === "premium") {
-
-            badge = `
-                <div class="product-badge premium-badge">
-                    👑 PREMIUM
-                </div>
-            `;
-
-        }
-        else if (!inStock) {
-
-            badge = `
-                <div class="product-badge stock-badge">
-                    🚫 OUT OF STOCK
-                </div>
-            `;
-
-        }
-
-
-        const imageHTML =
-            product.image
-
-                ?
-
-                `
-                    <img
-                        src="${escapeHTML(product.image)}"
-                        alt="${escapeHTML(product.name)}"
-                        loading="lazy"
-                        onerror="
-                            this.style.display='none';
-                            this.nextElementSibling.style.display='flex';
-                        "
-                    >
-
-                    <div
-                        class="image-placeholder"
-                        style="display:none;"
-                    >
-                        💊
-                    </div>
-                `
-
-                :
-
-                `
-                    <div class="image-placeholder">
-                        💊
-                    </div>
-                `;
-
-
-        const priceHTML =
-
-            mrp > price && mrp > 0
-
-                ?
-
-                `
-                    <div class="price-row">
-
-                        <span class="old-price">
-                            ₹${mrp.toFixed(0)}
-                        </span>
-
-                        <span class="sale-price">
-                            ₹${price.toFixed(0)}
-                        </span>
-
-                    </div>
-
-                    <div class="discount">
-                        ${discount}% OFF
-                    </div>
-                `
-
-                :
-
-                `
-                    <div class="price-row">
-
-                        <span class="sale-price">
-                            ₹${price.toFixed(0)}
-                        </span>
-
-                    </div>
-                `;
-
-
-        const company =
-            product.company
-                ? escapeHTML(product.company)
-                : "Healthcare Product";
-
-
-        const description =
-            product.description ||
-            "Premium Healthcare Product";
-
-
-        const buttonHTML =
-
-            inStock
-
-                ?
-
-                `
-                    <button
-                        class="cart-btn"
-                        onclick="addToCart('${escapeHTML(product.id)}')"
-                    >
-                        🛒 Add To Cart
-                    </button>
-                `
-
-                :
-
-                `
-                    <button
-                        class="cart-btn disabled-btn"
-                        disabled
-                    >
-                        🚫 Out of Stock
-                    </button>
-                `;
-
-
-        return `
-
-            <article
-                class="product-card
-                ${!inStock ? "out-stock-card" : ""}
-                "
-                data-id="${escapeHTML(product.id)}"
-                data-category="${escapeHTML(product.category)}"
-                data-company="${escapeHTML(product.company)}"
-                data-name="${escapeHTML(product.name)}"
-            >
-
-                ${badge}
-
-
-                <div class="product-image">
-
-                    ${imageHTML}
-
-                </div>
-
-
-                <div class="product-content">
-
-
-                    <div class="product-category">
-
-                        ${escapeHTML(product.category)}
-
-                        <span class="rating">
-                            ⭐ 5.0
-                        </span>
-
-                    </div>
-
-
-                    <h3 class="product-name">
-
-                        ${escapeHTML(product.name)}
-
-                    </h3>
-
-
-                    <p class="product-description">
-
-                        ${escapeHTML(description)}
-
-                    </p>
-
-
-                    <div class="company">
-
-                        🏭
-
-                        <span>
-                            ${company}
-                        </span>
-
-                    </div>
-
-
-                    ${
-                        product.brand
-                            ?
-
-                            `
-                                <div class="brand">
-
-                                    Brand:
-
-                                    <strong>
-                                        ${escapeHTML(
-                                            product.brand
-                                        )}
-                                    </strong>
-
-                                </div>
-                            `
-
-                            :
-                            ""
-                    }
-
-
-                    <div class="price-area">
-
-                        ${priceHTML}
-
-                    </div>
-
-
-                    ${
-                        inStock
-
-                            ?
-
-                            `
-                                <div class="stock in-stock">
-
-                                    ● In Stock (${stock})
-
-                                </div>
-                            `
-
-                            :
-
-                            `
-                                <div class="stock out-stock">
-
-                                    ● Out of Stock
-
-                                </div>
-                            `
-                    }
-
-
-                    ${buttonHTML}
-
-
-                </div>
-
-            </article>
-
+        badge = `
+            <div class="product-badge trending-badge">
+                🔥 TRENDING
+            </div>
         `;
 
     }
+    else if (type === "premium") {
+
+        badge = `
+            <div class="product-badge premium-badge">
+                👑 PREMIUM
+            </div>
+        `;
+
+    }
+    else if (!inStock) {
+
+        badge = `
+            <div class="product-badge stock-badge">
+                🚫 OUT OF STOCK
+            </div>
+        `;
+
+    }
+
+
+    /* =========================================
+       IMAGE
+    ========================================= */
+
+    const imageHTML = product.image
+
+        ? `
+            <img
+                src="${escapeHTML(product.image)}"
+                alt="${escapeHTML(product.name)}"
+                loading="lazy"
+                onerror="
+                    this.style.display='none';
+                    this.nextElementSibling.style.display='flex';
+                "
+            >
+
+            <div
+                class="image-placeholder"
+                style="display:none;"
+            >
+                💊
+            </div>
+        `
+
+        : `
+            <div class="image-placeholder">
+                💊
+            </div>
+        `;
+
+
+    /* =========================================
+       PRICE
+    ========================================= */
+
+    const priceHTML =
+
+        mrp > price && mrp > 0
+
+            ? `
+                <div class="price-row">
+
+                    <span class="old-price">
+                        ₹${mrp.toFixed(0)}
+                    </span>
+
+                    <span class="sale-price">
+                        ₹${price.toFixed(0)}
+                    </span>
+
+                </div>
+
+                <div class="discount">
+                    ${discount}% OFF
+                </div>
+            `
+
+            : `
+                <div class="price-row">
+
+                    <span class="sale-price">
+                        ₹${price.toFixed(0)}
+                    </span>
+
+                </div>
+            `;
+
+
+    /* =========================================
+       COMPANY
+    ========================================= */
+
+    const company = product.company
+        ? escapeHTML(product.company)
+        : "Healthcare Product";
+
+
+    const description =
+        product.description ||
+        "Premium Healthcare Product";
+
+
+    /* =========================================
+       BUTTON
+    ========================================= */
+
+    const buttonHTML = inStock
+
+        ? `
+            <button
+                type="button"
+                class="cart-btn"
+                onclick="addToCart('${escapeHTML(product.id)}')"
+            >
+                🛒 Add To Cart
+            </button>
+        `
+
+        : `
+            <button
+                type="button"
+                class="cart-btn disabled-btn"
+                disabled
+            >
+                🚫 Out of Stock
+            </button>
+        `;
+
+
+    /* =========================================
+       CARD
+    ========================================= */
+
+    return `
+
+        <article
+            class="
+                product-card
+                ${!inStock ? "out-stock-card" : ""}
+            "
+            data-id="${escapeHTML(product.id)}"
+            data-category="${escapeHTML(product.category)}"
+            data-company="${escapeHTML(product.company)}"
+            data-name="${escapeHTML(product.name)}"
+        >
+
+            ${badge}
+
+
+            <div class="product-image">
+
+                ${imageHTML}
+
+            </div>
+
+
+            <div class="product-content">
+
+
+                <div class="product-category">
+
+                    ${escapeHTML(product.category)}
+
+                    <span class="rating">
+                        ⭐ 5.0
+                    </span>
+
+                </div>
+
+
+                <h3 class="product-name">
+
+                    ${escapeHTML(product.name)}
+
+                </h3>
+
+
+                <p class="product-description">
+
+                    ${escapeHTML(description)}
+
+                </p>
+
+
+                <div class="company">
+
+                    🏭
+
+                    <span>
+                        ${company}
+                    </span>
+
+                </div>
+
+
+                ${
+                    product.brand
+
+                        ? `
+
+                            <div class="brand">
+
+                                Brand:
+
+                                <strong>
+                                    ${escapeHTML(product.brand)}
+                                </strong>
+
+                            </div>
+
+                        `
+
+                        : ""
+                }
+
+
+                <div class="price-area">
+
+                    ${priceHTML}
+
+                </div>
+
+
+                ${
+                    inStock
+
+                        ? `
+
+                            <div class="stock in-stock">
+
+                                ● In Stock (${stock})
+
+                            </div>
+
+                        `
+
+                        : `
+
+                            <div class="stock out-stock">
+
+                                ● Out of Stock
+
+                            </div>
+
+                        `
+                }
+
+
+                ${buttonHTML}
+
+
+            </div>
+
+        </article>
+
+    `;
+}
+
+    /* =====================================================
+   UPDATE CART QUANTITY
+===================================================== */
+
+async function updateCartQuantity(productId, quantity) {
+
+    try {
+
+        productId = String(productId);
+        quantity = Number(quantity);
+
+        if (quantity <= 0) {
+
+            await removeFromCart(productId);
+
+            return;
+        }
+
+
+        const response = await fetch("/api/cart", {
+
+            method: "PUT",
+
+            headers: {
+
+                "Content-Type": "application/json",
+
+                "Accept": "application/json"
+
+            },
+
+            body: JSON.stringify({
+
+                productId: productId,
+
+                quantity: quantity
+
+            })
+
+        });
+
+
+        const data = await response.json();
+
+
+        console.log(
+            "UPDATE CART RESPONSE:",
+            data
+        );
+
+
+        if (!response.ok || !data.success) {
+
+            alert(
+                data.message ||
+                "Unable to update cart"
+            );
+
+            return;
+        }
+
+
+        if (Array.isArray(data.cart)) {
+
+            doctorCart = data.cart.map(item => ({
+
+                id: String(
+                    item.productId ||
+                    item.id ||
+                    ""
+                ),
+
+                productId: String(
+                    item.productId ||
+                    item.id ||
+                    ""
+                ),
+
+                name:
+                    item.name ||
+                    "Product",
+
+                price:
+                    Number(item.price || 0),
+
+                image:
+                    item.image || "",
+
+                qty:
+                    Number(
+                        item.quantity ||
+                        item.qty ||
+                        1
+                    ),
+
+                quantity:
+                    Number(
+                        item.quantity ||
+                        item.qty ||
+                        1
+                    )
+
+            }));
+
+        }
+
+
+        localStorage.setItem(
+            "doctorCart",
+            JSON.stringify(doctorCart)
+        );
+
+
+        updateCartCount();
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "UPDATE CART ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to update cart"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   INCREASE PRODUCT
+===================================================== */
+
+async function increaseCart(productId) {
+
+    const item =
+        doctorCart.find(
+            item =>
+                String(
+                    item.productId ||
+                    item.id
+                ) === String(productId)
+        );
+
+
+    if (!item) {
+
+        console.error(
+            "Cart item not found:",
+            productId
+        );
+
+        return;
+    }
+
+
+    const product =
+        products.find(
+            product =>
+                String(product.id) ===
+                String(productId)
+        );
+
+
+    const stock =
+        product
+            ? Number(product.stock || 0)
+            : 999999;
+
+
+    const currentQty =
+        Number(
+            item.quantity ||
+            item.qty ||
+            1
+        );
+
+
+    if (currentQty >= stock) {
+
+        alert(
+            "Maximum available stock reached"
+        );
+
+        return;
+    }
+
+
+    await updateCartQuantity(
+        productId,
+        currentQty + 1
+    );
+
+}
+
+
+/* =====================================================
+   DECREASE PRODUCT
+===================================================== */
+
+async function decreaseCart(productId) {
+
+    const item =
+        doctorCart.find(
+            item =>
+                String(
+                    item.productId ||
+                    item.id
+                ) === String(productId)
+        );
+
+
+    if (!item) {
+
+        return;
+    }
+
+
+    const currentQty =
+        Number(
+            item.quantity ||
+            item.qty ||
+            1
+        );
+
+
+    if (currentQty <= 1) {
+
+        await removeFromCart(productId);
+
+        return;
+    }
+
+
+    await updateCartQuantity(
+        productId,
+        currentQty - 1
+    );
+
+}
+
+
+/* =====================================================
+   REMOVE PRODUCT
+===================================================== */
+
+/* =====================================================
+   REMOVE PRODUCT - FINAL
+===================================================== */
+
+async function removeFromCart(productId) {
+
+    try {
+
+        productId = String(productId);
+
+        console.log(
+            "REMOVE PRODUCT:",
+            productId
+        );
+
+
+        const response = await fetch(
+            "/api/cart",
+            {
+                method: "DELETE",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+
+                credentials: "include",
+
+                body: JSON.stringify({
+                    productId: productId
+                })
+            }
+        );
+
+
+        const text = await response.text();
+
+        let data = null;
+
+        try {
+
+            data = text
+                ? JSON.parse(text)
+                : null;
+
+        }
+        catch (error) {
+
+            console.error(
+                "REMOVE CART INVALID RESPONSE:",
+                text
+            );
+
+            alert(
+                "Server returned an invalid response"
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "REMOVE CART RESPONSE:",
+            data
+        );
+
+
+        /* =========================================
+           API ERROR
+        ========================================= */
+
+        if (
+            !response.ok ||
+            !data ||
+            data.success !== true
+        ) {
+
+            alert(
+                data?.message ||
+                "Unable to remove product"
+            );
+
+            return;
+        }
+
+
+        /* =========================================
+           IMPORTANT
+           DATABASE CART = MAIN SOURCE
+        ========================================= */
+
+        if (
+            Array.isArray(data.cart)
+        ) {
+
+            doctorCart =
+                normalizeCart(
+                    data.cart
+                );
+
+        }
+        else {
+
+            /*
+             * If DELETE API does not return cart,
+             * reload cart directly from database.
+             */
+
+            await loadCart();
+
+            return;
+        }
+
+
+        /* =========================================
+           REMOVE LOCAL CACHE ITEM
+        ========================================= */
+
+        doctorCart =
+            doctorCart.filter(
+                item =>
+                    String(
+                        item.productId ||
+                        item.id
+                    ) !== productId
+            );
+
+
+        /* =========================================
+           SAVE UPDATED CART
+        ========================================= */
+
+        saveLocalCart();
+
+
+        /* =========================================
+           UPDATE CART COUNT
+        ========================================= */
+
+        updateCartCount();
+
+
+        /* =========================================
+           FORCE CART COUNT FROM CURRENT CART
+        ========================================= */
+
+        const cartCount =
+            doctorCart.reduce(
+                (total, item) => {
+
+                    return total +
+                        Number(
+                            item.quantity ||
+                            item.qty ||
+                            0
+                        );
+
+                },
+                0
+            );
+
+
+        const countElement =
+            document.getElementById(
+                "cartCount"
+            );
+
+
+        if (countElement) {
+
+            countElement.textContent =
+                cartCount;
+
+        }
+
+
+        /* =========================================
+           CART EMPTY
+        ========================================= */
+
+        if (cartCount === 0) {
+
+            if (countElement) {
+
+                countElement.textContent = "0";
+
+            }
+
+            /*
+             * Optional:
+             * hide badge when cart is empty
+             */
+
+            if (countElement) {
+
+                countElement.style.display =
+                    "none";
+
+            }
+
+        }
+        else {
+
+            if (countElement) {
+
+                countElement.style.display =
+                    "inline-flex";
+
+            }
+
+        }
+
+
+        console.log(
+            "CART AFTER REMOVE:",
+            doctorCart
+        );
+
+
+    }
+    catch (error) {
+
+        console.error(
+            "REMOVE CART ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to remove product"
+        );
+
+    }
+
+}
 
 
     // =====================================================
@@ -2526,15 +3006,13 @@ select:focus {
 
 </footer>
 
-
 <script>
 
 /* =====================================================
    PRODUCT DATA
 ===================================================== */
 
-const products =
-    ${JSON.stringify(productData)};
+const products = ${JSON.stringify(productData)};
 
 
 /* =====================================================
@@ -2545,6 +3023,180 @@ let doctorCart = [];
 
 
 /* =====================================================
+   NORMALIZE CART ITEM
+===================================================== */
+
+function normalizeCartItem(item) {
+
+    if (!item) {
+        return null;
+    }
+
+    const productId = String(
+        item.productId ||
+        item.product?._id ||
+        item.id ||
+        ""
+    );
+
+    if (!productId) {
+        return null;
+    }
+
+    const quantity = Math.max(
+        1,
+        Number(
+            item.quantity ??
+            item.qty ??
+            1
+        )
+    );
+
+    return {
+
+        id: productId,
+
+        productId: productId,
+
+        name:
+            item.name ||
+            item.product?.name ||
+            "Product",
+
+        price:
+            Number(
+                item.price ??
+                item.product?.price ??
+                0
+            ),
+
+        image:
+            item.image ||
+            item.product?.image ||
+            "",
+
+        quantity: quantity,
+
+        qty: quantity
+
+    };
+
+}
+
+
+/* =====================================================
+   NORMALIZE CART
+===================================================== */
+
+function normalizeCart(cart) {
+
+    if (!Array.isArray(cart)) {
+        return [];
+    }
+
+    return cart
+        .map(normalizeCartItem)
+        .filter(Boolean);
+
+}
+
+
+/* =====================================================
+   UPDATE CART COUNT
+===================================================== */
+
+function updateCartCount() {
+
+    const countElement =
+        document.getElementById("cartCount");
+
+    if (!countElement) {
+        return;
+    }
+
+    const count =
+        Array.isArray(doctorCart)
+            ? doctorCart.reduce(
+                (total, item) => {
+
+                    return total +
+                        Number(
+                            item.quantity ??
+                            item.qty ??
+                            0
+                        );
+
+                },
+                0
+            )
+            : 0;
+
+    countElement.textContent = count;
+
+    if (count <= 0) {
+
+        countElement.style.display =
+            "none";
+
+    }
+    else {
+
+        countElement.style.display =
+            "inline-flex";
+
+    }
+
+}
+
+
+/* =====================================================
+   FIND PRODUCT
+===================================================== */
+
+function findProduct(productId) {
+
+    return products.find(
+        product =>
+            String(product.id) ===
+            String(productId)
+    );
+
+}
+
+
+/* =====================================================
+   API JSON HELPER
+===================================================== */
+
+async function getJSONResponse(response) {
+
+    const text =
+        await response.text();
+
+    if (!text) {
+        return null;
+    }
+
+    try {
+
+        return JSON.parse(text);
+
+    }
+    catch (error) {
+
+        console.error(
+            "Invalid JSON response:",
+            text
+        );
+
+        return null;
+
+    }
+
+}
+
+
+/* =====================================================
    LOAD CART FROM DATABASE
 ===================================================== */
 
@@ -2552,102 +3204,68 @@ async function loadCart() {
 
     try {
 
-        console.log("Loading cart from database...");
+        console.log(
+            "Loading doctor cart..."
+        );
 
         const response =
-            await fetch("/api/cart", {
-                method: "GET",
-                headers: {
-                    "Accept": "application/json"
-                }
-            });
+            await fetch(
+                "/api/cart",
+                {
+                    method: "GET",
 
+                    headers: {
+                        "Accept":
+                            "application/json"
+                    },
+
+                    credentials: "include"
+                }
+            );
 
         const data =
-            await response.json();
-
+            await getJSONResponse(
+                response
+            );
 
         console.log(
-            "CART API RESPONSE:",
+            "GET /api/cart:",
             data
         );
 
 
         if (
-            data.success &&
+            response.ok &&
+            data &&
+            data.success === true &&
             Array.isArray(data.cart)
         ) {
 
             doctorCart =
-                data.cart.map(item => ({
-
-                    id:
-                        String(
-                            item.productId ||
-                            item.id ||
-                            ""
-                        ),
-
-                    productId:
-                        String(
-                            item.productId ||
-                            item.id ||
-                            ""
-                        ),
-
-                    name:
-                        item.name ||
-                        "Product",
-
-                    price:
-                        Number(
-                            item.price || 0
-                        ),
-
-                    image:
-                        item.image || "",
-
-                    qty:
-                        Number(
-                            item.quantity ||
-                            item.qty ||
-                            1
-                        ),
-
-                    quantity:
-                        Number(
-                            item.quantity ||
-                            item.qty ||
-                            1
-                        )
-
-                }));
-
-
-            /*
-             * Optional local cache
-             */
-
-            localStorage.setItem(
-                "doctorCart",
-                JSON.stringify(
-                    doctorCart
-                )
-            );
+                normalizeCart(
+                    data.cart
+                );
 
         }
         else {
 
             doctorCart = [];
 
-        }
+            if (data?.message) {
 
+                console.warn(
+                    data.message
+                );
+
+            }
+
+        }
 
     }
     catch (error) {
 
         console.error(
-            "Cart load error:",
+            "LOAD CART ERROR:",
             error
         );
 
@@ -2655,58 +3273,25 @@ async function loadCart() {
 
     }
 
-
     updateCartCount();
 
 }
 
 
 /* =====================================================
-   CART COUNT
-===================================================== */
-
-function updateCartCount() {
-
-    const countElement =
-        document.getElementById(
-            "cartCount"
-        );
-
-
-    if (!countElement) {
-        return;
-    }
-
-
-    const count =
-        doctorCart.reduce(
-            (total, item) => {
-
-                return total +
-                    Number(
-                        item.qty ||
-                        item.quantity ||
-                        0
-                    );
-
-            },
-            0
-        );
-
-
-    countElement.textContent =
-        count;
-
-}
-
-
-/* =====================================================
-   ADD TO CART - DATABASE
+   ADD TO CART
+   POST /api/cart
 ===================================================== */
 
 async function addToCart(productId) {
 
     try {
+
+        productId =
+            String(
+                productId || ""
+            ).trim();
+
 
         console.log(
             "ADD TO CART PRODUCT ID:",
@@ -2714,12 +3299,31 @@ async function addToCart(productId) {
         );
 
 
-        const product =
-            products.find(
-                item =>
-                    String(item.id) ===
-                    String(productId)
+        if (!productId) {
+
+            alert(
+                "Invalid product ID"
             );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------
+           FIND PRODUCT
+        ----------------------------------------- */
+
+        const product =
+            findProduct(
+                productId
+            );
+
+
+        console.log(
+            "FOUND PRODUCT:",
+            product
+        );
 
 
         if (!product) {
@@ -2733,9 +3337,17 @@ async function addToCart(productId) {
         }
 
 
-        if (
-            Number(product.stock || 0) <= 0
-        ) {
+        /* -----------------------------------------
+           STOCK CHECK
+        ----------------------------------------- */
+
+        const stock =
+            Number(
+                product.stock || 0
+            );
+
+
+        if (stock <= 0) {
 
             alert(
                 "Product is out of stock"
@@ -2746,9 +3358,9 @@ async function addToCart(productId) {
         }
 
 
-        /*
-         * Check current quantity
-         */
+        /* -----------------------------------------
+           CURRENT CART QUANTITY
+        ----------------------------------------- */
 
         const existing =
             doctorCart.find(
@@ -2756,40 +3368,46 @@ async function addToCart(productId) {
                     String(
                         item.productId ||
                         item.id
-                    ) ===
-                    String(product.id)
+                    ) === productId
             );
 
 
-        if (existing) {
-
-            const currentQty =
-                Number(
-                    existing.qty ||
+        const currentQuantity =
+            existing
+                ? Number(
                     existing.quantity ||
+                    existing.qty ||
                     0
-                );
+                )
+                : 0;
 
 
-            if (
-                currentQty >=
-                Number(product.stock)
-            ) {
+        console.log(
+            "CURRENT QUANTITY:",
+            currentQuantity
+        );
 
-                alert(
-                    "Maximum available stock reached"
-                );
 
-                return;
+        /* -----------------------------------------
+           STOCK LIMIT
+        ----------------------------------------- */
 
-            }
+        if (
+            currentQuantity >= stock
+        ) {
+
+            alert(
+                "Maximum available stock reached"
+            );
+
+            return;
 
         }
 
 
-        /*
-         * SEND PRODUCT TO DATABASE
-         */
+        /* -----------------------------------------
+           ADD TO DATABASE
+        ----------------------------------------- */
 
         const response =
             await fetch(
@@ -2797,6 +3415,8 @@ async function addToCart(productId) {
                 {
 
                     method: "POST",
+
+                    credentials: "include",
 
                     headers: {
 
@@ -2812,22 +3432,7 @@ async function addToCart(productId) {
                         JSON.stringify({
 
                             productId:
-                                String(
-                                    product.id
-                                ),
-
-                            name:
-                                product.name,
-
-                            price:
-                                Number(
-                                    product.price ||
-                                    0
-                                ),
-
-                            image:
-                                product.image ||
-                                "",
+                                productId,
 
                             quantity: 1
 
@@ -2837,24 +3442,41 @@ async function addToCart(productId) {
             );
 
 
+        console.log(
+            "CART RESPONSE STATUS:",
+            response.status
+        );
+
+
+        /* -----------------------------------------
+           READ RESPONSE
+        ----------------------------------------- */
+
         const data =
-            await response.json();
+            await getJSONResponse(
+                response
+            );
 
 
         console.log(
-            "ADD CART RESPONSE:",
+            "CART API DATA:",
             data
         );
 
 
+        /* -----------------------------------------
+           API ERROR
+        ----------------------------------------- */
+
         if (
             !response.ok ||
-            !data.success
+            !data ||
+            data.success !== true
         ) {
 
             alert(
-                data.message ||
-                "Failed to add product to cart"
+                data?.message ||
+                "Unable to add product to cart"
             );
 
             return;
@@ -2862,85 +3484,51 @@ async function addToCart(productId) {
         }
 
 
-        /*
-         * IMPORTANT:
-         * Use database response as
-         * the current cart.
-         */
+        /* -----------------------------------------
+           UPDATE LOCAL CART
+           FROM DATABASE RESPONSE
+        ----------------------------------------- */
 
         if (
-            Array.isArray(data.cart)
+            Array.isArray(
+                data.cart
+            )
         ) {
 
             doctorCart =
-                data.cart.map(item => ({
+                normalizeCart(
+                    data.cart
+                );
 
-                    id:
-                        String(
-                            item.productId ||
-                            item.id ||
-                            ""
-                        ),
+        }
+        else {
 
-                    productId:
-                        String(
-                            item.productId ||
-                            item.id ||
-                            ""
-                        ),
-
-                    name:
-                        item.name ||
-                        "Product",
-
-                    price:
-                        Number(
-                            item.price || 0
-                        ),
-
-                    image:
-                        item.image || "",
-
-                    qty:
-                        Number(
-                            item.quantity ||
-                            item.qty ||
-                            1
-                        ),
-
-                    quantity:
-                        Number(
-                            item.quantity ||
-                            item.qty ||
-                            1
-                        )
-
-                }));
+            await loadCart();
 
         }
 
 
-        /*
-         * Local cache only.
-         * Main cart is MongoDB.
-         */
-
-        localStorage.setItem(
-            "doctorCart",
-            JSON.stringify(
-                doctorCart
-            )
-        );
-
+        /* -----------------------------------------
+           UPDATE COUNT
+        ----------------------------------------- */
 
         updateCartCount();
 
+
+        console.log(
+            "CART AFTER ADD:",
+            doctorCart
+        );
+
+
+        /* -----------------------------------------
+           SUCCESS
+        ----------------------------------------- */
 
         alert(
             product.name +
             " added to cart"
         );
-
 
     }
     catch (error) {
@@ -2949,7 +3537,6 @@ async function addToCart(productId) {
             "ADD TO CART ERROR:",
             error
         );
-
 
         alert(
             "Unable to add product to cart"
@@ -2961,37 +3548,513 @@ async function addToCart(productId) {
 
 
 /* =====================================================
-   FILTER
+   UPDATE CART QUANTITY
+   PATCH /api/cart/:productId
+===================================================== */
+
+async function updateCartQuantity(
+    productId,
+    quantity
+) {
+
+    try {
+
+        productId =
+            String(productId);
+
+        quantity =
+            Number(quantity);
+
+
+        /* -----------------------------------------
+           REMOVE WHEN ZERO
+        ----------------------------------------- */
+
+        if (
+            quantity <= 0
+        ) {
+
+            await removeFromCart(
+                productId
+            );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------
+           FIND PRODUCT
+        ----------------------------------------- */
+
+        const product =
+            findProduct(
+                productId
+            );
+
+
+        /* -----------------------------------------
+           STOCK CHECK
+        ----------------------------------------- */
+
+        if (product) {
+
+            const stock =
+                Number(
+                    product.stock || 0
+                );
+
+
+            if (
+                stock <= 0
+            ) {
+
+                alert(
+                    "Product is out of stock"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                quantity > stock
+            ) {
+
+                alert(
+                    "Maximum available stock reached"
+                );
+
+                return;
+
+            }
+
+        }
+
+
+        /* -----------------------------------------
+           PATCH API
+        ----------------------------------------- */
+
+        const response =
+            await fetch(
+                "/api/cart/" +
+                encodeURIComponent(
+                    productId
+                ),
+                {
+
+                    method: "PATCH",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json",
+
+                        "Accept":
+                            "application/json"
+
+                    },
+
+                    credentials: "include",
+
+                    body:
+                        JSON.stringify({
+
+                            quantity:
+                                quantity
+
+                        })
+
+                }
+            );
+
+
+        const data =
+            await getJSONResponse(
+                response
+            );
+
+
+        console.log(
+            "PATCH CART:",
+            data
+        );
+
+
+        /* -----------------------------------------
+           API ERROR
+        ----------------------------------------- */
+
+        if (
+            !response.ok ||
+            !data ||
+            data.success !== true
+        ) {
+
+            alert(
+                data?.message ||
+                "Unable to update cart"
+            );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------
+           UPDATE CART
+        ----------------------------------------- */
+
+        if (
+            Array.isArray(
+                data.cart
+            )
+        ) {
+
+            doctorCart =
+                normalizeCart(
+                    data.cart
+                );
+
+        }
+        else {
+
+            await loadCart();
+
+        }
+
+
+        updateCartCount();
+
+    }
+    catch (error) {
+
+        console.error(
+            "UPDATE CART ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to update cart"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   INCREASE CART
+===================================================== */
+
+async function increaseCart(
+    productId
+) {
+
+    const item =
+        doctorCart.find(
+            item =>
+                String(
+                    item.productId ||
+                    item.id
+                ) ===
+                String(productId)
+        );
+
+
+    if (!item) {
+
+        console.error(
+            "Cart item not found:",
+            productId
+        );
+
+        return;
+
+    }
+
+
+    const product =
+        findProduct(
+            productId
+        );
+
+
+    const stock =
+        product
+            ? Number(
+                product.stock || 0
+            )
+            : 0;
+
+
+    const currentQuantity =
+        Number(
+            item.quantity ||
+            item.qty ||
+            1
+        );
+
+
+    if (
+        stock <= 0
+    ) {
+
+        alert(
+            "Product is out of stock"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        currentQuantity >= stock
+    ) {
+
+        alert(
+            "Maximum available stock reached"
+        );
+
+        return;
+
+    }
+
+
+    await updateCartQuantity(
+        productId,
+        currentQuantity + 1
+    );
+
+}
+
+
+/* =====================================================
+   DECREASE CART
+===================================================== */
+
+async function decreaseCart(
+    productId
+) {
+
+    const item =
+        doctorCart.find(
+            item =>
+                String(
+                    item.productId ||
+                    item.id
+                ) ===
+                String(productId)
+        );
+
+
+    if (!item) {
+        return;
+    }
+
+
+    const currentQuantity =
+        Number(
+            item.quantity ||
+            item.qty ||
+            1
+        );
+
+
+    if (
+        currentQuantity <= 1
+    ) {
+
+        await removeFromCart(
+            productId
+        );
+
+        return;
+
+    }
+
+
+    await updateCartQuantity(
+        productId,
+        currentQuantity - 1
+    );
+
+}
+
+
+/* =====================================================
+   REMOVE PRODUCT
+   DELETE /api/cart/:productId
+===================================================== */
+
+async function removeFromCart(
+    productId
+) {
+
+    try {
+
+        productId =
+            String(productId);
+
+
+        const response =
+            await fetch(
+                "/api/cart/" +
+                encodeURIComponent(
+                    productId
+                ),
+                {
+
+                    method: "DELETE",
+
+                    headers: {
+
+                        "Accept":
+                            "application/json"
+
+                    },
+
+                    credentials: "include"
+
+                }
+            );
+
+
+        const data =
+            await getJSONResponse(
+                response
+            );
+
+
+        console.log(
+            "DELETE CART:",
+            data
+        );
+
+
+        /* -----------------------------------------
+           API ERROR
+        ----------------------------------------- */
+
+        if (
+            !response.ok ||
+            !data ||
+            data.success !== true
+        ) {
+
+            alert(
+                data?.message ||
+                "Unable to remove product"
+            );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------
+           UPDATE CART
+        ----------------------------------------- */
+
+        if (
+            Array.isArray(
+                data.cart
+            )
+        ) {
+
+            doctorCart =
+                normalizeCart(
+                    data.cart
+                );
+
+        }
+        else {
+
+            doctorCart =
+                doctorCart.filter(
+                    item =>
+                        String(
+                            item.productId ||
+                            item.id
+                        ) !==
+                        productId
+                );
+
+        }
+
+
+        updateCartCount();
+
+
+        console.log(
+            "CART AFTER REMOVE:",
+            doctorCart
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "REMOVE CART ERROR:",
+            error
+        );
+
+        alert(
+            "Unable to remove product"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   FILTER PRODUCTS
 ===================================================== */
 
 function filterProducts() {
 
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const categoryInput =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+    const companyInput =
+        document.getElementById(
+            "companyFilter"
+        );
+
+
     const search =
-        document
-            .getElementById(
-                "searchInput"
-            )
-            .value
-            .toLowerCase()
-            .trim();
+        searchInput
+            ? searchInput.value
+                .toLowerCase()
+                .trim()
+            : "";
 
 
     const category =
-        document
-            .getElementById(
-                "categoryFilter"
-            )
-            .value
-            .toLowerCase();
+        categoryInput
+            ? categoryInput.value
+                .toLowerCase()
+                .trim()
+            : "";
 
 
     const company =
-        document
-            .getElementById(
-                "companyFilter"
-            )
-            .value
-            .toLowerCase();
+        companyInput
+            ? companyInput.value
+                .toLowerCase()
+                .trim()
+            : "";
 
 
     const cards =
@@ -3003,142 +4066,177 @@ function filterProducts() {
     let visible = 0;
 
 
-    cards.forEach(card => {
+    cards.forEach(
+        card => {
 
-        const name =
-            (
-                card.dataset.name ||
-                ""
-            ).toLowerCase();
-
-
-        const cardCategory =
-            (
-                card.dataset.category ||
-                ""
-            ).toLowerCase();
+            const name =
+                String(
+                    card.dataset.name ||
+                    ""
+                ).toLowerCase();
 
 
-        const cardCompany =
-            (
-                card.dataset.company ||
-                ""
-            ).toLowerCase();
+            const cardCategory =
+                String(
+                    card.dataset.category ||
+                    ""
+                ).toLowerCase();
 
 
-        const matchSearch =
-            !search ||
-            name.includes(search);
+            const cardCompany =
+                String(
+                    card.dataset.company ||
+                    ""
+                ).toLowerCase();
 
 
-        const matchCategory =
-            !category ||
-            cardCategory === category;
+            const matchSearch =
+                !search ||
+                name.includes(
+                    search
+                );
 
 
-        const matchCompany =
-            !company ||
-            cardCompany === company;
+            const matchCategory =
+                !category ||
+                cardCategory ===
+                category;
 
 
-        const show =
-            matchSearch &&
-            matchCategory &&
-            matchCompany;
+            const matchCompany =
+                !company ||
+                cardCompany ===
+                company;
 
 
-        card.style.display =
-            show
-                ? ""
-                : "none";
+            const show =
+                matchSearch &&
+                matchCategory &&
+                matchCompany;
 
 
-        if (show) {
-            visible++;
+            card.style.display =
+                show
+                    ? ""
+                    : "none";
+
+
+            if (show) {
+                visible++;
+            }
+
         }
+    );
 
-    });
 
-
-    document
-        .getElementById(
+    const productCount =
+        document.getElementById(
             "productCount"
-        )
-        .textContent =
+        );
+
+
+    if (productCount) {
+
+        productCount.textContent =
             visible +
             " Products";
 
+    }
 
-    document
-        .getElementById(
+
+    const hasFilter =
+        Boolean(
+            search ||
+            category ||
+            company
+        );
+
+
+    const trendingSection =
+        document.getElementById(
             "trendingSection"
-        )
-        .style.display =
-            (
-                search ||
-                category ||
-                company
-            )
-                ? "none"
-                : "";
+        );
 
 
-    document
-        .getElementById(
+    const premiumSection =
+        document.getElementById(
             "premiumSection"
-        )
-        .style.display =
-            (
-                search ||
-                category ||
-                company
-            )
-                ? "none"
-                : "";
+        );
 
 
-    document
-        .getElementById(
+    const outStockSection =
+        document.getElementById(
             "outStockSection"
-        )
-        .style.display =
-            (
-                search ||
-                category ||
-                company
-            )
+        );
+
+
+    if (trendingSection) {
+
+        trendingSection.style.display =
+            hasFilter
                 ? "none"
                 : "";
 
+    }
+
+
+    if (premiumSection) {
+
+        premiumSection.style.display =
+            hasFilter
+                ? "none"
+                : "";
+
+    }
+
+
+    if (outStockSection) {
+
+        outStockSection.style.display =
+            hasFilter
+                ? "none"
+                : "";
+
+    }
 
 }
 
 
 /* =====================================================
-   RESET
+   RESET FILTERS
 ===================================================== */
 
 function resetFilters() {
 
-    document
-        .getElementById(
+    const searchInput =
+        document.getElementById(
             "searchInput"
-        )
-        .value = "";
+        );
 
-
-    document
-        .getElementById(
+    const categoryInput =
+        document.getElementById(
             "categoryFilter"
-        )
-        .value = "";
+        );
 
-
-    document
-        .getElementById(
+    const companyInput =
+        document.getElementById(
             "companyFilter"
-        )
-        .value = "";
+        );
+
+
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+
+    if (categoryInput) {
+        categoryInput.value = "";
+    }
+
+
+    if (companyInput) {
+        companyInput.value = "";
+    }
 
 
     filterProducts();
@@ -3147,44 +4245,105 @@ function resetFilters() {
 
 
 /* =====================================================
-   EVENTS
+   INITIALIZE PRODUCT PAGE
 ===================================================== */
 
-document
-    .getElementById(
-        "searchInput"
-    )
-    .addEventListener(
-        "input",
-        filterProducts
-    );
+function initializeProductPage() {
+
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
+
+    const categoryInput =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+    const companyInput =
+        document.getElementById(
+            "companyFilter"
+        );
 
 
-document
-    .getElementById(
-        "categoryFilter"
-    )
-    .addEventListener(
-        "change",
-        filterProducts
-    );
+    /* -----------------------------------------
+       SEARCH
+    ----------------------------------------- */
+
+    if (searchInput) {
+
+        searchInput.addEventListener(
+            "input",
+            filterProducts
+        );
+
+    }
 
 
-document
-    .getElementById(
-        "companyFilter"
-    )
-    .addEventListener(
-        "change",
-        filterProducts
-    );
+    /* -----------------------------------------
+       CATEGORY
+    ----------------------------------------- */
+
+    if (categoryInput) {
+
+        categoryInput.addEventListener(
+            "change",
+            filterProducts
+        );
+
+    }
+
+
+    /* -----------------------------------------
+       COMPANY
+    ----------------------------------------- */
+
+    if (companyInput) {
+
+        companyInput.addEventListener(
+            "change",
+            filterProducts
+        );
+
+    }
+
+
+    /* -----------------------------------------
+       INITIAL FILTER
+    ----------------------------------------- */
+
+    filterProducts();
+
+
+    /* -----------------------------------------
+       LOAD DATABASE CART
+    ----------------------------------------- */
+
+    loadCart();
+
+}
 
 
 /* =====================================================
-   INIT
+   START
 ===================================================== */
 
-loadCart();
+if (
+    document.readyState ===
+    "loading"
+) {
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeProductPage
+    );
+
+}
+else {
+
+    initializeProductPage();
+
+}
 
 </script>
 
