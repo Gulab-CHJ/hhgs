@@ -1,5 +1,208 @@
+// // // // // // // function EditProduct(product) {
+// // // // // // //   return `
+// // // // // // // <!DOCTYPE html>
+// // // // // // // <html lang="en">
+
+// // // // // // // <head>
+
+// // // // // // // <meta charset="UTF-8">
+
+// // // // // // // <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+// // // // // // // <title>Edit Product</title>
+
+// // // // // // // <style>
+
+// // // // // // // *{
+// // // // // // // margin:0;
+// // // // // // // padding:0;
+// // // // // // // box-sizing:border-box;
+// // // // // // // font-family:Arial,sans-serif;
+// // // // // // // }
+
+// // // // // // // body{
+// // // // // // // background:#f5f7fb;
+// // // // // // // padding:40px;
+// // // // // // // }
+
+// // // // // // // .container{
+// // // // // // // max-width:700px;
+// // // // // // // margin:auto;
+// // // // // // // background:#fff;
+// // // // // // // padding:30px;
+// // // // // // // border-radius:15px;
+// // // // // // // box-shadow:0 10px 25px rgba(0,0,0,.12);
+// // // // // // // }
+
+// // // // // // // h2{
+// // // // // // // text-align:center;
+// // // // // // // margin-bottom:25px;
+// // // // // // // color:#0d6efd;
+// // // // // // // }
+
+// // // // // // // .form-group{
+// // // // // // // margin-bottom:18px;
+// // // // // // // }
+
+// // // // // // // label{
+// // // // // // // display:block;
+// // // // // // // margin-bottom:6px;
+// // // // // // // font-weight:bold;
+// // // // // // // }
+
+// // // // // // // input,
+// // // // // // // textarea{
+// // // // // // // width:100%;
+// // // // // // // padding:12px;
+// // // // // // // border:1px solid #ddd;
+// // // // // // // border-radius:8px;
+// // // // // // // font-size:15px;
+// // // // // // // }
+
+// // // // // // // textarea{
+// // // // // // // height:120px;
+// // // // // // // resize:none;
+// // // // // // // }
+
+// // // // // // // .preview{
+// // // // // // // width:150px;
+// // // // // // // height:150px;
+// // // // // // // border-radius:10px;
+// // // // // // // object-fit:cover;
+// // // // // // // border:2px solid #ddd;
+// // // // // // // display:block;
+// // // // // // // margin:15px auto;
+// // // // // // // }
+
+// // // // // // // button{
+// // // // // // // width:100%;
+// // // // // // // padding:14px;
+// // // // // // // border:none;
+// // // // // // // border-radius:8px;
+// // // // // // // background:#0d6efd;
+// // // // // // // color:#fff;
+// // // // // // // font-size:16px;
+// // // // // // // cursor:pointer;
+// // // // // // // }
+
+// // // // // // // button:hover{
+// // // // // // // background:#0b5ed7;
+// // // // // // // }
+
+// // // // // // // .back{
+// // // // // // // display:block;
+// // // // // // // text-align:center;
+// // // // // // // margin-top:20px;
+// // // // // // // text-decoration:none;
+// // // // // // // color:#0d6efd;
+// // // // // // // font-weight:bold;
+// // // // // // // }
+
+// // // // // // // </style>
+
+// // // // // // // </head>
+
+// // // // // // // <body>
+
+// // // // // // // <div class="container">
+
+// // // // // // // <h2>✏️ Edit Product</h2>
+
+// // // // // // // <form
+// // // // // // // action="/admin/edit-product/${product._id}"
+// // // // // // // method="POST"
+// // // // // // // enctype="multipart/form-data">
+
+// // // // // // // <div class="form-group">
+
+// // // // // // // <label>Product Name</label>
+
+// // // // // // // <input
+// // // // // // // type="text"
+// // // // // // // name="name"
+// // // // // // // value="${product.name}"
+// // // // // // // required>
+
+// // // // // // // </div>
+
+// // // // // // // <div class="form-group">
+
+// // // // // // // <label>Price</label>
+
+// // // // // // // <input
+// // // // // // // type="number"
+// // // // // // // name="price"
+// // // // // // // value="${product.price}"
+// // // // // // // required>
+
+// // // // // // // </div>
+
+// // // // // // // <div class="form-group">
+
+// // // // // // // <label>Description</label>
+
+// // // // // // // <textarea
+// // // // // // // name="description">${product.description || ""}</textarea>
+
+// // // // // // // </div>
+
+// // // // // // // <img
+// // // // // // // src="${product.image}"
+// // // // // // // class="preview"
+// // // // // // // alt="${product.name}">
+
+// // // // // // // <div class="form-group">
+
+// // // // // // // <label>Change Image</label>
+
+// // // // // // // <input
+// // // // // // // type="file"
+// // // // // // // name="image"
+// // // // // // // accept="image/*">
+
+// // // // // // // </div>
+
+// // // // // // // <button type="submit">
+
+// // // // // // // 💾 Update Product
+
+// // // // // // // </button>
+
+// // // // // // // </form>
+
+// // // // // // // <a
+// // // // // // // href="/admin/manage-products"
+// // // // // // // class="back">
+
+// // // // // // // ⬅ Back
+
+// // // // // // // </a>
+
+// // // // // // // </div>
+
+// // // // // // // </body>
+
+// // // // // // // </html>
+// // // // // // // `;
+// // // // // // // }
+
+// // // // // // // module.exports = EditProduct;
+
+
 // // // // // // function EditProduct(product) {
-// // // // // //   return `
+
+// // // // // //     const compositions =
+// // // // // //         Array.isArray(product.composition) && product.composition.length
+// // // // // //             ? product.composition
+// // // // // //             : [""];
+
+// // // // // //     const images =
+// // // // // //         Array.isArray(product.images)
+// // // // // //             ? product.images
+// // // // // //             : (product.image ? [product.image] : []);
+
+// // // // // //     return `
+
 // // // // // // <!DOCTYPE html>
 // // // // // // <html lang="en">
 
@@ -7,272 +210,1443 @@
 
 // // // // // // <meta charset="UTF-8">
 
-// // // // // // <meta name="viewport" content="width=device-width, initial-scale=1.0">
+// // // // // // <meta
+// // // // // //     name="viewport"
+// // // // // //     content="width=device-width, initial-scale=1.0"
+// // // // // // >
 
 // // // // // // <title>Edit Product</title>
 
+
 // // // // // // <style>
 
-// // // // // // *{
-// // // // // // margin:0;
-// // // // // // padding:0;
-// // // // // // box-sizing:border-box;
-// // // // // // font-family:Arial,sans-serif;
+// // // // // // /* =========================
+// // // // // //    RESET
+// // // // // // ========================= */
+
+// // // // // // * {
+// // // // // //     margin: 0;
+// // // // // //     padding: 0;
+// // // // // //     box-sizing: border-box;
+// // // // // //     font-family: "Segoe UI", Arial, sans-serif;
 // // // // // // }
 
-// // // // // // body{
-// // // // // // background:#f5f7fb;
-// // // // // // padding:40px;
+
+// // // // // // /* =========================
+// // // // // //    BODY
+// // // // // // ========================= */
+
+// // // // // // body {
+
+// // // // // //     background:
+// // // // // //         linear-gradient(
+// // // // // //             135deg,
+// // // // // //             #2563eb,
+// // // // // //             #06b6d4
+// // // // // //         );
+
+// // // // // //     min-height: 100vh;
+
+// // // // // //     padding: 30px 15px;
+
 // // // // // // }
 
-// // // // // // .container{
-// // // // // // max-width:700px;
-// // // // // // margin:auto;
-// // // // // // background:#fff;
-// // // // // // padding:30px;
-// // // // // // border-radius:15px;
-// // // // // // box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+// // // // // // /* =========================
+// // // // // //    MAIN CONTAINER
+// // // // // // ========================= */
+
+// // // // // // .container {
+
+// // // // // //     width: 100%;
+// // // // // //     max-width: 1000px;
+
+// // // // // //     margin: auto;
+
+// // // // // //     background: #ffffff;
+
+// // // // // //     padding: 30px;
+
+// // // // // //     border-radius: 22px;
+
+// // // // // //     box-shadow:
+// // // // // //         0 20px 50px
+// // // // // //         rgba(0,0,0,.18);
+
 // // // // // // }
 
-// // // // // // h2{
-// // // // // // text-align:center;
-// // // // // // margin-bottom:25px;
-// // // // // // color:#0d6efd;
+
+// // // // // // /* =========================
+// // // // // //    HEADER
+// // // // // // ========================= */
+
+// // // // // // .header {
+
+// // // // // //     text-align: center;
+
+// // // // // //     margin-bottom: 30px;
+
 // // // // // // }
 
-// // // // // // .form-group{
-// // // // // // margin-bottom:18px;
+
+// // // // // // .header h2 {
+
+// // // // // //     color: #1e40af;
+
+// // // // // //     font-size: 28px;
+
+// // // // // //     margin-bottom: 6px;
+
 // // // // // // }
 
-// // // // // // label{
-// // // // // // display:block;
-// // // // // // margin-bottom:6px;
-// // // // // // font-weight:bold;
+
+// // // // // // .header p {
+
+// // // // // //     color: #64748b;
+
+// // // // // //     font-size: 14px;
+
 // // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    FORM GRID
+// // // // // // ========================= */
+
+// // // // // // .form-grid {
+
+// // // // // //     display: grid;
+
+// // // // // //     grid-template-columns:
+// // // // // //         repeat(2, 1fr);
+
+// // // // // //     gap: 18px;
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    FORM GROUP
+// // // // // // ========================= */
+
+// // // // // // .form-group {
+
+// // // // // //     display: flex;
+
+// // // // // //     flex-direction: column;
+
+// // // // // // }
+
+
+// // // // // // .form-group.full {
+
+// // // // // //     grid-column: 1 / -1;
+
+// // // // // // }
+
+
+// // // // // // label {
+
+// // // // // //     font-weight: 700;
+
+// // // // // //     color: #1e293b;
+
+// // // // // //     margin-bottom: 7px;
+
+// // // // // //     font-size: 14px;
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    INPUTS
+// // // // // // ========================= */
 
 // // // // // // input,
-// // // // // // textarea{
-// // // // // // width:100%;
-// // // // // // padding:12px;
-// // // // // // border:1px solid #ddd;
-// // // // // // border-radius:8px;
-// // // // // // font-size:15px;
+// // // // // // select,
+// // // // // // textarea {
+
+// // // // // //     width: 100%;
+
+// // // // // //     padding: 12px 13px;
+
+// // // // // //     border: 1px solid #d1d5db;
+
+// // // // // //     border-radius: 10px;
+
+// // // // // //     background: #fff;
+
+// // // // // //     color: #111827;
+
+// // // // // //     font-size: 15px;
+
+// // // // // //     outline: none;
+
+// // // // // //     transition: .2s;
+
 // // // // // // }
 
-// // // // // // textarea{
-// // // // // // height:120px;
-// // // // // // resize:none;
+
+// // // // // // input:focus,
+// // // // // // select:focus,
+// // // // // // textarea:focus {
+
+// // // // // //     border-color: #2563eb;
+
+// // // // // //     box-shadow:
+// // // // // //         0 0 0 3px
+// // // // // //         rgba(37,99,235,.10);
+
 // // // // // // }
 
-// // // // // // .preview{
-// // // // // // width:150px;
-// // // // // // height:150px;
-// // // // // // border-radius:10px;
-// // // // // // object-fit:cover;
-// // // // // // border:2px solid #ddd;
-// // // // // // display:block;
-// // // // // // margin:15px auto;
+
+// // // // // // textarea {
+
+// // // // // //     min-height: 120px;
+
+// // // // // //     resize: vertical;
+
 // // // // // // }
 
-// // // // // // button{
-// // // // // // width:100%;
-// // // // // // padding:14px;
-// // // // // // border:none;
-// // // // // // border-radius:8px;
-// // // // // // background:#0d6efd;
-// // // // // // color:#fff;
-// // // // // // font-size:16px;
-// // // // // // cursor:pointer;
+
+// // // // // // /* =========================
+// // // // // //    SECTION
+// // // // // // ========================= */
+
+// // // // // // .section {
+
+// // // // // //     margin-top: 28px;
+
+// // // // // //     padding-top: 22px;
+
+// // // // // //     border-top:
+// // // // // //         1px solid #e5e7eb;
+
 // // // // // // }
 
-// // // // // // button:hover{
-// // // // // // background:#0b5ed7;
+
+// // // // // // .section-title {
+
+// // // // // //     display: flex;
+
+// // // // // //     align-items: center;
+
+// // // // // //     gap: 8px;
+
+// // // // // //     margin-bottom: 15px;
+
+// // // // // //     color: #1e40af;
+
+// // // // // //     font-size: 19px;
+
+// // // // // //     font-weight: 700;
+
 // // // // // // }
 
-// // // // // // .back{
-// // // // // // display:block;
-// // // // // // text-align:center;
-// // // // // // margin-top:20px;
-// // // // // // text-decoration:none;
-// // // // // // color:#0d6efd;
-// // // // // // font-weight:bold;
+
+// // // // // // /* =========================
+// // // // // //    COMPOSITION
+// // // // // // ========================= */
+
+// // // // // // .composition-row {
+
+// // // // // //     display: flex;
+
+// // // // // //     gap: 10px;
+
+// // // // // //     margin-bottom: 10px;
+
+// // // // // // }
+
+
+// // // // // // .composition-row input {
+
+// // // // // //     flex: 1;
+
+// // // // // // }
+
+
+// // // // // // .remove-btn {
+
+// // // // // //     width: 45px;
+
+// // // // // //     padding: 0;
+
+// // // // // //     margin: 0;
+
+// // // // // //     border: none;
+
+// // // // // //     border-radius: 9px;
+
+// // // // // //     background: #dc2626;
+
+// // // // // //     color: white;
+
+// // // // // //     font-size: 18px;
+
+// // // // // //     cursor: pointer;
+
+// // // // // // }
+
+
+// // // // // // .remove-btn:hover {
+
+// // // // // //     background: #b91c1c;
+
+// // // // // // }
+
+
+// // // // // // .add-btn {
+
+// // // // // //     width: auto;
+
+// // // // // //     padding: 11px 18px;
+
+// // // // // //     margin-top: 5px;
+
+// // // // // //     border: none;
+
+// // // // // //     border-radius: 9px;
+
+// // // // // //     background: #16a34a;
+
+// // // // // //     color: white;
+
+// // // // // //     font-weight: 700;
+
+// // // // // //     cursor: pointer;
+
+// // // // // // }
+
+
+// // // // // // .add-btn:hover {
+
+// // // // // //     background: #15803d;
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    EXISTING IMAGES
+// // // // // // ========================= */
+
+// // // // // // .image-grid {
+
+// // // // // //     display: grid;
+
+// // // // // //     grid-template-columns:
+// // // // // //         repeat(4, 1fr);
+
+// // // // // //     gap: 15px;
+
+// // // // // // }
+
+
+// // // // // // .image-card {
+
+// // // // // //     position: relative;
+
+// // // // // //     border:
+// // // // // //         1px solid #e5e7eb;
+
+// // // // // //     border-radius: 12px;
+
+// // // // // //     padding: 8px;
+
+// // // // // //     background: #f8fafc;
+
+// // // // // // }
+
+
+// // // // // // .image-card img {
+
+// // // // // //     width: 100%;
+
+// // // // // //     height: 140px;
+
+// // // // // //     object-fit: cover;
+
+// // // // // //     border-radius: 8px;
+
+// // // // // //     display: block;
+
+// // // // // // }
+
+
+// // // // // // .image-number {
+
+// // // // // //     text-align: center;
+
+// // // // // //     margin-top: 6px;
+
+// // // // // //     font-size: 12px;
+
+// // // // // //     color: #64748b;
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    NO IMAGE
+// // // // // // ========================= */
+
+// // // // // // .no-image {
+
+// // // // // //     padding: 30px;
+
+// // // // // //     text-align: center;
+
+// // // // // //     background: #f8fafc;
+
+// // // // // //     border-radius: 10px;
+
+// // // // // //     color: #64748b;
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    UPDATE BUTTON
+// // // // // // ========================= */
+
+// // // // // // .update-btn {
+
+// // // // // //     width: 100%;
+
+// // // // // //     padding: 15px;
+
+// // // // // //     margin-top: 30px;
+
+// // // // // //     border: none;
+
+// // // // // //     border-radius: 12px;
+
+// // // // // //     background:
+// // // // // //         linear-gradient(
+// // // // // //             135deg,
+// // // // // //             #2563eb,
+// // // // // //             #1d4ed8
+// // // // // //         );
+
+// // // // // //     color: white;
+
+// // // // // //     font-size: 17px;
+
+// // // // // //     font-weight: 700;
+
+// // // // // //     cursor: pointer;
+
+// // // // // //     transition: .2s;
+
+// // // // // // }
+
+
+// // // // // // .update-btn:hover {
+
+// // // // // //     transform: translateY(-1px);
+
+// // // // // //     box-shadow:
+// // // // // //         0 8px 20px
+// // // // // //         rgba(37,99,235,.25);
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    BACK BUTTON
+// // // // // // ========================= */
+
+// // // // // // .back {
+
+// // // // // //     display: block;
+
+// // // // // //     text-align: center;
+
+// // // // // //     margin-top: 18px;
+
+// // // // // //     padding: 12px;
+
+// // // // // //     border-radius: 10px;
+
+// // // // // //     background: #f1f5f9;
+
+// // // // // //     color: #1e40af;
+
+// // // // // //     text-decoration: none;
+
+// // // // // //     font-weight: 700;
+
+// // // // // // }
+
+
+// // // // // // .back:hover {
+
+// // // // // //     background: #e2e8f0;
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    MOBILE
+// // // // // // ========================= */
+
+// // // // // // @media (max-width: 700px) {
+
+// // // // // //     body {
+
+// // // // // //         padding: 10px;
+
+// // // // // //     }
+
+
+// // // // // //     .container {
+
+// // // // // //         padding: 18px;
+
+// // // // // //         border-radius: 16px;
+
+// // // // // //     }
+
+
+// // // // // //     .header h2 {
+
+// // // // // //         font-size: 22px;
+
+// // // // // //     }
+
+
+// // // // // //     .form-grid {
+
+// // // // // //         grid-template-columns: 1fr;
+
+// // // // // //         gap: 15px;
+
+// // // // // //     }
+
+
+// // // // // //     .form-group.full {
+
+// // // // // //         grid-column: auto;
+
+// // // // // //     }
+
+
+// // // // // //     .image-grid {
+
+// // // // // //         grid-template-columns:
+// // // // // //             repeat(2, 1fr);
+
+// // // // // //     }
+
+
+// // // // // //     .image-card img {
+
+// // // // // //         height: 120px;
+
+// // // // // //     }
+
+
+// // // // // //     .composition-row {
+
+// // // // // //         gap: 7px;
+
+// // // // // //     }
+
+// // // // // // }
+
+
+// // // // // // /* =========================
+// // // // // //    SMALL MOBILE
+// // // // // // ========================= */
+
+// // // // // // @media (max-width: 400px) {
+
+// // // // // //     .container {
+
+// // // // // //         padding: 14px;
+
+// // // // // //     }
+
+
+// // // // // //     input,
+// // // // // //     select,
+// // // // // //     textarea {
+
+// // // // // //         font-size: 14px;
+
+// // // // // //         padding: 11px;
+
+// // // // // //     }
+
+
+// // // // // //     .image-grid {
+
+// // // // // //         grid-template-columns: 1fr 1fr;
+
+// // // // // //         gap: 8px;
+
+// // // // // //     }
+
+
+// // // // // //     .image-card img {
+
+// // // // // //         height: 100px;
+
+// // // // // //     }
+
 // // // // // // }
 
 // // // // // // </style>
 
 // // // // // // </head>
 
+
 // // // // // // <body>
+
 
 // // // // // // <div class="container">
 
-// // // // // // <h2>✏️ Edit Product</h2>
 
-// // // // // // <form
-// // // // // // action="/admin/edit-product/${product._id}"
-// // // // // // method="POST"
-// // // // // // enctype="multipart/form-data">
+// // // // // //     <!-- =========================
+// // // // // //          HEADER
+// // // // // //     ========================== -->
 
-// // // // // // <div class="form-group">
+// // // // // //     <div class="header">
 
-// // // // // // <label>Product Name</label>
+// // // // // //         <h2>✏️ Edit Pharma Product</h2>
 
-// // // // // // <input
-// // // // // // type="text"
-// // // // // // name="name"
-// // // // // // value="${product.name}"
-// // // // // // required>
+// // // // // //         <p>
+// // // // // //             Update product information and images
+// // // // // //         </p>
+
+// // // // // //     </div>
+
+
+// // // // // //     <!-- =========================
+// // // // // //          FORM
+// // // // // //     ========================== -->
+
+// // // // // //     <form
+
+// // // // // //         action="/admin/edit-product/${product._id}"
+
+// // // // // //         method="POST"
+
+// // // // // //         enctype="multipart/form-data"
+// // // // // //     >
+
+
+// // // // // //         <!-- =========================
+// // // // // //              BASIC INFORMATION
+// // // // // //         ========================== -->
+
+// // // // // //         <div class="form-grid">
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Product Name *
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="text"
+// // // // // //                     name="name"
+// // // // // //                     value="${product.name || ""}"
+// // // // // //                     required
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Brand Name
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="text"
+// // // // // //                     name="brand"
+// // // // // //                     value="${product.brand || ""}"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Category
+// // // // // //                 </label>
+
+// // // // // //                 <select name="category">
+
+// // // // // //                     <option value="">
+// // // // // //                         Select Category
+// // // // // //                     </option>
+
+// // // // // //                     <option
+// // // // // //                         value="Tablet"
+// // // // // //                         ${product.category === "Tablet" ? "selected" : ""}
+// // // // // //                     >
+// // // // // //                         Tablet
+// // // // // //                     </option>
+
+// // // // // //                     <option
+// // // // // //                         value="Capsule"
+// // // // // //                         ${product.category === "Capsule" ? "selected" : ""}
+// // // // // //                     >
+// // // // // //                         Capsule
+// // // // // //                     </option>
+
+// // // // // //                     <option
+// // // // // //                         value="Syrup"
+// // // // // //                         ${product.category === "Syrup" ? "selected" : ""}
+// // // // // //                     >
+// // // // // //                         Syrup
+// // // // // //                     </option>
+
+// // // // // //                     <option
+// // // // // //                         value="Drops"
+// // // // // //                         ${product.category === "Drops" ? "selected" : ""}
+// // // // // //                     >
+// // // // // //                         Drops
+// // // // // //                     </option>
+
+// // // // // //                     <option
+// // // // // //                         value="Injection"
+// // // // // //                         ${product.category === "Injection" ? "selected" : ""}
+// // // // // //                     >
+// // // // // //                         Injection
+// // // // // //                     </option>
+
+// // // // // //                     <option
+// // // // // //                         value="Cream"
+// // // // // //                         ${product.category === "Cream" ? "selected" : ""}
+// // // // // //                     >
+// // // // // //                         Cream
+// // // // // //                     </option>
+
+// // // // // //                     <option
+// // // // // //                         value="Other"
+// // // // // //                         ${product.category === "Other" ? "selected" : ""}
+// // // // // //                     >
+// // // // // //                         Other
+// // // // // //                     </option>
+
+// // // // // //                 </select>
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Manufacturer
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="text"
+// // // // // //                     name="manufacturer"
+// // // // // //                     value="${product.manufacturer || ""}"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     MRP
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="number"
+// // // // // //                     name="mrp"
+// // // // // //                     value="${product.mrp ?? ""}"
+// // // // // //                     min="0"
+// // // // // //                     step="0.01"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Selling Price *
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="number"
+// // // // // //                     name="price"
+// // // // // //                     value="${product.price ?? ""}"
+// // // // // //                     min="0"
+// // // // // //                     step="0.01"
+// // // // // //                     required
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Stock Quantity
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="number"
+// // // // // //                     name="stock"
+// // // // // //                     value="${product.stock ?? ""}"
+// // // // // //                     min="0"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Pack Size
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="text"
+// // // // // //                     name="packSize"
+// // // // // //                     value="${product.packSize || ""}"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Batch Number
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="text"
+// // // // // //                     name="batchNo"
+// // // // // //                     value="${product.batchNo || ""}"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Manufacturing Date
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="date"
+// // // // // //                     name="mfgDate"
+// // // // // //                     value="${
+// // // // // //                         product.mfgDate
+// // // // // //                             ? new Date(product.mfgDate)
+// // // // // //                                 .toISOString()
+// // // // // //                                 .split("T")[0]
+// // // // // //                             : ""
+// // // // // //                     }"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-group">
+
+// // // // // //                 <label>
+// // // // // //                     Expiry Date
+// // // // // //                 </label>
+
+// // // // // //                 <input
+// // // // // //                     type="date"
+// // // // // //                     name="expDate"
+// // // // // //                     value="${
+// // // // // //                         product.expDate
+// // // // // //                             ? new Date(product.expDate)
+// // // // // //                                 .toISOString()
+// // // // // //                                 .split("T")[0]
+// // // // // //                             : ""
+// // // // // //                     }"
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //         </div>
+
+
+// // // // // //         <!-- =========================
+// // // // // //              COMPOSITION
+// // // // // //         ========================== -->
+
+// // // // // //         <div class="section">
+
+// // // // // //             <div class="section-title">
+
+// // // // // //                 💊 Composition
+
+// // // // // //             </div>
+
+
+// // // // // //             <div id="compositionBox">
+
+// // // // // //                 ${compositions.map((item, index) => `
+
+// // // // // //                     <div class="composition-row">
+
+// // // // // //                         <input
+// // // // // //                             type="text"
+// // // // // //                             name="composition[]"
+// // // // // //                             value="${item || ""}"
+// // // // // //                             placeholder="Composition ${index + 1}"
+// // // // // //                         >
+
+// // // // // //                         ${
+// // // // // //                             index > 0
+// // // // // //                             ? `
+// // // // // //                             <button
+// // // // // //                                 type="button"
+// // // // // //                                 class="remove-btn"
+// // // // // //                                 onclick="this.parentElement.remove()"
+// // // // // //                             >
+// // // // // //                                 ×
+// // // // // //                             </button>
+// // // // // //                             `
+// // // // // //                             : ""
+// // // // // //                         }
+
+// // // // // //                     </div>
+
+// // // // // //                 `).join("")}
+
+// // // // // //             </div>
+
+
+// // // // // //             <button
+// // // // // //                 type="button"
+// // // // // //                 class="add-btn"
+// // // // // //                 onclick="addComposition()"
+// // // // // //             >
+// // // // // //                 + Add Composition
+// // // // // //             </button>
+
+// // // // // //         </div>
+
+
+// // // // // //         <!-- =========================
+// // // // // //              PRODUCT DETAILS
+// // // // // //         ========================== -->
+
+// // // // // //         <div class="section">
+
+// // // // // //             <div class="section-title">
+
+// // // // // //                 📋 Product Details
+
+// // // // // //             </div>
+
+
+// // // // // //             <div class="form-grid">
+
+
+// // // // // //                 <div class="form-group full">
+
+// // // // // //                     <label>
+// // // // // //                         Uses
+// // // // // //                     </label>
+
+// // // // // //                     <textarea
+// // // // // //                         name="uses"
+// // // // // //                         placeholder="Uses"
+// // // // // //                     >${product.uses || ""}</textarea>
+
+// // // // // //                 </div>
+
+
+// // // // // //                 <div class="form-group full">
+
+// // // // // //                     <label>
+// // // // // //                         Benefits
+// // // // // //                     </label>
+
+// // // // // //                     <textarea
+// // // // // //                         name="benefits"
+// // // // // //                         placeholder="Benefits"
+// // // // // //                     >${product.benefits || ""}</textarea>
+
+// // // // // //                 </div>
+
+
+// // // // // //                 <div class="form-group full">
+
+// // // // // //                     <label>
+// // // // // //                         Dosage
+// // // // // //                     </label>
+
+// // // // // //                     <textarea
+// // // // // //                         name="dosage"
+// // // // // //                         placeholder="Dosage"
+// // // // // //                     >${product.dosage || ""}</textarea>
+
+// // // // // //                 </div>
+
+
+// // // // // //                 <div class="form-group full">
+
+// // // // // //                     <label>
+// // // // // //                         Side Effects
+// // // // // //                     </label>
+
+// // // // // //                     <textarea
+// // // // // //                         name="sideEffects"
+// // // // // //                         placeholder="Side Effects"
+// // // // // //                     >${product.sideEffects || ""}</textarea>
+
+// // // // // //                 </div>
+
+
+// // // // // //                 <div class="form-group full">
+
+// // // // // //                     <label>
+// // // // // //                         Storage Instructions
+// // // // // //                     </label>
+
+// // // // // //                     <textarea
+// // // // // //                         name="storage"
+// // // // // //                         placeholder="Storage Instructions"
+// // // // // //                     >${product.storage || ""}</textarea>
+
+// // // // // //                 </div>
+
+
+// // // // // //                 <div class="form-group full">
+
+// // // // // //                     <label>
+// // // // // //                         Full Description
+// // // // // //                     </label>
+
+// // // // // //                     <textarea
+// // // // // //                         name="description"
+// // // // // //                         placeholder="Full Description"
+// // // // // //                     >${product.description || ""}</textarea>
+
+// // // // // //                 </div>
+
+
+// // // // // //             </div>
+
+// // // // // //         </div>
+
+
+// // // // // //         <!-- =========================
+// // // // // //              EXISTING IMAGES
+// // // // // //         ========================== -->
+
+// // // // // //         <div class="section">
+
+// // // // // //             <div class="section-title">
+
+// // // // // //                 🖼 Existing Product Images
+
+// // // // // //             </div>
+
+
+// // // // // //             ${
+// // // // // //                 images.length
+// // // // // //                 ?
+
+// // // // // //                 `<div class="image-grid">
+
+// // // // // //                     ${images.map((img, index) => `
+
+// // // // // //                         <div class="image-card">
+
+// // // // // //                             <img
+// // // // // //                                 src="${img}"
+// // // // // //                                 alt="Product Image ${index + 1}"
+// // // // // //                             >
+
+// // // // // //                             <div class="image-number">
+
+// // // // // //                                 Image ${index + 1}
+
+// // // // // //                             </div>
+
+// // // // // //                         </div>
+
+// // // // // //                     `).join("")}
+
+// // // // // //                 </div>`
+
+// // // // // //                 :
+
+// // // // // //                 `<div class="no-image">
+
+// // // // // //                     No existing product image
+
+// // // // // //                 </div>`
+// // // // // //             }
+
+// // // // // //         </div>
+
+
+// // // // // //         <!-- =========================
+// // // // // //              NEW IMAGES
+// // // // // //         ========================== -->
+
+// // // // // //         <div class="section">
+
+// // // // // //             <div class="section-title">
+
+// // // // // //                 📷 Add New Product Images
+
+// // // // // //             </div>
+
+
+// // // // // //             <div id="imageBox">
+
+// // // // // //                 <input
+// // // // // //                     type="file"
+// // // // // //                     name="images"
+// // // // // //                     accept="image/*"
+// // // // // //                     multiple
+// // // // // //                 >
+
+// // // // // //             </div>
+
+
+// // // // // //             <p
+// // // // // //                 style="
+// // // // // //                     margin-top:8px;
+// // // // // //                     color:#64748b;
+// // // // // //                     font-size:13px;
+// // // // // //                 "
+// // // // // //             >
+// // // // // //                 You can select multiple new images.
+// // // // // //             </p>
+
+// // // // // //         </div>
+
+
+// // // // // //         <!-- =========================
+// // // // // //              UPDATE
+// // // // // //         ========================== -->
+
+// // // // // //         <button
+// // // // // //             type="submit"
+// // // // // //             class="update-btn"
+// // // // // //         >
+
+// // // // // //             💾 Update Product
+
+// // // // // //         </button>
+
+
+// // // // // //     </form>
+
+
+// // // // // //     <!-- =========================
+// // // // // //          BACK
+// // // // // //     ========================== -->
+
+// // // // // //     <a
+// // // // // //         href="/admin/manage-products"
+// // // // // //         class="back"
+// // // // // //     >
+
+// // // // // //         ⬅ Back to Manage Products
+
+// // // // // //     </a>
+
 
 // // // // // // </div>
 
-// // // // // // <div class="form-group">
 
-// // // // // // <label>Price</label>
+// // // // // // <script>
 
-// // // // // // <input
-// // // // // // type="number"
-// // // // // // name="price"
-// // // // // // value="${product.price}"
-// // // // // // required>
 
-// // // // // // </div>
+// // // // // // /* =========================
+// // // // // //    ADD COMPOSITION
+// // // // // // ========================= */
 
-// // // // // // <div class="form-group">
+// // // // // // function addComposition() {
 
-// // // // // // <label>Description</label>
+// // // // // //     const box =
+// // // // // //         document.getElementById("compositionBox");
 
-// // // // // // <textarea
-// // // // // // name="description">${product.description || ""}</textarea>
 
-// // // // // // </div>
+// // // // // //     const row =
+// // // // // //         document.createElement("div");
 
-// // // // // // <img
-// // // // // // src="${product.image}"
-// // // // // // class="preview"
-// // // // // // alt="${product.name}">
 
-// // // // // // <div class="form-group">
+// // // // // //     row.className =
+// // // // // //         "composition-row";
 
-// // // // // // <label>Change Image</label>
 
-// // // // // // <input
-// // // // // // type="file"
-// // // // // // name="image"
-// // // // // // accept="image/*">
+// // // // // //     row.innerHTML = \`
 
-// // // // // // </div>
+// // // // // //         <input
+// // // // // //             type="text"
+// // // // // //             name="composition[]"
+// // // // // //             placeholder="Composition"
+// // // // // //         >
 
-// // // // // // <button type="submit">
+// // // // // //         <button
+// // // // // //             type="button"
+// // // // // //             class="remove-btn"
+// // // // // //             onclick="this.parentElement.remove()"
+// // // // // //         >
+// // // // // //             ×
+// // // // // //         </button>
 
-// // // // // // 💾 Update Product
+// // // // // //     \`;
 
-// // // // // // </button>
 
-// // // // // // </form>
+// // // // // //     box.appendChild(row);
 
-// // // // // // <a
-// // // // // // href="/admin/manage-products"
-// // // // // // class="back">
+// // // // // // }
 
-// // // // // // ⬅ Back
 
-// // // // // // </a>
+// // // // // // /* =========================
+// // // // // //    IMAGE VALIDATION
+// // // // // // ========================= */
 
-// // // // // // </div>
+// // // // // // const imageInput =
+// // // // // //     document.querySelector(
+// // // // // //         'input[name="images"]'
+// // // // // //     );
+
+
+// // // // // // if (imageInput) {
+
+// // // // // //     imageInput.addEventListener(
+// // // // // //         "change",
+// // // // // //         function () {
+
+// // // // // //             const files =
+// // // // // //                 this.files;
+
+
+// // // // // //             for (const file of files) {
+
+// // // // // //                 if (
+// // // // // //                     !file.type.startsWith("image/")
+// // // // // //                 ) {
+
+// // // // // //                     alert(
+// // // // // //                         "Please select only image files."
+// // // // // //                     );
+
+// // // // // //                     this.value = "";
+
+// // // // // //                     return;
+
+// // // // // //                 }
+
+// // // // // //             }
+
+// // // // // //         }
+// // // // // //     );
+
+// // // // // // }
+
+// // // // // // </script>
+
 
 // // // // // // </body>
 
 // // // // // // </html>
+
 // // // // // // `;
+
 // // // // // // }
+
 
 // // // // // // module.exports = EditProduct;
 
 
+
 // // // // // function EditProduct(product) {
 
-// // // // //     const compositions =
-// // // // //         Array.isArray(product.composition) && product.composition.length
-// // // // //             ? product.composition
-// // // // //             : [""];
+// // // // //     // =========================
+// // // // //     // SAFE HTML ESCAPE
+// // // // //     // =========================
 
-// // // // //     const images =
-// // // // //         Array.isArray(product.images)
-// // // // //             ? product.images
-// // // // //             : (product.image ? [product.image] : []);
+// // // // //     const escapeHTML = (value) => {
+// // // // //         if (value === null || value === undefined) return "";
+
+// // // // //         return String(value)
+// // // // //             .replace(/&/g, "&amp;")
+// // // // //             .replace(/</g, "&lt;")
+// // // // //             .replace(/>/g, "&gt;")
+// // // // //             .replace(/"/g, "&quot;")
+// // // // //             .replace(/'/g, "&#039;");
+// // // // //     };
+
+
+// // // // //     // =========================
+// // // // //     // DATE FORMAT
+// // // // //     // =========================
+
+// // // // //     const formatDate = (value) => {
+
+// // // // //         if (!value) return "";
+
+// // // // //         try {
+
+// // // // //             const date = new Date(value);
+
+// // // // //             if (isNaN(date.getTime())) {
+// // // // //                 return "";
+// // // // //             }
+
+// // // // //             return date.toISOString().split("T")[0];
+
+// // // // //         } catch (error) {
+
+// // // // //             return "";
+
+// // // // //         }
+
+// // // // //     };
+
+
+// // // // //     // =========================
+// // // // //     // COMPOSITION
+// // // // //     // =========================
+
+// // // // //     let compositions = [];
+
+// // // // //     if (Array.isArray(product.composition)) {
+
+// // // // //         compositions = product.composition
+// // // // //             .filter(item => item !== null && item !== undefined)
+// // // // //             .map(item => {
+
+// // // // //                 // अगर composition object है
+// // // // //                 if (typeof item === "object") {
+
+// // // // //                     if (item.name && item.strength) {
+// // // // //                         return `${item.name} ${item.strength}`;
+// // // // //                     }
+
+// // // // //                     if (item.name) {
+// // // // //                         return item.name;
+// // // // //                     }
+
+// // // // //                     return "";
+// // // // //                 }
+
+// // // // //                 return String(item);
+
+// // // // //             });
+
+// // // // //     } else if (product.composition) {
+
+// // // // //         compositions = [String(product.composition)];
+
+// // // // //     }
+
+
+// // // // //     if (!compositions.length) {
+// // // // //         compositions = [""];
+// // // // //     }
+
+
+// // // // //     // =========================
+// // // // //     // IMAGES
+// // // // //     // =========================
+
+// // // // //     let images = [];
+
+// // // // //     if (Array.isArray(product.images)) {
+
+// // // // //         images = product.images.filter(Boolean);
+
+// // // // //     }
+
+
+// // // // //     // पुराने database में image field है
+// // // // //     if (product.image && !images.includes(product.image)) {
+
+// // // // //         images.unshift(product.image);
+
+// // // // //     }
+
+
+// // // // //     // Remove duplicate images
+// // // // //     images = [...new Set(images)];
+
+
+// // // // //     // =========================
+// // // // //     // IMAGE URL CLEANER
+// // // // //     // =========================
+
+// // // // //     const cleanImageUrl = (url) => {
+
+// // // // //         if (!url) return "";
+
+// // // // //         let clean = String(url).trim();
+
+// // // // //         // Markdown format:
+// // // // //         // [https://example.com/image.jpg](https://example.com/image.jpg)
+
+// // // // //         const markdownMatch =
+// // // // //             clean.match(/\]\((https?:\/\/[^)]+)\)/);
+
+// // // // //         if (markdownMatch) {
+
+// // // // //             return markdownMatch[1];
+
+// // // // //         }
+
+
+// // // // //         // [https://example.com/image.jpg]
+// // // // //         if (
+// // // // //             clean.startsWith("[") &&
+// // // // //             clean.endsWith("]")
+// // // // //         ) {
+
+// // // // //             clean = clean.slice(1, -1);
+
+// // // // //         }
+
+// // // // //         return clean;
+
+// // // // //     };
+
+
+// // // // //     images = images
+// // // // //         .map(cleanImageUrl)
+// // // // //         .filter(Boolean);
+
 
 // // // // //     return `
 
-// // // // // <!DOCTYPE html>
-// // // // // <html lang="en">
-
-// // // // // <head>
-
-// // // // // <meta charset="UTF-8">
-
-// // // // // <meta
-// // // // //     name="viewport"
-// // // // //     content="width=device-width, initial-scale=1.0"
-// // // // // >
-
-// // // // // <title>Edit Product</title>
-
-
 // // // // // <style>
 
-// // // // // /* =========================
-// // // // //    RESET
-// // // // // ========================= */
-
-// // // // // * {
-// // // // //     margin: 0;
-// // // // //     padding: 0;
-// // // // //     box-sizing: border-box;
-// // // // //     font-family: "Segoe UI", Arial, sans-serif;
+// // // // // *{
+// // // // //     box-sizing:border-box;
 // // // // // }
 
-
-// // // // // /* =========================
-// // // // //    BODY
-// // // // // ========================= */
-
-// // // // // body {
-
-// // // // //     background:
-// // // // //         linear-gradient(
-// // // // //             135deg,
-// // // // //             #2563eb,
-// // // // //             #06b6d4
-// // // // //         );
-
-// // // // //     min-height: 100vh;
-
-// // // // //     padding: 30px 15px;
-
+// // // // // body{
+// // // // //     margin:0;
+// // // // //     font-family:Segoe UI,Arial,sans-serif;
+// // // // //     background:#f1f5f9;
+// // // // //     color:#1e293b;
 // // // // // }
 
-
-// // // // // /* =========================
-// // // // //    MAIN CONTAINER
-// // // // // ========================= */
-
-// // // // // .container {
-
-// // // // //     width: 100%;
-// // // // //     max-width: 1000px;
-
-// // // // //     margin: auto;
-
-// // // // //     background: #ffffff;
-
-// // // // //     padding: 30px;
-
-// // // // //     border-radius: 22px;
-
-// // // // //     box-shadow:
-// // // // //         0 20px 50px
-// // // // //         rgba(0,0,0,.18);
-
+// // // // // .edit-product-page{
+// // // // //     width:100%;
+// // // // //     max-width:1100px;
+// // // // //     margin:0 auto;
+// // // // //     padding:20px;
 // // // // // }
 
 
@@ -280,47 +1654,78 @@
 // // // // //    HEADER
 // // // // // ========================= */
 
-// // // // // .header {
+// // // // // .header{
 
-// // // // //     text-align: center;
+// // // // //     background:linear-gradient(
+// // // // //         135deg,
+// // // // //         #2563eb,
+// // // // //         #1d4ed8
+// // // // //     );
 
-// // // // //     margin-bottom: 30px;
+// // // // //     color:white;
+
+// // // // //     padding:25px;
+
+// // // // //     border-radius:18px;
+
+// // // // //     margin-bottom:20px;
+
+// // // // //     box-shadow:
+// // // // //         0 10px 30px
+// // // // //         rgba(37,99,235,.20);
 
 // // // // // }
 
+// // // // // .header h2{
 
-// // // // // .header h2 {
+// // // // //     margin:0 0 7px;
 
-// // // // //     color: #1e40af;
-
-// // // // //     font-size: 28px;
-
-// // // // //     margin-bottom: 6px;
+// // // // //     font-size:26px;
 
 // // // // // }
 
+// // // // // .header p{
 
-// // // // // .header p {
+// // // // //     margin:0;
 
-// // // // //     color: #64748b;
+// // // // //     opacity:.9;
 
-// // // // //     font-size: 14px;
+// // // // //     font-size:14px;
 
 // // // // // }
 
 
 // // // // // /* =========================
-// // // // //    FORM GRID
+// // // // //    FORM
 // // // // // ========================= */
 
-// // // // // .form-grid {
+// // // // // .product-form{
 
-// // // // //     display: grid;
+// // // // //     background:white;
+
+// // // // //     padding:25px;
+
+// // // // //     border-radius:18px;
+
+// // // // //     box-shadow:
+// // // // //         0 8px 25px
+// // // // //         rgba(15,23,42,.08);
+
+// // // // // }
+
+
+// // // // // /* =========================
+// // // // //    GRID
+// // // // // ========================= */
+
+// // // // // .form-grid{
+
+// // // // //     display:grid;
 
 // // // // //     grid-template-columns:
-// // // // //         repeat(2, 1fr);
+// // // // //         repeat(2,1fr);
 
-// // // // //     gap: 18px;
+// // // // //     gap:18px;
 
 // // // // // }
 
@@ -329,69 +1734,64 @@
 // // // // //    FORM GROUP
 // // // // // ========================= */
 
-// // // // // .form-group {
+// // // // // .form-group{
 
-// // // // //     display: flex;
+// // // // //     display:flex;
 
-// // // // //     flex-direction: column;
+// // // // //     flex-direction:column;
 
-// // // // // }
-
-
-// // // // // .form-group.full {
-
-// // // // //     grid-column: 1 / -1;
+// // // // //     gap:7px;
 
 // // // // // }
 
+// // // // // .form-group.full{
 
-// // // // // label {
+// // // // //     grid-column:1/-1;
 
-// // // // //     font-weight: 700;
+// // // // // }
 
-// // // // //     color: #1e293b;
+// // // // // .form-group label{
 
-// // // // //     margin-bottom: 7px;
+// // // // //     font-size:14px;
 
-// // // // //     font-size: 14px;
+// // // // //     font-weight:700;
+
+// // // // //     color:#334155;
 
 // // // // // }
 
 
 // // // // // /* =========================
-// // // // //    INPUTS
+// // // // //    INPUT
 // // // // // ========================= */
 
-// // // // // input,
-// // // // // select,
-// // // // // textarea {
+// // // // // .form-group input,
+// // // // // .form-group select,
+// // // // // .form-group textarea{
 
-// // // // //     width: 100%;
+// // // // //     width:100%;
 
-// // // // //     padding: 12px 13px;
+// // // // //     border:1px solid #cbd5e1;
 
-// // // // //     border: 1px solid #d1d5db;
+// // // // //     border-radius:10px;
 
-// // // // //     border-radius: 10px;
+// // // // //     padding:12px 13px;
 
-// // // // //     background: #fff;
+// // // // //     font-size:15px;
 
-// // // // //     color: #111827;
+// // // // //     outline:none;
 
-// // // // //     font-size: 15px;
+// // // // //     background:#fff;
 
-// // // // //     outline: none;
-
-// // // // //     transition: .2s;
+// // // // //     transition:.2s;
 
 // // // // // }
 
+// // // // // .form-group input:focus,
+// // // // // .form-group select:focus,
+// // // // // .form-group textarea:focus{
 
-// // // // // input:focus,
-// // // // // select:focus,
-// // // // // textarea:focus {
-
-// // // // //     border-color: #2563eb;
+// // // // //     border-color:#2563eb;
 
 // // // // //     box-shadow:
 // // // // //         0 0 0 3px
@@ -399,12 +1799,11 @@
 
 // // // // // }
 
+// // // // // .form-group textarea{
 
-// // // // // textarea {
+// // // // //     min-height:110px;
 
-// // // // //     min-height: 120px;
-
-// // // // //     resize: vertical;
+// // // // //     resize:vertical;
 
 // // // // // }
 
@@ -413,33 +1812,25 @@
 // // // // //    SECTION
 // // // // // ========================= */
 
-// // // // // .section {
+// // // // // .section{
 
-// // // // //     margin-top: 28px;
+// // // // //     margin-top:28px;
 
-// // // // //     padding-top: 22px;
+// // // // //     padding-top:22px;
 
-// // // // //     border-top:
-// // // // //         1px solid #e5e7eb;
+// // // // //     border-top:1px solid #e2e8f0;
 
 // // // // // }
 
+// // // // // .section-title{
 
-// // // // // .section-title {
+// // // // //     font-size:19px;
 
-// // // // //     display: flex;
+// // // // //     font-weight:800;
 
-// // // // //     align-items: center;
+// // // // //     color:#1e3a8a;
 
-// // // // //     gap: 8px;
-
-// // // // //     margin-bottom: 15px;
-
-// // // // //     color: #1e40af;
-
-// // // // //     font-size: 19px;
-
-// // // // //     font-weight: 700;
+// // // // //     margin-bottom:15px;
 
 // // // // // }
 
@@ -448,80 +1839,86 @@
 // // // // //    COMPOSITION
 // // // // // ========================= */
 
-// // // // // .composition-row {
+// // // // // .composition-row{
 
-// // // // //     display: flex;
+// // // // //     display:grid;
 
-// // // // //     gap: 10px;
+// // // // //     grid-template-columns:
+// // // // //         1fr auto;
 
-// // // // //     margin-bottom: 10px;
+// // // // //     gap:10px;
 
-// // // // // }
-
-
-// // // // // .composition-row input {
-
-// // // // //     flex: 1;
+// // // // //     margin-bottom:10px;
 
 // // // // // }
 
+// // // // // .composition-row input{
 
-// // // // // .remove-btn {
+// // // // //     width:100%;
 
-// // // // //     width: 45px;
+// // // // //     padding:12px;
 
-// // // // //     padding: 0;
+// // // // //     border:1px solid #cbd5e1;
 
-// // // // //     margin: 0;
+// // // // //     border-radius:10px;
 
-// // // // //     border: none;
+// // // // //     font-size:14px;
 
-// // // // //     border-radius: 9px;
-
-// // // // //     background: #dc2626;
-
-// // // // //     color: white;
-
-// // // // //     font-size: 18px;
-
-// // // // //     cursor: pointer;
+// // // // //     outline:none;
 
 // // // // // }
 
+// // // // // .composition-row input:focus{
 
-// // // // // .remove-btn:hover {
-
-// // // // //     background: #b91c1c;
-
-// // // // // }
-
-
-// // // // // .add-btn {
-
-// // // // //     width: auto;
-
-// // // // //     padding: 11px 18px;
-
-// // // // //     margin-top: 5px;
-
-// // // // //     border: none;
-
-// // // // //     border-radius: 9px;
-
-// // // // //     background: #16a34a;
-
-// // // // //     color: white;
-
-// // // // //     font-weight: 700;
-
-// // // // //     cursor: pointer;
+// // // // //     border-color:#2563eb;
 
 // // // // // }
 
+// // // // // .remove-btn{
 
-// // // // // .add-btn:hover {
+// // // // //     width:45px;
 
-// // // // //     background: #15803d;
+// // // // //     border:none;
+
+// // // // //     border-radius:9px;
+
+// // // // //     background:#dc2626;
+
+// // // // //     color:white;
+
+// // // // //     font-size:22px;
+
+// // // // //     cursor:pointer;
+
+// // // // // }
+
+// // // // // .remove-btn:hover{
+
+// // // // //     background:#b91c1c;
+
+// // // // // }
+
+// // // // // .add-btn{
+
+// // // // //     border:none;
+
+// // // // //     background:#2563eb;
+
+// // // // //     color:white;
+
+// // // // //     padding:11px 17px;
+
+// // // // //     border-radius:9px;
+
+// // // // //     font-weight:700;
+
+// // // // //     cursor:pointer;
+
+// // // // // }
+
+// // // // // .add-btn:hover{
+
+// // // // //     background:#1d4ed8;
 
 // // // // // }
 
@@ -530,77 +1927,85 @@
 // // // // //    EXISTING IMAGES
 // // // // // ========================= */
 
-// // // // // .image-grid {
+// // // // // .image-grid{
 
-// // // // //     display: grid;
+// // // // //     display:grid;
 
 // // // // //     grid-template-columns:
-// // // // //         repeat(4, 1fr);
+// // // // //         repeat(4,1fr);
 
-// // // // //     gap: 15px;
-
-// // // // // }
-
-
-// // // // // .image-card {
-
-// // // // //     position: relative;
-
-// // // // //     border:
-// // // // //         1px solid #e5e7eb;
-
-// // // // //     border-radius: 12px;
-
-// // // // //     padding: 8px;
-
-// // // // //     background: #f8fafc;
+// // // // //     gap:15px;
 
 // // // // // }
 
+// // // // // .image-card{
 
-// // // // // .image-card img {
+// // // // //     border:1px solid #e2e8f0;
 
-// // // // //     width: 100%;
+// // // // //     border-radius:12px;
 
-// // // // //     height: 140px;
+// // // // //     overflow:hidden;
 
-// // // // //     object-fit: cover;
-
-// // // // //     border-radius: 8px;
-
-// // // // //     display: block;
+// // // // //     background:#f8fafc;
 
 // // // // // }
 
+// // // // // .image-card img{
 
-// // // // // .image-number {
+// // // // //     width:100%;
 
-// // // // //     text-align: center;
+// // // // //     height:160px;
 
-// // // // //     margin-top: 6px;
+// // // // //     display:block;
 
-// // // // //     font-size: 12px;
+// // // // //     object-fit:contain;
 
-// // // // //     color: #64748b;
+// // // // //     background:#fff;
+
+// // // // // }
+
+// // // // // .image-number{
+
+// // // // //     padding:8px;
+
+// // // // //     text-align:center;
+
+// // // // //     font-size:13px;
+
+// // // // //     font-weight:600;
+
+// // // // //     color:#475569;
+
+// // // // // }
+
+// // // // // .no-image{
+
+// // // // //     padding:20px;
+
+// // // // //     background:#f8fafc;
+
+// // // // //     border:1px dashed #cbd5e1;
+
+// // // // //     border-radius:10px;
+
+// // // // //     text-align:center;
+
+// // // // //     color:#64748b;
 
 // // // // // }
 
 
 // // // // // /* =========================
-// // // // //    NO IMAGE
+// // // // //    FILE INPUT
 // // // // // ========================= */
 
-// // // // // .no-image {
+// // // // // input[type="file"]{
 
-// // // // //     padding: 30px;
+// // // // //     padding:10px;
 
-// // // // //     text-align: center;
+// // // // //     background:#f8fafc;
 
-// // // // //     background: #f8fafc;
-
-// // // // //     border-radius: 10px;
-
-// // // // //     color: #64748b;
+// // // // //     cursor:pointer;
 
 // // // // // }
 
@@ -609,17 +2014,17 @@
 // // // // //    UPDATE BUTTON
 // // // // // ========================= */
 
-// // // // // .update-btn {
+// // // // // .update-btn{
 
-// // // // //     width: 100%;
+// // // // //     width:100%;
 
-// // // // //     padding: 15px;
+// // // // //     margin-top:30px;
 
-// // // // //     margin-top: 30px;
+// // // // //     padding:15px;
 
-// // // // //     border: none;
+// // // // //     border:none;
 
-// // // // //     border-radius: 12px;
+// // // // //     border-radius:12px;
 
 // // // // //     background:
 // // // // //         linear-gradient(
@@ -628,26 +2033,23 @@
 // // // // //             #1d4ed8
 // // // // //         );
 
-// // // // //     color: white;
+// // // // //     color:white;
 
-// // // // //     font-size: 17px;
+// // // // //     font-size:17px;
 
-// // // // //     font-weight: 700;
+// // // // //     font-weight:800;
 
-// // // // //     cursor: pointer;
-
-// // // // //     transition: .2s;
-
-// // // // // }
-
-
-// // // // // .update-btn:hover {
-
-// // // // //     transform: translateY(-1px);
+// // // // //     cursor:pointer;
 
 // // // // //     box-shadow:
 // // // // //         0 8px 20px
-// // // // //         rgba(37,99,235,.25);
+// // // // //         rgba(37,99,235,.20);
+
+// // // // // }
+
+// // // // // .update-btn:hover{
+
+// // // // //     transform:translateY(-1px);
 
 // // // // // }
 
@@ -656,32 +2058,19 @@
 // // // // //    BACK BUTTON
 // // // // // ========================= */
 
-// // // // // .back {
+// // // // // .back{
 
-// // // // //     display: block;
+// // // // //     display:block;
 
-// // // // //     text-align: center;
+// // // // //     width:max-content;
 
-// // // // //     margin-top: 18px;
+// // // // //     margin:20px auto;
 
-// // // // //     padding: 12px;
+// // // // //     text-decoration:none;
 
-// // // // //     border-radius: 10px;
+// // // // //     color:#2563eb;
 
-// // // // //     background: #f1f5f9;
-
-// // // // //     color: #1e40af;
-
-// // // // //     text-decoration: none;
-
-// // // // //     font-weight: 700;
-
-// // // // // }
-
-
-// // // // // .back:hover {
-
-// // // // //     background: #e2e8f0;
+// // // // //     font-weight:700;
 
 // // // // // }
 
@@ -690,65 +2079,58 @@
 // // // // //    MOBILE
 // // // // // ========================= */
 
-// // // // // @media (max-width: 700px) {
+// // // // // @media(max-width:700px){
 
-// // // // //     body {
+// // // // //     .edit-product-page{
 
-// // // // //         padding: 10px;
-
-// // // // //     }
-
-
-// // // // //     .container {
-
-// // // // //         padding: 18px;
-
-// // // // //         border-radius: 16px;
+// // // // //         padding:10px;
 
 // // // // //     }
 
+// // // // //     .header{
 
-// // // // //     .header h2 {
+// // // // //         padding:20px;
 
-// // // // //         font-size: 22px;
-
-// // // // //     }
-
-
-// // // // //     .form-grid {
-
-// // // // //         grid-template-columns: 1fr;
-
-// // // // //         gap: 15px;
+// // // // //         border-radius:14px;
 
 // // // // //     }
 
+// // // // //     .header h2{
 
-// // // // //     .form-group.full {
-
-// // // // //         grid-column: auto;
+// // // // //         font-size:21px;
 
 // // // // //     }
 
+// // // // //     .product-form{
 
-// // // // //     .image-grid {
+// // // // //         padding:16px;
+
+// // // // //         border-radius:14px;
+
+// // // // //     }
+
+// // // // //     .form-grid{
+
+// // // // //         grid-template-columns:1fr;
+
+// // // // //     }
+
+// // // // //     .form-group.full{
+
+// // // // //         grid-column:auto;
+
+// // // // //     }
+
+// // // // //     .image-grid{
 
 // // // // //         grid-template-columns:
-// // // // //             repeat(2, 1fr);
+// // // // //             repeat(2,1fr);
 
 // // // // //     }
 
+// // // // //     .image-card img{
 
-// // // // //     .image-card img {
-
-// // // // //         height: 120px;
-
-// // // // //     }
-
-
-// // // // //     .composition-row {
-
-// // // // //         gap: 7px;
+// // // // //         height:130px;
 
 // // // // //     }
 
@@ -759,38 +2141,17 @@
 // // // // //    SMALL MOBILE
 // // // // // ========================= */
 
-// // // // // @media (max-width: 400px) {
+// // // // // @media(max-width:400px){
 
-// // // // //     .container {
+// // // // //     .image-grid{
 
-// // // // //         padding: 14px;
-
-// // // // //     }
-
-
-// // // // //     input,
-// // // // //     select,
-// // // // //     textarea {
-
-// // // // //         font-size: 14px;
-
-// // // // //         padding: 11px;
+// // // // //         grid-template-columns:1fr;
 
 // // // // //     }
 
+// // // // //     .image-card img{
 
-// // // // //     .image-grid {
-
-// // // // //         grid-template-columns: 1fr 1fr;
-
-// // // // //         gap: 8px;
-
-// // // // //     }
-
-
-// // // // //     .image-card img {
-
-// // // // //         height: 100px;
+// // // // //         height:180px;
 
 // // // // //     }
 
@@ -798,571 +2159,559 @@
 
 // // // // // </style>
 
-// // // // // </head>
+
+// // // // // <div class="edit-product-page">
 
 
-// // // // // <body>
+// // // // // <!-- =========================
+// // // // //      HEADER
+// // // // // ========================= -->
+
+// // // // // <div class="header">
+
+// // // // //     <h2>✏️ Edit Pharma Product</h2>
+
+// // // // //     <p>
+// // // // //         Update product information and images
+// // // // //     </p>
+
+// // // // // </div>
 
 
-// // // // // <div class="container">
+// // // // // <!-- =========================
+// // // // //      FORM
+// // // // // ========================= -->
+
+// // // // // <form
+// // // // //     class="product-form"
+// // // // //     action="/admin/edit-product/${escapeHTML(product._id)}"
+// // // // //     method="POST"
+// // // // //     enctype="multipart/form-data"
+// // // // // >
 
 
-// // // // //     <!-- =========================
-// // // // //          HEADER
-// // // // //     ========================== -->
+// // // // // <!-- =========================
+// // // // //      BASIC INFORMATION
+// // // // // ========================= -->
 
-// // // // //     <div class="header">
+// // // // // <div class="form-grid">
 
-// // // // //         <h2>✏️ Edit Pharma Product</h2>
 
-// // // // //         <p>
-// // // // //             Update product information and images
-// // // // //         </p>
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Product Name *
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="text"
+// // // // //             name="name"
+// // // // //             value="${escapeHTML(product.name)}"
+// // // // //             required
+// // // // //         >
 
 // // // // //     </div>
 
 
-// // // // //     <!-- =========================
-// // // // //          FORM
-// // // // //     ========================== -->
+// // // // //     <div class="form-group">
 
-// // // // //     <form
+// // // // //         <label>
+// // // // //             Brand Name
+// // // // //         </label>
 
-// // // // //         action="/admin/edit-product/${product._id}"
+// // // // //         <input
+// // // // //             type="text"
+// // // // //             name="brand"
+// // // // //             value="${escapeHTML(product.brand)}"
+// // // // //         >
 
-// // // // //         method="POST"
+// // // // //     </div>
 
-// // // // //         enctype="multipart/form-data"
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Category
+// // // // //         </label>
+
+// // // // //         <select name="category">
+
+// // // // //             <option value="">
+// // // // //                 Select Category
+// // // // //             </option>
+
+// // // // //             <option
+// // // // //                 value="Tablet"
+// // // // //                 ${product.category === "Tablet" ? "selected" : ""}
+// // // // //             >
+// // // // //                 Tablet
+// // // // //             </option>
+
+// // // // //             <option
+// // // // //                 value="Capsule"
+// // // // //                 ${product.category === "Capsule" ? "selected" : ""}
+// // // // //             >
+// // // // //                 Capsule
+// // // // //             </option>
+
+// // // // //             <option
+// // // // //                 value="Syrup"
+// // // // //                 ${product.category === "Syrup" ? "selected" : ""}
+// // // // //             >
+// // // // //                 Syrup
+// // // // //             </option>
+
+// // // // //             <option
+// // // // //                 value="Drops"
+// // // // //                 ${product.category === "Drops" ? "selected" : ""}
+// // // // //             >
+// // // // //                 Drops
+// // // // //             </option>
+
+// // // // //             <option
+// // // // //                 value="Injection"
+// // // // //                 ${product.category === "Injection" ? "selected" : ""}
+// // // // //             >
+// // // // //                 Injection
+// // // // //             </option>
+
+// // // // //             <option
+// // // // //                 value="Cream"
+// // // // //                 ${product.category === "Cream" ? "selected" : ""}
+// // // // //             >
+// // // // //                 Cream
+// // // // //             </option>
+
+// // // // //             <option
+// // // // //                 value="Other"
+// // // // //                 ${product.category === "Other" ? "selected" : ""}
+// // // // //             >
+// // // // //                 Other
+// // // // //             </option>
+
+// // // // //         </select>
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Manufacturer
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="text"
+// // // // //             name="manufacturer"
+// // // // //             value="${escapeHTML(product.manufacturer)}"
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             MRP ₹
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="number"
+// // // // //             name="mrp"
+// // // // //             value="${product.mrp ?? ""}"
+// // // // //             min="0"
+// // // // //             step="0.01"
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Selling Price ₹ *
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="number"
+// // // // //             name="price"
+// // // // //             value="${product.price ?? ""}"
+// // // // //             min="0"
+// // // // //             step="0.01"
+// // // // //             required
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Stock Quantity
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="number"
+// // // // //             name="stock"
+// // // // //             value="${product.stock ?? 0}"
+// // // // //             min="0"
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Pack Size
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="text"
+// // // // //             name="packSize"
+// // // // //             value="${escapeHTML(product.packSize)}"
+// // // // //             placeholder="e.g. 200 ml"
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Batch Number
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="text"
+// // // // //             name="batchNo"
+// // // // //             value="${escapeHTML(product.batchNo)}"
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Manufacturing Date
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="date"
+// // // // //             name="mfgDate"
+// // // // //             value="${formatDate(product.mfgDate)}"
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // //     <div class="form-group">
+
+// // // // //         <label>
+// // // // //             Expiry Date
+// // // // //         </label>
+
+// // // // //         <input
+// // // // //             type="date"
+// // // // //             name="expDate"
+// // // // //             value="${formatDate(product.expDate)}"
+// // // // //         >
+
+// // // // //     </div>
+
+
+// // // // // </div>
+
+
+// // // // // <!-- =========================
+// // // // //      COMPOSITION
+// // // // // ========================= -->
+
+// // // // // <div class="section">
+
+// // // // //     <div class="section-title">
+// // // // //         💊 Composition
+// // // // //     </div>
+
+
+// // // // //     <div id="compositionBox">
+
+// // // // //         ${compositions.map((item, index) => `
+
+// // // // //             <div class="composition-row">
+
+// // // // //                 <input
+// // // // //                     type="text"
+// // // // //                     name="composition[]"
+// // // // //                     value="${escapeHTML(item)}"
+// // // // //                     placeholder="Composition ${index + 1}"
+// // // // //                 >
+
+// // // // //                 ${
+// // // // //                     index > 0
+// // // // //                     ? `
+// // // // //                     <button
+// // // // //                         type="button"
+// // // // //                         class="remove-btn"
+// // // // //                         onclick="removeComposition(this)"
+// // // // //                     >
+// // // // //                         ×
+// // // // //                     </button>
+// // // // //                     `
+// // // // //                     : `
+// // // // //                     <button
+// // // // //                         type="button"
+// // // // //                         class="remove-btn"
+// // // // //                         onclick="removeComposition(this)"
+// // // // //                         style="visibility:hidden"
+// // // // //                     >
+// // // // //                         ×
+// // // // //                     </button>
+// // // // //                     `
+// // // // //                 }
+
+// // // // //             </div>
+
+// // // // //         `).join("")}
+
+// // // // //     </div>
+
+
+// // // // //     <button
+// // // // //         type="button"
+// // // // //         class="add-btn"
+// // // // //         onclick="addComposition()"
 // // // // //     >
+// // // // //         + Add Composition
+// // // // //     </button>
 
+// // // // // </div>
 
-// // // // //         <!-- =========================
-// // // // //              BASIC INFORMATION
-// // // // //         ========================== -->
 
-// // // // //         <div class="form-grid">
+// // // // // <!-- =========================
+// // // // //      PRODUCT DETAILS
+// // // // // ========================= -->
 
+// // // // // <div class="section">
 
-// // // // //             <div class="form-group">
+// // // // //     <div class="section-title">
+// // // // //         📋 Product Details
+// // // // //     </div>
 
-// // // // //                 <label>
-// // // // //                     Product Name *
-// // // // //                 </label>
 
-// // // // //                 <input
-// // // // //                     type="text"
-// // // // //                     name="name"
-// // // // //                     value="${product.name || ""}"
-// // // // //                     required
-// // // // //                 >
+// // // // //     <div class="form-grid">
 
-// // // // //             </div>
 
+// // // // //         <div class="form-group full">
 
-// // // // //             <div class="form-group">
+// // // // //             <label>
+// // // // //                 Uses
+// // // // //             </label>
 
-// // // // //                 <label>
-// // // // //                     Brand Name
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="text"
-// // // // //                     name="brand"
-// // // // //                     value="${product.brand || ""}"
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Category
-// // // // //                 </label>
-
-// // // // //                 <select name="category">
-
-// // // // //                     <option value="">
-// // // // //                         Select Category
-// // // // //                     </option>
-
-// // // // //                     <option
-// // // // //                         value="Tablet"
-// // // // //                         ${product.category === "Tablet" ? "selected" : ""}
-// // // // //                     >
-// // // // //                         Tablet
-// // // // //                     </option>
-
-// // // // //                     <option
-// // // // //                         value="Capsule"
-// // // // //                         ${product.category === "Capsule" ? "selected" : ""}
-// // // // //                     >
-// // // // //                         Capsule
-// // // // //                     </option>
-
-// // // // //                     <option
-// // // // //                         value="Syrup"
-// // // // //                         ${product.category === "Syrup" ? "selected" : ""}
-// // // // //                     >
-// // // // //                         Syrup
-// // // // //                     </option>
-
-// // // // //                     <option
-// // // // //                         value="Drops"
-// // // // //                         ${product.category === "Drops" ? "selected" : ""}
-// // // // //                     >
-// // // // //                         Drops
-// // // // //                     </option>
-
-// // // // //                     <option
-// // // // //                         value="Injection"
-// // // // //                         ${product.category === "Injection" ? "selected" : ""}
-// // // // //                     >
-// // // // //                         Injection
-// // // // //                     </option>
-
-// // // // //                     <option
-// // // // //                         value="Cream"
-// // // // //                         ${product.category === "Cream" ? "selected" : ""}
-// // // // //                     >
-// // // // //                         Cream
-// // // // //                     </option>
-
-// // // // //                     <option
-// // // // //                         value="Other"
-// // // // //                         ${product.category === "Other" ? "selected" : ""}
-// // // // //                     >
-// // // // //                         Other
-// // // // //                     </option>
-
-// // // // //                 </select>
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Manufacturer
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="text"
-// // // // //                     name="manufacturer"
-// // // // //                     value="${product.manufacturer || ""}"
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     MRP
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="number"
-// // // // //                     name="mrp"
-// // // // //                     value="${product.mrp ?? ""}"
-// // // // //                     min="0"
-// // // // //                     step="0.01"
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Selling Price *
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="number"
-// // // // //                     name="price"
-// // // // //                     value="${product.price ?? ""}"
-// // // // //                     min="0"
-// // // // //                     step="0.01"
-// // // // //                     required
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Stock Quantity
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="number"
-// // // // //                     name="stock"
-// // // // //                     value="${product.stock ?? ""}"
-// // // // //                     min="0"
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Pack Size
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="text"
-// // // // //                     name="packSize"
-// // // // //                     value="${product.packSize || ""}"
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Batch Number
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="text"
-// // // // //                     name="batchNo"
-// // // // //                     value="${product.batchNo || ""}"
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Manufacturing Date
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="date"
-// // // // //                     name="mfgDate"
-// // // // //                     value="${
-// // // // //                         product.mfgDate
-// // // // //                             ? new Date(product.mfgDate)
-// // // // //                                 .toISOString()
-// // // // //                                 .split("T")[0]
-// // // // //                             : ""
-// // // // //                     }"
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <div class="form-group">
-
-// // // // //                 <label>
-// // // // //                     Expiry Date
-// // // // //                 </label>
-
-// // // // //                 <input
-// // // // //                     type="date"
-// // // // //                     name="expDate"
-// // // // //                     value="${
-// // // // //                         product.expDate
-// // // // //                             ? new Date(product.expDate)
-// // // // //                                 .toISOString()
-// // // // //                                 .split("T")[0]
-// // // // //                             : ""
-// // // // //                     }"
-// // // // //                 >
-
-// // // // //             </div>
-
+// // // // //             <textarea
+// // // // //                 name="uses"
+// // // // //                 placeholder="Enter product uses"
+// // // // //             >${escapeHTML(product.uses)}</textarea>
 
 // // // // //         </div>
 
 
-// // // // //         <!-- =========================
-// // // // //              COMPOSITION
-// // // // //         ========================== -->
+// // // // //         <div class="form-group full">
 
-// // // // //         <div class="section">
+// // // // //             <label>
+// // // // //                 Benefits
+// // // // //             </label>
 
-// // // // //             <div class="section-title">
+// // // // //             <textarea
+// // // // //                 name="benefits"
+// // // // //                 placeholder="Enter product benefits"
+// // // // //             >${escapeHTML(product.benefits)}</textarea>
 
-// // // // //                 💊 Composition
-
-// // // // //             </div>
+// // // // //         </div>
 
 
-// // // // //             <div id="compositionBox">
+// // // // //         <div class="form-group full">
 
-// // // // //                 ${compositions.map((item, index) => `
+// // // // //             <label>
+// // // // //                 Dosage
+// // // // //             </label>
 
-// // // // //                     <div class="composition-row">
+// // // // //             <textarea
+// // // // //                 name="dosage"
+// // // // //                 placeholder="Enter dosage"
+// // // // //             >${escapeHTML(product.dosage)}</textarea>
 
-// // // // //                         <input
-// // // // //                             type="text"
-// // // // //                             name="composition[]"
-// // // // //                             value="${item || ""}"
-// // // // //                             placeholder="Composition ${index + 1}"
+// // // // //         </div>
+
+
+// // // // //         <div class="form-group full">
+
+// // // // //             <label>
+// // // // //                 Side Effects
+// // // // //             </label>
+
+// // // // //             <textarea
+// // // // //                 name="sideEffects"
+// // // // //                 placeholder="Enter side effects"
+// // // // //             >${escapeHTML(product.sideEffects)}</textarea>
+
+// // // // //         </div>
+
+
+// // // // //         <div class="form-group full">
+
+// // // // //             <label>
+// // // // //                 Storage Instructions
+// // // // //             </label>
+
+// // // // //             <textarea
+// // // // //                 name="storage"
+// // // // //                 placeholder="Enter storage instructions"
+// // // // //             >${escapeHTML(product.storage)}</textarea>
+
+// // // // //         </div>
+
+
+// // // // //         <div class="form-group full">
+
+// // // // //             <label>
+// // // // //                 Full Description
+// // // // //             </label>
+
+// // // // //             <textarea
+// // // // //                 name="description"
+// // // // //                 placeholder="Enter full product description"
+// // // // //             >${escapeHTML(product.description)}</textarea>
+
+// // // // //         </div>
+
+
+// // // // //     </div>
+
+// // // // // </div>
+
+
+// // // // // <!-- =========================
+// // // // //      EXISTING IMAGES
+// // // // // ========================= -->
+
+// // // // // <div class="section">
+
+// // // // //     <div class="section-title">
+// // // // //         🖼 Existing Product Images
+// // // // //     </div>
+
+
+// // // // //     ${
+// // // // //         images.length
+
+// // // // //         ?
+
+// // // // //         `<div class="image-grid">
+
+// // // // //             ${images.map((img, index) => {
+
+// // // // //                 const safeImg = cleanImageUrl(img);
+
+// // // // //                 return `
+
+// // // // //                     <div class="image-card">
+
+// // // // //                         <img
+// // // // //                             src="${escapeHTML(safeImg)}"
+// // // // //                             alt="Product Image ${index + 1}"
+// // // // //                             loading="lazy"
+// // // // //                             onerror="this.style.display='none'"
 // // // // //                         >
 
-// // // // //                         ${
-// // // // //                             index > 0
-// // // // //                             ? `
-// // // // //                             <button
-// // // // //                                 type="button"
-// // // // //                                 class="remove-btn"
-// // // // //                                 onclick="this.parentElement.remove()"
-// // // // //                             >
-// // // // //                                 ×
-// // // // //                             </button>
-// // // // //                             `
-// // // // //                             : ""
-// // // // //                         }
+// // // // //                         <div class="image-number">
+// // // // //                             Image ${index + 1}
+// // // // //                         </div>
 
 // // // // //                     </div>
 
-// // // // //                 `).join("")}
+// // // // //                 `;
 
-// // // // //             </div>
+// // // // //             }).join("")}
 
+// // // // //         </div>`
 
-// // // // //             <button
-// // // // //                 type="button"
-// // // // //                 class="add-btn"
-// // // // //                 onclick="addComposition()"
-// // // // //             >
-// // // // //                 + Add Composition
-// // // // //             </button>
+// // // // //         :
 
-// // // // //         </div>
+// // // // //         `<div class="no-image">
+// // // // //             No existing product image
+// // // // //         </div>`
+// // // // //     }
 
+// // // // // </div>
 
-// // // // //         <!-- =========================
-// // // // //              PRODUCT DETAILS
-// // // // //         ========================== -->
 
-// // // // //         <div class="section">
+// // // // // <!-- =========================
+// // // // //      NEW IMAGES
+// // // // // ========================= -->
 
-// // // // //             <div class="section-title">
+// // // // // <div class="section">
 
-// // // // //                 📋 Product Details
+// // // // //     <div class="section-title">
+// // // // //         📷 Add New Product Images
+// // // // //     </div>
 
-// // // // //             </div>
 
+// // // // //     <div class="form-group">
 
-// // // // //             <div class="form-grid">
+// // // // //         <label>
+// // // // //             Select New Images
+// // // // //         </label>
 
-
-// // // // //                 <div class="form-group full">
-
-// // // // //                     <label>
-// // // // //                         Uses
-// // // // //                     </label>
-
-// // // // //                     <textarea
-// // // // //                         name="uses"
-// // // // //                         placeholder="Uses"
-// // // // //                     >${product.uses || ""}</textarea>
-
-// // // // //                 </div>
-
-
-// // // // //                 <div class="form-group full">
-
-// // // // //                     <label>
-// // // // //                         Benefits
-// // // // //                     </label>
-
-// // // // //                     <textarea
-// // // // //                         name="benefits"
-// // // // //                         placeholder="Benefits"
-// // // // //                     >${product.benefits || ""}</textarea>
-
-// // // // //                 </div>
-
-
-// // // // //                 <div class="form-group full">
-
-// // // // //                     <label>
-// // // // //                         Dosage
-// // // // //                     </label>
-
-// // // // //                     <textarea
-// // // // //                         name="dosage"
-// // // // //                         placeholder="Dosage"
-// // // // //                     >${product.dosage || ""}</textarea>
-
-// // // // //                 </div>
-
-
-// // // // //                 <div class="form-group full">
-
-// // // // //                     <label>
-// // // // //                         Side Effects
-// // // // //                     </label>
-
-// // // // //                     <textarea
-// // // // //                         name="sideEffects"
-// // // // //                         placeholder="Side Effects"
-// // // // //                     >${product.sideEffects || ""}</textarea>
-
-// // // // //                 </div>
-
-
-// // // // //                 <div class="form-group full">
-
-// // // // //                     <label>
-// // // // //                         Storage Instructions
-// // // // //                     </label>
-
-// // // // //                     <textarea
-// // // // //                         name="storage"
-// // // // //                         placeholder="Storage Instructions"
-// // // // //                     >${product.storage || ""}</textarea>
-
-// // // // //                 </div>
-
-
-// // // // //                 <div class="form-group full">
-
-// // // // //                     <label>
-// // // // //                         Full Description
-// // // // //                     </label>
-
-// // // // //                     <textarea
-// // // // //                         name="description"
-// // // // //                         placeholder="Full Description"
-// // // // //                     >${product.description || ""}</textarea>
-
-// // // // //                 </div>
-
-
-// // // // //             </div>
-
-// // // // //         </div>
-
-
-// // // // //         <!-- =========================
-// // // // //              EXISTING IMAGES
-// // // // //         ========================== -->
-
-// // // // //         <div class="section">
-
-// // // // //             <div class="section-title">
-
-// // // // //                 🖼 Existing Product Images
-
-// // // // //             </div>
-
-
-// // // // //             ${
-// // // // //                 images.length
-// // // // //                 ?
-
-// // // // //                 `<div class="image-grid">
-
-// // // // //                     ${images.map((img, index) => `
-
-// // // // //                         <div class="image-card">
-
-// // // // //                             <img
-// // // // //                                 src="${img}"
-// // // // //                                 alt="Product Image ${index + 1}"
-// // // // //                             >
-
-// // // // //                             <div class="image-number">
-
-// // // // //                                 Image ${index + 1}
-
-// // // // //                             </div>
-
-// // // // //                         </div>
-
-// // // // //                     `).join("")}
-
-// // // // //                 </div>`
-
-// // // // //                 :
-
-// // // // //                 `<div class="no-image">
-
-// // // // //                     No existing product image
-
-// // // // //                 </div>`
-// // // // //             }
-
-// // // // //         </div>
-
-
-// // // // //         <!-- =========================
-// // // // //              NEW IMAGES
-// // // // //         ========================== -->
-
-// // // // //         <div class="section">
-
-// // // // //             <div class="section-title">
-
-// // // // //                 📷 Add New Product Images
-
-// // // // //             </div>
-
-
-// // // // //             <div id="imageBox">
-
-// // // // //                 <input
-// // // // //                     type="file"
-// // // // //                     name="images"
-// // // // //                     accept="image/*"
-// // // // //                     multiple
-// // // // //                 >
-
-// // // // //             </div>
-
-
-// // // // //             <p
-// // // // //                 style="
-// // // // //                     margin-top:8px;
-// // // // //                     color:#64748b;
-// // // // //                     font-size:13px;
-// // // // //                 "
-// // // // //             >
-// // // // //                 You can select multiple new images.
-// // // // //             </p>
-
-// // // // //         </div>
-
-
-// // // // //         <!-- =========================
-// // // // //              UPDATE
-// // // // //         ========================== -->
-
-// // // // //         <button
-// // // // //             type="submit"
-// // // // //             class="update-btn"
+// // // // //         <input
+// // // // //             type="file"
+// // // // //             name="images"
+// // // // //             accept="image/*"
+// // // // //             multiple
 // // // // //         >
 
-// // // // //             💾 Update Product
-
-// // // // //         </button>
+// // // // //     </div>
 
 
-// // // // //     </form>
-
-
-// // // // //     <!-- =========================
-// // // // //          BACK
-// // // // //     ========================== -->
-
-// // // // //     <a
-// // // // //         href="/admin/manage-products"
-// // // // //         class="back"
+// // // // //     <p
+// // // // //         style="
+// // // // //             margin-top:8px;
+// // // // //             color:#64748b;
+// // // // //             font-size:13px;
+// // // // //         "
 // // // // //     >
+// // // // //         You can select multiple new images.
+// // // // //     </p>
 
-// // // // //         ⬅ Back to Manage Products
+// // // // // </div>
 
-// // // // //     </a>
+
+// // // // // <!-- =========================
+// // // // //      UPDATE
+// // // // // ========================= -->
+
+// // // // // <button
+// // // // //     type="submit"
+// // // // //     class="update-btn"
+// // // // // >
+// // // // //     💾 Update Product
+// // // // // </button>
+
+
+// // // // // </form>
+
+
+// // // // // <!-- =========================
+// // // // //      BACK
+// // // // // ========================= -->
+
+// // // // // <a
+// // // // //     href="/admin/manage-products"
+// // // // //     class="back"
+// // // // // >
+// // // // //     ⬅ Back to Manage Products
+// // // // // </a>
 
 
 // // // // // </div>
@@ -1370,20 +2719,16 @@
 
 // // // // // <script>
 
-
-// // // // // /* =========================
-// // // // //    ADD COMPOSITION
-// // // // // ========================= */
-
-// // // // // function addComposition() {
+// // // // // function addComposition(){
 
 // // // // //     const box =
 // // // // //         document.getElementById("compositionBox");
 
+// // // // //     if(!box) return;
+
 
 // // // // //     const row =
 // // // // //         document.createElement("div");
-
 
 // // // // //     row.className =
 // // // // //         "composition-row";
@@ -1400,7 +2745,7 @@
 // // // // //         <button
 // // // // //             type="button"
 // // // // //             class="remove-btn"
-// // // // //             onclick="this.parentElement.remove()"
+// // // // //             onclick="removeComposition(this)"
 // // // // //         >
 // // // // //             ×
 // // // // //         </button>
@@ -1413,63 +2758,35 @@
 // // // // // }
 
 
-// // // // // /* =========================
-// // // // //    IMAGE VALIDATION
-// // // // // ========================= */
+// // // // // function removeComposition(button){
 
-// // // // // const imageInput =
-// // // // //     document.querySelector(
-// // // // //         'input[name="images"]'
-// // // // //     );
+// // // // //     if(!button) return;
 
 
-// // // // // if (imageInput) {
+// // // // //     const box =
+// // // // //         document.getElementById("compositionBox");
 
-// // // // //     imageInput.addEventListener(
-// // // // //         "change",
-// // // // //         function () {
-
-// // // // //             const files =
-// // // // //                 this.files;
+// // // // //     const rows =
+// // // // //         box.querySelectorAll(".composition-row");
 
 
-// // // // //             for (const file of files) {
+// // // // //     if(rows.length > 1){
 
-// // // // //                 if (
-// // // // //                     !file.type.startsWith("image/")
-// // // // //                 ) {
+// // // // //         button
+// // // // //             .parentElement
+// // // // //             .remove();
 
-// // // // //                     alert(
-// // // // //                         "Please select only image files."
-// // // // //                     );
-
-// // // // //                     this.value = "";
-
-// // // // //                     return;
-
-// // // // //                 }
-
-// // // // //             }
-
-// // // // //         }
-// // // // //     );
+// // // // //     }
 
 // // // // // }
 
 // // // // // </script>
 
-
-// // // // // </body>
-
-// // // // // </html>
-
 // // // // // `;
-
 // // // // // }
 
 
 // // // // // module.exports = EditProduct;
-
 
 
 // // // // function EditProduct(product) {
@@ -1479,7 +2796,10 @@
 // // // //     // =========================
 
 // // // //     const escapeHTML = (value) => {
-// // // //         if (value === null || value === undefined) return "";
+
+// // // //         if (value === null || value === undefined) {
+// // // //             return "";
+// // // //         }
 
 // // // //         return String(value)
 // // // //             .replace(/&/g, "&amp;")
@@ -1496,7 +2816,9 @@
 
 // // // //     const formatDate = (value) => {
 
-// // // //         if (!value) return "";
+// // // //         if (!value) {
+// // // //             return "";
+// // // //         }
 
 // // // //         try {
 
@@ -1513,7 +2835,6 @@
 // // // //             return "";
 
 // // // //         }
-
 // // // //     };
 
 
@@ -1544,7 +2865,6 @@
 // // // //                 }
 
 // // // //                 return String(item);
-
 // // // //             });
 
 // // // //     } else if (product.composition) {
@@ -1572,15 +2892,18 @@
 // // // //     }
 
 
-// // // //     // पुराने database में image field है
-// // // //     if (product.image && !images.includes(product.image)) {
+// // // //     // पुराने database में image field
+// // // //     if (
+// // // //         product.image &&
+// // // //         !images.includes(product.image)
+// // // //     ) {
 
 // // // //         images.unshift(product.image);
 
 // // // //     }
 
 
-// // // //     // Remove duplicate images
+// // // //     // Duplicate remove
 // // // //     images = [...new Set(images)];
 
 
@@ -1590,11 +2913,14 @@
 
 // // // //     const cleanImageUrl = (url) => {
 
-// // // //         if (!url) return "";
+// // // //         if (!url) {
+// // // //             return "";
+// // // //         }
 
 // // // //         let clean = String(url).trim();
 
-// // // //         // Markdown format:
+
+// // // //         // Markdown:
 // // // //         // [https://example.com/image.jpg](https://example.com/image.jpg)
 
 // // // //         const markdownMatch =
@@ -1608,6 +2934,7 @@
 
 
 // // // //         // [https://example.com/image.jpg]
+
 // // // //         if (
 // // // //             clean.startsWith("[") &&
 // // // //             clean.endsWith("]")
@@ -1617,8 +2944,11 @@
 
 // // // //         }
 
-// // // //         return clean;
 
+// // // //         // अगर URL के आगे/पीछे quotes हैं
+// // // //         clean = clean.replace(/^["']|["']$/g, "");
+
+// // // //         return clean;
 // // // //     };
 
 
@@ -1627,1091 +2957,1342 @@
 // // // //         .filter(Boolean);
 
 
+// // // //     // =========================
+// // // //     // CATEGORY
+// // // //     // =========================
+
+// // // //     const categories = [
+// // // //         "Tablet",
+// // // //         "Capsule",
+// // // //         "Syrup",
+// // // //         "Drops",
+// // // //         "Injection",
+// // // //         "Cream",
+// // // //         "Ointment",
+// // // //         "Gel",
+// // // //         "Powder",
+// // // //         "Suspension",
+// // // //         "Solution",
+// // // //         "Other"
+// // // //     ];
+
+
+// // // //     // =========================
+// // // //     // RETURN HTML
+// // // //     // =========================
+
 // // // //     return `
 
-// // // // <style>
+// // // // <!DOCTYPE html>
 
-// // // // *{
-// // // //     box-sizing:border-box;
-// // // // }
+// // // // <html lang="en">
 
-// // // // body{
-// // // //     margin:0;
-// // // //     font-family:Segoe UI,Arial,sans-serif;
-// // // //     background:#f1f5f9;
-// // // //     color:#1e293b;
-// // // // }
+// // // // <head>
 
-// // // // .edit-product-page{
-// // // //     width:100%;
-// // // //     max-width:1100px;
-// // // //     margin:0 auto;
-// // // //     padding:20px;
-// // // // }
+// // // //     <meta charset="UTF-8">
 
+// // // //     <meta
+// // // //         name="viewport"
+// // // //         content="width=device-width, initial-scale=1.0"
+// // // //     >
 
-// // // // /* =========================
-// // // //    HEADER
-// // // // ========================= */
+// // // //     <title>Edit Pharma Product</title>
 
-// // // // .header{
 
-// // // //     background:linear-gradient(
-// // // //         135deg,
-// // // //         #2563eb,
-// // // //         #1d4ed8
-// // // //     );
+// // // //     <style>
 
-// // // //     color:white;
+// // // //         /* =========================
+// // // //            RESET
+// // // //         ========================= */
 
-// // // //     padding:25px;
+// // // //         * {
+// // // //             margin: 0;
+// // // //             padding: 0;
+// // // //             box-sizing: border-box;
+// // // //             font-family:
+// // // //                 "Segoe UI",
+// // // //                 Arial,
+// // // //                 sans-serif;
+// // // //         }
 
-// // // //     border-radius:18px;
 
-// // // //     margin-bottom:20px;
+// // // //         /* =========================
+// // // //            BODY
+// // // //         ========================= */
 
-// // // //     box-shadow:
-// // // //         0 10px 30px
-// // // //         rgba(37,99,235,.20);
+// // // //         body {
 
-// // // // }
+// // // //             background:
+// // // //                 linear-gradient(
+// // // //                     135deg,
+// // // //                     #2563eb,
+// // // //                     #06b6d4
+// // // //                 );
 
-// // // // .header h2{
+// // // //             min-height: 100vh;
 
-// // // //     margin:0 0 7px;
+// // // //             padding: 30px 15px;
 
-// // // //     font-size:26px;
+// // // //         }
 
-// // // // }
 
-// // // // .header p{
+// // // //         /* =========================
+// // // //            MAIN CONTAINER
+// // // //         ========================= */
 
-// // // //     margin:0;
+// // // //         .container {
 
-// // // //     opacity:.9;
+// // // //             width: 100%;
 
-// // // //     font-size:14px;
+// // // //             max-width: 1000px;
 
-// // // // }
+// // // //             margin: auto;
 
+// // // //             background: #ffffff;
 
-// // // // /* =========================
-// // // //    FORM
-// // // // ========================= */
+// // // //             padding: 30px;
 
-// // // // .product-form{
+// // // //             border-radius: 22px;
 
-// // // //     background:white;
+// // // //             box-shadow:
+// // // //                 0 20px 50px
+// // // //                 rgba(0, 0, 0, .18);
 
-// // // //     padding:25px;
+// // // //         }
 
-// // // //     border-radius:18px;
 
-// // // //     box-shadow:
-// // // //         0 8px 25px
-// // // //         rgba(15,23,42,.08);
+// // // //         /* =========================
+// // // //            HEADER
+// // // //         ========================= */
 
-// // // // }
+// // // //         .header {
 
+// // // //             text-align: center;
 
-// // // // /* =========================
-// // // //    GRID
-// // // // ========================= */
+// // // //             margin-bottom: 30px;
 
-// // // // .form-grid{
+// // // //             padding-bottom: 20px;
 
-// // // //     display:grid;
+// // // //             border-bottom:
+// // // //                 1px solid #e5e7eb;
 
-// // // //     grid-template-columns:
-// // // //         repeat(2,1fr);
+// // // //         }
 
-// // // //     gap:18px;
 
-// // // // }
+// // // //         .header h2 {
 
+// // // //             color: #1e40af;
 
-// // // // /* =========================
-// // // //    FORM GROUP
-// // // // ========================= */
+// // // //             font-size: 28px;
 
-// // // // .form-group{
+// // // //             margin-bottom: 6px;
 
-// // // //     display:flex;
+// // // //         }
 
-// // // //     flex-direction:column;
 
-// // // //     gap:7px;
+// // // //         .header p {
 
-// // // // }
+// // // //             color: #64748b;
 
-// // // // .form-group.full{
+// // // //             font-size: 14px;
 
-// // // //     grid-column:1/-1;
+// // // //         }
 
-// // // // }
 
-// // // // .form-group label{
+// // // //         /* =========================
+// // // //            FORM GRID
+// // // //         ========================= */
 
-// // // //     font-size:14px;
+// // // //         .form-grid {
 
-// // // //     font-weight:700;
+// // // //             display: grid;
 
-// // // //     color:#334155;
+// // // //             grid-template-columns:
+// // // //                 repeat(2, 1fr);
 
-// // // // }
+// // // //             gap: 18px;
 
+// // // //         }
 
-// // // // /* =========================
-// // // //    INPUT
-// // // // ========================= */
 
-// // // // .form-group input,
-// // // // .form-group select,
-// // // // .form-group textarea{
+// // // //         /* =========================
+// // // //            FORM GROUP
+// // // //         ========================= */
 
-// // // //     width:100%;
+// // // //         .form-group {
 
-// // // //     border:1px solid #cbd5e1;
+// // // //             display: flex;
 
-// // // //     border-radius:10px;
+// // // //             flex-direction: column;
 
-// // // //     padding:12px 13px;
+// // // //         }
 
-// // // //     font-size:15px;
 
-// // // //     outline:none;
+// // // //         .form-group.full {
 
-// // // //     background:#fff;
+// // // //             grid-column: 1 / -1;
 
-// // // //     transition:.2s;
+// // // //         }
 
-// // // // }
 
-// // // // .form-group input:focus,
-// // // // .form-group select:focus,
-// // // // .form-group textarea:focus{
+// // // //         label {
 
-// // // //     border-color:#2563eb;
+// // // //             font-weight: 700;
 
-// // // //     box-shadow:
-// // // //         0 0 0 3px
-// // // //         rgba(37,99,235,.10);
+// // // //             color: #1e293b;
 
-// // // // }
+// // // //             margin-bottom: 7px;
 
-// // // // .form-group textarea{
+// // // //             font-size: 14px;
 
-// // // //     min-height:110px;
+// // // //         }
 
-// // // //     resize:vertical;
 
-// // // // }
+// // // //         /* =========================
+// // // //            INPUTS
+// // // //         ========================= */
 
+// // // //         input,
+// // // //         select,
+// // // //         textarea {
 
-// // // // /* =========================
-// // // //    SECTION
-// // // // ========================= */
+// // // //             width: 100%;
 
-// // // // .section{
+// // // //             padding: 12px 13px;
 
-// // // //     margin-top:28px;
+// // // //             border:
+// // // //                 1px solid #d1d5db;
 
-// // // //     padding-top:22px;
+// // // //             border-radius: 10px;
 
-// // // //     border-top:1px solid #e2e8f0;
+// // // //             background: #fff;
 
-// // // // }
+// // // //             color: #111827;
 
-// // // // .section-title{
+// // // //             font-size: 15px;
 
-// // // //     font-size:19px;
+// // // //             outline: none;
 
-// // // //     font-weight:800;
+// // // //             transition: .2s;
 
-// // // //     color:#1e3a8a;
+// // // //         }
 
-// // // //     margin-bottom:15px;
 
-// // // // }
+// // // //         input:focus,
+// // // //         select:focus,
+// // // //         textarea:focus {
 
+// // // //             border-color: #2563eb;
 
-// // // // /* =========================
-// // // //    COMPOSITION
-// // // // ========================= */
+// // // //             box-shadow:
+// // // //                 0 0 0 3px
+// // // //                 rgba(37, 99, 235, .10);
 
-// // // // .composition-row{
+// // // //         }
 
-// // // //     display:grid;
 
-// // // //     grid-template-columns:
-// // // //         1fr auto;
+// // // //         textarea {
 
-// // // //     gap:10px;
+// // // //             min-height: 120px;
 
-// // // //     margin-bottom:10px;
+// // // //             resize: vertical;
 
-// // // // }
+// // // //         }
 
-// // // // .composition-row input{
 
-// // // //     width:100%;
+// // // //         /* =========================
+// // // //            SECTION
+// // // //         ========================= */
 
-// // // //     padding:12px;
+// // // //         .section {
 
-// // // //     border:1px solid #cbd5e1;
+// // // //             margin-top: 30px;
 
-// // // //     border-radius:10px;
+// // // //             padding-top: 24px;
 
-// // // //     font-size:14px;
+// // // //             border-top:
+// // // //                 1px solid #e5e7eb;
 
-// // // //     outline:none;
+// // // //         }
 
-// // // // }
 
-// // // // .composition-row input:focus{
+// // // //         .section-title {
 
-// // // //     border-color:#2563eb;
+// // // //             display: flex;
 
-// // // // }
+// // // //             align-items: center;
 
-// // // // .remove-btn{
+// // // //             gap: 8px;
 
-// // // //     width:45px;
+// // // //             margin-bottom: 16px;
 
-// // // //     border:none;
+// // // //             color: #1e40af;
 
-// // // //     border-radius:9px;
+// // // //             font-size: 19px;
 
-// // // //     background:#dc2626;
+// // // //             font-weight: 700;
 
-// // // //     color:white;
+// // // //         }
 
-// // // //     font-size:22px;
 
-// // // //     cursor:pointer;
+// // // //         /* =========================
+// // // //            COMPOSITION
+// // // //         ========================= */
 
-// // // // }
+// // // //         .composition-row {
 
-// // // // .remove-btn:hover{
+// // // //             display: flex;
 
-// // // //     background:#b91c1c;
+// // // //             gap: 10px;
 
-// // // // }
+// // // //             margin-bottom: 10px;
 
-// // // // .add-btn{
+// // // //         }
 
-// // // //     border:none;
 
-// // // //     background:#2563eb;
+// // // //         .composition-row input {
 
-// // // //     color:white;
+// // // //             flex: 1;
 
-// // // //     padding:11px 17px;
+// // // //         }
 
-// // // //     border-radius:9px;
 
-// // // //     font-weight:700;
+// // // //         .remove-btn {
 
-// // // //     cursor:pointer;
+// // // //             width: 45px;
 
-// // // // }
+// // // //             min-width: 45px;
 
-// // // // .add-btn:hover{
+// // // //             padding: 0;
 
-// // // //     background:#1d4ed8;
+// // // //             margin: 0;
 
-// // // // }
+// // // //             border: none;
 
+// // // //             border-radius: 9px;
 
-// // // // /* =========================
-// // // //    EXISTING IMAGES
-// // // // ========================= */
+// // // //             background: #dc2626;
 
-// // // // .image-grid{
+// // // //             color: white;
 
-// // // //     display:grid;
+// // // //             font-size: 20px;
 
-// // // //     grid-template-columns:
-// // // //         repeat(4,1fr);
+// // // //             cursor: pointer;
 
-// // // //     gap:15px;
+// // // //         }
 
-// // // // }
 
-// // // // .image-card{
+// // // //         .remove-btn:hover {
 
-// // // //     border:1px solid #e2e8f0;
+// // // //             background: #b91c1c;
 
-// // // //     border-radius:12px;
+// // // //         }
 
-// // // //     overflow:hidden;
 
-// // // //     background:#f8fafc;
+// // // //         .add-btn {
 
-// // // // }
+// // // //             width: auto;
 
-// // // // .image-card img{
+// // // //             padding: 11px 18px;
 
-// // // //     width:100%;
+// // // //             margin-top: 5px;
 
-// // // //     height:160px;
+// // // //             border: none;
 
-// // // //     display:block;
+// // // //             border-radius: 9px;
 
-// // // //     object-fit:contain;
+// // // //             background: #16a34a;
 
-// // // //     background:#fff;
+// // // //             color: white;
 
-// // // // }
+// // // //             font-weight: 700;
 
-// // // // .image-number{
+// // // //             cursor: pointer;
 
-// // // //     padding:8px;
+// // // //         }
 
-// // // //     text-align:center;
 
-// // // //     font-size:13px;
+// // // //         .add-btn:hover {
 
-// // // //     font-weight:600;
+// // // //             background: #15803d;
 
-// // // //     color:#475569;
+// // // //         }
 
-// // // // }
 
-// // // // .no-image{
+// // // //         /* =========================
+// // // //            EXISTING IMAGES
+// // // //         ========================= */
 
-// // // //     padding:20px;
+// // // //         .image-grid {
 
-// // // //     background:#f8fafc;
+// // // //             display: grid;
 
-// // // //     border:1px dashed #cbd5e1;
+// // // //             grid-template-columns:
+// // // //                 repeat(4, 1fr);
 
-// // // //     border-radius:10px;
+// // // //             gap: 15px;
 
-// // // //     text-align:center;
+// // // //         }
 
-// // // //     color:#64748b;
 
-// // // // }
+// // // //         .image-card {
 
+// // // //             position: relative;
 
-// // // // /* =========================
-// // // //    FILE INPUT
-// // // // ========================= */
+// // // //             border:
+// // // //                 1px solid #e5e7eb;
 
-// // // // input[type="file"]{
+// // // //             border-radius: 12px;
 
-// // // //     padding:10px;
+// // // //             padding: 8px;
 
-// // // //     background:#f8fafc;
+// // // //             background: #f8fafc;
 
-// // // //     cursor:pointer;
+// // // //             transition: .2s;
 
-// // // // }
+// // // //         }
 
 
-// // // // /* =========================
-// // // //    UPDATE BUTTON
-// // // // ========================= */
+// // // //         .image-card:hover {
 
-// // // // .update-btn{
+// // // //             transform: translateY(-2px);
 
-// // // //     width:100%;
+// // // //             box-shadow:
+// // // //                 0 8px 20px
+// // // //                 rgba(0, 0, 0, .08);
 
-// // // //     margin-top:30px;
+// // // //         }
 
-// // // //     padding:15px;
 
-// // // //     border:none;
+// // // //         .image-card img {
 
-// // // //     border-radius:12px;
+// // // //             width: 100%;
 
-// // // //     background:
-// // // //         linear-gradient(
-// // // //             135deg,
-// // // //             #2563eb,
-// // // //             #1d4ed8
-// // // //         );
+// // // //             height: 140px;
 
-// // // //     color:white;
+// // // //             object-fit: cover;
 
-// // // //     font-size:17px;
+// // // //             border-radius: 8px;
 
-// // // //     font-weight:800;
+// // // //             display: block;
 
-// // // //     cursor:pointer;
+// // // //         }
 
-// // // //     box-shadow:
-// // // //         0 8px 20px
-// // // //         rgba(37,99,235,.20);
 
-// // // // }
+// // // //         .image-number {
 
-// // // // .update-btn:hover{
+// // // //             text-align: center;
 
-// // // //     transform:translateY(-1px);
+// // // //             margin-top: 6px;
 
-// // // // }
+// // // //             font-size: 12px;
 
+// // // //             color: #64748b;
 
-// // // // /* =========================
-// // // //    BACK BUTTON
-// // // // ========================= */
+// // // //         }
 
-// // // // .back{
 
-// // // //     display:block;
+// // // //         /* =========================
+// // // //            NO IMAGE
+// // // //         ========================= */
 
-// // // //     width:max-content;
+// // // //         .no-image {
 
-// // // //     margin:20px auto;
+// // // //             padding: 30px;
 
-// // // //     text-decoration:none;
+// // // //             text-align: center;
 
-// // // //     color:#2563eb;
+// // // //             background: #f8fafc;
 
-// // // //     font-weight:700;
+// // // //             border-radius: 10px;
 
-// // // // }
+// // // //             color: #64748b;
 
+// // // //             border:
+// // // //                 1px dashed #cbd5e1;
 
-// // // // /* =========================
-// // // //    MOBILE
-// // // // ========================= */
+// // // //         }
 
-// // // // @media(max-width:700px){
 
-// // // //     .edit-product-page{
+// // // //         /* =========================
+// // // //            FILE INPUT
+// // // //         ========================= */
 
-// // // //         padding:10px;
+// // // //         input[type="file"] {
 
-// // // //     }
+// // // //             padding: 10px;
 
-// // // //     .header{
+// // // //             background: #f8fafc;
 
-// // // //         padding:20px;
+// // // //             cursor: pointer;
 
-// // // //         border-radius:14px;
+// // // //         }
 
-// // // //     }
 
-// // // //     .header h2{
+// // // //         /* =========================
+// // // //            UPDATE BUTTON
+// // // //         ========================= */
 
-// // // //         font-size:21px;
+// // // //         .update-btn {
 
-// // // //     }
+// // // //             width: 100%;
 
-// // // //     .product-form{
+// // // //             padding: 15px;
 
-// // // //         padding:16px;
+// // // //             margin-top: 30px;
 
-// // // //         border-radius:14px;
+// // // //             border: none;
 
-// // // //     }
+// // // //             border-radius: 12px;
 
-// // // //     .form-grid{
+// // // //             background:
+// // // //                 linear-gradient(
+// // // //                     135deg,
+// // // //                     #2563eb,
+// // // //                     #1d4ed8
+// // // //                 );
 
-// // // //         grid-template-columns:1fr;
+// // // //             color: white;
 
-// // // //     }
+// // // //             font-size: 17px;
 
-// // // //     .form-group.full{
+// // // //             font-weight: 700;
 
-// // // //         grid-column:auto;
+// // // //             cursor: pointer;
 
-// // // //     }
+// // // //             transition: .2s;
 
-// // // //     .image-grid{
+// // // //         }
 
-// // // //         grid-template-columns:
-// // // //             repeat(2,1fr);
 
-// // // //     }
+// // // //         .update-btn:hover {
 
-// // // //     .image-card img{
+// // // //             transform: translateY(-1px);
 
-// // // //         height:130px;
+// // // //             box-shadow:
+// // // //                 0 8px 20px
+// // // //                 rgba(37, 99, 235, .25);
 
-// // // //     }
+// // // //         }
 
-// // // // }
 
+// // // //         .update-btn:active {
 
-// // // // /* =========================
-// // // //    SMALL MOBILE
-// // // // ========================= */
+// // // //             transform: scale(.99);
 
-// // // // @media(max-width:400px){
+// // // //         }
 
-// // // //     .image-grid{
 
-// // // //         grid-template-columns:1fr;
+// // // //         /* =========================
+// // // //            BACK BUTTON
+// // // //         ========================= */
 
-// // // //     }
+// // // //         .back {
 
-// // // //     .image-card img{
+// // // //             display: block;
 
-// // // //         height:180px;
+// // // //             text-align: center;
 
-// // // //     }
+// // // //             margin-top: 18px;
 
-// // // // }
+// // // //             padding: 12px;
 
-// // // // </style>
+// // // //             border-radius: 10px;
 
+// // // //             background: #f1f5f9;
 
-// // // // <div class="edit-product-page">
+// // // //             color: #1e40af;
 
+// // // //             text-decoration: none;
 
-// // // // <!-- =========================
-// // // //      HEADER
-// // // // ========================= -->
+// // // //             font-weight: 700;
 
-// // // // <div class="header">
+// // // //         }
 
-// // // //     <h2>✏️ Edit Pharma Product</h2>
 
-// // // //     <p>
-// // // //         Update product information and images
-// // // //     </p>
+// // // //         .back:hover {
 
-// // // // </div>
+// // // //             background: #e2e8f0;
 
+// // // //         }
 
-// // // // <!-- =========================
-// // // //      FORM
-// // // // ========================= -->
 
-// // // // <form
-// // // //     class="product-form"
-// // // //     action="/admin/edit-product/${escapeHTML(product._id)}"
-// // // //     method="POST"
-// // // //     enctype="multipart/form-data"
-// // // // >
+// // // //         /* =========================
+// // // //            REQUIRED STAR
+// // // //         ========================= */
 
+// // // //         .required {
 
-// // // // <!-- =========================
-// // // //      BASIC INFORMATION
-// // // // ========================= -->
+// // // //             color: #dc2626;
 
-// // // // <div class="form-grid">
+// // // //         }
 
 
-// // // //     <div class="form-group">
+// // // //         /* =========================
+// // // //            MOBILE
+// // // //         ========================= */
 
-// // // //         <label>
-// // // //             Product Name *
-// // // //         </label>
+// // // //         @media (max-width: 700px) {
 
-// // // //         <input
-// // // //             type="text"
-// // // //             name="name"
-// // // //             value="${escapeHTML(product.name)}"
-// // // //             required
-// // // //         >
+// // // //             body {
+
+// // // //                 padding: 10px;
+
+// // // //             }
+
+
+// // // //             .container {
+
+// // // //                 padding: 18px;
+
+// // // //                 border-radius: 16px;
+
+// // // //             }
+
+
+// // // //             .header {
+
+// // // //                 margin-bottom: 22px;
+
+// // // //             }
+
+
+// // // //             .header h2 {
+
+// // // //                 font-size: 22px;
+
+// // // //             }
+
+
+// // // //             .form-grid {
+
+// // // //                 grid-template-columns: 1fr;
+
+// // // //                 gap: 15px;
+
+// // // //             }
+
+
+// // // //             .form-group.full {
+
+// // // //                 grid-column: auto;
+
+// // // //             }
+
+
+// // // //             .image-grid {
+
+// // // //                 grid-template-columns:
+// // // //                     repeat(2, 1fr);
+
+// // // //             }
+
+
+// // // //             .image-card img {
+
+// // // //                 height: 120px;
+
+// // // //             }
+
+
+// // // //             .composition-row {
+
+// // // //                 gap: 7px;
+
+// // // //             }
+
+// // // //         }
+
+
+// // // //         /* =========================
+// // // //            SMALL MOBILE
+// // // //         ========================= */
+
+// // // //         @media (max-width: 400px) {
+
+// // // //             .container {
+
+// // // //                 padding: 14px;
+
+// // // //             }
+
+
+// // // //             input,
+// // // //             select,
+// // // //             textarea {
+
+// // // //                 font-size: 14px;
+
+// // // //                 padding: 11px;
+
+// // // //             }
+
+
+// // // //             .section-title {
+
+// // // //                 font-size: 17px;
+
+// // // //             }
+
+
+// // // //             .image-grid {
+
+// // // //                 grid-template-columns:
+// // // //                     1fr 1fr;
+
+// // // //                 gap: 8px;
+
+// // // //             }
+
+
+// // // //             .image-card img {
+
+// // // //                 height: 100px;
+
+// // // //             }
+
+
+// // // //             .composition-row {
+
+// // // //                 gap: 5px;
+
+// // // //             }
+
+
+// // // //             .remove-btn {
+
+// // // //                 width: 40px;
+
+// // // //                 min-width: 40px;
+
+// // // //             }
+
+// // // //         }
+
+// // // //     </style>
+
+// // // // </head>
+
+
+// // // // <body>
+
+
+// // // // <div class="container">
+
+
+// // // //     <!-- =========================
+// // // //          HEADER
+// // // //     ========================= -->
+
+// // // //     <div class="header">
+
+// // // //         <h2>
+// // // //             ✏️ Edit Pharma Product
+// // // //         </h2>
+
+// // // //         <p>
+// // // //             Update product information,
+// // // //             composition and images
+// // // //         </p>
 
 // // // //     </div>
 
 
-// // // //     <div class="form-group">
+// // // //     <!-- =========================
+// // // //          FORM
+// // // //     ========================= -->
 
-// // // //         <label>
-// // // //             Brand Name
-// // // //         </label>
+// // // //     <form
 
-// // // //         <input
-// // // //             type="text"
-// // // //             name="brand"
-// // // //             value="${escapeHTML(product.brand)}"
-// // // //         >
+// // // //         action="/admin/edit-product/${escapeHTML(product._id)}"
 
-// // // //     </div>
+// // // //         method="POST"
 
+// // // //         enctype="multipart/form-data"
 
-// // // //     <div class="form-group">
+// // // //         id="editProductForm"
 
-// // // //         <label>
-// // // //             Category
-// // // //         </label>
+// // // //     >
 
-// // // //         <select name="category">
 
-// // // //             <option value="">
-// // // //                 Select Category
-// // // //             </option>
+// // // //         <!-- =========================
+// // // //              BASIC INFORMATION
+// // // //         ========================= -->
 
-// // // //             <option
-// // // //                 value="Tablet"
-// // // //                 ${product.category === "Tablet" ? "selected" : ""}
-// // // //             >
-// // // //                 Tablet
-// // // //             </option>
+// // // //         <div class="form-grid">
 
-// // // //             <option
-// // // //                 value="Capsule"
-// // // //                 ${product.category === "Capsule" ? "selected" : ""}
-// // // //             >
-// // // //                 Capsule
-// // // //             </option>
 
-// // // //             <option
-// // // //                 value="Syrup"
-// // // //                 ${product.category === "Syrup" ? "selected" : ""}
-// // // //             >
-// // // //                 Syrup
-// // // //             </option>
+// // // //             <!-- Product Name -->
 
-// // // //             <option
-// // // //                 value="Drops"
-// // // //                 ${product.category === "Drops" ? "selected" : ""}
-// // // //             >
-// // // //                 Drops
-// // // //             </option>
+// // // //             <div class="form-group">
 
-// // // //             <option
-// // // //                 value="Injection"
-// // // //                 ${product.category === "Injection" ? "selected" : ""}
-// // // //             >
-// // // //                 Injection
-// // // //             </option>
-
-// // // //             <option
-// // // //                 value="Cream"
-// // // //                 ${product.category === "Cream" ? "selected" : ""}
-// // // //             >
-// // // //                 Cream
-// // // //             </option>
-
-// // // //             <option
-// // // //                 value="Other"
-// // // //                 ${product.category === "Other" ? "selected" : ""}
-// // // //             >
-// // // //                 Other
-// // // //             </option>
-
-// // // //         </select>
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             Manufacturer
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="text"
-// // // //             name="manufacturer"
-// // // //             value="${escapeHTML(product.manufacturer)}"
-// // // //         >
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             MRP ₹
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="number"
-// // // //             name="mrp"
-// // // //             value="${product.mrp ?? ""}"
-// // // //             min="0"
-// // // //             step="0.01"
-// // // //         >
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             Selling Price ₹ *
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="number"
-// // // //             name="price"
-// // // //             value="${product.price ?? ""}"
-// // // //             min="0"
-// // // //             step="0.01"
-// // // //             required
-// // // //         >
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             Stock Quantity
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="number"
-// // // //             name="stock"
-// // // //             value="${product.stock ?? 0}"
-// // // //             min="0"
-// // // //         >
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             Pack Size
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="text"
-// // // //             name="packSize"
-// // // //             value="${escapeHTML(product.packSize)}"
-// // // //             placeholder="e.g. 200 ml"
-// // // //         >
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             Batch Number
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="text"
-// // // //             name="batchNo"
-// // // //             value="${escapeHTML(product.batchNo)}"
-// // // //         >
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             Manufacturing Date
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="date"
-// // // //             name="mfgDate"
-// // // //             value="${formatDate(product.mfgDate)}"
-// // // //         >
-
-// // // //     </div>
-
-
-// // // //     <div class="form-group">
-
-// // // //         <label>
-// // // //             Expiry Date
-// // // //         </label>
-
-// // // //         <input
-// // // //             type="date"
-// // // //             name="expDate"
-// // // //             value="${formatDate(product.expDate)}"
-// // // //         >
-
-// // // //     </div>
-
-
-// // // // </div>
-
-
-// // // // <!-- =========================
-// // // //      COMPOSITION
-// // // // ========================= -->
-
-// // // // <div class="section">
-
-// // // //     <div class="section-title">
-// // // //         💊 Composition
-// // // //     </div>
-
-
-// // // //     <div id="compositionBox">
-
-// // // //         ${compositions.map((item, index) => `
-
-// // // //             <div class="composition-row">
+// // // //                 <label>
+// // // //                     Product Name
+// // // //                     <span class="required">*</span>
+// // // //                 </label>
 
 // // // //                 <input
 // // // //                     type="text"
-// // // //                     name="composition[]"
-// // // //                     value="${escapeHTML(item)}"
-// // // //                     placeholder="Composition ${index + 1}"
+// // // //                     name="name"
+// // // //                     value="${escapeHTML(product.name)}"
+// // // //                     placeholder="Enter product name"
+// // // //                     required
 // // // //                 >
-
-// // // //                 ${
-// // // //                     index > 0
-// // // //                     ? `
-// // // //                     <button
-// // // //                         type="button"
-// // // //                         class="remove-btn"
-// // // //                         onclick="removeComposition(this)"
-// // // //                     >
-// // // //                         ×
-// // // //                     </button>
-// // // //                     `
-// // // //                     : `
-// // // //                     <button
-// // // //                         type="button"
-// // // //                         class="remove-btn"
-// // // //                         onclick="removeComposition(this)"
-// // // //                         style="visibility:hidden"
-// // // //                     >
-// // // //                         ×
-// // // //                     </button>
-// // // //                     `
-// // // //                 }
 
 // // // //             </div>
 
-// // // //         `).join("")}
 
-// // // //     </div>
+// // // //             <!-- Brand -->
 
+// // // //             <div class="form-group">
 
-// // // //     <button
-// // // //         type="button"
-// // // //         class="add-btn"
-// // // //         onclick="addComposition()"
-// // // //     >
-// // // //         + Add Composition
-// // // //     </button>
+// // // //                 <label>
+// // // //                     Brand Name
+// // // //                 </label>
 
-// // // // </div>
+// // // //                 <input
+// // // //                     type="text"
+// // // //                     name="brand"
+// // // //                     value="${escapeHTML(product.brand)}"
+// // // //                     placeholder="Enter brand name"
+// // // //                 >
 
-
-// // // // <!-- =========================
-// // // //      PRODUCT DETAILS
-// // // // ========================= -->
-
-// // // // <div class="section">
-
-// // // //     <div class="section-title">
-// // // //         📋 Product Details
-// // // //     </div>
+// // // //             </div>
 
 
-// // // //     <div class="form-grid">
+// // // //             <!-- Category -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     Category
+// // // //                 </label>
+
+// // // //                 <select name="category">
+
+// // // //                     <option value="">
+// // // //                         Select Category
+// // // //                     </option>
+
+// // // //                     ${categories.map(category => `
+
+// // // //                         <option
+// // // //                             value="${escapeHTML(category)}"
+// // // //                             ${
+// // // //                                 product.category === category
+// // // //                                 ? "selected"
+// // // //                                 : ""
+// // // //                             }
+// // // //                         >
+// // // //                             ${escapeHTML(category)}
+// // // //                         </option>
+
+// // // //                     `).join("")}
+
+// // // //                 </select>
+
+// // // //             </div>
 
 
-// // // //         <div class="form-group full">
+// // // //             <!-- Manufacturer -->
 
-// // // //             <label>
-// // // //                 Uses
-// // // //             </label>
+// // // //             <div class="form-group">
 
-// // // //             <textarea
-// // // //                 name="uses"
-// // // //                 placeholder="Enter product uses"
-// // // //             >${escapeHTML(product.uses)}</textarea>
+// // // //                 <label>
+// // // //                     Manufacturer
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="text"
+// // // //                     name="manufacturer"
+// // // //                     value="${escapeHTML(product.manufacturer)}"
+// // // //                     placeholder="Manufacturer name"
+// // // //                 >
+
+// // // //             </div>
+
+
+// // // //             <!-- MRP -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     MRP ₹
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="number"
+// // // //                     name="mrp"
+// // // //                     value="${product.mrp ?? ""}"
+// // // //                     min="0"
+// // // //                     step="0.01"
+// // // //                     placeholder="0.00"
+// // // //                 >
+
+// // // //             </div>
+
+
+// // // //             <!-- Selling Price -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     Selling Price ₹
+// // // //                     <span class="required">*</span>
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="number"
+// // // //                     name="price"
+// // // //                     value="${product.price ?? ""}"
+// // // //                     min="0"
+// // // //                     step="0.01"
+// // // //                     placeholder="0.00"
+// // // //                     required
+// // // //                 >
+
+// // // //             </div>
+
+
+// // // //             <!-- Stock -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     Stock Quantity
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="number"
+// // // //                     name="stock"
+// // // //                     value="${product.stock ?? 0}"
+// // // //                     min="0"
+// // // //                     placeholder="0"
+// // // //                 >
+
+// // // //             </div>
+
+
+// // // //             <!-- Pack Size -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     Pack Size
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="text"
+// // // //                     name="packSize"
+// // // //                     value="${escapeHTML(product.packSize)}"
+// // // //                     placeholder="e.g. 200 ml"
+// // // //                 >
+
+// // // //             </div>
+
+
+// // // //             <!-- Batch -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     Batch Number
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="text"
+// // // //                     name="batchNo"
+// // // //                     value="${escapeHTML(product.batchNo)}"
+// // // //                     placeholder="Enter batch number"
+// // // //                 >
+
+// // // //             </div>
+
+
+// // // //             <!-- Manufacturing Date -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     Manufacturing Date
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="date"
+// // // //                     name="mfgDate"
+// // // //                     value="${formatDate(product.mfgDate)}"
+// // // //                 >
+
+// // // //             </div>
+
+
+// // // //             <!-- Expiry Date -->
+
+// // // //             <div class="form-group">
+
+// // // //                 <label>
+// // // //                     Expiry Date
+// // // //                 </label>
+
+// // // //                 <input
+// // // //                     type="date"
+// // // //                     name="expDate"
+// // // //                     value="${formatDate(product.expDate)}"
+// // // //                 >
+
+// // // //             </div>
+
 
 // // // //         </div>
 
 
-// // // //         <div class="form-group full">
+// // // //         <!-- =========================
+// // // //              COMPOSITION
+// // // //         ========================= -->
 
-// // // //             <label>
-// // // //                 Benefits
-// // // //             </label>
-
-// // // //             <textarea
-// // // //                 name="benefits"
-// // // //                 placeholder="Enter product benefits"
-// // // //             >${escapeHTML(product.benefits)}</textarea>
-
-// // // //         </div>
+// // // //         <div class="section">
 
 
-// // // //         <div class="form-group full">
-
-// // // //             <label>
-// // // //                 Dosage
-// // // //             </label>
-
-// // // //             <textarea
-// // // //                 name="dosage"
-// // // //                 placeholder="Enter dosage"
-// // // //             >${escapeHTML(product.dosage)}</textarea>
-
-// // // //         </div>
+// // // //             <div class="section-title">
+// // // //                 💊 Composition
+// // // //             </div>
 
 
-// // // //         <div class="form-group full">
+// // // //             <div id="compositionBox">
 
-// // // //             <label>
-// // // //                 Side Effects
-// // // //             </label>
+// // // //                 ${compositions.map((item, index) => `
 
-// // // //             <textarea
-// // // //                 name="sideEffects"
-// // // //                 placeholder="Enter side effects"
-// // // //             >${escapeHTML(product.sideEffects)}</textarea>
+// // // //                     <div class="composition-row">
 
-// // // //         </div>
-
-
-// // // //         <div class="form-group full">
-
-// // // //             <label>
-// // // //                 Storage Instructions
-// // // //             </label>
-
-// // // //             <textarea
-// // // //                 name="storage"
-// // // //                 placeholder="Enter storage instructions"
-// // // //             >${escapeHTML(product.storage)}</textarea>
-
-// // // //         </div>
-
-
-// // // //         <div class="form-group full">
-
-// // // //             <label>
-// // // //                 Full Description
-// // // //             </label>
-
-// // // //             <textarea
-// // // //                 name="description"
-// // // //                 placeholder="Enter full product description"
-// // // //             >${escapeHTML(product.description)}</textarea>
-
-// // // //         </div>
-
-
-// // // //     </div>
-
-// // // // </div>
-
-
-// // // // <!-- =========================
-// // // //      EXISTING IMAGES
-// // // // ========================= -->
-
-// // // // <div class="section">
-
-// // // //     <div class="section-title">
-// // // //         🖼 Existing Product Images
-// // // //     </div>
-
-
-// // // //     ${
-// // // //         images.length
-
-// // // //         ?
-
-// // // //         `<div class="image-grid">
-
-// // // //             ${images.map((img, index) => {
-
-// // // //                 const safeImg = cleanImageUrl(img);
-
-// // // //                 return `
-
-// // // //                     <div class="image-card">
-
-// // // //                         <img
-// // // //                             src="${escapeHTML(safeImg)}"
-// // // //                             alt="Product Image ${index + 1}"
-// // // //                             loading="lazy"
-// // // //                             onerror="this.style.display='none'"
+// // // //                         <input
+// // // //                             type="text"
+// // // //                             name="composition[]"
+// // // //                             value="${escapeHTML(item)}"
+// // // //                             placeholder="Composition ${index + 1}"
 // // // //                         >
 
-// // // //                         <div class="image-number">
-// // // //                             Image ${index + 1}
-// // // //                         </div>
+
+// // // //                         <button
+
+// // // //                             type="button"
+
+// // // //                             class="remove-btn"
+
+// // // //                             onclick="removeComposition(this)"
+
+// // // //                             ${
+// // // //                                 index === 0
+// // // //                                 ? 'style="visibility:hidden"'
+// // // //                                 : ''
+// // // //                             }
+
+// // // //                         >
+// // // //                             ×
+// // // //                         </button>
 
 // // // //                     </div>
 
-// // // //                 `;
+// // // //                 `).join("")}
 
-// // // //             }).join("")}
-
-// // // //         </div>`
-
-// // // //         :
-
-// // // //         `<div class="no-image">
-// // // //             No existing product image
-// // // //         </div>`
-// // // //     }
-
-// // // // </div>
+// // // //             </div>
 
 
-// // // // <!-- =========================
-// // // //      NEW IMAGES
-// // // // ========================= -->
+// // // //             <button
 
-// // // // <div class="section">
+// // // //                 type="button"
 
-// // // //     <div class="section-title">
-// // // //         📷 Add New Product Images
-// // // //     </div>
+// // // //                 class="add-btn"
+
+// // // //                 onclick="addComposition()"
+
+// // // //             >
+// // // //                 + Add Composition
+// // // //             </button>
 
 
-// // // //     <div class="form-group">
+// // // //         </div>
 
-// // // //         <label>
-// // // //             Select New Images
-// // // //         </label>
 
-// // // //         <input
-// // // //             type="file"
-// // // //             name="images"
-// // // //             accept="image/*"
-// // // //             multiple
+// // // //         <!-- =========================
+// // // //              PRODUCT DETAILS
+// // // //         ========================= -->
+
+// // // //         <div class="section">
+
+
+// // // //             <div class="section-title">
+// // // //                 📋 Product Details
+// // // //             </div>
+
+
+// // // //             <div class="form-grid">
+
+
+// // // //                 <!-- Uses -->
+
+// // // //                 <div class="form-group full">
+
+// // // //                     <label>
+// // // //                         Uses
+// // // //                     </label>
+
+// // // //                     <textarea
+// // // //                         name="uses"
+// // // //                         placeholder="Enter product uses"
+// // // //                     >${escapeHTML(product.uses)}</textarea>
+
+// // // //                 </div>
+
+
+// // // //                 <!-- Benefits -->
+
+// // // //                 <div class="form-group full">
+
+// // // //                     <label>
+// // // //                         Benefits
+// // // //                     </label>
+
+// // // //                     <textarea
+// // // //                         name="benefits"
+// // // //                         placeholder="Enter product benefits"
+// // // //                     >${escapeHTML(product.benefits)}</textarea>
+
+// // // //                 </div>
+
+
+// // // //                 <!-- Dosage -->
+
+// // // //                 <div class="form-group full">
+
+// // // //                     <label>
+// // // //                         Dosage
+// // // //                     </label>
+
+// // // //                     <textarea
+// // // //                         name="dosage"
+// // // //                         placeholder="Enter dosage"
+// // // //                     >${escapeHTML(product.dosage)}</textarea>
+
+// // // //                 </div>
+
+
+// // // //                 <!-- Side Effects -->
+
+// // // //                 <div class="form-group full">
+
+// // // //                     <label>
+// // // //                         Side Effects
+// // // //                     </label>
+
+// // // //                     <textarea
+// // // //                         name="sideEffects"
+// // // //                         placeholder="Enter side effects"
+// // // //                     >${escapeHTML(product.sideEffects)}</textarea>
+
+// // // //                 </div>
+
+
+// // // //                 <!-- Storage -->
+
+// // // //                 <div class="form-group full">
+
+// // // //                     <label>
+// // // //                         Storage Instructions
+// // // //                     </label>
+
+// // // //                     <textarea
+// // // //                         name="storage"
+// // // //                         placeholder="Enter storage instructions"
+// // // //                     >${escapeHTML(product.storage)}</textarea>
+
+// // // //                 </div>
+
+
+// // // //                 <!-- Description -->
+
+// // // //                 <div class="form-group full">
+
+// // // //                     <label>
+// // // //                         Full Description
+// // // //                     </label>
+
+// // // //                     <textarea
+// // // //                         name="description"
+// // // //                         placeholder="Enter full product description"
+// // // //                     >${escapeHTML(product.description)}</textarea>
+
+// // // //                 </div>
+
+
+// // // //             </div>
+
+// // // //         </div>
+
+
+// // // //         <!-- =========================
+// // // //              EXISTING IMAGES
+// // // //         ========================= -->
+
+// // // //         <div class="section">
+
+
+// // // //             <div class="section-title">
+// // // //                 🖼 Existing Product Images
+// // // //             </div>
+
+
+// // // //             ${
+// // // //                 images.length
+
+// // // //                 ?
+
+// // // //                 `
+// // // //                 <div class="image-grid">
+
+// // // //                     ${images.map((img, index) => {
+
+// // // //                         const safeImg =
+// // // //                             cleanImageUrl(img);
+
+// // // //                         return `
+
+// // // //                             <div class="image-card">
+
+// // // //                                 <img
+
+// // // //                                     src="${escapeHTML(safeImg)}"
+
+// // // //                                     alt="Product Image ${index + 1}"
+
+// // // //                                     loading="lazy"
+
+// // // //                                     onerror="
+// // // //                                         this.style.display='none';
+// // // //                                         this.nextElementSibling.innerHTML='Image unavailable';
+// // // //                                     "
+
+// // // //                                 >
+
+
+// // // //                                 <div class="image-number">
+
+// // // //                                     Image ${index + 1}
+
+// // // //                                 </div>
+
+// // // //                             </div>
+
+// // // //                         `;
+
+// // // //                     }).join("")}
+
+// // // //                 </div>
+// // // //                 `
+
+// // // //                 :
+
+// // // //                 `
+// // // //                 <div class="no-image">
+
+// // // //                     🖼️ No existing product image
+
+// // // //                 </div>
+// // // //                 `
+// // // //             }
+
+
+// // // //         </div>
+
+
+// // // //         <!-- =========================
+// // // //              NEW IMAGES
+// // // //         ========================= -->
+
+// // // //         <div class="section">
+
+
+// // // //             <div class="section-title">
+// // // //                 📷 Add New Product Images
+// // // //             </div>
+
+
+// // // //             <div class="form-group">
+
+
+// // // //                 <label>
+// // // //                     Select New Images
+// // // //                 </label>
+
+
+// // // //                 <input
+
+// // // //                     type="file"
+
+// // // //                     name="images"
+
+// // // //                     accept="image/*"
+
+// // // //                     multiple
+
+// // // //                     id="imageInput"
+
+// // // //                 >
+
+
+// // // //             </div>
+
+
+// // // //             <p
+// // // //                 style="
+// // // //                     margin-top:8px;
+// // // //                     color:#64748b;
+// // // //                     font-size:13px;
+// // // //                 "
+// // // //             >
+// // // //                 You can select multiple new images.
+// // // //             </p>
+
+
+// // // //         </div>
+
+
+// // // //         <!-- =========================
+// // // //              UPDATE BUTTON
+// // // //         ========================= -->
+
+// // // //         <button
+
+// // // //             type="submit"
+
+// // // //             class="update-btn"
+
+// // // //             id="updateBtn"
+
 // // // //         >
 
-// // // //     </div>
+// // // //             💾 Update Product
+
+// // // //         </button>
 
 
-// // // //     <p
-// // // //         style="
-// // // //             margin-top:8px;
-// // // //             color:#64748b;
-// // // //             font-size:13px;
-// // // //         "
+// // // //     </form>
+
+
+// // // //     <!-- =========================
+// // // //          BACK
+// // // //     ========================= -->
+
+// // // //     <a
+
+// // // //         href="/admin/manage-products"
+
+// // // //         class="back"
+
 // // // //     >
-// // // //         You can select multiple new images.
-// // // //     </p>
 
-// // // // </div>
+// // // //         ⬅ Back to Manage Products
 
-
-// // // // <!-- =========================
-// // // //      UPDATE
-// // // // ========================= -->
-
-// // // // <button
-// // // //     type="submit"
-// // // //     class="update-btn"
-// // // // >
-// // // //     💾 Update Product
-// // // // </button>
-
-
-// // // // </form>
-
-
-// // // // <!-- =========================
-// // // //      BACK
-// // // // ========================= -->
-
-// // // // <a
-// // // //     href="/admin/manage-products"
-// // // //     class="back"
-// // // // >
-// // // //     ⬅ Back to Manage Products
-// // // // </a>
+// // // //     </a>
 
 
 // // // // </div>
@@ -2719,38 +4300,60 @@
 
 // // // // <script>
 
-// // // // function addComposition(){
+
+// // // // // =========================
+// // // // // ADD COMPOSITION
+// // // // // =========================
+
+// // // // function addComposition() {
 
 // // // //     const box =
-// // // //         document.getElementById("compositionBox");
+// // // //         document.getElementById(
+// // // //             "compositionBox"
+// // // //         );
 
-// // // //     if(!box) return;
+
+// // // //     if (!box) {
+// // // //         return;
+// // // //     }
 
 
 // // // //     const row =
 // // // //         document.createElement("div");
 
+
 // // // //     row.className =
 // // // //         "composition-row";
 
 
-// // // //     row.innerHTML = \`
+// // // //     row.innerHTML = `
 
 // // // //         <input
+
 // // // //             type="text"
+
 // // // //             name="composition[]"
+
 // // // //             placeholder="Composition"
+
 // // // //         >
+
 
 // // // //         <button
+
 // // // //             type="button"
+
 // // // //             class="remove-btn"
+
 // // // //             onclick="removeComposition(this)"
+
 // // // //         >
+
 // // // //             ×
+
 // // // //         </button>
 
-// // // //     \`;
+// // // //     `;
 
 
 // // // //     box.appendChild(row);
@@ -2758,36 +4361,208 @@
 // // // // }
 
 
-// // // // function removeComposition(button){
+// // // // // =========================
+// // // // // REMOVE COMPOSITION
+// // // // // =========================
 
-// // // //     if(!button) return;
+// // // // function removeComposition(button) {
+
+// // // //     if (!button) {
+// // // //         return;
+// // // //     }
 
 
-// // // //     const box =
-// // // //         document.getElementById("compositionBox");
-
-// // // //     const rows =
-// // // //         box.querySelectorAll(".composition-row");
+// // // //     const row =
+// // // //         button.parentElement;
 
 
-// // // //     if(rows.length > 1){
+// // // //     if (row) {
 
-// // // //         button
-// // // //             .parentElement
-// // // //             .remove();
+// // // //         row.remove();
 
 // // // //     }
 
+
+// // // //     updateCompositionButtons();
+
 // // // // }
+
+
+// // // // // =========================
+// // // // // UPDATE COMPOSITION BUTTONS
+// // // // // =========================
+
+// // // // function updateCompositionButtons() {
+
+// // // //     const rows =
+// // // //         document.querySelectorAll(
+// // // //             "#compositionBox .composition-row"
+// // // //         );
+
+
+// // // //     rows.forEach((row, index) => {
+
+// // // //         const button =
+// // // //             row.querySelector(
+// // // //                 ".remove-btn"
+// // // //             );
+
+
+// // // //         if (!button) {
+// // // //             return;
+// // // //         }
+
+
+// // // //         if (index === 0) {
+
+// // // //             button.style.visibility =
+// // // //                 "hidden";
+
+// // // //         } else {
+
+// // // //             button.style.visibility =
+// // // //                 "visible";
+
+// // // //         }
+
+// // // //     });
+
+// // // // }
+
+
+// // // // // =========================
+// // // // // IMAGE VALIDATION
+// // // // // =========================
+
+// // // // const imageInput =
+// // // //     document.getElementById(
+// // // //         "imageInput"
+// // // //     );
+
+
+// // // // if (imageInput) {
+
+// // // //     imageInput.addEventListener(
+// // // //         "change",
+// // // //         function () {
+
+// // // //             const files =
+// // // //                 Array.from(this.files || []);
+
+
+// // // //             const maxSize =
+// // // //                 10 * 1024 * 1024;
+
+
+// // // //             for (const file of files) {
+
+
+// // // //                 // File type
+
+// // // //                 if (
+// // // //                     !file.type.startsWith(
+// // // //                         "image/"
+// // // //                     )
+// // // //                 ) {
+
+// // // //                     alert(
+// // // //                         "Please select only image files."
+// // // //                     );
+
+// // // //                     this.value = "";
+
+// // // //                     return;
+
+// // // //                 }
+
+
+// // // //                 // File size
+
+// // // //                 if (
+// // // //                     file.size > maxSize
+// // // //                 ) {
+
+// // // //                     alert(
+// // // //                         "Each image must be less than 10MB."
+// // // //                     );
+
+// // // //                     this.value = "";
+
+// // // //                     return;
+
+// // // //                 }
+
+// // // //             }
+
+// // // //         }
+// // // //     );
+
+// // // // }
+
+
+// // // // // =========================
+// // // // // FORM SUBMIT
+// // // // // =========================
+
+// // // // const editForm =
+// // // //     document.getElementById(
+// // // //         "editProductForm"
+// // // //     );
+
+
+// // // // const updateBtn =
+// // // //     document.getElementById(
+// // // //         "updateBtn"
+// // // //     );
+
+
+// // // // if (editForm) {
+
+// // // //     editForm.addEventListener(
+// // // //         "submit",
+// // // //         function () {
+
+// // // //             if (updateBtn) {
+
+// // // //                 updateBtn.disabled =
+// // // //                     true;
+
+// // // //                 updateBtn.innerHTML =
+// // // //                     "⏳ Updating Product...";
+
+// // // //                 updateBtn.style.opacity =
+// // // //                     "0.7";
+
+// // // //                 updateBtn.style.cursor =
+// // // //                     "not-allowed";
+
+// // // //             }
+
+// // // //         }
+// // // //     );
+
+// // // // }
+
+
+// // // // // =========================
+// // // // // INITIALIZE
+// // // // // =========================
+
+// // // // updateCompositionButtons();
+
 
 // // // // </script>
 
-// // // // `;
+
+// // // // </body>
+
+// // // // </html>
+
+// // // //     `;
 // // // // }
 
 
 // // // // module.exports = EditProduct;
-
 
 // // // function EditProduct(product) {
 
@@ -2850,7 +4625,6 @@
 // // //             .filter(item => item !== null && item !== undefined)
 // // //             .map(item => {
 
-// // //                 // अगर composition object है
 // // //                 if (typeof item === "object") {
 
 // // //                     if (item.name && item.strength) {
@@ -2875,7 +4649,9 @@
 
 
 // // //     if (!compositions.length) {
+
 // // //         compositions = [""];
+
 // // //     }
 
 
@@ -2892,7 +4668,7 @@
 // // //     }
 
 
-// // //     // पुराने database में image field
+// // //     // Old database image field
 // // //     if (
 // // //         product.image &&
 // // //         !images.includes(product.image)
@@ -2903,7 +4679,7 @@
 // // //     }
 
 
-// // //     // Duplicate remove
+// // //     // Remove duplicate images
 // // //     images = [...new Set(images)];
 
 
@@ -2944,37 +4720,14 @@
 
 // // //         }
 
-
-// // //         // अगर URL के आगे/पीछे quotes हैं
-// // //         clean = clean.replace(/^["']|["']$/g, "");
-
 // // //         return clean;
+
 // // //     };
 
 
 // // //     images = images
 // // //         .map(cleanImageUrl)
 // // //         .filter(Boolean);
-
-
-// // //     // =========================
-// // //     // CATEGORY
-// // //     // =========================
-
-// // //     const categories = [
-// // //         "Tablet",
-// // //         "Capsule",
-// // //         "Syrup",
-// // //         "Drops",
-// // //         "Injection",
-// // //         "Cream",
-// // //         "Ointment",
-// // //         "Gel",
-// // //         "Powder",
-// // //         "Suspension",
-// // //         "Solution",
-// // //         "Other"
-// // //     ];
 
 
 // // //     // =========================
@@ -3009,10 +4762,7 @@
 // // //             margin: 0;
 // // //             padding: 0;
 // // //             box-sizing: border-box;
-// // //             font-family:
-// // //                 "Segoe UI",
-// // //                 Arial,
-// // //                 sans-serif;
+// // //             font-family: "Segoe UI", Arial, sans-serif;
 // // //         }
 
 
@@ -3037,7 +4787,7 @@
 
 
 // // //         /* =========================
-// // //            MAIN CONTAINER
+// // //            CONTAINER
 // // //         ========================= */
 
 // // //         .container {
@@ -3070,11 +4820,6 @@
 // // //             text-align: center;
 
 // // //             margin-bottom: 30px;
-
-// // //             padding-bottom: 20px;
-
-// // //             border-bottom:
-// // //                 1px solid #e5e7eb;
 
 // // //         }
 
@@ -3149,7 +4894,7 @@
 
 
 // // //         /* =========================
-// // //            INPUTS
+// // //            INPUT
 // // //         ========================= */
 
 // // //         input,
@@ -3160,12 +4905,11 @@
 
 // // //             padding: 12px 13px;
 
-// // //             border:
-// // //                 1px solid #d1d5db;
+// // //             border: 1px solid #d1d5db;
 
 // // //             border-radius: 10px;
 
-// // //             background: #fff;
+// // //             background: #ffffff;
 
 // // //             color: #111827;
 
@@ -3208,7 +4952,7 @@
 
 // // //             margin-top: 30px;
 
-// // //             padding-top: 24px;
+// // //             padding-top: 23px;
 
 // // //             border-top:
 // // //                 1px solid #e5e7eb;
@@ -3247,6 +4991,8 @@
 
 // // //             margin-bottom: 10px;
 
+// // //             align-items: center;
+
 // // //         }
 
 
@@ -3263,9 +5009,9 @@
 
 // // //             min-width: 45px;
 
-// // //             padding: 0;
+// // //             height: 45px;
 
-// // //             margin: 0;
+// // //             padding: 0;
 
 // // //             border: none;
 
@@ -3273,9 +5019,11 @@
 
 // // //             background: #dc2626;
 
-// // //             color: white;
+// // //             color: #ffffff;
 
 // // //             font-size: 20px;
+
+// // //             font-weight: 700;
 
 // // //             cursor: pointer;
 
@@ -3303,7 +5051,7 @@
 
 // // //             background: #16a34a;
 
-// // //             color: white;
+// // //             color: #ffffff;
 
 // // //             font-weight: 700;
 
@@ -3320,7 +5068,7 @@
 
 
 // // //         /* =========================
-// // //            EXISTING IMAGES
+// // //            IMAGE GRID
 // // //         ========================= */
 
 // // //         .image-grid {
@@ -3348,19 +5096,6 @@
 
 // // //             background: #f8fafc;
 
-// // //             transition: .2s;
-
-// // //         }
-
-
-// // //         .image-card:hover {
-
-// // //             transform: translateY(-2px);
-
-// // //             box-shadow:
-// // //                 0 8px 20px
-// // //                 rgba(0, 0, 0, .08);
-
 // // //         }
 
 
@@ -3383,7 +5118,7 @@
 
 // // //             text-align: center;
 
-// // //             margin-top: 6px;
+// // //             margin-top: 7px;
 
 // // //             font-size: 12px;
 
@@ -3407,9 +5142,6 @@
 // // //             border-radius: 10px;
 
 // // //             color: #64748b;
-
-// // //             border:
-// // //                 1px dashed #cbd5e1;
 
 // // //         }
 
@@ -3452,7 +5184,7 @@
 // // //                     #1d4ed8
 // // //                 );
 
-// // //             color: white;
+// // //             color: #ffffff;
 
 // // //             font-size: 17px;
 
@@ -3472,13 +5204,6 @@
 // // //             box-shadow:
 // // //                 0 8px 20px
 // // //                 rgba(37, 99, 235, .25);
-
-// // //         }
-
-
-// // //         .update-btn:active {
-
-// // //             transform: scale(.99);
 
 // // //         }
 
@@ -3518,17 +5243,6 @@
 
 
 // // //         /* =========================
-// // //            REQUIRED STAR
-// // //         ========================= */
-
-// // //         .required {
-
-// // //             color: #dc2626;
-
-// // //         }
-
-
-// // //         /* =========================
 // // //            MOBILE
 // // //         ========================= */
 
@@ -3546,13 +5260,6 @@
 // // //                 padding: 18px;
 
 // // //                 border-radius: 16px;
-
-// // //             }
-
-
-// // //             .header {
-
-// // //                 margin-bottom: 22px;
 
 // // //             }
 
@@ -3628,17 +5335,10 @@
 // // //             }
 
 
-// // //             .section-title {
-
-// // //                 font-size: 17px;
-
-// // //             }
-
-
 // // //             .image-grid {
 
 // // //                 grid-template-columns:
-// // //                     1fr 1fr;
+// // //                     repeat(2, 1fr);
 
 // // //                 gap: 8px;
 
@@ -3652,18 +5352,13 @@
 // // //             }
 
 
-// // //             .composition-row {
-
-// // //                 gap: 5px;
-
-// // //             }
-
-
 // // //             .remove-btn {
 
 // // //                 width: 40px;
 
 // // //                 min-width: 40px;
+
+// // //                 height: 40px;
 
 // // //             }
 
@@ -3691,8 +5386,7 @@
 // // //         </h2>
 
 // // //         <p>
-// // //             Update product information,
-// // //             composition and images
+// // //             Update product information and images
 // // //         </p>
 
 // // //     </div>
@@ -3709,9 +5403,6 @@
 // // //         method="POST"
 
 // // //         enctype="multipart/form-data"
-
-// // //         id="editProductForm"
-
 // // //     >
 
 
@@ -3722,27 +5413,25 @@
 // // //         <div class="form-grid">
 
 
-// // //             <!-- Product Name -->
+// // //             <!-- PRODUCT NAME -->
 
 // // //             <div class="form-group">
 
 // // //                 <label>
-// // //                     Product Name
-// // //                     <span class="required">*</span>
+// // //                     Product Name *
 // // //                 </label>
 
 // // //                 <input
 // // //                     type="text"
 // // //                     name="name"
 // // //                     value="${escapeHTML(product.name)}"
-// // //                     placeholder="Enter product name"
 // // //                     required
 // // //                 >
 
 // // //             </div>
 
 
-// // //             <!-- Brand -->
+// // //             <!-- BRAND -->
 
 // // //             <div class="form-group">
 
@@ -3754,13 +5443,12 @@
 // // //                     type="text"
 // // //                     name="brand"
 // // //                     value="${escapeHTML(product.brand)}"
-// // //                     placeholder="Enter brand name"
 // // //                 >
 
 // // //             </div>
 
 
-// // //             <!-- Category -->
+// // //             <!-- CATEGORY -->
 
 // // //             <div class="form-group">
 
@@ -3774,27 +5462,61 @@
 // // //                         Select Category
 // // //                     </option>
 
-// // //                     ${categories.map(category => `
+// // //                     <option
+// // //                         value="Tablet"
+// // //                         ${product.category === "Tablet" ? "selected" : ""}
+// // //                     >
+// // //                         Tablet
+// // //                     </option>
 
-// // //                         <option
-// // //                             value="${escapeHTML(category)}"
-// // //                             ${
-// // //                                 product.category === category
-// // //                                 ? "selected"
-// // //                                 : ""
-// // //                             }
-// // //                         >
-// // //                             ${escapeHTML(category)}
-// // //                         </option>
+// // //                     <option
+// // //                         value="Capsule"
+// // //                         ${product.category === "Capsule" ? "selected" : ""}
+// // //                     >
+// // //                         Capsule
+// // //                     </option>
 
-// // //                     `).join("")}
+// // //                     <option
+// // //                         value="Syrup"
+// // //                         ${product.category === "Syrup" ? "selected" : ""}
+// // //                     >
+// // //                         Syrup
+// // //                     </option>
+
+// // //                     <option
+// // //                         value="Drops"
+// // //                         ${product.category === "Drops" ? "selected" : ""}
+// // //                     >
+// // //                         Drops
+// // //                     </option>
+
+// // //                     <option
+// // //                         value="Injection"
+// // //                         ${product.category === "Injection" ? "selected" : ""}
+// // //                     >
+// // //                         Injection
+// // //                     </option>
+
+// // //                     <option
+// // //                         value="Cream"
+// // //                         ${product.category === "Cream" ? "selected" : ""}
+// // //                     >
+// // //                         Cream
+// // //                     </option>
+
+// // //                     <option
+// // //                         value="Other"
+// // //                         ${product.category === "Other" ? "selected" : ""}
+// // //                     >
+// // //                         Other
+// // //                     </option>
 
 // // //                 </select>
 
 // // //             </div>
 
 
-// // //             <!-- Manufacturer -->
+// // //             <!-- MANUFACTURER -->
 
 // // //             <div class="form-group">
 
@@ -3806,7 +5528,6 @@
 // // //                     type="text"
 // // //                     name="manufacturer"
 // // //                     value="${escapeHTML(product.manufacturer)}"
-// // //                     placeholder="Manufacturer name"
 // // //                 >
 
 // // //             </div>
@@ -3826,19 +5547,17 @@
 // // //                     value="${product.mrp ?? ""}"
 // // //                     min="0"
 // // //                     step="0.01"
-// // //                     placeholder="0.00"
 // // //                 >
 
 // // //             </div>
 
 
-// // //             <!-- Selling Price -->
+// // //             <!-- PRICE -->
 
 // // //             <div class="form-group">
 
 // // //                 <label>
-// // //                     Selling Price ₹
-// // //                     <span class="required">*</span>
+// // //                     Selling Price ₹ *
 // // //                 </label>
 
 // // //                 <input
@@ -3847,14 +5566,13 @@
 // // //                     value="${product.price ?? ""}"
 // // //                     min="0"
 // // //                     step="0.01"
-// // //                     placeholder="0.00"
 // // //                     required
 // // //                 >
 
 // // //             </div>
 
 
-// // //             <!-- Stock -->
+// // //             <!-- STOCK -->
 
 // // //             <div class="form-group">
 
@@ -3867,13 +5585,12 @@
 // // //                     name="stock"
 // // //                     value="${product.stock ?? 0}"
 // // //                     min="0"
-// // //                     placeholder="0"
 // // //                 >
 
 // // //             </div>
 
 
-// // //             <!-- Pack Size -->
+// // //             <!-- PACK SIZE -->
 
 // // //             <div class="form-group">
 
@@ -3891,7 +5608,7 @@
 // // //             </div>
 
 
-// // //             <!-- Batch -->
+// // //             <!-- BATCH -->
 
 // // //             <div class="form-group">
 
@@ -3903,13 +5620,12 @@
 // // //                     type="text"
 // // //                     name="batchNo"
 // // //                     value="${escapeHTML(product.batchNo)}"
-// // //                     placeholder="Enter batch number"
 // // //                 >
 
 // // //             </div>
 
 
-// // //             <!-- Manufacturing Date -->
+// // //             <!-- MFG DATE -->
 
 // // //             <div class="form-group">
 
@@ -3926,7 +5642,7 @@
 // // //             </div>
 
 
-// // //             <!-- Expiry Date -->
+// // //             <!-- EXPIRY DATE -->
 
 // // //             <div class="form-group">
 
@@ -3954,7 +5670,9 @@
 
 
 // // //             <div class="section-title">
+
 // // //                 💊 Composition
+
 // // //             </div>
 
 
@@ -3971,24 +5689,33 @@
 // // //                             placeholder="Composition ${index + 1}"
 // // //                         >
 
+// // //                         ${
+// // //                             index > 0
+// // //                             ?
 
-// // //                         <button
+// // //                             `
+// // //                             <button
+// // //                                 type="button"
+// // //                                 class="remove-btn"
+// // //                                 onclick="removeComposition(this)"
+// // //                             >
+// // //                                 ×
+// // //                             </button>
+// // //                             `
 
-// // //                             type="button"
+// // //                             :
 
-// // //                             class="remove-btn"
-
-// // //                             onclick="removeComposition(this)"
-
-// // //                             ${
-// // //                                 index === 0
-// // //                                 ? 'style="visibility:hidden"'
-// // //                                 : ''
-// // //                             }
-
-// // //                         >
-// // //                             ×
-// // //                         </button>
+// // //                             `
+// // //                             <button
+// // //                                 type="button"
+// // //                                 class="remove-btn"
+// // //                                 onclick="removeComposition(this)"
+// // //                                 style="visibility:hidden"
+// // //                             >
+// // //                                 ×
+// // //                             </button>
+// // //                             `
+// // //                         }
 
 // // //                     </div>
 
@@ -3998,13 +5725,9 @@
 
 
 // // //             <button
-
 // // //                 type="button"
-
 // // //                 class="add-btn"
-
 // // //                 onclick="addComposition()"
-
 // // //             >
 // // //                 + Add Composition
 // // //             </button>
@@ -4021,14 +5744,16 @@
 
 
 // // //             <div class="section-title">
+
 // // //                 📋 Product Details
+
 // // //             </div>
 
 
 // // //             <div class="form-grid">
 
 
-// // //                 <!-- Uses -->
+// // //                 <!-- USES -->
 
 // // //                 <div class="form-group full">
 
@@ -4044,7 +5769,7 @@
 // // //                 </div>
 
 
-// // //                 <!-- Benefits -->
+// // //                 <!-- BENEFITS -->
 
 // // //                 <div class="form-group full">
 
@@ -4060,7 +5785,7 @@
 // // //                 </div>
 
 
-// // //                 <!-- Dosage -->
+// // //                 <!-- DOSAGE -->
 
 // // //                 <div class="form-group full">
 
@@ -4076,7 +5801,7 @@
 // // //                 </div>
 
 
-// // //                 <!-- Side Effects -->
+// // //                 <!-- SIDE EFFECTS -->
 
 // // //                 <div class="form-group full">
 
@@ -4092,7 +5817,7 @@
 // // //                 </div>
 
 
-// // //                 <!-- Storage -->
+// // //                 <!-- STORAGE -->
 
 // // //                 <div class="form-group full">
 
@@ -4108,7 +5833,7 @@
 // // //                 </div>
 
 
-// // //                 <!-- Description -->
+// // //                 <!-- DESCRIPTION -->
 
 // // //                 <div class="form-group full">
 
@@ -4126,6 +5851,7 @@
 
 // // //             </div>
 
+
 // // //         </div>
 
 
@@ -4137,7 +5863,9 @@
 
 
 // // //             <div class="section-title">
+
 // // //                 🖼 Existing Product Images
+
 // // //             </div>
 
 
@@ -4159,20 +5887,11 @@
 // // //                             <div class="image-card">
 
 // // //                                 <img
-
 // // //                                     src="${escapeHTML(safeImg)}"
-
 // // //                                     alt="Product Image ${index + 1}"
-
 // // //                                     loading="lazy"
-
-// // //                                     onerror="
-// // //                                         this.style.display='none';
-// // //                                         this.nextElementSibling.innerHTML='Image unavailable';
-// // //                                     "
-
+// // //                                     onerror="this.style.display='none'"
 // // //                                 >
-
 
 // // //                                 <div class="image-number">
 
@@ -4194,7 +5913,7 @@
 // // //                 `
 // // //                 <div class="no-image">
 
-// // //                     🖼️ No existing product image
+// // //                     No existing product image
 
 // // //                 </div>
 // // //                 `
@@ -4212,32 +5931,24 @@
 
 
 // // //             <div class="section-title">
+
 // // //                 📷 Add New Product Images
+
 // // //             </div>
 
 
 // // //             <div class="form-group">
 
-
 // // //                 <label>
 // // //                     Select New Images
 // // //                 </label>
 
-
 // // //                 <input
-
 // // //                     type="file"
-
 // // //                     name="images"
-
 // // //                     accept="image/*"
-
 // // //                     multiple
-
-// // //                     id="imageInput"
-
 // // //                 >
-
 
 // // //             </div>
 
@@ -4257,17 +5968,12 @@
 
 
 // // //         <!-- =========================
-// // //              UPDATE BUTTON
+// // //              UPDATE
 // // //         ========================= -->
 
 // // //         <button
-
 // // //             type="submit"
-
 // // //             class="update-btn"
-
-// // //             id="updateBtn"
-
 // // //         >
 
 // // //             💾 Update Product
@@ -4283,11 +5989,8 @@
 // // //     ========================= -->
 
 // // //     <a
-
 // // //         href="/admin/manage-products"
-
 // // //         class="back"
-
 // // //     >
 
 // // //         ⬅ Back to Manage Products
@@ -4300,256 +6003,125 @@
 
 // // // <script>
 
+// // //     // =========================
+// // //     // ADD COMPOSITION
+// // //     // =========================
 
-// // // // =========================
-// // // // ADD COMPOSITION
-// // // // =========================
+// // //     function addComposition() {
 
-// // // function addComposition() {
-
-// // //     const box =
-// // //         document.getElementById(
-// // //             "compositionBox"
-// // //         );
-
-
-// // //     if (!box) {
-// // //         return;
-// // //     }
-
-
-// // //     const row =
-// // //         document.createElement("div");
-
-
-// // //     row.className =
-// // //         "composition-row";
-
-
-// // //     row.innerHTML = `
-
-// // //         <input
-
-// // //             type="text"
-
-// // //             name="composition[]"
-
-// // //             placeholder="Composition"
-
-// // //         >
-
-
-// // //         <button
-
-// // //             type="button"
-
-// // //             class="remove-btn"
-
-// // //             onclick="removeComposition(this)"
-
-// // //         >
-
-// // //             ×
-
-// // //         </button>
-
-// // //     `;
-
-
-// // //     box.appendChild(row);
-
-// // // }
-
-
-// // // // =========================
-// // // // REMOVE COMPOSITION
-// // // // =========================
-
-// // // function removeComposition(button) {
-
-// // //     if (!button) {
-// // //         return;
-// // //     }
-
-
-// // //     const row =
-// // //         button.parentElement;
-
-
-// // //     if (row) {
-
-// // //         row.remove();
-
-// // //     }
-
-
-// // //     updateCompositionButtons();
-
-// // // }
-
-
-// // // // =========================
-// // // // UPDATE COMPOSITION BUTTONS
-// // // // =========================
-
-// // // function updateCompositionButtons() {
-
-// // //     const rows =
-// // //         document.querySelectorAll(
-// // //             "#compositionBox .composition-row"
-// // //         );
-
-
-// // //     rows.forEach((row, index) => {
-
-// // //         const button =
-// // //             row.querySelector(
-// // //                 ".remove-btn"
+// // //         const box =
+// // //             document.getElementById(
+// // //                 "compositionBox"
 // // //             );
 
 
-// // //         if (!button) {
-// // //             return;
+// // //         const row =
+// // //             document.createElement("div");
+
+
+// // //         row.className =
+// // //             "composition-row";
+
+
+// // //         row.innerHTML = \`
+
+// // //             <input
+// // //                 type="text"
+// // //                 name="composition[]"
+// // //                 placeholder="Composition"
+// // //             >
+
+// // //             <button
+// // //                 type="button"
+// // //                 class="remove-btn"
+// // //                 onclick="removeComposition(this)"
+// // //             >
+// // //                 ×
+// // //             </button>
+
+// // //         \`;
+
+
+// // //         box.appendChild(row);
+
+// // //     }
+
+
+// // //     // =========================
+// // //     // REMOVE COMPOSITION
+// // //     // =========================
+
+// // //     function removeComposition(button) {
+
+// // //         const row =
+// // //             button.parentElement;
+
+
+// // //         const box =
+// // //             document.getElementById(
+// // //                 "compositionBox"
+// // //             );
+
+
+// // //         if (
+// // //             box &&
+// // //             box.children.length > 1
+// // //         ) {
+
+// // //             row.remove();
+
 // // //         }
 
-
-// // //         if (index === 0) {
-
-// // //             button.style.visibility =
-// // //                 "hidden";
-
-// // //         } else {
-
-// // //             button.style.visibility =
-// // //                 "visible";
-
-// // //         }
-
-// // //     });
-
-// // // }
+// // //     }
 
 
-// // // // =========================
-// // // // IMAGE VALIDATION
-// // // // =========================
+// // //     // =========================
+// // //     // IMAGE VALIDATION
+// // //     // =========================
 
-// // // const imageInput =
-// // //     document.getElementById(
-// // //         "imageInput"
-// // //     );
-
-
-// // // if (imageInput) {
-
-// // //     imageInput.addEventListener(
-// // //         "change",
-// // //         function () {
-
-// // //             const files =
-// // //                 Array.from(this.files || []);
+// // //     const imageInput =
+// // //         document.querySelector(
+// // //             'input[name="images"]'
+// // //         );
 
 
-// // //             const maxSize =
-// // //                 10 * 1024 * 1024;
+// // //     if (imageInput) {
+
+// // //         imageInput.addEventListener(
+// // //             "change",
+// // //             function () {
+
+// // //                 const files =
+// // //                     this.files;
 
 
-// // //             for (const file of files) {
-
-
-// // //                 // File type
-
-// // //                 if (
-// // //                     !file.type.startsWith(
-// // //                         "image/"
-// // //                     )
+// // //                 for (
+// // //                     const file
+// // //                     of files
 // // //                 ) {
 
-// // //                     alert(
-// // //                         "Please select only image files."
-// // //                     );
+// // //                     if (
+// // //                         !file.type.startsWith(
+// // //                             "image/"
+// // //                         )
+// // //                     ) {
 
-// // //                     this.value = "";
+// // //                         alert(
+// // //                             "Please select only image files."
+// // //                         );
 
-// // //                     return;
+// // //                         this.value = "";
 
-// // //                 }
+// // //                         return;
 
-
-// // //                 // File size
-
-// // //                 if (
-// // //                     file.size > maxSize
-// // //                 ) {
-
-// // //                     alert(
-// // //                         "Each image must be less than 10MB."
-// // //                     );
-
-// // //                     this.value = "";
-
-// // //                     return;
+// // //                     }
 
 // // //                 }
 
 // // //             }
+// // //         );
 
-// // //         }
-// // //     );
-
-// // // }
-
-
-// // // // =========================
-// // // // FORM SUBMIT
-// // // // =========================
-
-// // // const editForm =
-// // //     document.getElementById(
-// // //         "editProductForm"
-// // //     );
-
-
-// // // const updateBtn =
-// // //     document.getElementById(
-// // //         "updateBtn"
-// // //     );
-
-
-// // // if (editForm) {
-
-// // //     editForm.addEventListener(
-// // //         "submit",
-// // //         function () {
-
-// // //             if (updateBtn) {
-
-// // //                 updateBtn.disabled =
-// // //                     true;
-
-// // //                 updateBtn.innerHTML =
-// // //                     "⏳ Updating Product...";
-
-// // //                 updateBtn.style.opacity =
-// // //                     "0.7";
-
-// // //                 updateBtn.style.cursor =
-// // //                     "not-allowed";
-
-// // //             }
-
-// // //         }
-// // //     );
-
-// // // }
-
-
-// // // // =========================
-// // // // INITIALIZE
-// // // // =========================
-
-// // // updateCompositionButtons();
-
+// // //     }
 
 // // // </script>
 
@@ -4558,7 +6130,8 @@
 
 // // // </html>
 
-// // //     `;
+// // // `;
+
 // // // }
 
 
@@ -4622,12 +6195,18 @@
 // //     if (Array.isArray(product.composition)) {
 
 // //         compositions = product.composition
-// //             .filter(item => item !== null && item !== undefined)
+// //             .filter(item =>
+// //                 item !== null &&
+// //                 item !== undefined
+// //             )
 // //             .map(item => {
 
 // //                 if (typeof item === "object") {
 
-// //                     if (item.name && item.strength) {
+// //                     if (
+// //                         item.name &&
+// //                         item.strength
+// //                     ) {
 // //                         return `${item.name} ${item.strength}`;
 // //                     }
 
@@ -4639,11 +6218,14 @@
 // //                 }
 
 // //                 return String(item);
+
 // //             });
 
 // //     } else if (product.composition) {
 
-// //         compositions = [String(product.composition)];
+// //         compositions = [
+// //             String(product.composition)
+// //         ];
 
 // //     }
 
@@ -4663,12 +6245,13 @@
 
 // //     if (Array.isArray(product.images)) {
 
-// //         images = product.images.filter(Boolean);
+// //         images =
+// //             product.images.filter(Boolean);
 
 // //     }
 
 
-// //     // Old database image field
+// //     // Old database image field support
 // //     if (
 // //         product.image &&
 // //         !images.includes(product.image)
@@ -4680,7 +6263,9 @@
 
 
 // //     // Remove duplicate images
-// //     images = [...new Set(images)];
+// //     images = [
+// //         ...new Set(images)
+// //     ];
 
 
 // //     // =========================
@@ -4693,14 +6278,17 @@
 // //             return "";
 // //         }
 
-// //         let clean = String(url).trim();
+// //         let clean =
+// //             String(url).trim();
 
 
 // //         // Markdown:
 // //         // [https://example.com/image.jpg](https://example.com/image.jpg)
 
 // //         const markdownMatch =
-// //             clean.match(/\]\((https?:\/\/[^)]+)\)/);
+// //             clean.match(
+// //                 /\]\((https?:\/\/[^)]+)\)/
+// //             );
 
 // //         if (markdownMatch) {
 
@@ -4716,7 +6304,8 @@
 // //             clean.endsWith("]")
 // //         ) {
 
-// //             clean = clean.slice(1, -1);
+// //             clean =
+// //                 clean.slice(1, -1);
 
 // //         }
 
@@ -4731,6 +6320,39 @@
 
 
 // //     // =========================
+// //     // VIDEOS
+// //     // =========================
+
+// //     let videos = [];
+
+// //     if (Array.isArray(product.videos)) {
+
+// //         videos =
+// //             product.videos.filter(Boolean);
+
+// //     } else if (product.video) {
+
+// //         // Old single video field support
+// //         videos = [
+// //             product.video
+// //         ];
+
+// //     }
+
+
+// //     // Clean video URLs
+// //     videos = videos
+// //         .map(cleanImageUrl)
+// //         .filter(Boolean);
+
+
+// //     // Remove duplicate videos
+// //     videos = [
+// //         ...new Set(videos)
+// //     ];
+
+
+// //     // =========================
 // //     // RETURN HTML
 // //     // =========================
 
@@ -4742,629 +6364,738 @@
 
 // // <head>
 
-// //     <meta charset="UTF-8">
+// // <meta charset="UTF-8">
 
-// //     <meta
-// //         name="viewport"
-// //         content="width=device-width, initial-scale=1.0"
-// //     >
+// // <meta
+// //     name="viewport"
+// //     content="width=device-width, initial-scale=1.0"
+// // >
 
-// //     <title>Edit Pharma Product</title>
+// // <title>Edit Pharma Product</title>
 
 
-// //     <style>
+// // <style>
 
-// //         /* =========================
-// //            RESET
-// //         ========================= */
+// // /* =========================
+// //    RESET
+// // ========================= */
 
-// //         * {
-// //             margin: 0;
-// //             padding: 0;
-// //             box-sizing: border-box;
-// //             font-family: "Segoe UI", Arial, sans-serif;
-// //         }
+// // * {
 
+// //     margin: 0;
 
-// //         /* =========================
-// //            BODY
-// //         ========================= */
+// //     padding: 0;
 
-// //         body {
+// //     box-sizing: border-box;
 
-// //             background:
-// //                 linear-gradient(
-// //                     135deg,
-// //                     #2563eb,
-// //                     #06b6d4
-// //                 );
+// //     font-family:
+// //         "Segoe UI",
+// //         Arial,
+// //         sans-serif;
 
-// //             min-height: 100vh;
+// // }
 
-// //             padding: 30px 15px;
 
-// //         }
+// // /* =========================
+// //    BODY
+// // ========================= */
 
+// // body {
 
-// //         /* =========================
-// //            CONTAINER
-// //         ========================= */
+// //     background:
+// //         linear-gradient(
+// //             135deg,
+// //             #2563eb,
+// //             #06b6d4
+// //         );
 
-// //         .container {
+// //     min-height: 100vh;
 
-// //             width: 100%;
+// //     padding: 30px 15px;
 
-// //             max-width: 1000px;
+// // }
 
-// //             margin: auto;
 
-// //             background: #ffffff;
+// // /* =========================
+// //    CONTAINER
+// // ========================= */
 
-// //             padding: 30px;
+// // .container {
 
-// //             border-radius: 22px;
+// //     width: 100%;
 
-// //             box-shadow:
-// //                 0 20px 50px
-// //                 rgba(0, 0, 0, .18);
+// //     max-width: 1000px;
 
-// //         }
+// //     margin: auto;
 
+// //     background: #ffffff;
 
-// //         /* =========================
-// //            HEADER
-// //         ========================= */
+// //     padding: 30px;
 
-// //         .header {
+// //     border-radius: 22px;
 
-// //             text-align: center;
+// //     box-shadow:
+// //         0 20px 50px
+// //         rgba(0, 0, 0, .18);
 
-// //             margin-bottom: 30px;
+// // }
 
-// //         }
 
+// // /* =========================
+// //    HEADER
+// // ========================= */
 
-// //         .header h2 {
+// // .header {
 
-// //             color: #1e40af;
+// //     text-align: center;
 
-// //             font-size: 28px;
+// //     margin-bottom: 30px;
 
-// //             margin-bottom: 6px;
+// // }
 
-// //         }
 
+// // .header h2 {
 
-// //         .header p {
+// //     color: #1e40af;
 
-// //             color: #64748b;
+// //     font-size: 28px;
 
-// //             font-size: 14px;
+// //     margin-bottom: 6px;
 
-// //         }
+// // }
 
 
-// //         /* =========================
-// //            FORM GRID
-// //         ========================= */
+// // .header p {
 
-// //         .form-grid {
+// //     color: #64748b;
 
-// //             display: grid;
+// //     font-size: 14px;
 
-// //             grid-template-columns:
-// //                 repeat(2, 1fr);
+// // }
 
-// //             gap: 18px;
 
-// //         }
+// // /* =========================
+// //    FORM GRID
+// // ========================= */
 
+// // .form-grid {
 
-// //         /* =========================
-// //            FORM GROUP
-// //         ========================= */
+// //     display: grid;
 
-// //         .form-group {
+// //     grid-template-columns:
+// //         repeat(2, 1fr);
 
-// //             display: flex;
+// //     gap: 18px;
 
-// //             flex-direction: column;
+// // }
 
-// //         }
 
+// // /* =========================
+// //    FORM GROUP
+// // ========================= */
 
-// //         .form-group.full {
+// // .form-group {
 
-// //             grid-column: 1 / -1;
+// //     display: flex;
 
-// //         }
+// //     flex-direction: column;
 
+// // }
 
-// //         label {
 
-// //             font-weight: 700;
+// // .form-group.full {
 
-// //             color: #1e293b;
+// //     grid-column: 1 / -1;
 
-// //             margin-bottom: 7px;
+// // }
 
-// //             font-size: 14px;
 
-// //         }
+// // label {
 
+// //     font-weight: 700;
 
-// //         /* =========================
-// //            INPUT
-// //         ========================= */
+// //     color: #1e293b;
 
-// //         input,
-// //         select,
-// //         textarea {
+// //     margin-bottom: 7px;
 
-// //             width: 100%;
+// //     font-size: 14px;
 
-// //             padding: 12px 13px;
+// // }
 
-// //             border: 1px solid #d1d5db;
 
-// //             border-radius: 10px;
+// // /* =========================
+// //    INPUT
+// // ========================= */
 
-// //             background: #ffffff;
+// // input,
+// // select,
+// // textarea {
 
-// //             color: #111827;
+// //     width: 100%;
 
-// //             font-size: 15px;
+// //     padding: 12px 13px;
 
-// //             outline: none;
+// //     border:
+// //         1px solid #d1d5db;
 
-// //             transition: .2s;
+// //     border-radius: 10px;
 
-// //         }
+// //     background: #ffffff;
 
+// //     color: #111827;
 
-// //         input:focus,
-// //         select:focus,
-// //         textarea:focus {
+// //     font-size: 15px;
 
-// //             border-color: #2563eb;
+// //     outline: none;
 
-// //             box-shadow:
-// //                 0 0 0 3px
-// //                 rgba(37, 99, 235, .10);
+// //     transition: .2s;
 
-// //         }
+// // }
 
 
-// //         textarea {
+// // input:focus,
+// // select:focus,
+// // textarea:focus {
 
-// //             min-height: 120px;
+// //     border-color: #2563eb;
 
-// //             resize: vertical;
+// //     box-shadow:
+// //         0 0 0 3px
+// //         rgba(
+// //             37,
+// //             99,
+// //             235,
+// //             .10
+// //         );
 
-// //         }
+// // }
 
 
-// //         /* =========================
-// //            SECTION
-// //         ========================= */
+// // textarea {
 
-// //         .section {
+// //     min-height: 120px;
 
-// //             margin-top: 30px;
+// //     resize: vertical;
 
-// //             padding-top: 23px;
+// // }
 
-// //             border-top:
-// //                 1px solid #e5e7eb;
 
-// //         }
+// // /* =========================
+// //    FILE INPUT
+// // ========================= */
 
+// // input[type="file"] {
 
-// //         .section-title {
+// //     padding: 10px;
 
-// //             display: flex;
+// //     background: #f8fafc;
 
-// //             align-items: center;
+// //     cursor: pointer;
 
-// //             gap: 8px;
+// // }
 
-// //             margin-bottom: 16px;
 
-// //             color: #1e40af;
+// // /* =========================
+// //    SECTION
+// // ========================= */
 
-// //             font-size: 19px;
+// // .section {
 
-// //             font-weight: 700;
+// //     margin-top: 30px;
 
-// //         }
+// //     padding-top: 23px;
 
+// //     border-top:
+// //         1px solid #e5e7eb;
 
-// //         /* =========================
-// //            COMPOSITION
-// //         ========================= */
+// // }
 
-// //         .composition-row {
 
-// //             display: flex;
+// // .section-title {
 
-// //             gap: 10px;
+// //     display: flex;
 
-// //             margin-bottom: 10px;
+// //     align-items: center;
 
-// //             align-items: center;
+// //     gap: 8px;
 
-// //         }
+// //     margin-bottom: 16px;
 
+// //     color: #1e40af;
 
-// //         .composition-row input {
+// //     font-size: 19px;
 
-// //             flex: 1;
+// //     font-weight: 700;
 
-// //         }
+// // }
 
 
-// //         .remove-btn {
+// // /* =========================
+// //    COMPOSITION
+// // ========================= */
 
-// //             width: 45px;
+// // .composition-row {
 
-// //             min-width: 45px;
+// //     display: flex;
 
-// //             height: 45px;
+// //     gap: 10px;
 
-// //             padding: 0;
+// //     margin-bottom: 10px;
 
-// //             border: none;
+// //     align-items: center;
 
-// //             border-radius: 9px;
+// // }
 
-// //             background: #dc2626;
 
-// //             color: #ffffff;
+// // .composition-row input {
 
-// //             font-size: 20px;
+// //     flex: 1;
 
-// //             font-weight: 700;
+// // }
 
-// //             cursor: pointer;
 
-// //         }
+// // .remove-btn {
 
+// //     width: 45px;
 
-// //         .remove-btn:hover {
+// //     min-width: 45px;
 
-// //             background: #b91c1c;
+// //     height: 45px;
 
-// //         }
+// //     padding: 0;
 
+// //     border: none;
 
-// //         .add-btn {
+// //     border-radius: 9px;
 
-// //             width: auto;
+// //     background: #dc2626;
 
-// //             padding: 11px 18px;
+// //     color: #ffffff;
 
-// //             margin-top: 5px;
+// //     font-size: 20px;
 
-// //             border: none;
+// //     font-weight: 700;
 
-// //             border-radius: 9px;
+// //     cursor: pointer;
 
-// //             background: #16a34a;
+// // }
 
-// //             color: #ffffff;
 
-// //             font-weight: 700;
+// // .remove-btn:hover {
 
-// //             cursor: pointer;
+// //     background: #b91c1c;
 
-// //         }
+// // }
 
 
-// //         .add-btn:hover {
+// // .add-btn {
 
-// //             background: #15803d;
+// //     width: auto;
 
-// //         }
+// //     padding: 11px 18px;
 
+// //     margin-top: 5px;
 
-// //         /* =========================
-// //            IMAGE GRID
-// //         ========================= */
+// //     border: none;
 
-// //         .image-grid {
+// //     border-radius: 9px;
 
-// //             display: grid;
+// //     background: #16a34a;
 
-// //             grid-template-columns:
-// //                 repeat(4, 1fr);
+// //     color: #ffffff;
 
-// //             gap: 15px;
+// //     font-weight: 700;
 
-// //         }
+// //     cursor: pointer;
 
+// // }
 
-// //         .image-card {
 
-// //             position: relative;
+// // .add-btn:hover {
 
-// //             border:
-// //                 1px solid #e5e7eb;
+// //     background: #15803d;
 
-// //             border-radius: 12px;
+// // }
 
-// //             padding: 8px;
 
-// //             background: #f8fafc;
+// // /* =========================
+// //    IMAGE GRID
+// // ========================= */
 
-// //         }
+// // .image-grid {
 
+// //     display: grid;
 
-// //         .image-card img {
+// //     grid-template-columns:
+// //         repeat(4, 1fr);
 
-// //             width: 100%;
+// //     gap: 15px;
 
-// //             height: 140px;
+// // }
 
-// //             object-fit: cover;
 
-// //             border-radius: 8px;
+// // .image-card {
 
-// //             display: block;
+// //     position: relative;
 
-// //         }
+// //     border:
+// //         1px solid #e5e7eb;
 
+// //     border-radius: 12px;
 
-// //         .image-number {
+// //     padding: 8px;
 
-// //             text-align: center;
+// //     background: #f8fafc;
 
-// //             margin-top: 7px;
+// // }
 
-// //             font-size: 12px;
 
-// //             color: #64748b;
+// // .image-card img {
 
-// //         }
+// //     width: 100%;
 
+// //     height: 140px;
 
-// //         /* =========================
-// //            NO IMAGE
-// //         ========================= */
+// //     object-fit: cover;
 
-// //         .no-image {
+// //     border-radius: 8px;
 
-// //             padding: 30px;
+// //     display: block;
 
-// //             text-align: center;
+// // }
 
-// //             background: #f8fafc;
 
-// //             border-radius: 10px;
+// // .image-number {
 
-// //             color: #64748b;
+// //     text-align: center;
 
-// //         }
+// //     margin-top: 7px;
 
+// //     font-size: 12px;
 
-// //         /* =========================
-// //            FILE INPUT
-// //         ========================= */
+// //     color: #64748b;
 
-// //         input[type="file"] {
+// // }
 
-// //             padding: 10px;
 
-// //             background: #f8fafc;
+// // /* =========================
+// //    VIDEO GRID
+// // ========================= */
 
-// //             cursor: pointer;
+// // .video-grid {
 
-// //         }
+// //     display: grid;
 
+// //     grid-template-columns:
+// //         repeat(3, 1fr);
 
-// //         /* =========================
-// //            UPDATE BUTTON
-// //         ========================= */
+// //     gap: 15px;
 
-// //         .update-btn {
+// // }
 
-// //             width: 100%;
 
-// //             padding: 15px;
+// // .video-card {
 
-// //             margin-top: 30px;
+// //     border:
+// //         1px solid #e5e7eb;
 
-// //             border: none;
+// //     border-radius: 12px;
 
-// //             border-radius: 12px;
+// //     padding: 8px;
 
-// //             background:
-// //                 linear-gradient(
-// //                     135deg,
-// //                     #2563eb,
-// //                     #1d4ed8
-// //                 );
+// //     background: #f8fafc;
 
-// //             color: #ffffff;
+// // }
 
-// //             font-size: 17px;
 
-// //             font-weight: 700;
+// // .video-card video {
 
-// //             cursor: pointer;
+// //     width: 100%;
 
-// //             transition: .2s;
+// //     height: 180px;
 
-// //         }
+// //     display: block;
 
+// //     object-fit: cover;
 
-// //         .update-btn:hover {
+// //     border-radius: 8px;
 
-// //             transform: translateY(-1px);
+// //     background: #000000;
 
-// //             box-shadow:
-// //                 0 8px 20px
-// //                 rgba(37, 99, 235, .25);
+// // }
 
-// //         }
 
+// // .video-number {
 
-// //         /* =========================
-// //            BACK BUTTON
-// //         ========================= */
+// //     text-align: center;
 
-// //         .back {
+// //     margin-top: 7px;
 
-// //             display: block;
+// //     font-size: 12px;
 
-// //             text-align: center;
+// //     color: #64748b;
 
-// //             margin-top: 18px;
+// // }
 
-// //             padding: 12px;
 
-// //             border-radius: 10px;
+// // /* =========================
+// //    NO IMAGE / VIDEO
+// // ========================= */
 
-// //             background: #f1f5f9;
+// // .no-image {
 
-// //             color: #1e40af;
+// //     padding: 30px;
 
-// //             text-decoration: none;
+// //     text-align: center;
 
-// //             font-weight: 700;
+// //     background: #f8fafc;
 
-// //         }
+// //     border-radius: 10px;
 
+// //     color: #64748b;
 
-// //         .back:hover {
+// // }
 
-// //             background: #e2e8f0;
 
-// //         }
+// // /* =========================
+// //    UPDATE BUTTON
+// // ========================= */
 
+// // .update-btn {
 
-// //         /* =========================
-// //            MOBILE
-// //         ========================= */
+// //     width: 100%;
 
-// //         @media (max-width: 700px) {
+// //     padding: 15px;
 
-// //             body {
+// //     margin-top: 30px;
 
-// //                 padding: 10px;
+// //     border: none;
 
-// //             }
+// //     border-radius: 12px;
 
+// //     background:
+// //         linear-gradient(
+// //             135deg,
+// //             #2563eb,
+// //             #1d4ed8
+// //         );
 
-// //             .container {
+// //     color: #ffffff;
 
-// //                 padding: 18px;
+// //     font-size: 17px;
 
-// //                 border-radius: 16px;
+// //     font-weight: 700;
 
-// //             }
+// //     cursor: pointer;
 
+// //     transition: .2s;
 
-// //             .header h2 {
+// // }
 
-// //                 font-size: 22px;
 
-// //             }
+// // .update-btn:hover {
 
+// //     transform:
+// //         translateY(-1px);
 
-// //             .form-grid {
+// //     box-shadow:
+// //         0 8px 20px
+// //         rgba(
+// //             37,
+// //             99,
+// //             235,
+// //             .25
+// //         );
 
-// //                 grid-template-columns: 1fr;
+// // }
 
-// //                 gap: 15px;
 
-// //             }
+// // /* =========================
+// //    BACK BUTTON
+// // ========================= */
 
+// // .back {
 
-// //             .form-group.full {
+// //     display: block;
 
-// //                 grid-column: auto;
+// //     text-align: center;
 
-// //             }
+// //     margin-top: 18px;
 
+// //     padding: 12px;
 
-// //             .image-grid {
+// //     border-radius: 10px;
 
-// //                 grid-template-columns:
-// //                     repeat(2, 1fr);
+// //     background: #f1f5f9;
 
-// //             }
+// //     color: #1e40af;
 
+// //     text-decoration: none;
 
-// //             .image-card img {
+// //     font-weight: 700;
 
-// //                 height: 120px;
+// // }
 
-// //             }
 
+// // .back:hover {
 
-// //             .composition-row {
+// //     background: #e2e8f0;
 
-// //                 gap: 7px;
+// // }
 
-// //             }
 
-// //         }
+// // /* =========================
+// //    MOBILE
+// // ========================= */
 
+// // @media (max-width: 700px) {
 
-// //         /* =========================
-// //            SMALL MOBILE
-// //         ========================= */
+// //     body {
 
-// //         @media (max-width: 400px) {
+// //         padding: 10px;
 
-// //             .container {
+// //     }
 
-// //                 padding: 14px;
 
-// //             }
+// //     .container {
 
+// //         padding: 18px;
 
-// //             input,
-// //             select,
-// //             textarea {
+// //         border-radius: 16px;
 
-// //                 font-size: 14px;
+// //     }
 
-// //                 padding: 11px;
 
-// //             }
+// //     .header h2 {
 
+// //         font-size: 22px;
 
-// //             .image-grid {
+// //     }
 
-// //                 grid-template-columns:
-// //                     repeat(2, 1fr);
 
-// //                 gap: 8px;
+// //     .form-grid {
 
-// //             }
+// //         grid-template-columns: 1fr;
 
+// //         gap: 15px;
 
-// //             .image-card img {
+// //     }
 
-// //                 height: 100px;
 
-// //             }
+// //     .form-group.full {
 
+// //         grid-column: auto;
 
-// //             .remove-btn {
+// //     }
 
-// //                 width: 40px;
 
-// //                 min-width: 40px;
+// //     .image-grid {
 
-// //                 height: 40px;
+// //         grid-template-columns:
+// //             repeat(2, 1fr);
 
-// //             }
+// //     }
 
-// //         }
 
-// //     </style>
+// //     .image-card img {
+
+// //         height: 120px;
+
+// //     }
+
+
+// //     .video-grid {
+
+// //         grid-template-columns:
+// //             repeat(2, 1fr);
+
+// //     }
+
+
+// //     .video-card video {
+
+// //         height: 140px;
+
+// //     }
+
+
+// //     .composition-row {
+
+// //         gap: 7px;
+
+// //     }
+
+// // }
+
+
+// // /* =========================
+// //    SMALL MOBILE
+// // ========================= */
+
+// // @media (max-width: 400px) {
+
+// //     .container {
+
+// //         padding: 14px;
+
+// //     }
+
+
+// //     input,
+// //     select,
+// //     textarea {
+
+// //         font-size: 14px;
+
+// //         padding: 11px;
+
+// //     }
+
+
+// //     .image-grid {
+
+// //         grid-template-columns:
+// //             repeat(2, 1fr);
+
+// //         gap: 8px;
+
+// //     }
+
+
+// //     .image-card img {
+
+// //         height: 100px;
+
+// //     }
+
+
+// //     .video-grid {
+
+// //         grid-template-columns: 1fr;
+
+// //     }
+
+
+// //     .video-card video {
+
+// //         height: 180px;
+
+// //     }
+
+
+// //     .remove-btn {
+
+// //         width: 40px;
+
+// //         min-width: 40px;
+
+// //         height: 40px;
+
+// //     }
+
+// // }
+
+// // </style>
 
 // // </head>
 
@@ -5375,627 +7106,729 @@
 // // <div class="container">
 
 
-// //     <!-- =========================
-// //          HEADER
-// //     ========================= -->
+// // <!-- =========================
+// //      HEADER
+// // ========================= -->
 
-// //     <div class="header">
+// // <div class="header">
 
-// //         <h2>
-// //             ✏️ Edit Pharma Product
-// //         </h2>
+// //     <h2>
+// //         ✏️ Edit Pharma Product
+// //     </h2>
 
-// //         <p>
-// //             Update product information and images
-// //         </p>
+// //     <p>
+// //         Update product information, images and videos
+// //     </p>
 
-// //     </div>
+// // </div>
 
 
-// //     <!-- =========================
-// //          FORM
-// //     ========================= -->
+// // <!-- =========================
+// //      FORM
+// // ========================= -->
 
-// //     <form
+// // <form
 
-// //         action="/admin/edit-product/${escapeHTML(product._id)}"
+// //     action="/admin/edit-product/${escapeHTML(product._id)}"
 
-// //         method="POST"
+// //     method="POST"
 
-// //         enctype="multipart/form-data"
+// //     enctype="multipart/form-data"
+// // >
+
+
+// // <!-- =========================
+// //      BASIC INFORMATION
+// // ========================= -->
+
+// // <div class="form-grid">
+
+
+// // <!-- PRODUCT NAME -->
+
+// // <div class="form-group">
+
+// //     <label>
+// //         Product Name *
+// //     </label>
+
+// //     <input
+// //         type="text"
+// //         name="name"
+// //         value="${escapeHTML(product.name)}"
+// //         required
 // //     >
 
+// // </div>
 
-// //         <!-- =========================
-// //              BASIC INFORMATION
-// //         ========================= -->
 
-// //         <div class="form-grid">
+// // <!-- BRAND -->
 
+// // <div class="form-group">
 
-// //             <!-- PRODUCT NAME -->
+// //     <label>
+// //         Brand Name
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="text"
+// //         name="brand"
+// //         value="${escapeHTML(product.brand)}"
+// //     >
 
-// //                 <label>
-// //                     Product Name *
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="text"
-// //                     name="name"
-// //                     value="${escapeHTML(product.name)}"
-// //                     required
-// //                 >
 
-// //             </div>
+// // <!-- CATEGORY -->
 
+// // <div class="form-group">
 
-// //             <!-- BRAND -->
+// //     <label>
+// //         Category
+// //     </label>
 
-// //             <div class="form-group">
+// //     <select name="category">
 
-// //                 <label>
-// //                     Brand Name
-// //                 </label>
+// //         <option value="">
+// //             Select Category
+// //         </option>
 
-// //                 <input
-// //                     type="text"
-// //                     name="brand"
-// //                     value="${escapeHTML(product.brand)}"
-// //                 >
+// //         <option
+// //             value="Tablet"
+// //             ${product.category === "Tablet" ? "selected" : ""}
+// //         >
+// //             Tablet
+// //         </option>
 
-// //             </div>
+// //         <option
+// //             value="Capsule"
+// //             ${product.category === "Capsule" ? "selected" : ""}
+// //         >
+// //             Capsule
+// //         </option>
 
+// //         <option
+// //             value="Syrup"
+// //             ${product.category === "Syrup" ? "selected" : ""}
+// //         >
+// //             Syrup
+// //         </option>
 
-// //             <!-- CATEGORY -->
+// //         <option
+// //             value="Drops"
+// //             ${product.category === "Drops" ? "selected" : ""}
+// //         >
+// //             Drops
+// //         </option>
 
-// //             <div class="form-group">
+// //         <option
+// //             value="Injection"
+// //             ${product.category === "Injection" ? "selected" : ""}
+// //         >
+// //             Injection
+// //         </option>
 
-// //                 <label>
-// //                     Category
-// //                 </label>
+// //         <option
+// //             value="Cream"
+// //             ${product.category === "Cream" ? "selected" : ""}
+// //         >
+// //             Cream
+// //         </option>
 
-// //                 <select name="category">
+// //         <option
+// //             value="Other"
+// //             ${product.category === "Other" ? "selected" : ""}
+// //         >
+// //             Other
+// //         </option>
 
-// //                     <option value="">
-// //                         Select Category
-// //                     </option>
+// //     </select>
 
-// //                     <option
-// //                         value="Tablet"
-// //                         ${product.category === "Tablet" ? "selected" : ""}
-// //                     >
-// //                         Tablet
-// //                     </option>
+// // </div>
 
-// //                     <option
-// //                         value="Capsule"
-// //                         ${product.category === "Capsule" ? "selected" : ""}
-// //                     >
-// //                         Capsule
-// //                     </option>
 
-// //                     <option
-// //                         value="Syrup"
-// //                         ${product.category === "Syrup" ? "selected" : ""}
-// //                     >
-// //                         Syrup
-// //                     </option>
+// // <!-- MANUFACTURER -->
 
-// //                     <option
-// //                         value="Drops"
-// //                         ${product.category === "Drops" ? "selected" : ""}
-// //                     >
-// //                         Drops
-// //                     </option>
+// // <div class="form-group">
 
-// //                     <option
-// //                         value="Injection"
-// //                         ${product.category === "Injection" ? "selected" : ""}
-// //                     >
-// //                         Injection
-// //                     </option>
+// //     <label>
+// //         Manufacturer
+// //     </label>
 
-// //                     <option
-// //                         value="Cream"
-// //                         ${product.category === "Cream" ? "selected" : ""}
-// //                     >
-// //                         Cream
-// //                     </option>
+// //     <input
+// //         type="text"
+// //         name="manufacturer"
+// //         value="${escapeHTML(product.manufacturer)}"
+// //     >
 
-// //                     <option
-// //                         value="Other"
-// //                         ${product.category === "Other" ? "selected" : ""}
-// //                     >
-// //                         Other
-// //                     </option>
+// // </div>
 
-// //                 </select>
 
-// //             </div>
+// // <!-- MRP -->
 
+// // <div class="form-group">
 
-// //             <!-- MANUFACTURER -->
+// //     <label>
+// //         MRP ₹
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="number"
+// //         name="mrp"
+// //         value="${product.mrp ?? ""}"
+// //         min="0"
+// //         step="0.01"
+// //     >
 
-// //                 <label>
-// //                     Manufacturer
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="text"
-// //                     name="manufacturer"
-// //                     value="${escapeHTML(product.manufacturer)}"
-// //                 >
 
-// //             </div>
+// // <!-- PRICE -->
 
+// // <div class="form-group">
 
-// //             <!-- MRP -->
+// //     <label>
+// //         Selling Price ₹ *
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="number"
+// //         name="price"
+// //         value="${product.price ?? ""}"
+// //         min="0"
+// //         step="0.01"
+// //         required
+// //     >
 
-// //                 <label>
-// //                     MRP ₹
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="number"
-// //                     name="mrp"
-// //                     value="${product.mrp ?? ""}"
-// //                     min="0"
-// //                     step="0.01"
-// //                 >
 
-// //             </div>
+// // <!-- STOCK -->
 
+// // <div class="form-group">
 
-// //             <!-- PRICE -->
+// //     <label>
+// //         Stock Quantity
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="number"
+// //         name="stock"
+// //         value="${product.stock ?? 0}"
+// //         min="0"
+// //     >
 
-// //                 <label>
-// //                     Selling Price ₹ *
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="number"
-// //                     name="price"
-// //                     value="${product.price ?? ""}"
-// //                     min="0"
-// //                     step="0.01"
-// //                     required
-// //                 >
 
-// //             </div>
+// // <!-- PACK SIZE -->
 
+// // <div class="form-group">
 
-// //             <!-- STOCK -->
+// //     <label>
+// //         Pack Size
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="text"
+// //         name="packSize"
+// //         value="${escapeHTML(product.packSize)}"
+// //         placeholder="e.g. 200 ml"
+// //     >
 
-// //                 <label>
-// //                     Stock Quantity
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="number"
-// //                     name="stock"
-// //                     value="${product.stock ?? 0}"
-// //                     min="0"
-// //                 >
 
-// //             </div>
+// // <!-- BATCH -->
 
+// // <div class="form-group">
 
-// //             <!-- PACK SIZE -->
+// //     <label>
+// //         Batch Number
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="text"
+// //         name="batchNo"
+// //         value="${escapeHTML(product.batchNo)}"
+// //     >
 
-// //                 <label>
-// //                     Pack Size
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="text"
-// //                     name="packSize"
-// //                     value="${escapeHTML(product.packSize)}"
-// //                     placeholder="e.g. 200 ml"
-// //                 >
 
-// //             </div>
+// // <!-- MFG DATE -->
 
+// // <div class="form-group">
 
-// //             <!-- BATCH -->
+// //     <label>
+// //         Manufacturing Date
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="date"
+// //         name="mfgDate"
+// //         value="${formatDate(product.mfgDate)}"
+// //     >
 
-// //                 <label>
-// //                     Batch Number
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="text"
-// //                     name="batchNo"
-// //                     value="${escapeHTML(product.batchNo)}"
-// //                 >
 
-// //             </div>
+// // <!-- EXPIRY DATE -->
 
+// // <div class="form-group">
 
-// //             <!-- MFG DATE -->
+// //     <label>
+// //         Expiry Date
+// //     </label>
 
-// //             <div class="form-group">
+// //     <input
+// //         type="date"
+// //         name="expDate"
+// //         value="${formatDate(product.expDate)}"
+// //     >
 
-// //                 <label>
-// //                     Manufacturing Date
-// //                 </label>
+// // </div>
 
-// //                 <input
-// //                     type="date"
-// //                     name="mfgDate"
-// //                     value="${formatDate(product.mfgDate)}"
-// //                 >
 
-// //             </div>
+// // </div>
 
 
-// //             <!-- EXPIRY DATE -->
+// // <!-- =========================
+// //      COMPOSITION
+// // ========================= -->
 
-// //             <div class="form-group">
+// // <div class="section">
 
-// //                 <label>
-// //                     Expiry Date
-// //                 </label>
+// // <div class="section-title">
 
-// //                 <input
-// //                     type="date"
-// //                     name="expDate"
-// //                     value="${formatDate(product.expDate)}"
-// //                 >
+// //     💊 Composition
 
-// //             </div>
+// // </div>
 
 
-// //         </div>
+// // <div id="compositionBox">
 
+// //     ${compositions.map((item, index) => `
 
-// //         <!-- =========================
-// //              COMPOSITION
-// //         ========================= -->
+// //         <div class="composition-row">
 
-// //         <div class="section">
-
-
-// //             <div class="section-title">
-
-// //                 💊 Composition
-
-// //             </div>
-
-
-// //             <div id="compositionBox">
-
-// //                 ${compositions.map((item, index) => `
-
-// //                     <div class="composition-row">
-
-// //                         <input
-// //                             type="text"
-// //                             name="composition[]"
-// //                             value="${escapeHTML(item)}"
-// //                             placeholder="Composition ${index + 1}"
-// //                         >
-
-// //                         ${
-// //                             index > 0
-// //                             ?
-
-// //                             `
-// //                             <button
-// //                                 type="button"
-// //                                 class="remove-btn"
-// //                                 onclick="removeComposition(this)"
-// //                             >
-// //                                 ×
-// //                             </button>
-// //                             `
-
-// //                             :
-
-// //                             `
-// //                             <button
-// //                                 type="button"
-// //                                 class="remove-btn"
-// //                                 onclick="removeComposition(this)"
-// //                                 style="visibility:hidden"
-// //                             >
-// //                                 ×
-// //                             </button>
-// //                             `
-// //                         }
-
-// //                     </div>
-
-// //                 `).join("")}
-
-// //             </div>
-
-
-// //             <button
-// //                 type="button"
-// //                 class="add-btn"
-// //                 onclick="addComposition()"
+// //             <input
+// //                 type="text"
+// //                 name="composition[]"
+// //                 value="${escapeHTML(item)}"
+// //                 placeholder="Composition ${index + 1}"
 // //             >
-// //                 + Add Composition
-// //             </button>
-
-
-// //         </div>
-
-
-// //         <!-- =========================
-// //              PRODUCT DETAILS
-// //         ========================= -->
-
-// //         <div class="section">
-
-
-// //             <div class="section-title">
-
-// //                 📋 Product Details
-
-// //             </div>
-
-
-// //             <div class="form-grid">
-
-
-// //                 <!-- USES -->
-
-// //                 <div class="form-group full">
-
-// //                     <label>
-// //                         Uses
-// //                     </label>
-
-// //                     <textarea
-// //                         name="uses"
-// //                         placeholder="Enter product uses"
-// //                     >${escapeHTML(product.uses)}</textarea>
-
-// //                 </div>
-
-
-// //                 <!-- BENEFITS -->
-
-// //                 <div class="form-group full">
-
-// //                     <label>
-// //                         Benefits
-// //                     </label>
-
-// //                     <textarea
-// //                         name="benefits"
-// //                         placeholder="Enter product benefits"
-// //                     >${escapeHTML(product.benefits)}</textarea>
-
-// //                 </div>
-
-
-// //                 <!-- DOSAGE -->
-
-// //                 <div class="form-group full">
-
-// //                     <label>
-// //                         Dosage
-// //                     </label>
-
-// //                     <textarea
-// //                         name="dosage"
-// //                         placeholder="Enter dosage"
-// //                     >${escapeHTML(product.dosage)}</textarea>
-
-// //                 </div>
-
-
-// //                 <!-- SIDE EFFECTS -->
-
-// //                 <div class="form-group full">
-
-// //                     <label>
-// //                         Side Effects
-// //                     </label>
-
-// //                     <textarea
-// //                         name="sideEffects"
-// //                         placeholder="Enter side effects"
-// //                     >${escapeHTML(product.sideEffects)}</textarea>
-
-// //                 </div>
-
-
-// //                 <!-- STORAGE -->
-
-// //                 <div class="form-group full">
-
-// //                     <label>
-// //                         Storage Instructions
-// //                     </label>
-
-// //                     <textarea
-// //                         name="storage"
-// //                         placeholder="Enter storage instructions"
-// //                     >${escapeHTML(product.storage)}</textarea>
-
-// //                 </div>
-
-
-// //                 <!-- DESCRIPTION -->
-
-// //                 <div class="form-group full">
-
-// //                     <label>
-// //                         Full Description
-// //                     </label>
-
-// //                     <textarea
-// //                         name="description"
-// //                         placeholder="Enter full product description"
-// //                     >${escapeHTML(product.description)}</textarea>
-
-// //                 </div>
-
-
-// //             </div>
-
-
-// //         </div>
-
-
-// //         <!-- =========================
-// //              EXISTING IMAGES
-// //         ========================= -->
-
-// //         <div class="section">
-
-
-// //             <div class="section-title">
-
-// //                 🖼 Existing Product Images
-
-// //             </div>
-
 
 // //             ${
-// //                 images.length
+// //                 index > 0
 
 // //                 ?
 
 // //                 `
-// //                 <div class="image-grid">
-
-// //                     ${images.map((img, index) => {
-
-// //                         const safeImg =
-// //                             cleanImageUrl(img);
-
-// //                         return `
-
-// //                             <div class="image-card">
-
-// //                                 <img
-// //                                     src="${escapeHTML(safeImg)}"
-// //                                     alt="Product Image ${index + 1}"
-// //                                     loading="lazy"
-// //                                     onerror="this.style.display='none'"
-// //                                 >
-
-// //                                 <div class="image-number">
-
-// //                                     Image ${index + 1}
-
-// //                                 </div>
-
-// //                             </div>
-
-// //                         `;
-
-// //                     }).join("")}
-
-// //                 </div>
+// //                 <button
+// //                     type="button"
+// //                     class="remove-btn"
+// //                     onclick="removeComposition(this)"
+// //                 >
+// //                     ×
+// //                 </button>
 // //                 `
 
 // //                 :
 
 // //                 `
-// //                 <div class="no-image">
-
-// //                     No existing product image
-
-// //                 </div>
+// //                 <button
+// //                     type="button"
+// //                     class="remove-btn"
+// //                     style="visibility:hidden"
+// //                 >
+// //                     ×
+// //                 </button>
 // //                 `
 // //             }
 
-
 // //         </div>
 
+// //     `).join("")}
 
-// //         <!-- =========================
-// //              NEW IMAGES
-// //         ========================= -->
-
-// //         <div class="section">
+// // </div>
 
 
-// //             <div class="section-title">
-
-// //                 📷 Add New Product Images
-
-// //             </div>
-
-
-// //             <div class="form-group">
-
-// //                 <label>
-// //                     Select New Images
-// //                 </label>
-
-// //                 <input
-// //                     type="file"
-// //                     name="images"
-// //                     accept="image/*"
-// //                     multiple
-// //                 >
-
-// //             </div>
+// // <button
+// //     type="button"
+// //     class="add-btn"
+// //     onclick="addComposition()"
+// // >
+// //     + Add Composition
+// // </button>
 
 
-// //             <p
-// //                 style="
-// //                     margin-top:8px;
-// //                     color:#64748b;
-// //                     font-size:13px;
-// //                 "
-// //             >
-// //                 You can select multiple new images.
-// //             </p>
+// // </div>
 
 
-// //         </div>
+// // <!-- =========================
+// //      PRODUCT DETAILS
+// // ========================= -->
+
+// // <div class="section">
+
+// // <div class="section-title">
+
+// //     📋 Product Details
+
+// // </div>
 
 
-// //         <!-- =========================
-// //              UPDATE
-// //         ========================= -->
-
-// //         <button
-// //             type="submit"
-// //             class="update-btn"
-// //         >
-
-// //             💾 Update Product
-
-// //         </button>
+// // <div class="form-grid">
 
 
-// //     </form>
+// // <!-- USES -->
+
+// // <div class="form-group full">
+
+// //     <label>
+// //         Uses
+// //     </label>
+
+// //     <textarea
+// //         name="uses"
+// //         placeholder="Enter product uses"
+// //     >${escapeHTML(product.uses)}</textarea>
+
+// // </div>
 
 
-// //     <!-- =========================
-// //          BACK
-// //     ========================= -->
+// // <!-- BENEFITS -->
 
-// //     <a
-// //         href="/admin/manage-products"
-// //         class="back"
+// // <div class="form-group full">
+
+// //     <label>
+// //         Benefits
+// //     </label>
+
+// //     <textarea
+// //         name="benefits"
+// //         placeholder="Enter product benefits"
+// //     >${escapeHTML(product.benefits)}</textarea>
+
+// // </div>
+
+
+// // <!-- DOSAGE -->
+
+// // <div class="form-group full">
+
+// //     <label>
+// //         Dosage
+// //     </label>
+
+// //     <textarea
+// //         name="dosage"
+// //         placeholder="Enter dosage"
+// //     >${escapeHTML(product.dosage)}</textarea>
+
+// // </div>
+
+
+// // <!-- SIDE EFFECTS -->
+
+// // <div class="form-group full">
+
+// //     <label>
+// //         Side Effects
+// //     </label>
+
+// //     <textarea
+// //         name="sideEffects"
+// //         placeholder="Enter side effects"
+// //     >${escapeHTML(product.sideEffects)}</textarea>
+
+// // </div>
+
+
+// // <!-- STORAGE -->
+
+// // <div class="form-group full">
+
+// //     <label>
+// //         Storage Instructions
+// //     </label>
+
+// //     <textarea
+// //         name="storage"
+// //         placeholder="Enter storage instructions"
+// //     >${escapeHTML(product.storage)}</textarea>
+
+// // </div>
+
+
+// // <!-- DESCRIPTION -->
+
+// // <div class="form-group full">
+
+// //     <label>
+// //         Full Description
+// //     </label>
+
+// //     <textarea
+// //         name="description"
+// //         placeholder="Enter full product description"
+// //     >${escapeHTML(product.description)}</textarea>
+
+// // </div>
+
+
+// // </div>
+
+// // </div>
+
+
+// // <!-- =========================
+// //      EXISTING IMAGES
+// // ========================= -->
+
+// // <div class="section">
+
+// // <div class="section-title">
+
+// //     🖼 Existing Product Images
+
+// // </div>
+
+
+// // ${
+// //     images.length
+
+// //     ?
+
+// //     `
+// //     <div class="image-grid">
+
+// //         ${images.map((img, index) => {
+
+// //             const safeImg =
+// //                 cleanImageUrl(img);
+
+// //             return `
+
+// //                 <div class="image-card">
+
+// //                     <img
+// //                         src="${escapeHTML(safeImg)}"
+// //                         alt="Product Image ${index + 1}"
+// //                         loading="lazy"
+// //                         onerror="this.style.display='none'"
+// //                     >
+
+// //                     <div class="image-number">
+// //                         Image ${index + 1}
+// //                     </div>
+
+// //                 </div>
+
+// //             `;
+
+// //         }).join("")}
+
+// //     </div>
+// //     `
+
+// //     :
+
+// //     `
+// //     <div class="no-image">
+
+// //         No existing product image
+
+// //     </div>
+// //     `
+// // }
+
+
+// // </div>
+
+
+// // <!-- =========================
+// //      ADD NEW IMAGES
+// // ========================= -->
+
+// // <div class="section">
+
+// // <div class="section-title">
+
+// //     📷 Add New Product Images
+
+// // </div>
+
+
+// // <div class="form-group">
+
+// //     <label>
+// //         Select New Images
+// //     </label>
+
+// //     <input
+// //         type="file"
+// //         name="images"
+// //         accept="image/*"
+// //         multiple
 // //     >
 
-// //         ⬅ Back to Manage Products
+// // </div>
 
-// //     </a>
+
+// // <p
+// //     style="
+// //         margin-top:8px;
+// //         color:#64748b;
+// //         font-size:13px;
+// //     "
+// // >
+// //     You can select multiple product images.
+// // </p>
+
+
+// // </div>
+
+
+// // <!-- =========================
+// //      EXISTING VIDEOS
+// // ========================= -->
+
+// // <div class="section">
+
+// // <div class="section-title">
+
+// //     🎥 Existing Product Videos
+
+// // </div>
+
+
+// // ${
+// //     videos.length
+
+// //     ?
+
+// //     `
+// //     <div class="video-grid">
+
+// //         ${videos.map((video, index) => {
+
+// //             const safeVideo =
+// //                 cleanImageUrl(video);
+
+// //             return `
+
+// //                 <div class="video-card">
+
+// //                     <video
+// //                         src="${escapeHTML(safeVideo)}"
+// //                         controls
+// //                         preload="metadata"
+// //                         playsinline
+// //                     ></video>
+
+// //                     <div class="video-number">
+// //                         Video ${index + 1}
+// //                     </div>
+
+// //                 </div>
+
+// //             `;
+
+// //         }).join("")}
+
+// //     </div>
+// //     `
+
+// //     :
+
+// //     `
+// //     <div class="no-image">
+
+// //         No existing product video
+
+// //     </div>
+// //     `
+// // }
+
+
+// // </div>
+
+
+// // <!-- =========================
+// //      ADD NEW VIDEOS
+// // ========================= -->
+
+// // <div class="section">
+
+// // <div class="section-title">
+
+// //     🎥 Add Product Videos
+
+// // </div>
+
+
+// // <div class="form-group">
+
+// //     <label>
+// //         Select New Videos
+// //     </label>
+
+// //     <input
+// //         type="file"
+// //         name="videos"
+// //         accept="video/mp4,video/webm,video/quicktime"
+// //         multiple
+// //     >
+
+// // </div>
+
+
+// // <p
+// //     style="
+// //         margin-top:8px;
+// //         color:#64748b;
+// //         font-size:13px;
+// //     "
+// // >
+// //     You can select multiple videos.
+// //     MP4, WebM and MOV are supported.
+// // </p>
+
+
+// // </div>
+
+
+// // <!-- =========================
+// //      UPDATE BUTTON
+// // ========================= -->
+
+// // <button
+// //     type="submit"
+// //     class="update-btn"
+// // >
+
+// //     💾 Update Product
+
+// // </button>
+
+
+// // </form>
+
+
+// // <!-- =========================
+// //      BACK
+// // ========================= -->
+
+// // <a
+// //     href="/admin/manage-products"
+// //     class="back"
+// // >
+
+// //     ⬅ Back to Manage Products
+
+// // </a>
 
 
 // // </div>
@@ -6003,125 +7836,225 @@
 
 // // <script>
 
-// //     // =========================
-// //     // ADD COMPOSITION
-// //     // =========================
 
-// //     function addComposition() {
+// // // =========================
+// // // ADD COMPOSITION
+// // // =========================
 
-// //         const box =
-// //             document.getElementById(
-// //                 "compositionBox"
-// //             );
+// // function addComposition() {
 
-
-// //         const row =
-// //             document.createElement("div");
-
-
-// //         row.className =
-// //             "composition-row";
-
-
-// //         row.innerHTML = \`
-
-// //             <input
-// //                 type="text"
-// //                 name="composition[]"
-// //                 placeholder="Composition"
-// //             >
-
-// //             <button
-// //                 type="button"
-// //                 class="remove-btn"
-// //                 onclick="removeComposition(this)"
-// //             >
-// //                 ×
-// //             </button>
-
-// //         \`;
-
-
-// //         box.appendChild(row);
-
-// //     }
-
-
-// //     // =========================
-// //     // REMOVE COMPOSITION
-// //     // =========================
-
-// //     function removeComposition(button) {
-
-// //         const row =
-// //             button.parentElement;
-
-
-// //         const box =
-// //             document.getElementById(
-// //                 "compositionBox"
-// //             );
-
-
-// //         if (
-// //             box &&
-// //             box.children.length > 1
-// //         ) {
-
-// //             row.remove();
-
-// //         }
-
-// //     }
-
-
-// //     // =========================
-// //     // IMAGE VALIDATION
-// //     // =========================
-
-// //     const imageInput =
-// //         document.querySelector(
-// //             'input[name="images"]'
+// //     const box =
+// //         document.getElementById(
+// //             "compositionBox"
 // //         );
 
 
-// //     if (imageInput) {
-
-// //         imageInput.addEventListener(
-// //             "change",
-// //             function () {
-
-// //                 const files =
-// //                     this.files;
+// //     if (!box) {
+// //         return;
+// //     }
 
 
-// //                 for (
-// //                     const file
-// //                     of files
+// //     const row =
+// //         document.createElement("div");
+
+
+// //     row.className =
+// //         "composition-row";
+
+
+// //     row.innerHTML = `
+
+// //         <input
+// //             type="text"
+// //             name="composition[]"
+// //             placeholder="Composition"
+// //         >
+
+// //         <button
+// //             type="button"
+// //             class="remove-btn"
+// //             onclick="removeComposition(this)"
+// //         >
+// //             ×
+// //         </button>
+
+// //     `;
+
+
+// //     box.appendChild(row);
+
+// // }
+
+
+// // // =========================
+// // // REMOVE COMPOSITION
+// // // =========================
+
+// // function removeComposition(button) {
+
+// //     const row =
+// //         button.closest(
+// //             ".composition-row"
+// //         );
+
+
+// //     if (!row) {
+// //         return;
+// //     }
+
+
+// //     const box =
+// //         document.getElementById(
+// //             "compositionBox"
+// //         );
+
+
+// //     if (!box) {
+// //         return;
+// //     }
+
+
+// //     const rows =
+// //         box.querySelectorAll(
+// //             ".composition-row"
+// //         );
+
+
+// //     // कम से कम एक composition row रहे
+// //     if (rows.length <= 1) {
+
+// //         const input =
+// //             row.querySelector("input");
+
+// //         if (input) {
+// //             input.value = "";
+// //         }
+
+// //         return;
+// //     }
+
+
+// //     row.remove();
+
+// // }
+
+
+// // // =========================
+// // // IMAGE VALIDATION
+// // // =========================
+
+// // const imageInput =
+// //     document.querySelector(
+// //         'input[name="images"]'
+// //     );
+
+
+// // if (imageInput) {
+
+// //     imageInput.addEventListener(
+// //         "change",
+// //         function () {
+
+// //             const files =
+// //                 Array.from(this.files || []);
+
+
+// //             for (const file of files) {
+
+// //                 if (
+// //                     !file.type.startsWith(
+// //                         "image/"
+// //                     )
 // //                 ) {
 
-// //                     if (
-// //                         !file.type.startsWith(
-// //                             "image/"
-// //                         )
-// //                     ) {
+// //                     alert(
+// //                         "Please select only image files."
+// //                     );
 
-// //                         alert(
-// //                             "Please select only image files."
-// //                         );
+// //                     this.value = "";
 
-// //                         this.value = "";
-
-// //                         return;
-
-// //                     }
-
+// //                     return;
 // //                 }
 
 // //             }
-// //         );
 
-// //     }
+// //         }
+// //     );
+
+// // }
+
+
+// // // =========================
+// // // VIDEO VALIDATION
+// // // =========================
+
+// // const videoInput =
+// //     document.querySelector(
+// //         'input[name="videos"]'
+// //     );
+
+
+// // if (videoInput) {
+
+// //     videoInput.addEventListener(
+// //         "change",
+// //         function () {
+
+// //             const files =
+// //                 Array.from(this.files || []);
+
+
+// //             const allowedTypes = [
+
+// //                 "video/mp4",
+
+// //                 "video/webm",
+
+// //                 "video/quicktime"
+
+// //             ];
+
+
+// //             for (const file of files) {
+
+// //                 if (
+// //                     !allowedTypes.includes(
+// //                         file.type
+// //                     )
+// //                 ) {
+
+// //                     alert(
+// //                         "Please select only MP4, WebM or MOV video files."
+// //                     );
+
+// //                     this.value = "";
+
+// //                     return;
+// //                 }
+
+
+// //                 // 100 MB maximum per video
+// //                 if (
+// //                     file.size >
+// //                     100 * 1024 * 1024
+// //                 ) {
+
+// //                     alert(
+// //                         "Each video must be less than 100 MB."
+// //                     );
+
+// //                     this.value = "";
+
+// //                     return;
+// //                 }
+
+// //             }
+
+// //         }
+// //     );
+
+// // }
+
 
 // // </script>
 
@@ -6136,6 +8069,7 @@
 
 
 // // module.exports = EditProduct;
+
 
 // function EditProduct(product) {
 
@@ -6195,18 +8129,12 @@
 //     if (Array.isArray(product.composition)) {
 
 //         compositions = product.composition
-//             .filter(item =>
-//                 item !== null &&
-//                 item !== undefined
-//             )
+//             .filter(item => item !== null && item !== undefined)
 //             .map(item => {
 
 //                 if (typeof item === "object") {
 
-//                     if (
-//                         item.name &&
-//                         item.strength
-//                     ) {
+//                     if (item.name && item.strength) {
 //                         return `${item.name} ${item.strength}`;
 //                     }
 
@@ -6218,22 +8146,16 @@
 //                 }
 
 //                 return String(item);
-
 //             });
 
 //     } else if (product.composition) {
 
-//         compositions = [
-//             String(product.composition)
-//         ];
+//         compositions = [String(product.composition)];
 
 //     }
 
-
 //     if (!compositions.length) {
-
 //         compositions = [""];
-
 //     }
 
 
@@ -6245,13 +8167,11 @@
 
 //     if (Array.isArray(product.images)) {
 
-//         images =
-//             product.images.filter(Boolean);
+//         images = product.images.filter(Boolean);
 
 //     }
 
-
-//     // Old database image field support
+//     // Old image field
 //     if (
 //         product.image &&
 //         !images.includes(product.image)
@@ -6261,11 +8181,8 @@
 
 //     }
 
-
-//     // Remove duplicate images
-//     images = [
-//         ...new Set(images)
-//     ];
+//     // Remove duplicates
+//     images = [...new Set(images)];
 
 
 //     // =========================
@@ -6278,24 +8195,19 @@
 //             return "";
 //         }
 
-//         let clean =
-//             String(url).trim();
+//         let clean = String(url).trim();
 
-
-//         // Markdown:
-//         // [https://example.com/image.jpg](https://example.com/image.jpg)
+//         // Markdown URL:
+//         // [text](https://example.com/image.jpg)
 
 //         const markdownMatch =
-//             clean.match(
-//                 /\]\((https?:\/\/[^)]+)\)/
-//             );
+//             clean.match(/\]\((https?:\/\/[^)]+)\)/);
 
 //         if (markdownMatch) {
 
 //             return markdownMatch[1];
 
 //         }
-
 
 //         // [https://example.com/image.jpg]
 
@@ -6304,13 +8216,11 @@
 //             clean.endsWith("]")
 //         ) {
 
-//             clean =
-//                 clean.slice(1, -1);
+//             clean = clean.slice(1, -1);
 
 //         }
 
 //         return clean;
-
 //     };
 
 
@@ -6327,29 +8237,31 @@
 
 //     if (Array.isArray(product.videos)) {
 
-//         videos =
-//             product.videos.filter(Boolean);
-
-//     } else if (product.video) {
-
-//         // Old single video field support
-//         videos = [
-//             product.video
-//         ];
+//         videos = product.videos.filter(Boolean);
 
 //     }
 
+//     // Old/single video field
+//     if (
+//         product.video &&
+//         !videos.includes(product.video)
+//     ) {
 
-//     // Clean video URLs
-//     videos = videos
-//         .map(cleanImageUrl)
-//         .filter(Boolean);
+//         videos.unshift(product.video);
 
+//     }
 
-//     // Remove duplicate videos
-//     videos = [
-//         ...new Set(videos)
-//     ];
+//     // Video URL field
+//     if (
+//         product.videoUrl &&
+//         !videos.includes(product.videoUrl)
+//     ) {
+
+//         videos.unshift(product.videoUrl);
+
+//     }
+
+//     videos = [...new Set(videos)];
 
 
 //     // =========================
@@ -6364,738 +8276,733 @@
 
 // <head>
 
-// <meta charset="UTF-8">
+//     <meta charset="UTF-8">
 
-// <meta
-//     name="viewport"
-//     content="width=device-width, initial-scale=1.0"
-// >
+//     <meta
+//         name="viewport"
+//         content="width=device-width, initial-scale=1.0"
+//     >
 
-// <title>Edit Pharma Product</title>
+//     <title>Edit Pharma Product</title>
 
 
-// <style>
+//     <style>
 
-// /* =========================
-//    RESET
-// ========================= */
+//         /* =========================
+//            RESET
+//         ========================= */
 
-// * {
+//         * {
+//             margin: 0;
+//             padding: 0;
+//             box-sizing: border-box;
+//             font-family: "Segoe UI", Arial, sans-serif;
+//         }
 
-//     margin: 0;
 
-//     padding: 0;
+//         /* =========================
+//            BODY
+//         ========================= */
 
-//     box-sizing: border-box;
+//         body {
 
-//     font-family:
-//         "Segoe UI",
-//         Arial,
-//         sans-serif;
+//             background:
+//                 linear-gradient(
+//                     135deg,
+//                     #2563eb,
+//                     #06b6d4
+//                 );
 
-// }
+//             min-height: 100vh;
 
+//             padding: 30px 15px;
 
-// /* =========================
-//    BODY
-// ========================= */
+//         }
 
-// body {
 
-//     background:
-//         linear-gradient(
-//             135deg,
-//             #2563eb,
-//             #06b6d4
-//         );
+//         /* =========================
+//            CONTAINER
+//         ========================= */
 
-//     min-height: 100vh;
+//         .container {
 
-//     padding: 30px 15px;
+//             width: 100%;
 
-// }
+//             max-width: 1000px;
 
+//             margin: auto;
 
-// /* =========================
-//    CONTAINER
-// ========================= */
+//             background: #ffffff;
 
-// .container {
+//             padding: 30px;
 
-//     width: 100%;
+//             border-radius: 22px;
 
-//     max-width: 1000px;
+//             box-shadow:
+//                 0 20px 50px
+//                 rgba(0, 0, 0, .18);
 
-//     margin: auto;
+//         }
 
-//     background: #ffffff;
 
-//     padding: 30px;
+//         /* =========================
+//            HEADER
+//         ========================= */
 
-//     border-radius: 22px;
+//         .header {
 
-//     box-shadow:
-//         0 20px 50px
-//         rgba(0, 0, 0, .18);
+//             text-align: center;
 
-// }
+//             margin-bottom: 30px;
 
+//         }
 
-// /* =========================
-//    HEADER
-// ========================= */
 
-// .header {
+//         .header h2 {
 
-//     text-align: center;
+//             color: #1e40af;
 
-//     margin-bottom: 30px;
+//             font-size: 28px;
 
-// }
+//             margin-bottom: 6px;
 
+//         }
 
-// .header h2 {
 
-//     color: #1e40af;
+//         .header p {
 
-//     font-size: 28px;
+//             color: #64748b;
 
-//     margin-bottom: 6px;
+//             font-size: 14px;
 
-// }
+//         }
 
 
-// .header p {
+//         /* =========================
+//            FORM GRID
+//         ========================= */
 
-//     color: #64748b;
+//         .form-grid {
 
-//     font-size: 14px;
+//             display: grid;
 
-// }
+//             grid-template-columns:
+//                 repeat(2, 1fr);
 
+//             gap: 18px;
 
-// /* =========================
-//    FORM GRID
-// ========================= */
+//         }
 
-// .form-grid {
 
-//     display: grid;
+//         /* =========================
+//            FORM GROUP
+//         ========================= */
 
-//     grid-template-columns:
-//         repeat(2, 1fr);
+//         .form-group {
 
-//     gap: 18px;
+//             display: flex;
 
-// }
+//             flex-direction: column;
 
+//         }
 
-// /* =========================
-//    FORM GROUP
-// ========================= */
 
-// .form-group {
+//         .form-group.full {
 
-//     display: flex;
+//             grid-column: 1 / -1;
 
-//     flex-direction: column;
+//         }
 
-// }
 
+//         label {
 
-// .form-group.full {
+//             font-weight: 700;
 
-//     grid-column: 1 / -1;
+//             color: #1e293b;
 
-// }
+//             margin-bottom: 7px;
 
+//             font-size: 14px;
 
-// label {
+//         }
 
-//     font-weight: 700;
 
-//     color: #1e293b;
+//         /* =========================
+//            INPUTS
+//         ========================= */
 
-//     margin-bottom: 7px;
+//         input,
+//         select,
+//         textarea {
 
-//     font-size: 14px;
+//             width: 100%;
 
-// }
+//             padding: 12px 13px;
 
+//             border: 1px solid #d1d5db;
 
-// /* =========================
-//    INPUT
-// ========================= */
+//             border-radius: 10px;
 
-// input,
-// select,
-// textarea {
+//             background: #ffffff;
 
-//     width: 100%;
+//             color: #111827;
 
-//     padding: 12px 13px;
+//             font-size: 15px;
 
-//     border:
-//         1px solid #d1d5db;
+//             outline: none;
 
-//     border-radius: 10px;
+//             transition: .2s;
 
-//     background: #ffffff;
+//         }
 
-//     color: #111827;
 
-//     font-size: 15px;
+//         input:focus,
+//         select:focus,
+//         textarea:focus {
 
-//     outline: none;
+//             border-color: #2563eb;
 
-//     transition: .2s;
+//             box-shadow:
+//                 0 0 0 3px
+//                 rgba(37, 99, 235, .10);
 
-// }
+//         }
 
 
-// input:focus,
-// select:focus,
-// textarea:focus {
+//         textarea {
 
-//     border-color: #2563eb;
+//             min-height: 120px;
 
-//     box-shadow:
-//         0 0 0 3px
-//         rgba(
-//             37,
-//             99,
-//             235,
-//             .10
-//         );
+//             resize: vertical;
 
-// }
+//         }
 
 
-// textarea {
+//         /* =========================
+//            SECTION
+//         ========================= */
 
-//     min-height: 120px;
+//         .section {
 
-//     resize: vertical;
+//             margin-top: 30px;
 
-// }
+//             padding-top: 23px;
 
+//             border-top:
+//                 1px solid #e5e7eb;
 
-// /* =========================
-//    FILE INPUT
-// ========================= */
+//         }
 
-// input[type="file"] {
 
-//     padding: 10px;
+//         .section-title {
 
-//     background: #f8fafc;
+//             display: flex;
 
-//     cursor: pointer;
+//             align-items: center;
 
-// }
+//             gap: 8px;
 
+//             margin-bottom: 16px;
 
-// /* =========================
-//    SECTION
-// ========================= */
+//             color: #1e40af;
 
-// .section {
+//             font-size: 19px;
 
-//     margin-top: 30px;
+//             font-weight: 700;
 
-//     padding-top: 23px;
+//         }
 
-//     border-top:
-//         1px solid #e5e7eb;
 
-// }
+//         /* =========================
+//            COMPOSITION
+//         ========================= */
 
+//         .composition-row {
 
-// .section-title {
+//             display: flex;
 
-//     display: flex;
+//             gap: 10px;
 
-//     align-items: center;
+//             margin-bottom: 10px;
 
-//     gap: 8px;
+//             align-items: center;
 
-//     margin-bottom: 16px;
+//         }
 
-//     color: #1e40af;
 
-//     font-size: 19px;
+//         .composition-row input {
 
-//     font-weight: 700;
+//             flex: 1;
 
-// }
+//         }
 
 
-// /* =========================
-//    COMPOSITION
-// ========================= */
+//         .remove-btn {
 
-// .composition-row {
+//             width: 45px;
 
-//     display: flex;
+//             min-width: 45px;
 
-//     gap: 10px;
+//             height: 45px;
 
-//     margin-bottom: 10px;
+//             padding: 0;
 
-//     align-items: center;
+//             border: none;
 
-// }
+//             border-radius: 9px;
 
+//             background: #dc2626;
 
-// .composition-row input {
+//             color: #ffffff;
 
-//     flex: 1;
+//             font-size: 20px;
 
-// }
+//             font-weight: 700;
 
+//             cursor: pointer;
 
-// .remove-btn {
+//         }
 
-//     width: 45px;
 
-//     min-width: 45px;
+//         .remove-btn:hover {
 
-//     height: 45px;
+//             background: #b91c1c;
 
-//     padding: 0;
+//         }
 
-//     border: none;
 
-//     border-radius: 9px;
+//         .add-btn {
 
-//     background: #dc2626;
+//             width: auto;
 
-//     color: #ffffff;
+//             padding: 11px 18px;
 
-//     font-size: 20px;
+//             margin-top: 5px;
 
-//     font-weight: 700;
+//             border: none;
 
-//     cursor: pointer;
+//             border-radius: 9px;
 
-// }
+//             background: #16a34a;
 
+//             color: #ffffff;
 
-// .remove-btn:hover {
+//             font-weight: 700;
 
-//     background: #b91c1c;
+//             cursor: pointer;
 
-// }
+//         }
 
 
-// .add-btn {
+//         .add-btn:hover {
 
-//     width: auto;
+//             background: #15803d;
 
-//     padding: 11px 18px;
+//         }
 
-//     margin-top: 5px;
 
-//     border: none;
+//         /* =========================
+//            IMAGE GRID
+//         ========================= */
 
-//     border-radius: 9px;
+//         .image-grid {
 
-//     background: #16a34a;
+//             display: grid;
 
-//     color: #ffffff;
+//             grid-template-columns:
+//                 repeat(4, 1fr);
 
-//     font-weight: 700;
+//             gap: 15px;
 
-//     cursor: pointer;
+//         }
 
-// }
 
+//         .image-card {
 
-// .add-btn:hover {
+//             border:
+//                 1px solid #e5e7eb;
 
-//     background: #15803d;
+//             border-radius: 12px;
 
-// }
+//             padding: 8px;
 
+//             background: #f8fafc;
 
-// /* =========================
-//    IMAGE GRID
-// ========================= */
+//         }
 
-// .image-grid {
 
-//     display: grid;
+//         .image-card img {
 
-//     grid-template-columns:
-//         repeat(4, 1fr);
+//             width: 100%;
 
-//     gap: 15px;
+//             height: 140px;
 
-// }
+//             object-fit: cover;
 
+//             border-radius: 8px;
 
-// .image-card {
+//             display: block;
 
-//     position: relative;
+//         }
 
-//     border:
-//         1px solid #e5e7eb;
 
-//     border-radius: 12px;
+//         .image-number {
 
-//     padding: 8px;
+//             text-align: center;
 
-//     background: #f8fafc;
+//             margin-top: 7px;
 
-// }
+//             font-size: 12px;
 
+//             color: #64748b;
 
-// .image-card img {
+//         }
 
-//     width: 100%;
 
-//     height: 140px;
+//         /* =========================
+//            VIDEO GRID
+//         ========================= */
 
-//     object-fit: cover;
+//         .video-grid {
 
-//     border-radius: 8px;
+//             display: grid;
 
-//     display: block;
+//             grid-template-columns:
+//                 repeat(2, 1fr);
 
-// }
+//             gap: 18px;
 
+//         }
 
-// .image-number {
 
-//     text-align: center;
+//         .video-card {
 
-//     margin-top: 7px;
+//             border:
+//                 1px solid #e5e7eb;
 
-//     font-size: 12px;
+//             border-radius: 12px;
 
-//     color: #64748b;
+//             padding: 10px;
 
-// }
+//             background: #f8fafc;
 
+//         }
 
-// /* =========================
-//    VIDEO GRID
-// ========================= */
 
-// .video-grid {
+//         .video-card video {
 
-//     display: grid;
+//             width: 100%;
 
-//     grid-template-columns:
-//         repeat(3, 1fr);
+//             height: 220px;
 
-//     gap: 15px;
+//             object-fit: cover;
 
-// }
+//             border-radius: 9px;
 
+//             background: #000;
 
-// .video-card {
+//             display: block;
 
-//     border:
-//         1px solid #e5e7eb;
+//         }
 
-//     border-radius: 12px;
 
-//     padding: 8px;
+//         .video-number {
 
-//     background: #f8fafc;
+//             text-align: center;
 
-// }
+//             margin-top: 8px;
 
+//             font-size: 12px;
 
-// .video-card video {
+//             color: #64748b;
 
-//     width: 100%;
+//         }
 
-//     height: 180px;
 
-//     display: block;
+//         /* =========================
+//            VIDEO URL
+//         ========================= */
 
-//     object-fit: cover;
+//         .video-url-box {
 
-//     border-radius: 8px;
+//             margin-top: 15px;
 
-//     background: #000000;
+//         }
 
-// }
 
+//         .video-help {
 
-// .video-number {
+//             margin-top: 7px;
 
-//     text-align: center;
+//             color: #64748b;
 
-//     margin-top: 7px;
+//             font-size: 13px;
 
-//     font-size: 12px;
+//             line-height: 1.5;
 
-//     color: #64748b;
+//         }
 
-// }
 
+//         /* =========================
+//            NO MEDIA
+//         ========================= */
 
-// /* =========================
-//    NO IMAGE / VIDEO
-// ========================= */
+//         .no-image,
+//         .no-video {
 
-// .no-image {
+//             padding: 30px;
 
-//     padding: 30px;
+//             text-align: center;
 
-//     text-align: center;
+//             background: #f8fafc;
 
-//     background: #f8fafc;
+//             border-radius: 10px;
 
-//     border-radius: 10px;
+//             color: #64748b;
 
-//     color: #64748b;
+//         }
 
-// }
 
+//         /* =========================
+//            FILE INPUT
+//         ========================= */
 
-// /* =========================
-//    UPDATE BUTTON
-// ========================= */
+//         input[type="file"] {
 
-// .update-btn {
+//             padding: 10px;
 
-//     width: 100%;
+//             background: #f8fafc;
 
-//     padding: 15px;
+//             cursor: pointer;
 
-//     margin-top: 30px;
+//         }
 
-//     border: none;
 
-//     border-radius: 12px;
+//         /* =========================
+//            UPDATE BUTTON
+//         ========================= */
 
-//     background:
-//         linear-gradient(
-//             135deg,
-//             #2563eb,
-//             #1d4ed8
-//         );
+//         .update-btn {
 
-//     color: #ffffff;
+//             width: 100%;
 
-//     font-size: 17px;
+//             padding: 15px;
 
-//     font-weight: 700;
+//             margin-top: 30px;
 
-//     cursor: pointer;
+//             border: none;
 
-//     transition: .2s;
+//             border-radius: 12px;
 
-// }
+//             background:
+//                 linear-gradient(
+//                     135deg,
+//                     #2563eb,
+//                     #1d4ed8
+//                 );
 
+//             color: #ffffff;
 
-// .update-btn:hover {
+//             font-size: 17px;
 
-//     transform:
-//         translateY(-1px);
+//             font-weight: 700;
 
-//     box-shadow:
-//         0 8px 20px
-//         rgba(
-//             37,
-//             99,
-//             235,
-//             .25
-//         );
+//             cursor: pointer;
 
-// }
+//             transition: .2s;
 
+//         }
 
-// /* =========================
-//    BACK BUTTON
-// ========================= */
 
-// .back {
+//         .update-btn:hover {
 
-//     display: block;
+//             transform: translateY(-1px);
 
-//     text-align: center;
+//             box-shadow:
+//                 0 8px 20px
+//                 rgba(37, 99, 235, .25);
 
-//     margin-top: 18px;
+//         }
 
-//     padding: 12px;
 
-//     border-radius: 10px;
+//         /* =========================
+//            BACK BUTTON
+//         ========================= */
 
-//     background: #f1f5f9;
+//         .back {
 
-//     color: #1e40af;
+//             display: block;
 
-//     text-decoration: none;
+//             text-align: center;
 
-//     font-weight: 700;
+//             margin-top: 18px;
 
-// }
+//             padding: 12px;
 
+//             border-radius: 10px;
 
-// .back:hover {
+//             background: #f1f5f9;
 
-//     background: #e2e8f0;
+//             color: #1e40af;
 
-// }
+//             text-decoration: none;
 
+//             font-weight: 700;
 
-// /* =========================
-//    MOBILE
-// ========================= */
+//         }
 
-// @media (max-width: 700px) {
 
-//     body {
+//         .back:hover {
 
-//         padding: 10px;
+//             background: #e2e8f0;
 
-//     }
+//         }
 
 
-//     .container {
+//         /* =========================
+//            MOBILE
+//         ========================= */
 
-//         padding: 18px;
+//         @media (max-width: 700px) {
 
-//         border-radius: 16px;
+//             body {
 
-//     }
+//                 padding: 10px;
 
+//             }
 
-//     .header h2 {
 
-//         font-size: 22px;
+//             .container {
 
-//     }
+//                 padding: 18px;
 
+//                 border-radius: 16px;
 
-//     .form-grid {
+//             }
 
-//         grid-template-columns: 1fr;
 
-//         gap: 15px;
+//             .header h2 {
 
-//     }
+//                 font-size: 22px;
 
+//             }
 
-//     .form-group.full {
 
-//         grid-column: auto;
+//             .form-grid {
 
-//     }
+//                 grid-template-columns: 1fr;
 
+//                 gap: 15px;
 
-//     .image-grid {
+//             }
 
-//         grid-template-columns:
-//             repeat(2, 1fr);
 
-//     }
+//             .form-group.full {
 
+//                 grid-column: auto;
 
-//     .image-card img {
+//             }
 
-//         height: 120px;
 
-//     }
+//             .image-grid {
 
+//                 grid-template-columns:
+//                     repeat(2, 1fr);
 
-//     .video-grid {
+//             }
 
-//         grid-template-columns:
-//             repeat(2, 1fr);
 
-//     }
+//             .image-card img {
 
+//                 height: 120px;
 
-//     .video-card video {
+//             }
 
-//         height: 140px;
 
-//     }
+//             .video-grid {
 
+//                 grid-template-columns: 1fr;
 
-//     .composition-row {
+//             }
 
-//         gap: 7px;
 
-//     }
+//             .video-card video {
 
-// }
+//                 height: 200px;
 
+//             }
 
-// /* =========================
-//    SMALL MOBILE
-// ========================= */
 
-// @media (max-width: 400px) {
+//             .composition-row {
 
-//     .container {
+//                 gap: 7px;
 
-//         padding: 14px;
+//             }
 
-//     }
+//         }
 
 
-//     input,
-//     select,
-//     textarea {
+//         /* =========================
+//            SMALL MOBILE
+//         ========================= */
 
-//         font-size: 14px;
+//         @media (max-width: 400px) {
 
-//         padding: 11px;
+//             .container {
 
-//     }
+//                 padding: 14px;
 
+//             }
 
-//     .image-grid {
 
-//         grid-template-columns:
-//             repeat(2, 1fr);
+//             input,
+//             select,
+//             textarea {
 
-//         gap: 8px;
+//                 font-size: 14px;
 
-//     }
+//                 padding: 11px;
 
+//             }
 
-//     .image-card img {
 
-//         height: 100px;
+//             .image-grid {
 
-//     }
+//                 grid-template-columns:
+//                     repeat(2, 1fr);
 
+//                 gap: 8px;
 
-//     .video-grid {
+//             }
 
-//         grid-template-columns: 1fr;
 
-//     }
+//             .image-card img {
 
+//                 height: 100px;
 
-//     .video-card video {
+//             }
 
-//         height: 180px;
 
-//     }
+//             .video-card video {
 
+//                 height: 180px;
 
-//     .remove-btn {
+//             }
 
-//         width: 40px;
 
-//         min-width: 40px;
+//             .remove-btn {
 
-//         height: 40px;
+//                 width: 40px;
 
-//     }
+//                 min-width: 40px;
 
-// }
+//                 height: 40px;
 
-// </style>
+//             }
+
+//         }
+
+//     </style>
 
 // </head>
 
@@ -7106,82 +9013,80 @@
 // <div class="container">
 
 
-// <!-- =========================
-//      HEADER
-// ========================= -->
+//     <!-- =========================
+//          HEADER
+//     ========================= -->
 
-// <div class="header">
+//     <div class="header">
 
-//     <h2>
-//         ✏️ Edit Pharma Product
-//     </h2>
+//         <h2>
+//             ✏️ Edit Pharma Product
+//         </h2>
 
-//     <p>
-//         Update product information, images and videos
-//     </p>
+//         <p>
+//             Update product information, images and videos
+//         </p>
 
-// </div>
-
-
-// <!-- =========================
-//      FORM
-// ========================= -->
-
-// <form
-
-//     action="/admin/edit-product/${escapeHTML(product._id)}"
-
-//     method="POST"
-
-//     enctype="multipart/form-data"
-// >
+//     </div>
 
 
-// <!-- =========================
-//      BASIC INFORMATION
-// ========================= -->
+//     <!-- =========================
+//          FORM
+//     ========================= -->
 
-// <div class="form-grid">
+//     <form
 
+//         action="/admin/edit-product/${escapeHTML(product._id)}"
 
-// <!-- PRODUCT NAME -->
+//         method="POST"
 
-// <div class="form-group">
-
-//     <label>
-//         Product Name *
-//     </label>
-
-//     <input
-//         type="text"
-//         name="name"
-//         value="${escapeHTML(product.name)}"
-//         required
+//         enctype="multipart/form-data"
 //     >
 
-// </div>
+
+//         <!-- =========================
+//              BASIC INFORMATION
+//         ========================= -->
+
+//         <div class="form-grid">
 
 
-// <!-- BRAND -->
+//             <!-- PRODUCT NAME -->
 
-// <div class="form-group">
+//             <div class="form-group">
 
-//     <label>
-//         Brand Name
-//     </label>
+//                 <label>
+//                     Product Name *
+//                 </label>
 
-//     <input
-//         type="text"
-//         name="brand"
-//         value="${escapeHTML(product.brand)}"
-//     >
+//                 <input
+//                     type="text"
+//                     name="name"
+//                     value="${escapeHTML(product.name)}"
+//                     required
+//                 >
 
-// </div>
+//             </div>
 
 
-// <!-- CATEGORY -->
+//             <!-- BRAND -->
 
-// <div class="form-group">
+//             <div class="form-group">
+
+//                 <label>
+//                     Brand Name
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="brand"
+//                     value="${escapeHTML(product.brand)}"
+//                 >
+
+//             </div>
+
+
+//            <div class="form-group">
 
 //     <label>
 //         Category
@@ -7235,6 +9140,14 @@
 //             Cream
 //         </option>
 
+//         <!-- SOAP -->
+//         <option
+//             value="Soap"
+//             ${product.category === "Soap" ? "selected" : ""}
+//         >
+//             Soap
+//         </option>
+
 //         <option
 //             value="Other"
 //             ${product.category === "Other" ? "selected" : ""}
@@ -7247,588 +9160,569 @@
 // </div>
 
 
-// <!-- MANUFACTURER -->
+//             <!-- MANUFACTURER -->
 
-// <div class="form-group">
+//             <div class="form-group">
 
-//     <label>
-//         Manufacturer
-//     </label>
+//                 <label>
+//                     Manufacturer
+//                 </label>
 
-//     <input
-//         type="text"
-//         name="manufacturer"
-//         value="${escapeHTML(product.manufacturer)}"
-//     >
+//                 <input
+//                     type="text"
+//                     name="manufacturer"
+//                     value="${escapeHTML(product.manufacturer)}"
+//                 >
 
-// </div>
-
-
-// <!-- MRP -->
-
-// <div class="form-group">
-
-//     <label>
-//         MRP ₹
-//     </label>
-
-//     <input
-//         type="number"
-//         name="mrp"
-//         value="${product.mrp ?? ""}"
-//         min="0"
-//         step="0.01"
-//     >
-
-// </div>
+//             </div>
 
 
-// <!-- PRICE -->
+//             <!-- MRP -->
 
-// <div class="form-group">
+//             <div class="form-group">
 
-//     <label>
-//         Selling Price ₹ *
-//     </label>
+//                 <label>
+//                     MRP ₹
+//                 </label>
 
-//     <input
-//         type="number"
-//         name="price"
-//         value="${product.price ?? ""}"
-//         min="0"
-//         step="0.01"
-//         required
-//     >
+//                 <input
+//                     type="number"
+//                     name="mrp"
+//                     value="${product.mrp ?? ""}"
+//                     min="0"
+//                     step="0.01"
+//                 >
 
-// </div>
-
-
-// <!-- STOCK -->
-
-// <div class="form-group">
-
-//     <label>
-//         Stock Quantity
-//     </label>
-
-//     <input
-//         type="number"
-//         name="stock"
-//         value="${product.stock ?? 0}"
-//         min="0"
-//     >
-
-// </div>
+//             </div>
 
 
-// <!-- PACK SIZE -->
+//             <!-- SELLING PRICE -->
 
-// <div class="form-group">
+//             <div class="form-group">
 
-//     <label>
-//         Pack Size
-//     </label>
+//                 <label>
+//                     Selling Price ₹ *
+//                 </label>
 
-//     <input
-//         type="text"
-//         name="packSize"
-//         value="${escapeHTML(product.packSize)}"
-//         placeholder="e.g. 200 ml"
-//     >
+//                 <input
+//                     type="number"
+//                     name="price"
+//                     value="${product.price ?? ""}"
+//                     min="0"
+//                     step="0.01"
+//                     required
+//                 >
 
-// </div>
-
-
-// <!-- BATCH -->
-
-// <div class="form-group">
-
-//     <label>
-//         Batch Number
-//     </label>
-
-//     <input
-//         type="text"
-//         name="batchNo"
-//         value="${escapeHTML(product.batchNo)}"
-//     >
-
-// </div>
+//             </div>
 
 
-// <!-- MFG DATE -->
+//             <!-- STOCK -->
 
-// <div class="form-group">
+//             <div class="form-group">
 
-//     <label>
-//         Manufacturing Date
-//     </label>
+//                 <label>
+//                     Stock Quantity
+//                 </label>
 
-//     <input
-//         type="date"
-//         name="mfgDate"
-//         value="${formatDate(product.mfgDate)}"
-//     >
+//                 <input
+//                     type="number"
+//                     name="stock"
+//                     value="${product.stock ?? 0}"
+//                     min="0"
+//                 >
 
-// </div>
-
-
-// <!-- EXPIRY DATE -->
-
-// <div class="form-group">
-
-//     <label>
-//         Expiry Date
-//     </label>
-
-//     <input
-//         type="date"
-//         name="expDate"
-//         value="${formatDate(product.expDate)}"
-//     >
-
-// </div>
+//             </div>
 
 
-// </div>
+//             <!-- PACK SIZE -->
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Pack Size
+//                 </label>
+
+//                 <input
+//                     type="text"
+//                     name="packSize"
+//                     value="${escapeHTML(product.packSize)}"
+//                     placeholder="e.g. 200 ml"
+//                 >
+
+//             </div>
 
 
-// <!-- =========================
-//      COMPOSITION
-// ========================= -->
+//             <!-- BATCH -->
 
-// <div class="section">
+//             <div class="form-group">
 
-// <div class="section-title">
+//                 <label>
+//                     Batch Number
+//                 </label>
 
-//     💊 Composition
+//                 <input
+//                     type="text"
+//                     name="batchNo"
+//                     value="${escapeHTML(product.batchNo)}"
+//                 >
 
-// </div>
+//             </div>
 
 
-// <div id="compositionBox">
+//             <!-- MFG DATE -->
 
-//     ${compositions.map((item, index) => `
+//             <div class="form-group">
 
-//         <div class="composition-row">
+//                 <label>
+//                     Manufacturing Date
+//                 </label>
 
-//             <input
-//                 type="text"
-//                 name="composition[]"
-//                 value="${escapeHTML(item)}"
-//                 placeholder="Composition ${index + 1}"
+//                 <input
+//                     type="date"
+//                     name="mfgDate"
+//                     value="${formatDate(product.mfgDate)}"
+//                 >
+
+//             </div>
+
+
+//             <!-- EXPIRY DATE -->
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Expiry Date
+//                 </label>
+
+//                 <input
+//                     type="date"
+//                     name="expDate"
+//                     value="${formatDate(product.expDate)}"
+//                 >
+
+//             </div>
+
+
+//         </div>
+
+
+//         <!-- =========================
+//              COMPOSITION
+//         ========================= -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+//                 💊 Composition
+//             </div>
+
+
+//             <div id="compositionBox">
+
+//                 ${compositions.map((item, index) => `
+
+//                     <div class="composition-row">
+
+//                         <input
+//                             type="text"
+//                             name="composition[]"
+//                             value="${escapeHTML(item)}"
+//                             placeholder="Composition ${index + 1}"
+//                         >
+
+//                         <button
+//                             type="button"
+//                             class="remove-btn"
+//                             onclick="removeComposition(this)"
+//                             ${index === 0 ? 'style="visibility:hidden"' : ""}
+//                         >
+//                             ×
+//                         </button>
+
+//                     </div>
+
+//                 `).join("")}
+
+//             </div>
+
+
+//             <button
+//                 type="button"
+//                 class="add-btn"
+//                 onclick="addComposition()"
 //             >
+//                 + Add Composition
+//             </button>
+
+//         </div>
+
+
+//         <!-- =========================
+//              PRODUCT DETAILS
+//         ========================= -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+//                 📋 Product Details
+//             </div>
+
+
+//             <div class="form-grid">
+
+
+//                 <!-- USES -->
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Uses
+//                     </label>
+
+//                     <textarea
+//                         name="uses"
+//                         placeholder="Enter product uses"
+//                     >${escapeHTML(product.uses)}</textarea>
+
+//                 </div>
+
+
+//                 <!-- BENEFITS -->
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Benefits
+//                     </label>
+
+//                     <textarea
+//                         name="benefits"
+//                         placeholder="Enter product benefits"
+//                     >${escapeHTML(product.benefits)}</textarea>
+
+//                 </div>
+
+
+//                 <!-- DOSAGE -->
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Dosage
+//                     </label>
+
+//                     <textarea
+//                         name="dosage"
+//                         placeholder="Enter dosage"
+//                     >${escapeHTML(product.dosage)}</textarea>
+
+//                 </div>
+
+
+//                 <!-- SIDE EFFECTS -->
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Side Effects
+//                     </label>
+
+//                     <textarea
+//                         name="sideEffects"
+//                         placeholder="Enter side effects"
+//                     >${escapeHTML(product.sideEffects)}</textarea>
+
+//                 </div>
+
+
+//                 <!-- STORAGE -->
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Storage Instructions
+//                     </label>
+
+//                     <textarea
+//                         name="storage"
+//                         placeholder="Enter storage instructions"
+//                     >${escapeHTML(product.storage)}</textarea>
+
+//                 </div>
+
+
+//                 <!-- DESCRIPTION -->
+
+//                 <div class="form-group full">
+
+//                     <label>
+//                         Full Description
+//                     </label>
+
+//                     <textarea
+//                         name="description"
+//                         placeholder="Enter full product description"
+//                     >${escapeHTML(product.description)}</textarea>
+
+//                 </div>
+
+
+//             </div>
+
+//         </div>
+
+
+//         <!-- =========================
+//              EXISTING IMAGES
+//         ========================= -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+//                 🖼 Existing Product Images
+//             </div>
+
 
 //             ${
-//                 index > 0
+//                 images.length
 
 //                 ?
 
 //                 `
-//                 <button
-//                     type="button"
-//                     class="remove-btn"
-//                     onclick="removeComposition(this)"
-//                 >
-//                     ×
-//                 </button>
+//                 <div class="image-grid">
+
+//                     ${images.map((img, index) => {
+
+//                         const safeImg =
+//                             cleanImageUrl(img);
+
+//                         return `
+
+//                             <div class="image-card">
+
+//                                 <img
+//                                     src="${escapeHTML(safeImg)}"
+//                                     alt="Product Image ${index + 1}"
+//                                     loading="lazy"
+//                                     onerror="this.style.display='none'"
+//                                 >
+
+//                                 <div class="image-number">
+//                                     Image ${index + 1}
+//                                 </div>
+
+//                             </div>
+
+//                         `;
+
+//                     }).join("")}
+
+//                 </div>
 //                 `
 
 //                 :
 
 //                 `
-//                 <button
-//                     type="button"
-//                     class="remove-btn"
-//                     style="visibility:hidden"
-//                 >
-//                     ×
-//                 </button>
+//                 <div class="no-image">
+//                     No existing product image
+//                 </div>
 //                 `
 //             }
 
 //         </div>
 
-//     `).join("")}
 
-// </div>
+//         <!-- =========================
+//              ADD NEW IMAGES
+//         ========================= -->
 
+//         <div class="section">
 
-// <button
-//     type="button"
-//     class="add-btn"
-//     onclick="addComposition()"
-// >
-//     + Add Composition
-// </button>
+//             <div class="section-title">
+//                 📷 Add New Product Images
+//             </div>
 
 
-// </div>
+//             <div class="form-group">
 
+//                 <label>
+//                     Select New Images
+//                 </label>
 
-// <!-- =========================
-//      PRODUCT DETAILS
-// ========================= -->
+//                 <input
+//                     type="file"
+//                     name="images"
+//                     accept="image/*"
+//                     multiple
+//                 >
 
-// <div class="section">
+//             </div>
 
-// <div class="section-title">
 
-//     📋 Product Details
+//             <p
+//                 style="
+//                     margin-top:8px;
+//                     color:#64748b;
+//                     font-size:13px;
+//                 "
+//             >
+//                 You can select multiple new images.
+//             </p>
 
-// </div>
+//         </div>
 
 
-// <div class="form-grid">
+//         <!-- =========================
+//              EXISTING VIDEOS
+//         ========================= -->
 
+//         <div class="section">
 
-// <!-- USES -->
+//             <div class="section-title">
+//                 🎥 Existing Product Videos
+//             </div>
 
-// <div class="form-group full">
 
-//     <label>
-//         Uses
-//     </label>
+//             ${
+//                 videos.length
 
-//     <textarea
-//         name="uses"
-//         placeholder="Enter product uses"
-//     >${escapeHTML(product.uses)}</textarea>
+//                 ?
 
-// </div>
+//                 `
+//                 <div class="video-grid">
 
+//                     ${videos.map((video, index) => {
 
-// <!-- BENEFITS -->
+//                         return `
 
-// <div class="form-group full">
+//                             <div class="video-card">
 
-//     <label>
-//         Benefits
-//     </label>
+//                                 <video
+//                                     controls
+//                                     preload="metadata"
+//                                 >
+//                                     <source
+//                                         src="${escapeHTML(video)}"
+//                                     >
+//                                     Your browser does not support video.
+//                                 </video>
 
-//     <textarea
-//         name="benefits"
-//         placeholder="Enter product benefits"
-//     >${escapeHTML(product.benefits)}</textarea>
+//                                 <div class="video-number">
+//                                     Video ${index + 1}
+//                                 </div>
 
-// </div>
+//                             </div>
 
+//                         `;
 
-// <!-- DOSAGE -->
-
-// <div class="form-group full">
-
-//     <label>
-//         Dosage
-//     </label>
-
-//     <textarea
-//         name="dosage"
-//         placeholder="Enter dosage"
-//     >${escapeHTML(product.dosage)}</textarea>
-
-// </div>
-
-
-// <!-- SIDE EFFECTS -->
-
-// <div class="form-group full">
-
-//     <label>
-//         Side Effects
-//     </label>
-
-//     <textarea
-//         name="sideEffects"
-//         placeholder="Enter side effects"
-//     >${escapeHTML(product.sideEffects)}</textarea>
-
-// </div>
-
-
-// <!-- STORAGE -->
-
-// <div class="form-group full">
-
-//     <label>
-//         Storage Instructions
-//     </label>
-
-//     <textarea
-//         name="storage"
-//         placeholder="Enter storage instructions"
-//     >${escapeHTML(product.storage)}</textarea>
-
-// </div>
-
-
-// <!-- DESCRIPTION -->
-
-// <div class="form-group full">
-
-//     <label>
-//         Full Description
-//     </label>
-
-//     <textarea
-//         name="description"
-//         placeholder="Enter full product description"
-//     >${escapeHTML(product.description)}</textarea>
-
-// </div>
-
-
-// </div>
-
-// </div>
-
-
-// <!-- =========================
-//      EXISTING IMAGES
-// ========================= -->
-
-// <div class="section">
-
-// <div class="section-title">
-
-//     🖼 Existing Product Images
-
-// </div>
-
-
-// ${
-//     images.length
-
-//     ?
-
-//     `
-//     <div class="image-grid">
-
-//         ${images.map((img, index) => {
-
-//             const safeImg =
-//                 cleanImageUrl(img);
-
-//             return `
-
-//                 <div class="image-card">
-
-//                     <img
-//                         src="${escapeHTML(safeImg)}"
-//                         alt="Product Image ${index + 1}"
-//                         loading="lazy"
-//                         onerror="this.style.display='none'"
-//                     >
-
-//                     <div class="image-number">
-//                         Image ${index + 1}
-//                     </div>
+//                     }).join("")}
 
 //                 </div>
+//                 `
 
-//             `;
+//                 :
 
-//         }).join("")}
-
-//     </div>
-//     `
-
-//     :
-
-//     `
-//     <div class="no-image">
-
-//         No existing product image
-
-//     </div>
-//     `
-// }
-
-
-// </div>
-
-
-// <!-- =========================
-//      ADD NEW IMAGES
-// ========================= -->
-
-// <div class="section">
-
-// <div class="section-title">
-
-//     📷 Add New Product Images
-
-// </div>
-
-
-// <div class="form-group">
-
-//     <label>
-//         Select New Images
-//     </label>
-
-//     <input
-//         type="file"
-//         name="images"
-//         accept="image/*"
-//         multiple
-//     >
-
-// </div>
-
-
-// <p
-//     style="
-//         margin-top:8px;
-//         color:#64748b;
-//         font-size:13px;
-//     "
-// >
-//     You can select multiple product images.
-// </p>
-
-
-// </div>
-
-
-// <!-- =========================
-//      EXISTING VIDEOS
-// ========================= -->
-
-// <div class="section">
-
-// <div class="section-title">
-
-//     🎥 Existing Product Videos
-
-// </div>
-
-
-// ${
-//     videos.length
-
-//     ?
-
-//     `
-//     <div class="video-grid">
-
-//         ${videos.map((video, index) => {
-
-//             const safeVideo =
-//                 cleanImageUrl(video);
-
-//             return `
-
-//                 <div class="video-card">
-
-//                     <video
-//                         src="${escapeHTML(safeVideo)}"
-//                         controls
-//                         preload="metadata"
-//                         playsinline
-//                     ></video>
-
-//                     <div class="video-number">
-//                         Video ${index + 1}
-//                     </div>
-
+//                 `
+//                 <div class="no-video">
+//                     No existing product video
 //                 </div>
+//                 `
+//             }
 
-//             `;
-
-//         }).join("")}
-
-//     </div>
-//     `
-
-//     :
-
-//     `
-//     <div class="no-image">
-
-//         No existing product video
-
-//     </div>
-//     `
-// }
+//         </div>
 
 
-// </div>
+//         <!-- =========================
+//              VIDEO URL
+//         ========================= -->
+
+//         <div class="section">
+
+//             <div class="section-title">
+//                 🔗 Add Video URL
+//             </div>
 
 
-// <!-- =========================
-//      ADD NEW VIDEOS
-// ========================= -->
+//             <div class="form-group">
 
-// <div class="section">
+//                 <label>
+//                     Product Video URL
+//                 </label>
 
-// <div class="section-title">
+//                 <input
+//                     type="url"
+//                     name="videoUrl"
+//                     value="${escapeHTML(product.videoUrl || "")}"
+//                     placeholder="https://example.com/product-video.mp4"
+//                 >
 
-//     🎥 Add Product Videos
+//                 <p class="video-help">
+//                     You can add a direct MP4/video URL.
+//                 </p>
 
-// </div>
+//             </div>
+
+//         </div>
 
 
-// <div class="form-group">
+//         <!-- =========================
+//              NEW VIDEO UPLOAD
+//         ========================= -->
 
-//     <label>
-//         Select New Videos
-//     </label>
+//         <div class="section">
 
-//     <input
-//         type="file"
-//         name="videos"
-//         accept="video/mp4,video/webm,video/quicktime"
-//         multiple
+//             <div class="section-title">
+//                 🎬 Upload New Product Video
+//             </div>
+
+
+//             <div class="form-group">
+
+//                 <label>
+//                     Select Video
+//                 </label>
+
+//                 <input
+//                     type="file"
+//                     name="videos"
+//                     accept="video/*"
+//                     multiple
+//                 >
+
+//                 <p class="video-help">
+//                     You can select one or multiple product videos.
+//                 </p>
+
+//             </div>
+
+//         </div>
+
+
+//         <!-- =========================
+//              UPDATE BUTTON
+//         ========================= -->
+
+//         <button
+//             type="submit"
+//             class="update-btn"
+//         >
+//             💾 Update Product
+//         </button>
+
+
+//     </form>
+
+
+//     <!-- =========================
+//          BACK
+//     ========================= -->
+
+//     <a
+//         href="/admin/manage-products"
+//         class="back"
 //     >
-
-// </div>
-
-
-// <p
-//     style="
-//         margin-top:8px;
-//         color:#64748b;
-//         font-size:13px;
-//     "
-// >
-//     You can select multiple videos.
-//     MP4, WebM and MOV are supported.
-// </p>
-
-
-// </div>
-
-
-// <!-- =========================
-//      UPDATE BUTTON
-// ========================= -->
-
-// <button
-//     type="submit"
-//     class="update-btn"
-// >
-
-//     💾 Update Product
-
-// </button>
-
-
-// </form>
-
-
-// <!-- =========================
-//      BACK
-// ========================= -->
-
-// <a
-//     href="/admin/manage-products"
-//     class="back"
-// >
-
-//     ⬅ Back to Manage Products
-
-// </a>
+//         ⬅ Back to Manage Products
+//     </a>
 
 
 // </div>
@@ -7836,225 +9730,216 @@
 
 // <script>
 
+//     // =========================
+//     // ADD COMPOSITION
+//     // =========================
 
-// // =========================
-// // ADD COMPOSITION
-// // =========================
+//     function addComposition() {
 
-// function addComposition() {
+//         const box =
+//             document.getElementById("compositionBox");
 
-//     const box =
-//         document.getElementById(
-//             "compositionBox"
-//         );
-
-
-//     if (!box) {
-//         return;
-//     }
-
-
-//     const row =
-//         document.createElement("div");
-
-
-//     row.className =
-//         "composition-row";
-
-
-//     row.innerHTML = `
-
-//         <input
-//             type="text"
-//             name="composition[]"
-//             placeholder="Composition"
-//         >
-
-//         <button
-//             type="button"
-//             class="remove-btn"
-//             onclick="removeComposition(this)"
-//         >
-//             ×
-//         </button>
-
-//     `;
-
-
-//     box.appendChild(row);
-
-// }
-
-
-// // =========================
-// // REMOVE COMPOSITION
-// // =========================
-
-// function removeComposition(button) {
-
-//     const row =
-//         button.closest(
-//             ".composition-row"
-//         );
-
-
-//     if (!row) {
-//         return;
-//     }
-
-
-//     const box =
-//         document.getElementById(
-//             "compositionBox"
-//         );
-
-
-//     if (!box) {
-//         return;
-//     }
-
-
-//     const rows =
-//         box.querySelectorAll(
-//             ".composition-row"
-//         );
-
-
-//     // कम से कम एक composition row रहे
-//     if (rows.length <= 1) {
-
-//         const input =
-//             row.querySelector("input");
-
-//         if (input) {
-//             input.value = "";
+//         if (!box) {
+//             return;
 //         }
 
-//         return;
+
+//         const row =
+//             document.createElement("div");
+
+//         row.className =
+//             "composition-row";
+
+
+//         row.innerHTML = \`
+            
+//             <input
+//                 type="text"
+//                 name="composition[]"
+//                 placeholder="Composition"
+//             >
+
+//             <button
+//                 type="button"
+//                 class="remove-btn"
+//                 onclick="removeComposition(this)"
+//             >
+//                 ×
+//             </button>
+
+//         \`;
+
+
+//         box.appendChild(row);
+
 //     }
 
 
-//     row.remove();
+//     // =========================
+//     // REMOVE COMPOSITION
+//     // =========================
 
-// }
+//     function removeComposition(button) {
 
+//         const row =
+//             button.parentElement;
 
-// // =========================
-// // IMAGE VALIDATION
-// // =========================
-
-// const imageInput =
-//     document.querySelector(
-//         'input[name="images"]'
-//     );
-
-
-// if (imageInput) {
-
-//     imageInput.addEventListener(
-//         "change",
-//         function () {
-
-//             const files =
-//                 Array.from(this.files || []);
+//         if (!row) {
+//             return;
+//         }
 
 
-//             for (const file of files) {
+//         const box =
+//             document.getElementById("compositionBox");
 
-//                 if (
-//                     !file.type.startsWith(
-//                         "image/"
-//                     )
-//                 ) {
 
-//                     alert(
-//                         "Please select only image files."
-//                     );
+//         if (!box) {
+//             return;
+//         }
 
-//                     this.value = "";
 
-//                     return;
+//         const rows =
+//             box.querySelectorAll(".composition-row");
+
+
+//         // कम से कम एक composition हमेशा रहे
+//         if (rows.length <= 1) {
+
+//             const input =
+//                 row.querySelector("input");
+
+//             if (input) {
+//                 input.value = "";
+//             }
+
+//             return;
+//         }
+
+
+//         row.remove();
+
+//     }
+
+
+//     // =========================
+//     // IMAGE VALIDATION
+//     // =========================
+
+//     const imageInput =
+//         document.querySelector(
+//             'input[name="images"]'
+//         );
+
+
+//     if (imageInput) {
+
+//         imageInput.addEventListener(
+//             "change",
+//             function () {
+
+//                 const files =
+//                     Array.from(this.files || []);
+
+
+//                 for (const file of files) {
+
+//                     if (
+//                         !file.type.startsWith("image/")
+//                     ) {
+
+//                         alert(
+//                             "Please select only image files."
+//                         );
+
+//                         this.value = "";
+
+//                         return;
+//                     }
+
 //                 }
 
 //             }
+//         );
 
-//         }
-//     );
-
-// }
+//     }
 
 
-// // =========================
-// // VIDEO VALIDATION
-// // =========================
+//     // =========================
+//     // VIDEO VALIDATION
+//     // =========================
 
-// const videoInput =
-//     document.querySelector(
-//         'input[name="videos"]'
-//     );
-
-
-// if (videoInput) {
-
-//     videoInput.addEventListener(
-//         "change",
-//         function () {
-
-//             const files =
-//                 Array.from(this.files || []);
+//     const videoInput =
+//         document.querySelector(
+//             'input[name="videos"]'
+//         );
 
 
-//             const allowedTypes = [
+//     if (videoInput) {
 
-//                 "video/mp4",
+//         videoInput.addEventListener(
+//             "change",
+//             function () {
 
-//                 "video/webm",
-
-//                 "video/quicktime"
-
-//             ];
-
-
-//             for (const file of files) {
-
-//                 if (
-//                     !allowedTypes.includes(
-//                         file.type
-//                     )
-//                 ) {
-
-//                     alert(
-//                         "Please select only MP4, WebM or MOV video files."
-//                     );
-
-//                     this.value = "";
-
-//                     return;
-//                 }
+//                 const files =
+//                     Array.from(this.files || []);
 
 
-//                 // 100 MB maximum per video
-//                 if (
-//                     file.size >
-//                     100 * 1024 * 1024
-//                 ) {
+//                 for (const file of files) {
 
-//                     alert(
-//                         "Each video must be less than 100 MB."
-//                     );
+//                     if (
+//                         !file.type.startsWith("video/")
+//                     ) {
 
-//                     this.value = "";
+//                         alert(
+//                             "Please select only video files."
+//                         );
 
-//                     return;
+//                         this.value = "";
+
+//                         return;
+//                     }
+
 //                 }
 
 //             }
+//         );
 
-//         }
-//     );
+//     }
 
-// }
 
+//     // =========================
+//     // FORM SUBMIT
+//     // =========================
+
+//     const form =
+//         document.querySelector("form");
+
+
+//     if (form) {
+
+//         form.addEventListener(
+//             "submit",
+//             function () {
+
+//                 const button =
+//                     form.querySelector(
+//                         ".update-btn"
+//                     );
+
+
+//                 if (button) {
+
+//                     button.disabled = true;
+
+//                     button.innerHTML =
+//                         "⏳ Updating Product...";
+
+//                 }
+
+//             }
+//         );
+
+//     }
 
 // </script>
 
@@ -8071,11 +9956,8 @@
 // module.exports = EditProduct;
 
 
-function EditProduct(product) {
 
-    // =========================
-    // SAFE HTML ESCAPE
-    // =========================
+function EditProduct(product = {}) {
 
     const escapeHTML = (value) => {
 
@@ -8092,57 +9974,35 @@ function EditProduct(product) {
     };
 
 
-    // =========================
-    // DATE FORMAT
-    // =========================
-
     const formatDate = (value) => {
 
         if (!value) {
             return "";
         }
 
-        try {
+        const date = new Date(value);
 
-            const date = new Date(value);
-
-            if (isNaN(date.getTime())) {
-                return "";
-            }
-
-            return date.toISOString().split("T")[0];
-
-        } catch (error) {
-
+        if (isNaN(date.getTime())) {
             return "";
-
         }
+
+        return date.toISOString().split("T")[0];
     };
 
-
-    // =========================
-    // COMPOSITION
-    // =========================
 
     let compositions = [];
 
     if (Array.isArray(product.composition)) {
 
         compositions = product.composition
-            .filter(item => item !== null && item !== undefined)
-            .map(item => {
+            .filter(Boolean)
+            .map((item) => {
 
                 if (typeof item === "object") {
-
-                    if (item.name && item.strength) {
-                        return `${item.name} ${item.strength}`;
-                    }
-
-                    if (item.name) {
-                        return item.name;
-                    }
-
-                    return "";
+                    return [
+                        item.name || "",
+                        item.strength || ""
+                    ].filter(Boolean).join(" ");
                 }
 
                 return String(item);
@@ -8159,119 +10019,55 @@ function EditProduct(product) {
     }
 
 
-    // =========================
-    // IMAGES
-    // =========================
+    let images = Array.isArray(product.images)
+        ? product.images.filter(Boolean)
+        : [];
 
-    let images = [];
-
-    if (Array.isArray(product.images)) {
-
-        images = product.images.filter(Boolean);
-
-    }
-
-    // Old image field
-    if (
-        product.image &&
-        !images.includes(product.image)
-    ) {
-
+    if (product.image && !images.includes(product.image)) {
         images.unshift(product.image);
-
     }
 
-    // Remove duplicates
     images = [...new Set(images)];
 
 
-    // =========================
-    // IMAGE URL CLEANER
-    // =========================
+    let videos = Array.isArray(product.videos)
+        ? product.videos.filter(Boolean)
+        : [];
 
-    const cleanImageUrl = (url) => {
-
-        if (!url) {
-            return "";
-        }
-
-        let clean = String(url).trim();
-
-        // Markdown URL:
-        // [text](https://example.com/image.jpg)
-
-        const markdownMatch =
-            clean.match(/\]\((https?:\/\/[^)]+)\)/);
-
-        if (markdownMatch) {
-
-            return markdownMatch[1];
-
-        }
-
-        // [https://example.com/image.jpg]
-
-        if (
-            clean.startsWith("[") &&
-            clean.endsWith("]")
-        ) {
-
-            clean = clean.slice(1, -1);
-
-        }
-
-        return clean;
-    };
-
-
-    images = images
-        .map(cleanImageUrl)
-        .filter(Boolean);
-
-
-    // =========================
-    // VIDEOS
-    // =========================
-
-    let videos = [];
-
-    if (Array.isArray(product.videos)) {
-
-        videos = product.videos.filter(Boolean);
-
-    }
-
-    // Old/single video field
-    if (
-        product.video &&
-        !videos.includes(product.video)
-    ) {
-
+    if (product.video && !videos.includes(product.video)) {
         videos.unshift(product.video);
-
     }
 
-    // Video URL field
-    if (
-        product.videoUrl &&
-        !videos.includes(product.videoUrl)
-    ) {
-
+    if (product.videoUrl && !videos.includes(product.videoUrl)) {
         videos.unshift(product.videoUrl);
-
     }
 
     videos = [...new Set(videos)];
 
 
-    // =========================
-    // RETURN HTML
-    // =========================
+    const mrp = Number(product.mrp) || 0;
+    const price = Number(product.price) || 0;
+
+    const savedDiscount = Number(product.discountPercentage);
+
+    const discountPercentage = Number.isFinite(savedDiscount)
+        ? Math.min(100, Math.max(0, savedDiscount))
+        : (
+            mrp > 0
+                ? Math.min(
+                    100,
+                    Math.max(
+                        0,
+                        ((mrp - price) / mrp) * 100
+                    )
+                )
+                : 0
+        );
+
 
     return `
 
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -8285,1037 +10081,447 @@ function EditProduct(product) {
 
     <title>Edit Pharma Product</title>
 
-
     <style>
 
-        /* =========================
-           RESET
-        ========================= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
+        *{
+            box-sizing:border-box;
+            font-family:"Segoe UI",Arial,sans-serif;
         }
 
-
-        /* =========================
-           BODY
-        ========================= */
-
-        body {
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #06b6d4
-                );
-
-            min-height: 100vh;
-
-            padding: 30px 15px;
-
+        body{
+            margin:0;
+            min-height:100vh;
+            padding:25px 12px;
+            background:linear-gradient(135deg,#2563eb,#06b6d4);
         }
 
-
-        /* =========================
-           CONTAINER
-        ========================= */
-
-        .container {
-
-            width: 100%;
-
-            max-width: 1000px;
-
-            margin: auto;
-
-            background: #ffffff;
-
-            padding: 30px;
-
-            border-radius: 22px;
-
-            box-shadow:
-                0 20px 50px
-                rgba(0, 0, 0, .18);
-
+        .container{
+            width:100%;
+            max-width:1050px;
+            margin:auto;
+            padding:28px;
+            border-radius:20px;
+            background:#fff;
+            box-shadow:0 20px 50px rgba(0,0,0,.2);
         }
 
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        .header {
-
-            text-align: center;
-
-            margin-bottom: 30px;
-
+        .header{
+            margin-bottom:25px;
+            padding-bottom:16px;
+            border-bottom:1px solid #e5e7eb;
         }
 
-
-        .header h2 {
-
-            color: #1e40af;
-
-            font-size: 28px;
-
-            margin-bottom: 6px;
-
+        .header h2{
+            margin:0 0 7px;
+            color:#1e3a8a;
         }
 
-
-        .header p {
-
-            color: #64748b;
-
-            font-size: 14px;
-
+        .header p{
+            margin:0;
+            color:#64748b;
         }
 
-
-        /* =========================
-           FORM GRID
-        ========================= */
-
-        .form-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 18px;
-
+        .section{
+            margin-top:28px;
         }
 
-
-        /* =========================
-           FORM GROUP
-        ========================= */
-
-        .form-group {
-
-            display: flex;
-
-            flex-direction: column;
-
+        .section-title{
+            margin-bottom:14px;
+            padding-bottom:10px;
+            color:#1e3a8a;
+            font-size:19px;
+            font-weight:700;
+            border-bottom:2px solid #dbeafe;
         }
 
-
-        .form-group.full {
-
-            grid-column: 1 / -1;
-
+        .form-grid{
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:16px;
         }
 
-
-        label {
-
-            font-weight: 700;
-
-            color: #1e293b;
-
-            margin-bottom: 7px;
-
-            font-size: 14px;
-
+        .form-group{
+            display:flex;
+            flex-direction:column;
+            gap:7px;
         }
 
+        .form-group.full{
+            grid-column:1/-1;
+        }
 
-        /* =========================
-           INPUTS
-        ========================= */
+        label{
+            color:#374151;
+            font-weight:650;
+        }
 
         input,
-        select,
-        textarea {
-
-            width: 100%;
-
-            padding: 12px 13px;
-
-            border: 1px solid #d1d5db;
-
-            border-radius: 10px;
-
-            background: #ffffff;
-
-            color: #111827;
-
-            font-size: 15px;
-
-            outline: none;
-
-            transition: .2s;
-
+        textarea,
+        select{
+            width:100%;
+            padding:12px 13px;
+            font-size:15px;
+            color:#111827;
+            border:1px solid #cbd5e1;
+            border-radius:10px;
+            outline:none;
         }
-
 
         input:focus,
-        select:focus,
-        textarea:focus {
-
-            border-color: #2563eb;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(37, 99, 235, .10);
-
+        textarea:focus,
+        select:focus{
+            border-color:#2563eb;
+            box-shadow:0 0 0 3px rgba(37,99,235,.12);
         }
 
-
-        textarea {
-
-            min-height: 120px;
-
-            resize: vertical;
-
+        input[readonly]{
+            color:#1d4ed8;
+            font-weight:700;
+            background:#eff6ff;
         }
 
-
-        /* =========================
-           SECTION
-        ========================= */
-
-        .section {
-
-            margin-top: 30px;
-
-            padding-top: 23px;
-
-            border-top:
-                1px solid #e5e7eb;
-
+        textarea{
+            min-height:100px;
+            resize:vertical;
         }
 
-
-        .section-title {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 8px;
-
-            margin-bottom: 16px;
-
-            color: #1e40af;
-
-            font-size: 19px;
-
-            font-weight: 700;
-
+        .composition-row{
+            display:grid;
+            grid-template-columns:1fr auto;
+            gap:10px;
+            margin-bottom:10px;
         }
 
-
-        /* =========================
-           COMPOSITION
-        ========================= */
-
-        .composition-row {
-
-            display: flex;
-
-            gap: 10px;
-
-            margin-bottom: 10px;
-
-            align-items: center;
-
+        .add-btn,
+        .remove-btn,
+        .update-btn{
+            border:0;
+            cursor:pointer;
+            font-weight:700;
+            border-radius:9px;
         }
 
-
-        .composition-row input {
-
-            flex: 1;
-
+        .add-btn{
+            padding:11px 16px;
+            color:#fff;
+            background:#2563eb;
         }
 
-
-        .remove-btn {
-
-            width: 45px;
-
-            min-width: 45px;
-
-            height: 45px;
-
-            padding: 0;
-
-            border: none;
-
-            border-radius: 9px;
-
-            background: #dc2626;
-
-            color: #ffffff;
-
-            font-size: 20px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
+        .remove-btn{
+            min-width:46px;
+            color:#fff;
+            background:#dc2626;
+            font-size:20px;
         }
 
-
-        .remove-btn:hover {
-
-            background: #b91c1c;
-
+        .update-btn{
+            width:100%;
+            margin-top:30px;
+            padding:15px;
+            color:#fff;
+            font-size:17px;
+            background:linear-gradient(135deg,#2563eb,#1d4ed8);
         }
 
-
-        .add-btn {
-
-            width: auto;
-
-            padding: 11px 18px;
-
-            margin-top: 5px;
-
-            border: none;
-
-            border-radius: 9px;
-
-            background: #16a34a;
-
-            color: #ffffff;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
+        .back{
+            display:block;
+            width:max-content;
+            margin:20px auto 0;
+            color:#1d4ed8;
+            font-weight:700;
+            text-decoration:none;
         }
 
-
-        .add-btn:hover {
-
-            background: #15803d;
-
+        .image-grid,
+        .video-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+            gap:14px;
         }
 
-
-        /* =========================
-           IMAGE GRID
-        ========================= */
-
-        .image-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, 1fr);
-
-            gap: 15px;
-
+        .media-card{
+            overflow:hidden;
+            border:1px solid #e2e8f0;
+            border-radius:12px;
+            background:#f8fafc;
         }
 
-
-        .image-card {
-
-            border:
-                1px solid #e5e7eb;
-
-            border-radius: 12px;
-
-            padding: 8px;
-
-            background: #f8fafc;
-
+        .media-card img,
+        .media-card video{
+            display:block;
+            width:100%;
+            height:150px;
+            object-fit:cover;
+            background:#e2e8f0;
         }
 
-
-        .image-card img {
-
-            width: 100%;
-
-            height: 140px;
-
-            object-fit: cover;
-
-            border-radius: 8px;
-
-            display: block;
-
+        .media-name{
+            padding:9px;
+            color:#475569;
+            font-size:13px;
+            text-align:center;
         }
 
-
-        .image-number {
-
-            text-align: center;
-
-            margin-top: 7px;
-
-            font-size: 12px;
-
-            color: #64748b;
-
+        .empty-box{
+            padding:16px;
+            color:#64748b;
+            border:1px dashed #cbd5e1;
+            border-radius:10px;
+            background:#f8fafc;
         }
 
-
-        /* =========================
-           VIDEO GRID
-        ========================= */
-
-        .video-grid {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, 1fr);
-
-            gap: 18px;
-
+        .help{
+            margin:0;
+            color:#64748b;
+            font-size:13px;
         }
 
+        @media(max-width:700px){
 
-        .video-card {
-
-            border:
-                1px solid #e5e7eb;
-
-            border-radius: 12px;
-
-            padding: 10px;
-
-            background: #f8fafc;
-
-        }
-
-
-        .video-card video {
-
-            width: 100%;
-
-            height: 220px;
-
-            object-fit: cover;
-
-            border-radius: 9px;
-
-            background: #000;
-
-            display: block;
-
-        }
-
-
-        .video-number {
-
-            text-align: center;
-
-            margin-top: 8px;
-
-            font-size: 12px;
-
-            color: #64748b;
-
-        }
-
-
-        /* =========================
-           VIDEO URL
-        ========================= */
-
-        .video-url-box {
-
-            margin-top: 15px;
-
-        }
-
-
-        .video-help {
-
-            margin-top: 7px;
-
-            color: #64748b;
-
-            font-size: 13px;
-
-            line-height: 1.5;
-
-        }
-
-
-        /* =========================
-           NO MEDIA
-        ========================= */
-
-        .no-image,
-        .no-video {
-
-            padding: 30px;
-
-            text-align: center;
-
-            background: #f8fafc;
-
-            border-radius: 10px;
-
-            color: #64748b;
-
-        }
-
-
-        /* =========================
-           FILE INPUT
-        ========================= */
-
-        input[type="file"] {
-
-            padding: 10px;
-
-            background: #f8fafc;
-
-            cursor: pointer;
-
-        }
-
-
-        /* =========================
-           UPDATE BUTTON
-        ========================= */
-
-        .update-btn {
-
-            width: 100%;
-
-            padding: 15px;
-
-            margin-top: 30px;
-
-            border: none;
-
-            border-radius: 12px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #1d4ed8
-                );
-
-            color: #ffffff;
-
-            font-size: 17px;
-
-            font-weight: 700;
-
-            cursor: pointer;
-
-            transition: .2s;
-
-        }
-
-
-        .update-btn:hover {
-
-            transform: translateY(-1px);
-
-            box-shadow:
-                0 8px 20px
-                rgba(37, 99, 235, .25);
-
-        }
-
-
-        /* =========================
-           BACK BUTTON
-        ========================= */
-
-        .back {
-
-            display: block;
-
-            text-align: center;
-
-            margin-top: 18px;
-
-            padding: 12px;
-
-            border-radius: 10px;
-
-            background: #f1f5f9;
-
-            color: #1e40af;
-
-            text-decoration: none;
-
-            font-weight: 700;
-
-        }
-
-
-        .back:hover {
-
-            background: #e2e8f0;
-
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 700px) {
-
-            body {
-
-                padding: 10px;
-
+            body{
+                padding:10px;
             }
 
-
-            .container {
-
-                padding: 18px;
-
-                border-radius: 16px;
-
+            .container{
+                padding:17px;
+                border-radius:14px;
             }
 
-
-            .header h2 {
-
-                font-size: 22px;
-
+            .form-grid,
+            .composition-row{
+                grid-template-columns:1fr;
             }
 
-
-            .form-grid {
-
-                grid-template-columns: 1fr;
-
-                gap: 15px;
-
+            .form-group.full{
+                grid-column:auto;
             }
 
-
-            .form-group.full {
-
-                grid-column: auto;
-
+            .remove-btn{
+                min-height:42px;
             }
-
-
-            .image-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-
-            }
-
-
-            .image-card img {
-
-                height: 120px;
-
-            }
-
-
-            .video-grid {
-
-                grid-template-columns: 1fr;
-
-            }
-
-
-            .video-card video {
-
-                height: 200px;
-
-            }
-
-
-            .composition-row {
-
-                gap: 7px;
-
-            }
-
-        }
-
-
-        /* =========================
-           SMALL MOBILE
-        ========================= */
-
-        @media (max-width: 400px) {
-
-            .container {
-
-                padding: 14px;
-
-            }
-
-
-            input,
-            select,
-            textarea {
-
-                font-size: 14px;
-
-                padding: 11px;
-
-            }
-
-
-            .image-grid {
-
-                grid-template-columns:
-                    repeat(2, 1fr);
-
-                gap: 8px;
-
-            }
-
-
-            .image-card img {
-
-                height: 100px;
-
-            }
-
-
-            .video-card video {
-
-                height: 180px;
-
-            }
-
-
-            .remove-btn {
-
-                width: 40px;
-
-                min-width: 40px;
-
-                height: 40px;
-
-            }
-
         }
 
     </style>
 
 </head>
 
-
 <body>
-
 
 <div class="container">
 
-
-    <!-- =========================
-         HEADER
-    ========================= -->
-
     <div class="header">
-
-        <h2>
-            ✏️ Edit Pharma Product
-        </h2>
-
-        <p>
-            Update product information, images and videos
-        </p>
-
+        <h2>✏️ Edit Pharma Product</h2>
+        <p>Update product information, images and videos</p>
     </div>
 
-
-    <!-- =========================
-         FORM
-    ========================= -->
-
     <form
-
         action="/admin/edit-product/${escapeHTML(product._id)}"
-
         method="POST"
-
         enctype="multipart/form-data"
     >
 
+        <div class="section">
 
-        <!-- =========================
-             BASIC INFORMATION
-        ========================= -->
-
-        <div class="form-grid">
-
-
-            <!-- PRODUCT NAME -->
-
-            <div class="form-group">
-
-                <label>
-                    Product Name *
-                </label>
-
-                <input
-                    type="text"
-                    name="name"
-                    value="${escapeHTML(product.name)}"
-                    required
-                >
-
+            <div class="section-title">
+                📦 Basic Product Information
             </div>
 
+            <div class="form-grid">
 
-            <!-- BRAND -->
+                <div class="form-group">
+                    <label>Product Name *</label>
+                    <input
+                        type="text"
+                        name="name"
+                        value="${escapeHTML(product.name)}"
+                        required
+                    >
+                </div>
 
-            <div class="form-group">
+                <div class="form-group">
+                    <label>Brand Name</label>
+                    <input
+                        type="text"
+                        name="brand"
+                        value="${escapeHTML(product.brand)}"
+                    >
+                </div>
 
-                <label>
-                    Brand Name
-                </label>
+                <div class="form-group">
+                    <label>Category</label>
 
-                <input
-                    type="text"
-                    name="brand"
-                    value="${escapeHTML(product.brand)}"
-                >
+                    <select name="category">
 
-            </div>
+                        <option value="">
+                            Select Category
+                        </option>
 
+                        <option
+                            value="Tablet"
+                            ${product.category === "Tablet" ? "selected" : ""}
+                        >
+                            Tablet
+                        </option>
 
-           <div class="form-group">
+                        <option
+                            value="Capsule"
+                            ${product.category === "Capsule" ? "selected" : ""}
+                        >
+                            Capsule
+                        </option>
 
-    <label>
-        Category
-    </label>
+                        <option
+                            value="Syrup"
+                            ${product.category === "Syrup" ? "selected" : ""}
+                        >
+                            Syrup
+                        </option>
 
-    <select name="category">
+                        <option
+                            value="Drops"
+                            ${product.category === "Drops" ? "selected" : ""}
+                        >
+                            Drops
+                        </option>
 
-        <option value="">
-            Select Category
-        </option>
+                        <option
+                            value="Injection"
+                            ${product.category === "Injection" ? "selected" : ""}
+                        >
+                            Injection
+                        </option>
 
-        <option
-            value="Tablet"
-            ${product.category === "Tablet" ? "selected" : ""}
-        >
-            Tablet
-        </option>
+                        <option
+                            value="Cream"
+                            ${product.category === "Cream" ? "selected" : ""}
+                        >
+                            Cream
+                        </option>
 
-        <option
-            value="Capsule"
-            ${product.category === "Capsule" ? "selected" : ""}
-        >
-            Capsule
-        </option>
+                        <option
+                            value="Soap"
+                            ${product.category === "Soap" ? "selected" : ""}
+                        >
+                            Soap
+                        </option>
 
-        <option
-            value="Syrup"
-            ${product.category === "Syrup" ? "selected" : ""}
-        >
-            Syrup
-        </option>
+                        <option
+                            value="Other"
+                            ${product.category === "Other" ? "selected" : ""}
+                        >
+                            Other
+                        </option>
 
-        <option
-            value="Drops"
-            ${product.category === "Drops" ? "selected" : ""}
-        >
-            Drops
-        </option>
+                    </select>
+                </div>
 
-        <option
-            value="Injection"
-            ${product.category === "Injection" ? "selected" : ""}
-        >
-            Injection
-        </option>
+                <div class="form-group">
+                    <label>Manufacturer</label>
+                    <input
+                        type="text"
+                        name="manufacturer"
+                        value="${escapeHTML(product.manufacturer)}"
+                    >
+                </div>
 
-        <option
-            value="Cream"
-            ${product.category === "Cream" ? "selected" : ""}
-        >
-            Cream
-        </option>
+                <div class="form-group">
+                    <label>MRP ₹ *</label>
+                    <input
+                        type="number"
+                        id="mrp"
+                        name="mrp"
+                        value="${product.mrp ?? ""}"
+                        min="0"
+                        step="0.01"
+                        required
+                        oninput="calculateSellingPrice()"
+                    >
+                </div>
 
-        <!-- SOAP -->
-        <option
-            value="Soap"
-            ${product.category === "Soap" ? "selected" : ""}
-        >
-            Soap
-        </option>
+                <div class="form-group">
+                    <label>Discount %</label>
+                    <input
+                        type="number"
+                        id="discountPercentage"
+                        name="discountPercentage"
+                        value="${discountPercentage.toFixed(2)}"
+                        min="0"
+                        max="100"
+                        step="0.01"
+                        placeholder="e.g. 10"
+                        oninput="calculateSellingPrice()"
+                    >
+                </div>
 
-        <option
-            value="Other"
-            ${product.category === "Other" ? "selected" : ""}
-        >
-            Other
-        </option>
+                <div class="form-group">
+                    <label>Selling Price ₹ * (Auto Calculated)</label>
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value="${product.price ?? ""}"
+                        min="0"
+                        step="0.01"
+                        readonly
+                        required
+                    >
+                </div>
 
-    </select>
+                <div class="form-group">
+                    <label>Stock Quantity</label>
+                    <input
+                        type="number"
+                        name="stock"
+                        value="${product.stock ?? 0}"
+                        min="0"
+                    >
+                </div>
 
-</div>
+                <div class="form-group">
+                    <label>Pack Size</label>
+                    <input
+                        type="text"
+                        name="packSize"
+                        value="${escapeHTML(product.packSize)}"
+                        placeholder="e.g. 200 ml"
+                    >
+                </div>
 
+                <div class="form-group">
+                    <label>Batch Number</label>
+                    <input
+                        type="text"
+                        name="batchNo"
+                        value="${escapeHTML(product.batchNo)}"
+                    >
+                </div>
 
-            <!-- MANUFACTURER -->
+                <div class="form-group">
+                    <label>Manufacturing Date</label>
+                    <input
+                        type="date"
+                        name="mfgDate"
+                        value="${formatDate(product.mfgDate)}"
+                    >
+                </div>
 
-            <div class="form-group">
-
-                <label>
-                    Manufacturer
-                </label>
-
-                <input
-                    type="text"
-                    name="manufacturer"
-                    value="${escapeHTML(product.manufacturer)}"
-                >
-
-            </div>
-
-
-            <!-- MRP -->
-
-            <div class="form-group">
-
-                <label>
-                    MRP ₹
-                </label>
-
-                <input
-                    type="number"
-                    name="mrp"
-                    value="${product.mrp ?? ""}"
-                    min="0"
-                    step="0.01"
-                >
-
-            </div>
-
-
-            <!-- SELLING PRICE -->
-
-            <div class="form-group">
-
-                <label>
-                    Selling Price ₹ *
-                </label>
-
-                <input
-                    type="number"
-                    name="price"
-                    value="${product.price ?? ""}"
-                    min="0"
-                    step="0.01"
-                    required
-                >
-
-            </div>
-
-
-            <!-- STOCK -->
-
-            <div class="form-group">
-
-                <label>
-                    Stock Quantity
-                </label>
-
-                <input
-                    type="number"
-                    name="stock"
-                    value="${product.stock ?? 0}"
-                    min="0"
-                >
-
-            </div>
-
-
-            <!-- PACK SIZE -->
-
-            <div class="form-group">
-
-                <label>
-                    Pack Size
-                </label>
-
-                <input
-                    type="text"
-                    name="packSize"
-                    value="${escapeHTML(product.packSize)}"
-                    placeholder="e.g. 200 ml"
-                >
-
-            </div>
-
-
-            <!-- BATCH -->
-
-            <div class="form-group">
-
-                <label>
-                    Batch Number
-                </label>
-
-                <input
-                    type="text"
-                    name="batchNo"
-                    value="${escapeHTML(product.batchNo)}"
-                >
+                <div class="form-group">
+                    <label>Expiry Date</label>
+                    <input
+                        type="date"
+                        name="expDate"
+                        value="${formatDate(product.expDate)}"
+                    >
+                </div>
 
             </div>
-
-
-            <!-- MFG DATE -->
-
-            <div class="form-group">
-
-                <label>
-                    Manufacturing Date
-                </label>
-
-                <input
-                    type="date"
-                    name="mfgDate"
-                    value="${formatDate(product.mfgDate)}"
-                >
-
-            </div>
-
-
-            <!-- EXPIRY DATE -->
-
-            <div class="form-group">
-
-                <label>
-                    Expiry Date
-                </label>
-
-                <input
-                    type="date"
-                    name="expDate"
-                    value="${formatDate(product.expDate)}"
-                >
-
-            </div>
-
-
         </div>
-
-
-        <!-- =========================
-             COMPOSITION
-        ========================= -->
 
         <div class="section">
 
             <div class="section-title">
                 💊 Composition
             </div>
-
 
             <div id="compositionBox">
 
@@ -9334,7 +10540,6 @@ function EditProduct(product) {
                             type="button"
                             class="remove-btn"
                             onclick="removeComposition(this)"
-                            ${index === 0 ? 'style="visibility:hidden"' : ""}
                         >
                             ×
                         </button>
@@ -9344,7 +10549,6 @@ function EditProduct(product) {
                 `).join("")}
 
             </div>
-
 
             <button
                 type="button"
@@ -9356,125 +10560,64 @@ function EditProduct(product) {
 
         </div>
 
-
-        <!-- =========================
-             PRODUCT DETAILS
-        ========================= -->
-
         <div class="section">
 
             <div class="section-title">
                 📋 Product Details
             </div>
 
-
             <div class="form-grid">
 
-
-                <!-- USES -->
-
                 <div class="form-group full">
-
-                    <label>
-                        Uses
-                    </label>
-
+                    <label>Uses</label>
                     <textarea
                         name="uses"
                         placeholder="Enter product uses"
                     >${escapeHTML(product.uses)}</textarea>
-
                 </div>
 
-
-                <!-- BENEFITS -->
-
                 <div class="form-group full">
-
-                    <label>
-                        Benefits
-                    </label>
-
+                    <label>Benefits</label>
                     <textarea
                         name="benefits"
                         placeholder="Enter product benefits"
                     >${escapeHTML(product.benefits)}</textarea>
-
                 </div>
 
-
-                <!-- DOSAGE -->
-
                 <div class="form-group full">
-
-                    <label>
-                        Dosage
-                    </label>
-
+                    <label>Dosage</label>
                     <textarea
                         name="dosage"
                         placeholder="Enter dosage"
                     >${escapeHTML(product.dosage)}</textarea>
-
                 </div>
 
-
-                <!-- SIDE EFFECTS -->
-
                 <div class="form-group full">
-
-                    <label>
-                        Side Effects
-                    </label>
-
+                    <label>Side Effects</label>
                     <textarea
                         name="sideEffects"
                         placeholder="Enter side effects"
                     >${escapeHTML(product.sideEffects)}</textarea>
-
                 </div>
 
-
-                <!-- STORAGE -->
-
                 <div class="form-group full">
-
-                    <label>
-                        Storage Instructions
-                    </label>
-
+                    <label>Storage Instructions</label>
                     <textarea
                         name="storage"
                         placeholder="Enter storage instructions"
                     >${escapeHTML(product.storage)}</textarea>
-
                 </div>
 
-
-                <!-- DESCRIPTION -->
-
                 <div class="form-group full">
-
-                    <label>
-                        Full Description
-                    </label>
-
+                    <label>Full Description</label>
                     <textarea
                         name="description"
                         placeholder="Enter full product description"
                     >${escapeHTML(product.description)}</textarea>
-
                 </div>
 
-
             </div>
-
         </div>
-
-
-        <!-- =========================
-             EXISTING IMAGES
-        ========================= -->
 
         <div class="section">
 
@@ -9482,59 +10625,39 @@ function EditProduct(product) {
                 🖼 Existing Product Images
             </div>
 
-
             ${
                 images.length
+                    ? `
+                        <div class="image-grid">
 
-                ?
+                            ${images.map((image, index) => `
 
-                `
-                <div class="image-grid">
+                                <div class="media-card">
 
-                    ${images.map((img, index) => {
+                                    <img
+                                        src="${escapeHTML(image)}"
+                                        alt="Product Image ${index + 1}"
+                                        onerror="this.style.display='none'"
+                                    >
 
-                        const safeImg =
-                            cleanImageUrl(img);
+                                    <div class="media-name">
+                                        Image ${index + 1}
+                                    </div>
 
-                        return `
-
-                            <div class="image-card">
-
-                                <img
-                                    src="${escapeHTML(safeImg)}"
-                                    alt="Product Image ${index + 1}"
-                                    loading="lazy"
-                                    onerror="this.style.display='none'"
-                                >
-
-                                <div class="image-number">
-                                    Image ${index + 1}
                                 </div>
 
-                            </div>
+                            `).join("")}
 
-                        `;
-
-                    }).join("")}
-
-                </div>
-                `
-
-                :
-
-                `
-                <div class="no-image">
-                    No existing product image
-                </div>
-                `
+                        </div>
+                    `
+                    : `
+                        <div class="empty-box">
+                            No existing product image.
+                        </div>
+                    `
             }
 
         </div>
-
-
-        <!-- =========================
-             ADD NEW IMAGES
-        ========================= -->
 
         <div class="section">
 
@@ -9542,12 +10665,9 @@ function EditProduct(product) {
                 📷 Add New Product Images
             </div>
 
-
             <div class="form-group">
 
-                <label>
-                    Select New Images
-                </label>
+                <label>Select New Images</label>
 
                 <input
                     type="file"
@@ -9556,25 +10676,13 @@ function EditProduct(product) {
                     multiple
                 >
 
+                <p class="help">
+                    You can select multiple new images.
+                </p>
+
             </div>
 
-
-            <p
-                style="
-                    margin-top:8px;
-                    color:#64748b;
-                    font-size:13px;
-                "
-            >
-                You can select multiple new images.
-            </p>
-
         </div>
-
-
-        <!-- =========================
-             EXISTING VIDEOS
-        ========================= -->
 
         <div class="section">
 
@@ -9582,59 +10690,38 @@ function EditProduct(product) {
                 🎥 Existing Product Videos
             </div>
 
-
             ${
                 videos.length
+                    ? `
+                        <div class="video-grid">
 
-                ?
+                            ${videos.map((video, index) => `
 
-                `
-                <div class="video-grid">
+                                <div class="media-card">
 
-                    ${videos.map((video, index) => {
+                                    <video controls preload="metadata">
+                                        <source src="${escapeHTML(video)}">
+                                        Your browser does not support video.
+                                    </video>
 
-                        return `
+                                    <div class="media-name">
+                                        Video ${index + 1}
+                                    </div>
 
-                            <div class="video-card">
-
-                                <video
-                                    controls
-                                    preload="metadata"
-                                >
-                                    <source
-                                        src="${escapeHTML(video)}"
-                                    >
-                                    Your browser does not support video.
-                                </video>
-
-                                <div class="video-number">
-                                    Video ${index + 1}
                                 </div>
 
-                            </div>
+                            `).join("")}
 
-                        `;
-
-                    }).join("")}
-
-                </div>
-                `
-
-                :
-
-                `
-                <div class="no-video">
-                    No existing product video
-                </div>
-                `
+                        </div>
+                    `
+                    : `
+                        <div class="empty-box">
+                            No existing product video.
+                        </div>
+                    `
             }
 
         </div>
-
-
-        <!-- =========================
-             VIDEO URL
-        ========================= -->
 
         <div class="section">
 
@@ -9642,12 +10729,9 @@ function EditProduct(product) {
                 🔗 Add Video URL
             </div>
 
-
             <div class="form-group">
 
-                <label>
-                    Product Video URL
-                </label>
+                <label>Product Video URL</label>
 
                 <input
                     type="url"
@@ -9656,18 +10740,13 @@ function EditProduct(product) {
                     placeholder="https://example.com/product-video.mp4"
                 >
 
-                <p class="video-help">
-                    You can add a direct MP4/video URL.
+                <p class="help">
+                    You can add a direct video URL.
                 </p>
 
             </div>
 
         </div>
-
-
-        <!-- =========================
-             NEW VIDEO UPLOAD
-        ========================= -->
 
         <div class="section">
 
@@ -9675,12 +10754,9 @@ function EditProduct(product) {
                 🎬 Upload New Product Video
             </div>
 
-
             <div class="form-group">
 
-                <label>
-                    Select Video
-                </label>
+                <label>Select Video</label>
 
                 <input
                     type="file"
@@ -9689,18 +10765,13 @@ function EditProduct(product) {
                     multiple
                 >
 
-                <p class="video-help">
+                <p class="help">
                     You can select one or multiple product videos.
                 </p>
 
             </div>
 
         </div>
-
-
-        <!-- =========================
-             UPDATE BUTTON
-        ========================= -->
 
         <button
             type="submit"
@@ -9709,13 +10780,7 @@ function EditProduct(product) {
             💾 Update Product
         </button>
 
-
     </form>
-
-
-    <!-- =========================
-         BACK
-    ========================= -->
 
     <a
         href="/admin/manage-products"
@@ -9724,233 +10789,99 @@ function EditProduct(product) {
         ⬅ Back to Manage Products
     </a>
 
-
 </div>
-
 
 <script>
 
-    // =========================
-    // ADD COMPOSITION
-    // =========================
+function calculateSellingPrice() {
 
-    function addComposition() {
+    const mrp = Number(
+        document.getElementById("mrp").value || 0
+    );
 
-        const box =
-            document.getElementById("compositionBox");
+    let discount = Number(
+        document.getElementById("discountPercentage").value || 0
+    );
 
-        if (!box) {
-            return;
-        }
-
-
-        const row =
-            document.createElement("div");
-
-        row.className =
-            "composition-row";
-
-
-        row.innerHTML = \`
-            
-            <input
-                type="text"
-                name="composition[]"
-                placeholder="Composition"
-            >
-
-            <button
-                type="button"
-                class="remove-btn"
-                onclick="removeComposition(this)"
-            >
-                ×
-            </button>
-
-        \`;
-
-
-        box.appendChild(row);
-
+    if (discount < 0) {
+        discount = 0;
     }
 
-
-    // =========================
-    // REMOVE COMPOSITION
-    // =========================
-
-    function removeComposition(button) {
-
-        const row =
-            button.parentElement;
-
-        if (!row) {
-            return;
-        }
-
-
-        const box =
-            document.getElementById("compositionBox");
-
-
-        if (!box) {
-            return;
-        }
-
-
-        const rows =
-            box.querySelectorAll(".composition-row");
-
-
-        // कम से कम एक composition हमेशा रहे
-        if (rows.length <= 1) {
-
-            const input =
-                row.querySelector("input");
-
-            if (input) {
-                input.value = "";
-            }
-
-            return;
-        }
-
-
-        row.remove();
-
+    if (discount > 100) {
+        discount = 100;
     }
 
+    const sellingPrice =
+        mrp - (mrp * discount / 100);
 
-    // =========================
-    // IMAGE VALIDATION
-    // =========================
-
-    const imageInput =
-        document.querySelector(
-            'input[name="images"]'
-        );
-
-
-    if (imageInput) {
-
-        imageInput.addEventListener(
-            "change",
-            function () {
-
-                const files =
-                    Array.from(this.files || []);
+    document.getElementById("price").value =
+        mrp > 0
+            ? sellingPrice.toFixed(2)
+            : "";
+}
 
 
-                for (const file of files) {
+function addComposition() {
 
-                    if (
-                        !file.type.startsWith("image/")
-                    ) {
+    const box =
+        document.getElementById("compositionBox");
 
-                        alert(
-                            "Please select only image files."
-                        );
+    const row =
+        document.createElement("div");
 
-                        this.value = "";
+    row.className =
+        "composition-row";
 
-                        return;
-                    }
+    row.innerHTML = \`
 
-                }
+        <input
+            type="text"
+            name="composition[]"
+            placeholder="Composition name"
+        >
 
-            }
-        );
+        <button
+            type="button"
+            class="remove-btn"
+            onclick="removeComposition(this)"
+        >
+            ×
+        </button>
+    \`;
 
+    box.appendChild(row);
+}
+
+
+function removeComposition(button) {
+
+    const rows =
+        document.querySelectorAll(".composition-row");
+
+    if (rows.length > 1) {
+        button.parentElement.remove();
     }
+}
 
 
-    // =========================
-    // VIDEO VALIDATION
-    // =========================
+document.querySelector("form").addEventListener(
+    "submit",
+    function() {
 
-    const videoInput =
-        document.querySelector(
-            'input[name="videos"]'
-        );
+        const button =
+            document.querySelector(".update-btn");
 
-
-    if (videoInput) {
-
-        videoInput.addEventListener(
-            "change",
-            function () {
-
-                const files =
-                    Array.from(this.files || []);
-
-
-                for (const file of files) {
-
-                    if (
-                        !file.type.startsWith("video/")
-                    ) {
-
-                        alert(
-                            "Please select only video files."
-                        );
-
-                        this.value = "";
-
-                        return;
-                    }
-
-                }
-
-            }
-        );
-
+        button.disabled = true;
+        button.innerHTML = "⏳ Updating Product...";
     }
-
-
-    // =========================
-    // FORM SUBMIT
-    // =========================
-
-    const form =
-        document.querySelector("form");
-
-
-    if (form) {
-
-        form.addEventListener(
-            "submit",
-            function () {
-
-                const button =
-                    form.querySelector(
-                        ".update-btn"
-                    );
-
-
-                if (button) {
-
-                    button.disabled = true;
-
-                    button.innerHTML =
-                        "⏳ Updating Product...";
-
-                }
-
-            }
-        );
-
-    }
+);
 
 </script>
 
-
 </body>
-
 </html>
 
 `;
-
 }
-
 
 module.exports = EditProduct;

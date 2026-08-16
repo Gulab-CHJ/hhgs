@@ -4618,123 +4618,74 @@ const DoctorOrder = require("../models/DoctorOrder");
 const DoctorOrders = require("../pages/admin/DoctorOrders");
 
 
-// ======================================================
-// ADMIN: PARTICULAR DOCTOR ALL ORDERS
-// URL: /admin/doctor/:id/orders
-// ======================================================
-router.get("/doctor/:id/orders", async (req, res) => {
-    try {
-        const doctor = await Doctor.findById(req.params.id);
-
-        if (!doctor) {
-            return res.status(404).send("Doctor not found");
-        }
-
-        const orders = await DoctorOrder.find({
-            doctorId: String(doctor._id)
-        }).sort({ createdAt: -1 });
-
-        return res.send(DoctorOrders(doctor, orders));
-
-    } catch (error) {
-        console.log("Doctor orders error:", error);
-
-        return res.status(500).send(`
-            <h2>Unable to load doctor orders</h2>
-            <p>${error.message}</p>
-            <a href="/admin/manage-doctors">← Back to Doctors</a>
-        `);
-    }
-});
-
-
 
 
 // ======================================================
-// UPDATE DOCTOR ORDER STATUS
+// PREMIUM DOCTOR ORDERS
 // ======================================================
-router.post("/doctor-order/:orderId/status", async (req, res) => {
-    try {
-        const { status } = req.body;
-
-        const allowedStatus = [
-            "Pending",
-            "Confirmed",
-            "Processing",
-            "Completed",
-            "Cancelled"
-        ];
-
-        if (!allowedStatus.includes(status)) {
-            return res.status(400).send("Invalid order status");
-        }
-
-        const order = await DoctorOrder.findByIdAndUpdate(
-            req.params.orderId,
-            {
-                status: status
-            },
-            {
-                new: true
-            }
-        );
-
-        if (!order) {
-            return res.status(404).send("Order not found");
-        }
-
-        return res.redirect(
-            `/admin/doctor/${order.doctorId}/orders`
-        );
-
-    } catch (error) {
-        console.log("Status update error:", error);
-
-        return res.status(500).send(`
-            <h2>Unable to update order status</h2>
-            <p>${error.message}</p>
-        `);
-    }
-});
-
-
-const PDFDocument = require("pdfkit");
 // ======================================================
-// DOWNLOAD ROUGH ESTIMATE PDF
+// INVOICE PDF
 // ======================================================
 router.get("/doctor-order/:orderId/invoice", async (req, res) => {
     try {
-        const order = await DoctorOrder.findById(req.params.orderId);
+        const order = await DoctorOrder.findById(
+            req.params.orderId
+        ).lean();
 
         if (!order) {
             return res.status(404).send("Order not found");
         }
 
-        const doctor = await Doctor.findById(order.doctorId);
+        const doctor = await Doctor.findById(
+            order.doctorId
+        ).lean();
 
         const items = Array.isArray(order.items)
             ? order.items
             : [];
 
-        const formatDate = (date) => {
-            return date
-                ? new Date(date).toLocaleDateString("en-GB")
-                : "-";
-        };
+        // Product database से packSize: 5ml, 100gm, 200ml आदि
+        const productIds = items
+            .map((item) => item.productId)
+            .filter(Boolean);
 
-        const billNo = "D" + String(order.orderId || order._id)
+        const products = productIds.length
+            ? await Product.find({
+                _id: { $in: productIds }
+            }).lean()
+            : [];
+
+        const productMap = new Map(
+            products.map((product) => [
+                String(product._id),
+                product
+            ])
+        );
+
+        const billNo = "D" + String(
+            order.orderId || order._id
+        )
             .slice(-6)
             .toUpperCase();
 
         const totalQuantity = items.reduce((sum, item) => {
-            return sum + Number(item.quantity || 1);
+            return sum + (
+                Number(item.quantity ?? item.qty ?? 1) || 1
+            );
         }, 0);
 
         const grandTotal = Number(
             order.totalAmount || order.total || 0
         );
 
-        const doctorName = String(doctor?.name || "-")
+        const date = order.createdAt
+            ? new Date(order.createdAt)
+                .toLocaleDateString("en-GB")
+            : "-";
+
+        const doctorName = String(
+            doctor?.name || "Doctor"
+        )
             .replace(/^Dr\.?\s*/i, "")
             .trim();
 
@@ -4745,7 +4696,6 @@ router.get("/doctor-order/:orderId/invoice", async (req, res) => {
             `attachment; filename=Estimate-${billNo}.pdf`
         );
 
-        // छोटा A5 landscape page
         const pdf = new PDFDocument({
             size: "A5",
             layout: "landscape",
@@ -4761,9 +4711,6 @@ router.get("/doctor-order/:orderId/invoice", async (req, res) => {
         const right = pageWidth - 20;
         const rightColumn = 310;
 
-        // =================================================
-        // 1PX OUTER BORDER
-        // =================================================
         pdf.lineWidth(1)
             .strokeColor("#000")
             .rect(5, 5, pageWidth - 10, pageHeight - 10)
@@ -4779,9 +4726,6 @@ router.get("/doctor-order/:orderId/invoice", async (req, res) => {
             pdf.y += 5;
         }
 
-        // =================================================
-        // HEADER
-        // =================================================
         pdf.y = 16;
 
         pdf.font("Helvetica-Bold")
@@ -4808,43 +4752,58 @@ router.get("/doctor-order/:orderId/invoice", async (req, res) => {
         pdf.y += 7;
         borderLine();
 
-        // =================================================
-        // DOCTOR + BILL DETAILS
-        // =================================================
         const detailsY = pdf.y + 3;
 
         pdf.font("Helvetica-Bold")
             .fontSize(8.5)
             .fillColor("#000");
 
-        // Left side
-        pdf.text(`DOCTOR : Dr. ${doctorName}`, left, detailsY);
+        pdf.text(
+            `DOCTOR : Dr. ${doctorName}`,
+            left,
+            detailsY
+        );
+
         pdf.text(
             `SPECIALIZATION : ${doctor?.specialization || "-"}`,
             left,
             detailsY + 13
         );
+
         pdf.text(
             `DOCTOR ID : ${doctor?.doctorId || "-"}`,
             left,
             detailsY + 26
         );
+
         pdf.text(
             `PHONE : ${doctor?.phone || "-"}`,
             left,
             detailsY + 39
         );
 
-        // Right side
-        pdf.text(`BILL NO : ${billNo}`, rightColumn, detailsY);
         pdf.text(
-            `DATE : ${formatDate(order.createdAt)}`,
+            `BILL NO : ${billNo}`,
+            rightColumn,
+            detailsY
+        );
+
+        pdf.text(
+            `DATE : ${date}`,
             rightColumn,
             detailsY + 13
         );
-        pdf.text("TYPE : CREDIT", rightColumn, detailsY + 26);
+
         pdf.text(
-            `PAYMENT : ${String(order.paymentMethod || "COD").toUpperCase()}`,
+            "TYPE : CREDIT",
+            rightColumn,
+            detailsY + 26
+        );
+
+        pdf.text(
+            `PAYMENT : ${String(
+                order.paymentMethod || "COD"
+            ).toUpperCase()}`,
             rightColumn,
             detailsY + 39
         );
@@ -4852,48 +4811,74 @@ router.get("/doctor-order/:orderId/invoice", async (req, res) => {
         pdf.y = detailsY + 56;
         borderLine();
 
-        // =================================================
-        // PRODUCT TABLE HEADER
-        // =================================================
         const xSL = 25;
         const xProduct = 50;
         const xQty = 330;
         const xRate = 380;
         const xAmount = 470;
 
-        const tableHeadY = pdf.y + 2;
+        const tableY = pdf.y + 2;
 
         pdf.font("Helvetica-Bold")
             .fontSize(8)
             .fillColor("#000");
 
-        pdf.text("SL", xSL, tableHeadY);
-        pdf.text("PRODUCT DESCRIPTION", xProduct, tableHeadY);
-        pdf.text("QTY", xQty, tableHeadY);
-        pdf.text("RATE", xRate, tableHeadY);
-        pdf.text("AMOUNT", xAmount, tableHeadY);
+        pdf.text("SL", xSL, tableY);
+        pdf.text("PRODUCT DESCRIPTION", xProduct, tableY);
+        pdf.text("QTY", xQty, tableY);
+        pdf.text("RATE", xRate, tableY);
+        pdf.text("AMOUNT", xAmount, tableY);
 
-        pdf.y = tableHeadY + 14;
+        pdf.y = tableY + 14;
         borderLine();
 
-        // =================================================
-        // PRODUCTS
-        // =================================================
         pdf.font("Helvetica")
             .fontSize(8)
             .fillColor("#000");
 
         items.forEach((item, index) => {
-            const quantity = Number(item.quantity || 1);
-            const rate = Number(item.price || item.rate || 0);
+            const quantity = Number(
+                item.quantity ?? item.qty ?? 1
+            ) || 1;
+
+            const rate = Number(
+                item.price || item.rate || 0
+            );
+
             const amount = quantity * rate;
+
+            const product = productMap.get(
+                String(item.productId || "")
+            );
+
+            const productName = String(
+                item.name ||
+                item.productName ||
+                product?.name ||
+                "Product"
+            ).trim();
+
+            const packSize = String(
+                item.packSize ||
+                item.size ||
+                item.unit ||
+                product?.packSize ||
+                product?.size ||
+                product?.unit ||
+                ""
+            ).trim();
+
+            // Moxifit Eye Drops (5ml)
+            const displayName = packSize
+                ? `${productName} (${packSize})`
+                : productName;
 
             const productY = pdf.y + 2;
 
             pdf.text(`${index + 1}`, xSL, productY);
 
             pdf.text(
-                String(item.name || item.productName || "Product"),
+                displayName,
                 xProduct,
                 productY,
                 {
@@ -4911,51 +4896,48 @@ router.get("/doctor-order/:orderId/invoice", async (req, res) => {
 
         borderLine();
 
-        // =================================================
-        // TOTALS
-        // =================================================
         const totalY = pdf.y + 3;
 
         pdf.font("Helvetica-Bold")
             .fontSize(8.5)
             .fillColor("#000");
 
-        // Left side totals
-        pdf.text(`NO OF ITEMS : ${items.length}`, left, totalY);
+        pdf.text(
+            `NO OF ITEMS : ${items.length}`,
+            left,
+            totalY
+        );
+
         pdf.text(
             `TOTAL QUANTITY : ${totalQuantity}`,
             left,
             totalY + 13
         );
+
         pdf.text(
             `CURRENT BILL AMOUNT : Rs.${grandTotal.toFixed(2)}`,
             left,
             totalY + 26
         );
 
-        // Right side totals
         pdf.text(
             `GRAND TOTAL : Rs.${grandTotal.toFixed(2)}`,
             rightColumn,
             totalY
         );
+
         pdf.text(
             "BACK DUES AMOUNT : Rs.0.00",
             rightColumn,
             totalY + 13
         );
+
         pdf.text(
             `TOTAL BALANCE : Rs.${grandTotal.toFixed(2)}`,
             rightColumn,
             totalY + 26
         );
 
-        pdf.y = totalY + 42;
-        borderLine();
-
-        // =================================================
-        // FIXED FOOTER — blank page नहीं बनेगा
-        // =================================================
         const footerY = pageHeight - 58;
 
         pdf.font("Helvetica")
@@ -5006,10 +4988,824 @@ router.get("/doctor-order/:orderId/invoice", async (req, res) => {
         pdf.end();
 
     } catch (error) {
-        console.log("ESTIMATE INVOICE ERROR:", error);
+        console.log("Invoice error:", error);
 
         return res.status(500).send(
             "Invoice generate nahi hua: " + error.message
+        );
+    }
+});
+
+// ======================================================
+// UPDATE ORDER STATUS
+// ======================================================
+router.post("/doctor-order/:orderId/status", async (req, res) => {
+    try {
+        const allowedStatuses = [
+            "Pending",
+            "Processing",
+            "Delivered",
+            "Success",
+            "Cancelled"
+        ];
+
+        const status = String(
+            req.body.status || "Pending"
+        ).trim();
+
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).send(
+                "Invalid order status"
+            );
+        }
+
+        const order = await DoctorOrder.findByIdAndUpdate(
+            req.params.orderId,
+            {
+                $set: {
+                    status: status
+                }
+            },
+            {
+                new: true
+            }
+        );
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        return res.redirect(
+            `/admin/doctor/${order.doctorId}/orders`
+        );
+
+    } catch (error) {
+        console.log("Order status update error:", error);
+
+        return res.status(500).send(
+            "Unable to update order status: " + error.message
+        );
+    }
+});
+
+
+
+
+
+
+
+
+const PDFDocument = require("pdfkit");
+
+
+// ======================================================
+// INVOICE PDF ROUTE
+// URL: /admin/doctor-order/:orderId/invoice
+// ======================================================
+router.get("/doctor-order/:orderId/invoice", async (req, res) => {
+    try {
+        const order = await DoctorOrder.findById(
+            req.params.orderId
+        ).lean();
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        const doctor = await Doctor.findById(
+            order.doctorId
+        ).lean();
+
+        const items = Array.isArray(order.items)
+            ? order.items
+            : [];
+
+        const billNo = "D" + String(
+            order.orderId || order._id
+        )
+            .slice(-6)
+            .toUpperCase();
+
+        const totalQuantity = items.reduce((sum, item) => {
+            const qty = Number(
+                item.quantity ?? item.qty ?? 1
+            ) || 1;
+
+            return sum + qty;
+        }, 0);
+
+        const grandTotal = Number(
+            order.totalAmount || order.total || 0
+        );
+
+        const date = order.createdAt
+            ? new Date(order.createdAt).toLocaleDateString("en-GB")
+            : "-";
+
+        const doctorName = String(doctor?.name || "Doctor")
+            .replace(/^Dr\.?\s*/i, "")
+            .trim();
+
+        res.setHeader("Content-Type", "application/pdf");
+
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=Estimate-${billNo}.pdf`
+        );
+
+        const pdf = new PDFDocument({
+            size: "A5",
+            layout: "landscape",
+            margin: 0
+        });
+
+        pdf.pipe(res);
+
+        const pageWidth = pdf.page.width;
+        const pageHeight = pdf.page.height;
+
+        const left = 20;
+        const right = pageWidth - 20;
+        const rightColumn = 310;
+
+        pdf.lineWidth(1)
+            .strokeColor("#000")
+            .rect(5, 5, pageWidth - 10, pageHeight - 10)
+            .stroke();
+
+        function borderLine() {
+            pdf.strokeColor("#000")
+                .lineWidth(0.6)
+                .moveTo(left, pdf.y)
+                .lineTo(right, pdf.y)
+                .stroke();
+
+            pdf.y += 5;
+        }
+
+        pdf.y = 16;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(16)
+            .fillColor("#0d6efd")
+            .text("GLOBAL HEALTHCARE", {
+                align: "center"
+            });
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8)
+            .fillColor("#198754")
+            .text("SAFE & SECURE Healthcare", {
+                align: "center"
+            });
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(10)
+            .fillColor("#000")
+            .text("ROUGH ESTIMATE", {
+                align: "center"
+            });
+
+        pdf.y += 7;
+        borderLine();
+
+        const detailsY = pdf.y + 3;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8.5)
+            .fillColor("#000");
+
+        pdf.text(
+            `DOCTOR : Dr. ${doctorName}`,
+            left,
+            detailsY
+        );
+
+        pdf.text(
+            `SPECIALIZATION : ${doctor?.specialization || "-"}`,
+            left,
+            detailsY + 13
+        );
+
+        pdf.text(
+            `DOCTOR ID : ${doctor?.doctorId || "-"}`,
+            left,
+            detailsY + 26
+        );
+
+        pdf.text(
+            `PHONE : ${doctor?.phone || "-"}`,
+            left,
+            detailsY + 39
+        );
+
+        pdf.text(
+            `BILL NO : ${billNo}`,
+            rightColumn,
+            detailsY
+        );
+
+        pdf.text(
+            `DATE : ${date}`,
+            rightColumn,
+            detailsY + 13
+        );
+
+        pdf.text(
+            "TYPE : CREDIT",
+            rightColumn,
+            detailsY + 26
+        );
+
+        pdf.text(
+            `PAYMENT : ${String(
+                order.paymentMethod || "COD"
+            ).toUpperCase()}`,
+            rightColumn,
+            detailsY + 39
+        );
+
+        pdf.y = detailsY + 56;
+        borderLine();
+
+        const xSL = 25;
+        const xProduct = 50;
+        const xQty = 330;
+        const xRate = 380;
+        const xAmount = 470;
+
+        const headerY = pdf.y + 2;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8)
+            .fillColor("#000");
+
+        pdf.text("SL", xSL, headerY);
+        pdf.text("PRODUCT DESCRIPTION", xProduct, headerY);
+        pdf.text("QTY", xQty, headerY);
+        pdf.text("RATE", xRate, headerY);
+        pdf.text("AMOUNT", xAmount, headerY);
+
+        pdf.y = headerY + 14;
+        borderLine();
+
+        pdf.font("Helvetica")
+            .fontSize(8)
+            .fillColor("#000");
+
+        items.forEach((item, index) => {
+            const quantity = Number(
+                item.quantity ?? item.qty ?? 1
+            ) || 1;
+
+            const rate = Number(
+                item.price || item.rate || 0
+            );
+
+            const amount = quantity * rate;
+
+            const productName = String(
+                item.name ||
+                item.productName ||
+                "Product"
+            );
+
+            const packSize = String(
+                item.packSize ||
+                item.size ||
+                item.unit ||
+                ""
+            ).trim();
+
+            const displayName = packSize
+                ? `${productName} (${packSize})`
+                : productName;
+
+            const y = pdf.y + 2;
+
+            pdf.text(`${index + 1}`, xSL, y);
+
+            pdf.text(
+                displayName,
+                xProduct,
+                y,
+                {
+                    width: 250,
+                    lineBreak: false
+                }
+            );
+
+            pdf.text(`${quantity}`, xQty, y);
+            pdf.text(`Rs.${rate.toFixed(2)}`, xRate, y);
+            pdf.text(`Rs.${amount.toFixed(2)}`, xAmount, y);
+
+            pdf.y = y + 14;
+        });
+
+        borderLine();
+
+        const totalY = pdf.y + 3;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8.5)
+            .fillColor("#000");
+
+        pdf.text(
+            `NO OF ITEMS : ${items.length}`,
+            left,
+            totalY
+        );
+
+        pdf.text(
+            `TOTAL QUANTITY : ${totalQuantity}`,
+            left,
+            totalY + 13
+        );
+
+        pdf.text(
+            `CURRENT BILL AMOUNT : Rs.${grandTotal.toFixed(2)}`,
+            left,
+            totalY + 26
+        );
+
+        pdf.text(
+            `GRAND TOTAL : Rs.${grandTotal.toFixed(2)}`,
+            rightColumn,
+            totalY
+        );
+
+        pdf.text(
+            "BACK DUES AMOUNT : Rs.0.00",
+            rightColumn,
+            totalY + 13
+        );
+
+        pdf.text(
+            `TOTAL BALANCE : Rs.${grandTotal.toFixed(2)}`,
+            rightColumn,
+            totalY + 26
+        );
+
+        const footerY = pageHeight - 58;
+
+        pdf.font("Helvetica")
+            .fontSize(8)
+            .fillColor("#000")
+            .text(
+                "Import Purchase ONLINE : No",
+                left,
+                footerY
+            );
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(10)
+            .fillColor("#0d6efd")
+            .text(
+                "GLOBAL HEALTHCARE",
+                left,
+                footerY,
+                {
+                    width: right - left,
+                    align: "center"
+                }
+            );
+
+        pdf.font("Helvetica")
+            .fontSize(8)
+            .fillColor("#555")
+            .text(
+                "Powered by Osium Biogenix",
+                left,
+                footerY + 14,
+                {
+                    width: right - left,
+                    align: "center"
+                }
+            );
+
+        pdf.text(
+            "Call : 9142264714",
+            left,
+            footerY + 26,
+            {
+                width: right - left,
+                align: "center"
+            }
+        );
+
+        pdf.end();
+
+    } catch (error) {
+        console.log("Invoice error:", error);
+
+        return res.status(500).send(
+            "Invoice generate nahi hua: " + error.message
+        );
+    }
+});
+// ======================================================
+// PREMIUM DOCTOR ORDERS PAGE
+// ======================================================
+// ======================================================
+// FINAL PREMIUM DOCTOR ORDERS + ALL STATUS COUNTS
+// ======================================================
+router.get("/doctor/:id/orders", async (req, res) => {
+    try {
+        const doctor = await Doctor.findById(req.params.id).lean();
+
+        if (!doctor) {
+            return res.status(404).send("Doctor not found");
+        }
+
+        const orders = await DoctorOrder.find({
+            doctorId: doctor._id
+        })
+            .sort({ createdAt: -1 })
+            .lean();
+
+        const safe = (value) => String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+        const date = (value) => value
+            ? new Date(value).toLocaleDateString("en-GB")
+            : "-";
+
+        const countStatus = (status) => {
+            return orders.filter((order) => {
+                return String(order.status || "Pending")
+                    .toLowerCase() === status;
+            }).length;
+        };
+
+        const pendingCount = countStatus("pending");
+        const processingCount = countStatus("processing");
+        const deliveredCount = countStatus("delivered");
+        const successCount = countStatus("success");
+        const cancelledCount = countStatus("cancelled");
+
+        const totalAmount = orders.reduce((sum, order) => {
+            return sum + Number(
+                order.totalAmount || order.total || 0
+            );
+        }, 0);
+
+        const doctorName = String(doctor.name || "Doctor")
+            .replace(/^(dr\.?\s*)+/i, "")
+            .trim();
+
+        const getStatusClass = (status) => {
+            const value = String(status || "Pending").toLowerCase();
+
+            if (value === "processing") return "processing";
+            if (value === "delivered") return "delivered";
+            if (value === "success") return "success";
+            if (value === "cancelled") return "cancelled";
+
+            return "pending";
+        };
+
+        const rows = orders.length
+            ? orders.map((order, index) => {
+                const items = Array.isArray(order.items)
+                    ? order.items
+                    : [];
+
+                const billNo = "D" + String(
+                    order.orderId || order._id
+                )
+                    .slice(-6)
+                    .toUpperCase();
+
+                const status = String(order.status || "Pending");
+
+                const amount = Number(
+                    order.totalAmount || order.total || 0
+                );
+
+                const productList = items.length
+                    ? items.map((item) => {
+                        const qty = Number(
+                            item.quantity ?? item.qty ?? 1
+                        ) || 1;
+
+                        return `
+                            <div class="product">
+                                ${safe(
+                                    item.name ||
+                                    item.productName ||
+                                    "Product"
+                                )}
+                                <b>× ${qty}</b>
+                            </div>
+                        `;
+                    }).join("")
+                    : "No product";
+
+                return `
+                    <tr>
+                        <td><span class="sl">${index + 1}</span></td>
+
+                        <td>
+                            <b class="bill">${billNo}</b>
+                            <small>${date(order.createdAt)}</small>
+                        </td>
+
+                        <td>${productList}</td>
+
+                        <td>
+                            <b class="amount">
+                                ₹${amount.toFixed(2)}
+                            </b>
+                        </td>
+
+                        <td>
+                            <span class="status ${getStatusClass(status)}">
+                                ${safe(status)}
+                            </span>
+                        </td>
+
+                        <td>
+                            <form
+                                action="/admin/doctor-order/${order._id}/status"
+                                method="POST"
+                                class="update-form"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="doctorId"
+                                    value="${doctor._id}"
+                                >
+
+                                <select name="status">
+                                    <option value="Pending"
+                                        ${status === "Pending" ? "selected" : ""}>
+                                        Pending
+                                    </option>
+
+                                    <option value="Processing"
+                                        ${status === "Processing" ? "selected" : ""}>
+                                        Processing
+                                    </option>
+
+                                    <option value="Delivered"
+                                        ${status === "Delivered" ? "selected" : ""}>
+                                        Delivered
+                                    </option>
+
+                                    <option value="Success"
+                                        ${status === "Success" ? "selected" : ""}>
+                                        Success
+                                    </option>
+
+                                    <option value="Cancelled"
+                                        ${status === "Cancelled" ? "selected" : ""}>
+                                        Cancelled
+                                    </option>
+                                </select>
+
+                                <button type="submit">Update</button>
+                            </form>
+
+                            <a
+                                class="invoice"
+                                target="_blank"
+                                href="/admin/doctor-order/${order._id}/invoice"
+                            >
+                                📄 Invoice
+                            </a>
+                        </td>
+                    </tr>
+                `;
+            }).join("")
+            : `
+                <tr>
+                    <td colspan="6" class="empty">
+                        📦<br>No orders found for this doctor.
+                    </td>
+                </tr>
+            `;
+
+        return res.send(`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doctor Orders</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:22px;font-family:Arial,sans-serif;color:#162338;background:linear-gradient(135deg,#eaf2ff,#f8fbff,#e9fff5)}
+.container{max-width:1250px;margin:auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:20px}
+.brand{color:#0d4ca2;font-size:22px;font-weight:bold}
+.brand small{display:block;margin-top:4px;color:#718096;font-size:10px;letter-spacing:1px}
+.back{padding:10px 14px;border-radius:8px;color:#fff;background:#1c3c64;text-decoration:none;font-size:13px;font-weight:bold}
+.doctor-card{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:25px;margin-bottom:20px;border-radius:18px;color:#fff;background:linear-gradient(130deg,#073b82,#1263c9);box-shadow:0 14px 35px rgba(18,99,201,.24)}
+.doctor-left{display:flex;align-items:center;gap:15px}
+.icon{display:grid;width:60px;height:60px;border:2px solid rgba(255,255,255,.3);border-radius:50%;place-items:center;background:rgba(255,255,255,.14);font-size:28px}
+h1{margin:0 0 6px;font-size:24px}
+.doctor-card p{margin:4px 0;color:#e4efff;font-size:13px}
+.doctor-id{display:inline-block;padding:5px 8px;margin-top:6px;border-radius:6px;background:rgba(0,0,0,.17);font-size:11px}
+.stats{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+.stat{min-width:92px;padding:10px;border-radius:11px;color:#172033;background:#fff;text-align:center}
+.stat b{display:block;color:#0c56b5;font-size:19px}
+.stat span{color:#718096;font-size:9px;font-weight:bold}
+.card{overflow:hidden;border:1px solid #e4ebf5;border-radius:16px;background:#fff;box-shadow:0 8px 25px rgba(32,61,101,.08)}
+.heading{padding:18px 20px;border-bottom:1px solid #edf1f6;color:#164782;font-size:17px;font-weight:bold}
+.table-wrap{overflow-x:auto}
+table{width:100%;min-width:980px;border-collapse:collapse}
+th,td{padding:14px 12px;text-align:left;vertical-align:top;border-bottom:1px solid #edf1f6}
+th{color:#536780;background:#f7faff;font-size:11px}
+.sl{display:grid;width:27px;height:27px;border-radius:50%;place-items:center;color:#0e56b0;background:#e8f1ff;font-size:12px;font-weight:bold}
+.bill{display:block;color:#0c56b5;font-size:13px}
+td small{display:block;margin-top:5px;color:#7d8a9d;font-size:11px}
+.product{padding:3px 0;color:#27364c;font-size:12px}
+.product b{color:#687a91;font-size:11px}
+.amount{color:#07854a;font-size:15px}
+.status{display:inline-block;padding:6px 10px;border-radius:20px;font-size:11px;font-weight:bold}
+.pending{color:#966300;background:#fff2c6}
+.processing{color:#075bab;background:#dcecff}
+.delivered,.success{color:#08724b;background:#d9f8e8}
+.cancelled{color:#b42318;background:#ffe1df}
+.update-form{display:flex;gap:7px;margin-bottom:8px}
+select{min-width:105px;padding:8px;border:1px solid #cbd7e6;border-radius:7px;background:#fff;font-size:12px}
+button{padding:8px 10px;border:0;border-radius:7px;color:#fff;background:#07854a;cursor:pointer;font-size:12px;font-weight:bold}
+.invoice{display:inline-block;padding:8px 11px;border-radius:7px;color:#0c56b5;background:#e8f1ff;text-decoration:none;font-size:12px;font-weight:bold}
+.empty{padding:50px;color:#718096;text-align:center}
+@media(max-width:700px){body{padding:12px}.top,.doctor-card{align-items:flex-start;flex-direction:column}.doctor-card{padding:18px}h1{font-size:19px}}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+    <div class="top">
+        <div class="brand">
+            GLOBAL HEALTHCARE
+            <small>SAFE & SECURE HEALTHCARE</small>
+        </div>
+
+        <a href="/admin/manage-doctors" class="back">
+            ← Back to Doctors
+        </a>
+    </div>
+
+    <div class="doctor-card">
+        <div class="doctor-left">
+            <div class="icon">👨‍⚕️</div>
+
+            <div>
+                <h1>Dr. ${safe(doctorName)}</h1>
+
+                <p>
+                    ${safe(
+                        doctor.specialization ||
+                        "General Physician"
+                    )}
+                </p>
+
+                <p>
+                    ${safe(
+                        doctor.hospital ||
+                        "Healthcare Partner"
+                    )}
+                </p>
+
+                <span class="doctor-id">
+                    Doctor ID: ${safe(doctor.doctorId || "-")}
+                </span>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <b>${orders.length}</b>
+                <span>TOTAL ORDERS</span>
+            </div>
+
+            <div class="stat">
+                <b>${pendingCount}</b>
+                <span>PENDING</span>
+            </div>
+
+            <div class="stat">
+                <b>${processingCount}</b>
+                <span>PROCESSING</span>
+            </div>
+
+            <div class="stat">
+                <b>${deliveredCount}</b>
+                <span>DELIVERED</span>
+            </div>
+
+            <div class="stat">
+                <b>${successCount}</b>
+                <span>SUCCESS</span>
+            </div>
+
+            <div class="stat">
+                <b>${cancelledCount}</b>
+                <span>CANCELLED</span>
+            </div>
+
+            <div class="stat">
+                <b>₹${totalAmount.toFixed(0)}</b>
+                <span>ORDER VALUE</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="heading">
+            📦 Doctor Order History
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>SL</th>
+                        <th>BILL / DATE</th>
+                        <th>PRODUCTS</th>
+                        <th>AMOUNT</th>
+                        <th>STATUS</th>
+                        <th>UPDATE / INVOICE</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
+        `);
+
+    } catch (error) {
+        console.log("Doctor orders error:", error);
+
+        return res.status(500).send(
+            "Unable to load doctor orders: " + error.message
+        );
+    }
+});
+
+
+// ======================================================
+// FINAL STATUS UPDATE ROUTE
+// ======================================================
+router.post("/doctor-order/:orderId/status", async (req, res) => {
+    try {
+        const allowedStatuses = [
+            "Pending",
+            "Processing",
+            "Delivered",
+            "Success",
+            "Cancelled"
+        ];
+
+        const status = String(
+            req.body.status || "Pending"
+        ).trim();
+
+        if (!allowedStatuses.includes(status)) {
+            return res.status(400).send("Invalid order status");
+        }
+
+        const order = await DoctorOrder.findByIdAndUpdate(
+            req.params.orderId,
+            {
+                $set: {
+                    status: status
+                }
+            },
+            {
+                new: true
+            }
+        );
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        return res.redirect(
+            `/admin/doctor/${order.doctorId}/orders`
+        );
+
+    } catch (error) {
+        console.log("Status update error:", error);
+
+        return res.status(500).send(
+            "Unable to update status: " + error.message
         );
     }
 });
