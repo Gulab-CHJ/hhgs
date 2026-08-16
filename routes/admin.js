@@ -5809,6 +5809,227 @@ router.post("/doctor-order/:orderId/status", async (req, res) => {
         );
     }
 });
+
+
+
+// ======================================================
+// STUDENT RECEIPT PDF
+// ======================================================
+
+const path = require("path");
+const fs = require("fs");
+
+router.get("/student-receipt/:id", async (req, res) => {
+    try {
+        const student = await Student.findById(
+            req.params.id
+        ).lean();
+
+        if (!student) {
+            return res.status(404).send("Student not found");
+        }
+
+        const rollNumber =
+            student.roll ||
+            student.rollNo ||
+            "-";
+
+        const mobile =
+            student.mobile ||
+            student.phone ||
+            "-";
+
+        const course =
+            student.className ||
+            student.course ||
+            "-";
+
+        const receiptNo = "GSR" + String(student._id)
+            .slice(-6)
+            .toUpperCase();
+
+        const date = student.createdAt
+            ? new Date(student.createdAt)
+                .toLocaleDateString("en-GB")
+            : new Date().toLocaleDateString("en-GB");
+
+        res.setHeader("Content-Type", "application/pdf");
+
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=Receipt-${rollNumber}.pdf`
+        );
+
+        const pdf = new PDFDocument({
+            size: [595, 425],
+            margin: 0
+        });
+
+        pdf.pipe(res);
+
+        const width = pdf.page.width;
+        const height = pdf.page.height;
+
+        // अपने logo को public/images/logo.png में रखें
+        const logoPath = path.join(
+            process.cwd(),
+            "public",
+            "images",
+            "GS LOGO.png"
+        );
+
+        pdf.lineWidth(1)
+            .strokeColor("#0d6efd")
+            .rect(8, 8, width - 16, height - 16)
+            .stroke();
+
+        // ==================================================
+        // WEBSITE LOGO
+        // ==================================================
+        if (fs.existsSync(logoPath)) {
+            pdf.image(
+                logoPath,
+                42,
+                18,
+                {
+                    fit: [60, 60]
+                }
+            );
+        }
+
+        // ==================================================
+        // HEADER
+        // ==================================================
+        pdf.font("Helvetica-Bold")
+            .fontSize(20)
+            .fillColor("#0d6efd")
+            .text(
+                "GLOBAL SERVICES",
+                110,
+                26,
+                {
+                    width: 435,
+                    align: "center"
+                }
+            );
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(9)
+            .fillColor("#198754")
+            .text(
+                "SAFE & SECURE Services",
+                110,
+                52,
+                {
+                    width: 435,
+                    align: "center"
+                }
+            );
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(13)
+            .fillColor("#000")
+            .text(
+                "STUDENT REGISTRATION RECEIPT",
+                25,
+                75,
+                {
+                    width: width - 50,
+                    align: "center"
+                }
+            );
+
+        pdf.lineWidth(0.7)
+            .strokeColor("#999")
+            .moveTo(28, 99)
+            .lineTo(width - 28, 99)
+            .stroke();
+
+        const left = 45;
+        const labelX = 45;
+        const valueX = 220;
+        let y = 116;
+
+        const details = [
+            ["Receipt No.", receiptNo],
+            ["Date", date],
+            ["Student Name", student.name || "-"],
+            ["Roll Number", rollNumber],
+            ["Mobile Number", mobile],
+            ["Class / Course", course],
+            ["Selected Plan", student.plan || "-"],
+            [
+                "Amount",
+                `Rs.${Number(student.amount || 0).toFixed(2)}`
+            ],
+            [
+                "Payment Status",
+                student.paymentStatus || "Pending"
+            ]
+        ];
+
+        details.forEach(([label, value]) => {
+            pdf.font("Helvetica-Bold")
+                .fontSize(10)
+                .fillColor("#123b85")
+                .text(`${label} :`, labelX, y);
+
+            pdf.font("Helvetica")
+                .fontSize(10)
+                .fillColor("#000")
+                .text(String(value), valueX, y);
+
+            pdf.strokeColor("#e5e7eb")
+                .lineWidth(0.4)
+                .moveTo(left, y + 18)
+                .lineTo(width - 45, y + 18)
+                .stroke();
+
+            y += 25;
+        });
+
+        pdf.lineWidth(0.7)
+            .strokeColor("#999")
+            .moveTo(28, 348)
+            .lineTo(width - 28, 348)
+            .stroke();
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(11)
+            .fillColor("#0d6efd")
+            .text(
+                "GLOBAL SERVICES",
+                25,
+                363,
+                {
+                    width: width - 50,
+                    align: "center"
+                }
+            );
+
+        pdf.font("Helvetica")
+            .fontSize(8)
+            .fillColor("#555")
+            .text(
+                "This is a computer generated registration receipt.",
+                25,
+                380,
+                {
+                    width: width - 50,
+                    align: "center"
+                }
+            );
+
+        pdf.end();
+
+    } catch (error) {
+        console.log("Student receipt error:", error);
+
+        return res.status(500).send(
+            "Receipt download failed: " + error.message
+        );
+    }
+});
 // ======================================================
 // EXPORT
 // ======================================================
