@@ -4147,7 +4147,872 @@ router.get(
     }
 );
 
+const StudentRegistration = require("../pages/StudentRegistration");
 
+router.get("/student-registration", (req, res) => {
+    res.send(
+        StudentRegistration()
+    );
+});
+
+
+router.post(
+    "/student-registration",
+    async (req, res) => {
+
+        try {
+
+            const {
+                name,
+                phone,
+                age,
+                className,
+                password,
+                plan,
+                amount
+            } = req.body;
+
+
+            const mobile =
+                String(phone || "").trim();
+
+
+            const existingStudent =
+                await Student.findOne({
+                    mobile: mobile
+                });
+
+
+            if (existingStudent) {
+
+                return res.send(`
+                    <h2>
+                        This phone number is already registered.
+                    </h2>
+
+                    <a href="/admin/student-registration">
+                        ← Back to Registration
+                    </a>
+                `);
+
+            }
+
+
+            let nextNumber = 1001;
+            let rollNo = "";
+            let rollExists = true;
+
+
+            while (rollExists) {
+
+                rollNo = "GSI" + nextNumber;
+
+                const foundStudent =
+                    await Student.findOne({
+                        rollNo: rollNo
+                    });
+
+                if (!foundStudent) {
+                    rollExists = false;
+                } else {
+                    nextNumber++;
+                }
+
+            }
+
+
+            const student = new Student({
+
+                name: String(name || "").trim(),
+
+                mobile: mobile,
+
+                age: Number(age),
+
+                course: String(className || "").trim(),
+
+                rollNo: rollNo,
+
+                password: password,
+
+                plan: plan,
+
+                amount: Number(amount),
+
+                paymentStatus: "Pending"
+
+            });
+
+
+            await student.save();
+
+
+            res.send(`
+                <!DOCTYPE html>
+                <html lang="en">
+
+                <head>
+                    <meta charset="UTF-8">
+
+                    <meta
+                        name="viewport"
+                        content="width=device-width, initial-scale=1.0"
+                    >
+
+                    <title>Registration Successful</title>
+                </head>
+
+                <body style="
+                    font-family:Arial;
+                    text-align:center;
+                    padding:50px;
+                    background:#f0fdf4;
+                ">
+
+                    <h1 style="color:#166534;">
+                        Registration Successful ✓
+                    </h1>
+
+                    <h2>
+                        Welcome, ${student.name}
+                    </h2>
+
+                    <p>
+                        Your unique Roll Number is:
+                    </p>
+
+                    <h1 style="color:#1d4ed8;">
+                        ${student.rollNo}
+                    </h1>
+
+                    <p>
+                        Selected Plan: ${student.plan}
+                    </p>
+
+                    <p>
+                        Amount: ₹${student.amount}
+                    </p>
+
+                    <p>
+                        Payment Status: ${student.paymentStatus}
+                    </p>
+
+                    <a
+                        href="/student-login"
+                        style="
+                            display:inline-block;
+                            margin-top:20px;
+                            padding:12px 20px;
+                            border-radius:8px;
+                            color:white;
+                            background:#2563eb;
+                            text-decoration:none;
+                        "
+                    >
+                        Go to Student Login
+                    </a>
+
+                </body>
+
+                </html>
+            `);
+
+        } catch (error) {
+
+            console.error(
+                "STUDENT REGISTRATION ERROR:",
+                error
+            );
+
+            res.status(500).send(
+                "Student registration failed: " +
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+const ManageStudents = require("../pages/manageStudents");
+
+router.get(
+    "/manage-students",
+    async (req, res) => {
+
+        try {
+
+            const students =
+                await Student.find()
+                    .sort({
+                        createdAt: -1
+                    })
+                    .lean();
+
+            res.send(
+                ManageStudents(students)
+            );
+
+        } catch (error) {
+
+            console.error(
+                "MANAGE STUDENTS ERROR:",
+                error
+            );
+
+            res.status(500).send(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+router.post(
+    "/delete-student/:id",
+    async (req, res) => {
+
+        try {
+
+            await Student.findByIdAndDelete(
+                req.params.id
+            );
+
+            res.redirect(
+                "/admin/manage-students"
+            );
+
+        } catch (error) {
+
+            res.status(500).send(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+const EditStudent = require("../pages/editpages/editStudent");
+router.get(
+    "/edit-student/:id",
+    async (req, res) => {
+
+        try {
+
+            const student =
+                await Student.findById(
+                    req.params.id
+                ).lean();
+
+            if (!student) {
+                return res.send(
+                    "Student not found"
+                );
+            }
+
+            res.send(
+                EditStudent(student)
+            );
+
+        } catch (error) {
+
+            console.error(
+                "EDIT STUDENT PAGE ERROR:",
+                error
+            );
+
+            res.status(500).send(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+router.post(
+    "/edit-student/:id",
+    async (req, res) => {
+
+        try {
+
+            const updateData = {
+
+                name: String(
+                    req.body.name || ""
+                ).trim(),
+
+                mobile: String(
+                    req.body.mobile || ""
+                ).trim(),
+
+                age: Number(
+                    req.body.age || 0
+                ),
+
+                course: String(
+                    req.body.course || ""
+                ).trim(),
+
+                plan: req.body.plan,
+
+                amount: Number(
+                    req.body.amount || 0
+                ),
+
+                paymentStatus:
+                    req.body.paymentStatus
+
+            };
+
+
+            if (
+                req.body.password &&
+                req.body.password.trim() !== ""
+            ) {
+
+                updateData.password =
+                    req.body.password.trim();
+
+            }
+
+
+            await Student.findByIdAndUpdate(
+                req.params.id,
+                updateData,
+                {
+                    new: true
+                }
+            );
+
+
+            res.redirect(
+                "/admin/manage-students"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "UPDATE STUDENT ERROR:",
+                error
+            );
+
+            res.status(500).send(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+router.post(
+    "/update-student-payment/:id",
+    async (req, res) => {
+
+        try {
+
+            const paymentStatus =
+                req.body.paymentStatus === "Success"
+                    ? "Success"
+                    : "Pending";
+
+
+            await Student.findByIdAndUpdate(
+                req.params.id,
+                {
+                    paymentStatus: paymentStatus
+                }
+            );
+
+
+            res.redirect(
+                "/admin/manage-students"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "PAYMENT STATUS UPDATE ERROR:",
+                error
+            );
+
+            res.status(500).send(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+const StudentLogin = require("../pages/studentLogin");
+const StudentInformation = require("../pages/studentInformation");
+router.post(
+    "/student-login",
+    async (req, res) => {
+
+        const rollNo =
+            String(req.body.rollNo || "")
+                .trim()
+                .toUpperCase();
+
+        const student =
+            await Student.findOne({
+                rollNo: rollNo
+            });
+
+        if (!student) {
+            return res.send(
+                StudentLogin("Roll Number not found.")
+            );
+        }
+
+        if (student.password !== req.body.password) {
+            return res.send(
+                StudentLogin("Wrong password.")
+            );
+        }
+
+        res.send(
+    StudentInformation(student)
+);
+
+    }
+);
+
+
+
+
+
+router.get(
+    "/student-logout",
+    (req, res) => {
+
+        if (req.session) {
+            req.session.destroy(() => {
+                res.redirect(
+                    "/student-login"
+                );
+            });
+
+            return;
+        }
+
+        res.redirect(
+            "/student-login"
+        );
+
+    }
+);
+
+
+
+const DoctorOrder = require("../models/DoctorOrder");
+const DoctorOrders = require("../pages/admin/DoctorOrders");
+
+
+// ======================================================
+// ADMIN: PARTICULAR DOCTOR ALL ORDERS
+// URL: /admin/doctor/:id/orders
+// ======================================================
+router.get("/doctor/:id/orders", async (req, res) => {
+    try {
+        const doctor = await Doctor.findById(req.params.id);
+
+        if (!doctor) {
+            return res.status(404).send("Doctor not found");
+        }
+
+        const orders = await DoctorOrder.find({
+            doctorId: String(doctor._id)
+        }).sort({ createdAt: -1 });
+
+        return res.send(DoctorOrders(doctor, orders));
+
+    } catch (error) {
+        console.log("Doctor orders error:", error);
+
+        return res.status(500).send(`
+            <h2>Unable to load doctor orders</h2>
+            <p>${error.message}</p>
+            <a href="/admin/manage-doctors">← Back to Doctors</a>
+        `);
+    }
+});
+
+
+
+
+// ======================================================
+// UPDATE DOCTOR ORDER STATUS
+// ======================================================
+router.post("/doctor-order/:orderId/status", async (req, res) => {
+    try {
+        const { status } = req.body;
+
+        const allowedStatus = [
+            "Pending",
+            "Confirmed",
+            "Processing",
+            "Completed",
+            "Cancelled"
+        ];
+
+        if (!allowedStatus.includes(status)) {
+            return res.status(400).send("Invalid order status");
+        }
+
+        const order = await DoctorOrder.findByIdAndUpdate(
+            req.params.orderId,
+            {
+                status: status
+            },
+            {
+                new: true
+            }
+        );
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        return res.redirect(
+            `/admin/doctor/${order.doctorId}/orders`
+        );
+
+    } catch (error) {
+        console.log("Status update error:", error);
+
+        return res.status(500).send(`
+            <h2>Unable to update order status</h2>
+            <p>${error.message}</p>
+        `);
+    }
+});
+
+
+const PDFDocument = require("pdfkit");
+// ======================================================
+// DOWNLOAD ROUGH ESTIMATE PDF
+// ======================================================
+router.get("/doctor-order/:orderId/invoice", async (req, res) => {
+    try {
+        const order = await DoctorOrder.findById(req.params.orderId);
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        const doctor = await Doctor.findById(order.doctorId);
+
+        const items = Array.isArray(order.items)
+            ? order.items
+            : [];
+
+        const formatDate = (date) => {
+            return date
+                ? new Date(date).toLocaleDateString("en-GB")
+                : "-";
+        };
+
+        const billNo = "D" + String(order.orderId || order._id)
+            .slice(-6)
+            .toUpperCase();
+
+        const totalQuantity = items.reduce((sum, item) => {
+            return sum + Number(item.quantity || 1);
+        }, 0);
+
+        const grandTotal = Number(
+            order.totalAmount || order.total || 0
+        );
+
+        const doctorName = String(doctor?.name || "-")
+            .replace(/^Dr\.?\s*/i, "")
+            .trim();
+
+        res.setHeader("Content-Type", "application/pdf");
+
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename=Estimate-${billNo}.pdf`
+        );
+
+        // छोटा A5 landscape page
+        const pdf = new PDFDocument({
+            size: "A5",
+            layout: "landscape",
+            margin: 0
+        });
+
+        pdf.pipe(res);
+
+        const pageWidth = pdf.page.width;
+        const pageHeight = pdf.page.height;
+
+        const left = 20;
+        const right = pageWidth - 20;
+        const rightColumn = 310;
+
+        // =================================================
+        // 1PX OUTER BORDER
+        // =================================================
+        pdf.lineWidth(1)
+            .strokeColor("#000")
+            .rect(5, 5, pageWidth - 10, pageHeight - 10)
+            .stroke();
+
+        function borderLine() {
+            pdf.strokeColor("#000")
+                .lineWidth(0.6)
+                .moveTo(left, pdf.y)
+                .lineTo(right, pdf.y)
+                .stroke();
+
+            pdf.y += 5;
+        }
+
+        // =================================================
+        // HEADER
+        // =================================================
+        pdf.y = 16;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(16)
+            .fillColor("#0d6efd")
+            .text("GLOBAL HEALTHCARE", {
+                align: "center"
+            });
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8)
+            .fillColor("#198754")
+            .text("SAFE & SECURE Healthcare", {
+                align: "center"
+            });
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(10)
+            .fillColor("#000")
+            .text("ROUGH ESTIMATE", {
+                align: "center"
+            });
+
+        pdf.y += 7;
+        borderLine();
+
+        // =================================================
+        // DOCTOR + BILL DETAILS
+        // =================================================
+        const detailsY = pdf.y + 3;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8.5)
+            .fillColor("#000");
+
+        // Left side
+        pdf.text(`DOCTOR : Dr. ${doctorName}`, left, detailsY);
+        pdf.text(
+            `SPECIALIZATION : ${doctor?.specialization || "-"}`,
+            left,
+            detailsY + 13
+        );
+        pdf.text(
+            `DOCTOR ID : ${doctor?.doctorId || "-"}`,
+            left,
+            detailsY + 26
+        );
+        pdf.text(
+            `PHONE : ${doctor?.phone || "-"}`,
+            left,
+            detailsY + 39
+        );
+
+        // Right side
+        pdf.text(`BILL NO : ${billNo}`, rightColumn, detailsY);
+        pdf.text(
+            `DATE : ${formatDate(order.createdAt)}`,
+            rightColumn,
+            detailsY + 13
+        );
+        pdf.text("TYPE : CREDIT", rightColumn, detailsY + 26);
+        pdf.text(
+            `PAYMENT : ${String(order.paymentMethod || "COD").toUpperCase()}`,
+            rightColumn,
+            detailsY + 39
+        );
+
+        pdf.y = detailsY + 56;
+        borderLine();
+
+        // =================================================
+        // PRODUCT TABLE HEADER
+        // =================================================
+        const xSL = 25;
+        const xProduct = 50;
+        const xQty = 330;
+        const xRate = 380;
+        const xAmount = 470;
+
+        const tableHeadY = pdf.y + 2;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8)
+            .fillColor("#000");
+
+        pdf.text("SL", xSL, tableHeadY);
+        pdf.text("PRODUCT DESCRIPTION", xProduct, tableHeadY);
+        pdf.text("QTY", xQty, tableHeadY);
+        pdf.text("RATE", xRate, tableHeadY);
+        pdf.text("AMOUNT", xAmount, tableHeadY);
+
+        pdf.y = tableHeadY + 14;
+        borderLine();
+
+        // =================================================
+        // PRODUCTS
+        // =================================================
+        pdf.font("Helvetica")
+            .fontSize(8)
+            .fillColor("#000");
+
+        items.forEach((item, index) => {
+            const quantity = Number(item.quantity || 1);
+            const rate = Number(item.price || item.rate || 0);
+            const amount = quantity * rate;
+
+            const productY = pdf.y + 2;
+
+            pdf.text(`${index + 1}`, xSL, productY);
+
+            pdf.text(
+                String(item.name || item.productName || "Product"),
+                xProduct,
+                productY,
+                {
+                    width: 250,
+                    lineBreak: false
+                }
+            );
+
+            pdf.text(`${quantity}`, xQty, productY);
+            pdf.text(`Rs.${rate.toFixed(2)}`, xRate, productY);
+            pdf.text(`Rs.${amount.toFixed(2)}`, xAmount, productY);
+
+            pdf.y = productY + 14;
+        });
+
+        borderLine();
+
+        // =================================================
+        // TOTALS
+        // =================================================
+        const totalY = pdf.y + 3;
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(8.5)
+            .fillColor("#000");
+
+        // Left side totals
+        pdf.text(`NO OF ITEMS : ${items.length}`, left, totalY);
+        pdf.text(
+            `TOTAL QUANTITY : ${totalQuantity}`,
+            left,
+            totalY + 13
+        );
+        pdf.text(
+            `CURRENT BILL AMOUNT : Rs.${grandTotal.toFixed(2)}`,
+            left,
+            totalY + 26
+        );
+
+        // Right side totals
+        pdf.text(
+            `GRAND TOTAL : Rs.${grandTotal.toFixed(2)}`,
+            rightColumn,
+            totalY
+        );
+        pdf.text(
+            "BACK DUES AMOUNT : Rs.0.00",
+            rightColumn,
+            totalY + 13
+        );
+        pdf.text(
+            `TOTAL BALANCE : Rs.${grandTotal.toFixed(2)}`,
+            rightColumn,
+            totalY + 26
+        );
+
+        pdf.y = totalY + 42;
+        borderLine();
+
+        // =================================================
+        // FIXED FOOTER — blank page नहीं बनेगा
+        // =================================================
+        const footerY = pageHeight - 58;
+
+        pdf.font("Helvetica")
+            .fontSize(8)
+            .fillColor("#000")
+            .text(
+                "Import Purchase ONLINE : No",
+                left,
+                footerY
+            );
+
+        pdf.font("Helvetica-Bold")
+            .fontSize(10)
+            .fillColor("#0d6efd")
+            .text(
+                "GLOBAL HEALTHCARE",
+                left,
+                footerY,
+                {
+                    width: right - left,
+                    align: "center"
+                }
+            );
+
+        pdf.font("Helvetica")
+            .fontSize(8)
+            .fillColor("#555")
+            .text(
+                "Powered by Osium Biogenix",
+                left,
+                footerY + 14,
+                {
+                    width: right - left,
+                    align: "center"
+                }
+            );
+
+        pdf.text(
+            "Call : 9142264714",
+            left,
+            footerY + 26,
+            {
+                width: right - left,
+                align: "center"
+            }
+        );
+
+        pdf.end();
+
+    } catch (error) {
+        console.log("ESTIMATE INVOICE ERROR:", error);
+
+        return res.status(500).send(
+            "Invoice generate nahi hua: " + error.message
+        );
+    }
+});
 // ======================================================
 // EXPORT
 // ======================================================
