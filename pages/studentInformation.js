@@ -600,6 +600,14 @@ function StudentInformation(student = {}) {
                 grid-template-columns: 1fr;
             }
         }
+
+        .avatar img {
+    width: 100%;
+    height: 100%;
+    padding: 6px;
+    border-radius: 50%;
+    object-fit: contain;
+}
     </style>
 </head>
 
@@ -613,19 +621,19 @@ function StudentInformation(student = {}) {
         </div>
 
         <section class="hero">
-            <div class="avatar">
-                ${escapeHTML(
-                    String(studentName)
-                        .charAt(0)
-                        .toUpperCase()
-                )}
-            </div>
 
-            <h1>${escapeHTML(studentName)}</h1>
+    <div class="avatar">
+        <img
+            src="/images/GS LOGO.png"
+            alt="GLOBAL SERVICES Logo"
+        >
+    </div>
 
-            <p>Gulab Service Institute Student Profile</p>
-        </section>
+    <h1>${escapeHTML(studentName)}</h1>
 
+    <p>Gulab Service Institute Student Profile</p>
+
+</section>
         <section class="content">
 
             <div class="roll-number">
@@ -638,79 +646,94 @@ function StudentInformation(student = {}) {
 
             <div class="details-grid">
 
-                <div class="detail-box">
-                    <small>Mobile Number</small>
-                    <strong>${escapeHTML(mobile)}</strong>
-                </div>
+    <div class="detail-box">
+        <small>Mobile Number</small>
+        <strong>${escapeHTML(mobile)}</strong>
+    </div>
 
-                <div class="detail-box">
-                    <small>Age</small>
-                    <strong>
-                        ${escapeHTML(student.age || "-")} Years
-                    </strong>
-                </div>
+    <div class="detail-box">
+        <small>Age</small>
+        <strong>
+            ${escapeHTML(student.age || "-")} Years
+        </strong>
+    </div>
 
-                <div class="detail-box">
-                    <small>Class / Course</small>
-                    <strong>${escapeHTML(course)}</strong>
-                </div>
+    <div class="detail-box">
+        <small>Class / Course</small>
+        <strong>${escapeHTML(course)}</strong>
+    </div>
 
-                <div class="detail-box">
-                    <small>Subscription Plan</small>
-                    <strong>
-                        ${escapeHTML(student.plan || "-")}
-                    </strong>
-                </div>
+    <div class="detail-box">
+        <small>Subscription Plan</small>
+        <strong>
+            ${escapeHTML(student.plan || "-")}
+        </strong>
+    </div>
 
-                <div class="detail-box">
-                    <small>Total Fee</small>
-                    <strong>₹${amount}</strong>
-                </div>
+    <div class="detail-box">
+        <small>Total Fee</small>
+        <strong>₹${amount}</strong>
+    </div>
 
-                <div class="detail-box">
-                    <small>Payment Status</small>
+    <div class="detail-box">
+        <small>Payment Status</small>
 
-                    <span class="status ${
-                        paymentSuccess
-                            ? "success"
-                            : "pending"
-                    }">
-                        ${
-                            paymentSuccess
-                                ? "Success"
-                                : "Pending"
-                        }
-                    </span>
-                </div>
+        <span class="status ${
+            paymentSuccess
+                ? "success"
+                : "pending"
+        }">
+            ${
+                paymentSuccess
+                    ? "Success"
+                    : "Pending"
+            }
+        </span>
+    </div>
 
-            </div>
+</div>
 
-            <div class="buttons">
+${!paymentSuccess ? `
+    <div class="pending-alert">
+        <div class="alert-icon">⚠️</div>
 
-                <a
-                    href="/admin/student-receipt/${escapeHTML(studentId)}"
-                    target="_blank"
-                    class="receipt-btn"
-                >
-                    ⬇ Download Receipt
-                </a>
+        <div>
+            <strong>भुगतान लंबित है</strong>
 
-                <a
-                    href="/student-logout"
-                    class="logout-btn"
-                >
-                    🚪 Logout
-                </a>
-
-            </div>
-
-        </section>
-
-        <div class="footer">
-            GLOBAL SERVICES • Your education, our commitment
+            <p>
+                कृपया भुगतान संबंधी जानकारी और पुष्टि के लिए
+                होम ब्रांच से संपर्क करें।
+            </p>
         </div>
+    </div>
+` : ""}
 
-    </main>
+<div class="buttons">
+
+    <a
+        href="/admin/student-receipt/${escapeHTML(studentId)}"
+        target="_blank"
+        class="receipt-btn"
+    >
+        ⬇ Download Receipt
+    </a>
+
+    <a
+        href="/student-logout"
+        class="logout-btn"
+    >
+        🚪 Logout
+    </a>
+
+</div>
+
+</section>
+
+<div class="footer">
+    GLOBAL SERVICES • Your education, our commitment
+</div>
+
+</main>
 
 </body>
 </html>

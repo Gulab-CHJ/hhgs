@@ -3837,18 +3837,74 @@ router.post(
 // MANAGE GOVERNMENT
 // ======================================================
 
+// router.get(
+//     "/manage-government",
+//     async (req, res) => {
+
+//         try {
+
+//             const persons =
+//                 await GovernmentPerson
+//                     .find()
+//                     .sort({
+//                         createdAt: -1
+//                     });
+
+
+//             res.send(
+//                 ManageGovernment(persons)
+//             );
+
+
+//         } catch (err) {
+
+//             console.error(
+//                 "MANAGE GOVERNMENT ERROR:",
+//                 err
+//             );
+
+
+//             res
+//                 .status(500)
+//                 .send(err.message);
+
+//         }
+
+//     }
+// );
+
 router.get(
     "/manage-government",
     async (req, res) => {
 
         try {
 
-            const persons =
+            const data =
                 await GovernmentPerson
                     .find()
                     .sort({
                         createdAt: -1
-                    });
+                    })
+                    .lean();
+
+
+            // ==========================================
+            // ADD EDIT + DELETE URL
+            // ==========================================
+
+            const persons = data.map(person => {
+
+                return {
+                    ...person,
+
+                    editUrl:
+                        `/admin/edit-government/${person._id}`,
+
+                    deleteUrl:
+                        `/admin/delete-government/${person._id}`
+                };
+
+            });
 
 
             res.send(
@@ -6030,6 +6086,822 @@ router.get("/student-receipt/:id", async (req, res) => {
         );
     }
 });
+
+
+
+const EditGovernment =
+    require("../pages/editpages/EditGovernment");
+
+
+    // ======================================================
+// EDIT GOVERNMENT PERSON PAGE
+// GET /admin/edit-government/:id
+// ======================================================
+
+router.get(
+    "/edit-government/:id",
+    async (req, res) => {
+
+        try {
+
+            const person =
+                await GovernmentPerson
+                    .findById(req.params.id)
+                    .lean();
+
+
+            if (!person) {
+
+                return res
+                    .status(404)
+                    .send("Government Person Not Found");
+
+            }
+
+
+            return res.send(
+                EditGovernment(person)
+            );
+
+
+        } catch (err) {
+
+            console.error(
+                "EDIT GOVERNMENT GET ERROR:",
+                err
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Failed to load Government Person: " +
+                    err.message
+                );
+
+        }
+
+    }
+);
+
+
+
+// ======================================================
+// UPDATE GOVERNMENT PERSON
+// POST /admin/edit-government/:id
+// ======================================================
+
+const multer = require("multer");
+
+
+
+
+
+
+
+
+// ======================================================
+// GOVERNMENT PHOTO UPLOAD FOLDER
+// ======================================================
+
+const governmentUploadDir =
+    path.join(
+        process.cwd(),
+        "public",
+        "uploads",
+        "government"
+    );
+
+
+// Folder automatic create
+if (!fs.existsSync(governmentUploadDir)) {
+
+    fs.mkdirSync(
+        governmentUploadDir,
+        {
+            recursive: true
+        }
+    );
+
+}
+
+
+
+// ======================================================
+// MULTER STORAGE
+// ======================================================
+
+const governmentStorage =
+    multer.diskStorage({
+
+        destination: function (
+            req,
+            file,
+            cb
+        ) {
+
+            cb(
+                null,
+                governmentUploadDir
+            );
+
+        },
+
+
+        filename: function (
+            req,
+            file,
+            cb
+        ) {
+
+            const ext =
+                path
+                    .extname(file.originalname)
+                    .toLowerCase();
+
+
+            const fileName =
+                "government-" +
+                Date.now() +
+                "-" +
+                Math.round(
+                    Math.random() * 1E9
+                ) +
+                ext;
+
+
+            cb(
+                null,
+                fileName
+            );
+
+        }
+
+    });
+
+
+
+// ======================================================
+// MULTER
+// ======================================================
+
+const uploadGovernment =
+    multer({
+
+        storage:
+            governmentStorage,
+
+        limits: {
+
+            fileSize:
+                5 * 1024 * 1024
+
+        },
+
+        fileFilter: function (
+            req,
+            file,
+            cb
+        ) {
+
+            const allowedTypes = [
+
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+
+            ];
+
+
+            if (
+                allowedTypes.includes(
+                    file.mimetype
+                )
+            ) {
+
+                return cb(
+                    null,
+                    true
+                );
+
+            }
+
+
+            return cb(
+                new Error(
+                    "Only JPG, JPEG, PNG and WEBP images are allowed"
+                )
+            );
+
+        }
+
+    });
+
+
+
+// ======================================================
+// EDIT GOVERNMENT PERSON PAGE
+// GET /admin/edit-government/:id
+// ======================================================
+
+router.get(
+    "/edit-government/:id",
+    async (req, res) => {
+
+        try {
+
+            const person =
+                await GovernmentPerson
+                    .findById(
+                        req.params.id
+                    )
+                    .lean();
+
+
+            if (!person) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Government Person Not Found"
+                    );
+
+            }
+
+
+            return res.send(
+                EditGovernment(person)
+            );
+
+
+        } catch (err) {
+
+            console.error(
+                "EDIT GOVERNMENT GET ERROR:",
+                err
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Failed to load Government Person: " +
+                    err.message
+                );
+
+        }
+
+    }
+);
+
+
+
+// ======================================================
+// UPDATE GOVERNMENT PERSON
+// POST /admin/edit-government/:id
+// ======================================================
+
+router.post(
+    "/edit-government/:id",
+
+    // ==============================================
+    // VERY IMPORTANT
+    // Ye multipart form ko parse karega
+    // ==============================================
+
+    uploadGovernment.single("image"),
+
+    async (req, res) => {
+
+        try {
+
+            console.log(
+                "=================================="
+            );
+
+            console.log(
+                "EDIT GOVERNMENT POST"
+            );
+
+            console.log(
+                "BODY:",
+                req.body
+            );
+
+            console.log(
+                "FILE:",
+                req.file
+            );
+
+            console.log(
+                "=================================="
+            );
+
+
+
+            // ==================================================
+            // OLD PERSON
+            // ==================================================
+
+            const oldPerson =
+                await GovernmentPerson
+                    .findById(
+                        req.params.id
+                    );
+
+
+            if (!oldPerson) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Government Person Not Found"
+                    );
+
+            }
+
+
+
+            // ==================================================
+            // SAFE BODY
+            // ==================================================
+
+            const body =
+                req.body || {};
+
+
+
+            const name =
+                String(
+                    body.name || ""
+                ).trim();
+
+
+            const position =
+                String(
+                    body.position || ""
+                ).trim();
+
+
+            const department =
+                String(
+                    body.department || ""
+                ).trim();
+
+
+            const phone =
+                String(
+                    body.phone || ""
+                ).trim();
+
+
+            const address =
+                String(
+                    body.address || ""
+                ).trim();
+
+
+
+            // ==================================================
+            // VALIDATION
+            // ==================================================
+
+            if (!name) {
+
+                return res
+                    .status(400)
+                    .send(
+                        "Person Name is required"
+                    );
+
+            }
+
+
+            if (!position) {
+
+                return res
+                    .status(400)
+                    .send(
+                        "Position is required"
+                    );
+
+            }
+
+
+
+            // ==================================================
+            // UPDATE DATA
+            // ==================================================
+
+            const updateData = {
+
+                name,
+
+                position,
+
+                department,
+
+                phone,
+
+                address
+
+            };
+
+
+
+            // ==================================================
+            // PHOTO
+            // ==================================================
+
+            if (req.file) {
+
+                // New photo uploaded
+
+                updateData.image =
+                    "/uploads/government/" +
+                    req.file.filename;
+
+            } else {
+
+                // No new photo
+                // Keep old photo
+
+                updateData.image =
+                    oldPerson.image || "";
+
+            }
+
+
+
+            // ==================================================
+            // UPDATE DATABASE
+            // ==================================================
+
+            const updatedPerson =
+                await GovernmentPerson
+                    .findByIdAndUpdate(
+
+                        req.params.id,
+
+                        {
+                            $set:
+                                updateData
+                        },
+
+                        {
+                            new: true,
+                            runValidators: true
+                        }
+
+                    );
+
+
+
+            if (!updatedPerson) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Government Person Not Found"
+                    );
+
+            }
+
+
+
+            console.log(
+                "✅ GOVERNMENT PERSON UPDATED:",
+                updatedPerson._id
+            );
+
+
+            console.log(
+                "✅ PHOTO:",
+                updatedPerson.image
+            );
+
+
+
+            // ==================================================
+            // REDIRECT
+            // ==================================================
+
+            return res.redirect(
+                "/admin/manage-government"
+            );
+
+
+        } catch (err) {
+
+            console.error(
+                "EDIT GOVERNMENT POST ERROR:",
+                err
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Government Person Update Failed: " +
+                    err.message
+                );
+
+        }
+
+    }
+);
+
+
+
+// ======================================================
+// GOVERNMENT PERSON DETAILS
+// GET /government/person/:id
+// ======================================================
+
+router.get(
+    "/person/:id",
+    async (req, res) => {
+
+        try {
+
+            const person =
+                await GovernmentPerson
+                    .findById(req.params.id)
+                    .lean();
+
+
+            if (!person) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Government Person Not Found"
+                    );
+
+            }
+
+
+            return res.send(`
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>${person.name || "Government Person"}</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+    padding:20px;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background:#f1f5f9;
+
+    color:#0f172a;
+}
+
+.container{
+
+    max-width:650px;
+
+    margin:auto;
+
+    background:#ffffff;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 10px 35px
+        rgba(0,0,0,.10);
+}
+
+.header{
+
+    background:
+        linear-gradient(
+            135deg,
+            #1e3a8a,
+            #2563eb
+        );
+
+    color:white;
+
+    padding:28px 20px;
+
+    text-align:center;
+}
+
+.photo{
+
+    width:120px;
+    height:120px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    border:4px solid white;
+
+    margin-bottom:12px;
+
+    background:#e2e8f0;
+}
+
+.header h1{
+
+    margin:5px 0;
+
+    font-size:26px;
+}
+
+.header p{
+
+    margin:5px 0;
+
+    opacity:.9;
+}
+
+.details{
+
+    padding:25px;
+}
+
+.detail{
+
+    padding:14px 0;
+
+    border-bottom:
+        1px solid #e2e8f0;
+}
+
+.detail small{
+
+    display:block;
+
+    color:#64748b;
+
+    margin-bottom:5px;
+}
+
+.detail strong{
+
+    font-size:16px;
+
+    color:#0f172a;
+}
+
+.back-btn{
+
+    display:block;
+
+    margin-top:22px;
+
+    padding:13px;
+
+    background:#2563eb;
+
+    color:white;
+
+    text-decoration:none;
+
+    text-align:center;
+
+    border-radius:9px;
+
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <div class="header">
+
+        <img
+            src="${person.image || "/images/default.png"}"
+            class="photo"
+            onerror="
+                this.onerror=null;
+                this.src='/images/default.png';
+            "
+        >
+
+        <h1>
+            ${person.name || "-"}
+        </h1>
+
+        <p>
+            ${person.position || "-"}
+        </p>
+
+    </div>
+
+
+    <div class="details">
+
+
+        <div class="detail">
+
+            <small>
+                Department
+            </small>
+
+            <strong>
+                ${person.department || "-"}
+            </strong>
+
+        </div>
+
+
+        <div class="detail">
+
+            <small>
+                Phone Number
+            </small>
+
+            <strong>
+                ${person.phone || "-"}
+            </strong>
+
+        </div>
+
+
+        <div class="detail">
+
+            <small>
+                Address
+            </small>
+
+            <strong>
+                ${person.address || "-"}
+            </strong>
+
+        </div>
+
+
+        <a
+            href="/"
+            class="back-btn"
+        >
+            ← Back
+        </a>
+
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
+            `);
+
+
+        } catch (err) {
+
+            console.error(
+                "GOVERNMENT PERSON DETAILS ERROR:",
+                err
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Failed to load Government Person: " +
+                    err.message
+                );
+
+        }
+
+    }
+);
 // ======================================================
 // EXPORT
 // ======================================================
