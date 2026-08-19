@@ -3117,74 +3117,424 @@ router.get(
 // UPDATE PRODUCT
 // ======================================================
 
+// router.post(
+//     "/edit-product/:id",
+
+//     upload.fields([
+
+//         {
+//             name: "images",
+//             maxCount: 10
+//         },
+
+//         {
+//             name: "video",
+//             maxCount: 1
+//         }
+
+//     ]),
+
+//     async (req, res) => {
+
+//         try {
+
+//             console.log(
+//                 "\n========== EDIT PRODUCT =========="
+//             );
+
+//             console.log(
+//                 "PRODUCT ID:",
+//                 req.params.id
+//             );
+
+//             console.log(
+//                 "BODY:",
+//                 req.body
+//             );
+
+//             console.log(
+//                 "FILES:",
+//                 req.files
+//             );
+
+
+//             // ------------------------------------------
+//             // FIND PRODUCT
+//             // ------------------------------------------
+
+//             const product =
+//                 await Product.findById(
+//                     req.params.id
+//                 );
+
+
+//             if (!product) {
+
+//                 return res
+//                     .status(404)
+//                     .send(
+//                         "Product Not Found"
+//                     );
+
+//             }
+
+
+//             // ------------------------------------------
+//             // BASIC DETAILS
+//             // ------------------------------------------
+
+//             product.name =
+//                 req.body.name || "";
+
+//             product.brand =
+//                 req.body.brand || "";
+
+//             product.category =
+//                 req.body.category || "";
+
+//             product.manufacturer =
+//                 req.body.manufacturer || "";
+
+
+//             // ------------------------------------------
+//             // PRICE
+//             // ------------------------------------------
+
+//             product.mrp =
+//                 req.body.mrp !== undefined &&
+//                 req.body.mrp !== ""
+//                     ? Number(req.body.mrp)
+//                     : 0;
+
+
+//             product.price =
+//                 req.body.price !== undefined &&
+//                 req.body.price !== ""
+//                     ? Number(req.body.price)
+//                     : 0;
+
+
+//             product.stock =
+//                 req.body.stock !== undefined &&
+//                 req.body.stock !== ""
+//                     ? Number(req.body.stock)
+//                     : 0;
+
+
+//             // ------------------------------------------
+//             // MEDICINE DETAILS
+//             // ------------------------------------------
+
+//             product.packSize =
+//                 req.body.packSize || "";
+
+//             product.batchNo =
+//                 req.body.batchNo || "";
+
+//             product.mfgDate =
+//                 req.body.mfgDate || "";
+
+//             product.expDate =
+//                 req.body.expDate || "";
+
+
+//             // ------------------------------------------
+//             // COMPOSITION
+//             // ------------------------------------------
+
+//             let composition = [];
+
+
+//             if (
+//                 Array.isArray(
+//                     req.body.composition
+//                 )
+//             ) {
+
+//                 composition =
+//                     req.body.composition
+//                         .map(item =>
+//                             String(item).trim()
+//                         )
+//                         .filter(Boolean);
+
+//             }
+
+//             else if (
+//                 req.body.composition
+//             ) {
+
+//                 composition = [
+
+//                     String(
+//                         req.body.composition
+//                     ).trim()
+
+//                 ];
+
+//             }
+
+
+//             product.composition =
+//                 composition;
+
+
+//             // ------------------------------------------
+//             // PRODUCT DETAILS
+//             // ------------------------------------------
+
+//             product.description =
+//                 req.body.description || "";
+
+//             product.uses =
+//                 req.body.uses || "";
+
+//             product.benefits =
+//                 req.body.benefits || "";
+
+//             product.dosage =
+//                 req.body.dosage || "";
+
+//             product.sideEffects =
+//                 req.body.sideEffects || "";
+
+//             product.storage =
+//                 req.body.storage || "";
+
+
+//             // =================================================
+//             // NEW IMAGES
+//             // =================================================
+
+//             const imageFiles =
+//                 req.files?.images || [];
+
+
+//             if (
+//                 imageFiles.length > 0
+//             ) {
+
+//                 console.log(
+//                     "NEW IMAGE COUNT:",
+//                     imageFiles.length
+//                 );
+
+
+//                 const newImages =
+//                     imageFiles
+//                         .map(file =>
+//                             file.path ||
+//                             file.secure_url ||
+//                             file.url
+//                         )
+//                         .filter(Boolean);
+
+
+//                 let existingImages = [];
+
+
+//                 if (
+//                     Array.isArray(
+//                         product.images
+//                     )
+//                 ) {
+
+//                     existingImages =
+//                         product.images
+//                             .filter(Boolean);
+
+//                 }
+
+
+//                 // Old main image preserve
+
+//                 if (
+//                     product.image &&
+//                     !existingImages.includes(
+//                         product.image
+//                     )
+//                 ) {
+
+//                     existingImages.push(
+//                         product.image
+//                     );
+
+//                 }
+
+
+//                 // Existing + New
+
+//                 product.images = [
+
+//                     ...existingImages,
+
+//                     ...newImages
+
+//                 ];
+
+
+//                 // Main image
+
+//                 if (
+//                     !product.image &&
+//                     newImages.length > 0
+//                 ) {
+
+//                     product.image =
+//                         newImages[0];
+
+//                 }
+
+//             }
+
+
+//             // =================================================
+//             // NEW VIDEO
+//             // =================================================
+
+//             const videoFiles =
+//                 req.files?.video || [];
+
+
+//             if (
+//                 videoFiles.length > 0
+//             ) {
+
+//                 console.log(
+//                     "NEW VIDEO COUNT:",
+//                     videoFiles.length
+//                 );
+
+
+//                 const newVideo =
+//                     videoFiles[0].path ||
+//                     videoFiles[0].secure_url ||
+//                     videoFiles[0].url;
+
+
+//                 console.log(
+//                     "NEW VIDEO URL:",
+//                     newVideo
+//                 );
+
+
+//                 if (newVideo) {
+
+//                     // IMPORTANT:
+//                     // Schema field = video
+
+//                     product.video =
+//                         newVideo;
+
+//                 }
+
+//             }
+
+//             else {
+
+//                 console.log(
+//                     "NO NEW VIDEO - OLD VIDEO KEPT"
+//                 );
+
+//             }
+
+
+//             // =================================================
+//             // SAVE
+//             // =================================================
+
+//             await product.save();
+
+
+//             // =================================================
+//             // FINAL LOG
+//             // =================================================
+
+//             console.log(
+//                 "================================="
+//             );
+
+//             console.log(
+//                 "PRODUCT UPDATED:",
+//                 product._id
+//             );
+
+//             console.log(
+//                 "TOTAL IMAGES:",
+//                 product.images?.length || 0
+//             );
+
+//             console.log(
+//                 "SAVED VIDEO:",
+//                 product.video
+//             );
+
+//             console.log(
+//                 "================================="
+//             );
+
+
+//             return res.redirect(
+//                 "/admin/manage-products"
+//             );
+
+
+//         } catch (err) {
+
+//             console.error(
+//                 "UPDATE PRODUCT ERROR:",
+//                 err
+//             );
+
+
+//             return res
+//                 .status(500)
+//                 .send(
+//                     "Product Update Error: " +
+//                     err.message
+//                 );
+
+//         }
+
+//     }
+// );
+
+
 router.post(
     "/edit-product/:id",
-
     upload.fields([
-
         {
             name: "images",
             maxCount: 10
         },
-
         {
-            name: "video",
-            maxCount: 1
+            name: "videos",
+            maxCount: 5
         }
-
     ]),
-
     async (req, res) => {
 
         try {
-
-            console.log(
-                "\n========== EDIT PRODUCT =========="
-            );
-
-            console.log(
-                "PRODUCT ID:",
-                req.params.id
-            );
-
-            console.log(
-                "BODY:",
-                req.body
-            );
-
-            console.log(
-                "FILES:",
-                req.files
-            );
-
-
-            // ------------------------------------------
-            // FIND PRODUCT
-            // ------------------------------------------
 
             const product =
                 await Product.findById(
                     req.params.id
                 );
 
-
             if (!product) {
 
                 return res
                     .status(404)
-                    .send(
-                        "Product Not Found"
-                    );
-
+                    .send("Product not found");
             }
 
 
-            // ------------------------------------------
+            // ==========================================
             // BASIC DETAILS
-            // ------------------------------------------
+            // ==========================================
 
             product.name =
-                req.body.name || "";
+                req.body.name || product.name;
 
             product.brand =
                 req.body.brand || "";
@@ -3195,96 +3545,55 @@ router.post(
             product.manufacturer =
                 req.body.manufacturer || "";
 
-
-            // ------------------------------------------
-            // PRICE
-            // ------------------------------------------
-
             product.mrp =
-                req.body.mrp !== undefined &&
-                req.body.mrp !== ""
-                    ? Number(req.body.mrp)
-                    : 0;
-
+                Number(req.body.mrp || 0);
 
             product.price =
-                req.body.price !== undefined &&
-                req.body.price !== ""
-                    ? Number(req.body.price)
-                    : 0;
+                Number(req.body.price || 0);
 
+            product.discountPercentage =
+                Number(
+                    req.body.discountPercentage || 0
+                );
 
             product.stock =
-                req.body.stock !== undefined &&
-                req.body.stock !== ""
-                    ? Number(req.body.stock)
-                    : 0;
-
-
-            // ------------------------------------------
-            // MEDICINE DETAILS
-            // ------------------------------------------
+                Number(req.body.stock || 0);
 
             product.packSize =
                 req.body.packSize || "";
 
-            product.batchNo =
-                req.body.batchNo || "";
+            product.batchNumber =
+                req.body.batchNumber || "";
 
-            product.mfgDate =
-                req.body.mfgDate || "";
+            product.manufacturingDate =
+                req.body.manufacturingDate || null;
 
-            product.expDate =
-                req.body.expDate || "";
+            product.expiryDate =
+                req.body.expiryDate || null;
 
 
-            // ------------------------------------------
+            // ==========================================
             // COMPOSITION
-            // ------------------------------------------
+            // ==========================================
 
-            let composition = [];
+            let composition =
+                req.body.composition || [];
 
-
-            if (
-                Array.isArray(
-                    req.body.composition
-                )
-            ) {
-
-                composition =
-                    req.body.composition
-                        .map(item =>
-                            String(item).trim()
-                        )
-                        .filter(Boolean);
-
+            if (!Array.isArray(composition)) {
+                composition = [composition];
             }
-
-            else if (
-                req.body.composition
-            ) {
-
-                composition = [
-
-                    String(
-                        req.body.composition
-                    ).trim()
-
-                ];
-
-            }
-
 
             product.composition =
-                composition;
+                composition
+                    .map(item =>
+                        String(item || "").trim()
+                    )
+                    .filter(Boolean);
 
 
-            // ------------------------------------------
+            // ==========================================
             // PRODUCT DETAILS
-            // ------------------------------------------
-
-            product.description =
-                req.body.description || "";
+            // ==========================================
 
             product.uses =
                 req.body.uses || "";
@@ -3301,201 +3610,155 @@ router.post(
             product.storage =
                 req.body.storage || "";
 
+            product.description =
+                req.body.description || "";
 
-            // =================================================
-            // NEW IMAGES
-            // =================================================
 
-            const imageFiles =
+            // ==========================================
+            // REMOVE SELECTED IMAGES
+            // ==========================================
+
+            let removeImages =
+                req.body.removeImages || [];
+
+            if (!Array.isArray(removeImages)) {
+                removeImages = [removeImages];
+            }
+
+            const removeImageSet =
+                new Set(
+                    removeImages
+                        .map(image =>
+                            String(image || "").trim()
+                        )
+                        .filter(Boolean)
+                );
+
+
+            const getImageURL = image => {
+
+                if (!image) {
+                    return "";
+                }
+
+                if (typeof image === "object") {
+
+                    return String(
+                        image.url ||
+                        image.secure_url ||
+                        image.path ||
+                        ""
+                    ).trim();
+                }
+
+                return String(image).trim();
+            };
+
+
+            const existingImages =
+                Array.isArray(product.images)
+                    ? product.images
+                    : [];
+
+
+            product.images =
+                existingImages.filter(image => {
+
+                    return !removeImageSet.has(
+                        getImageURL(image)
+                    );
+                });
+
+
+            const currentMainImage =
+                getImageURL(product.image);
+
+
+            if (
+                currentMainImage &&
+                removeImageSet.has(
+                    currentMainImage
+                )
+            ) {
+
+                product.image =
+                    product.images.length
+                        ? getImageURL(
+                            product.images[0]
+                        )
+                        : "";
+            }
+
+
+            // ==========================================
+            // ADD NEW UPLOADED IMAGES
+            // ==========================================
+
+            const newImageFiles =
                 req.files?.images || [];
 
+            const newImages =
+                newImageFiles
+                    .map(file =>
+                        file.path ||
+                        file.secure_url ||
+                        file.location ||
+                        ""
+                    )
+                    .filter(Boolean);
+
+
+            product.images = [
+                ...product.images,
+                ...newImages
+            ];
+
 
             if (
-                imageFiles.length > 0
+                !product.image &&
+                product.images.length
             ) {
 
-                console.log(
-                    "NEW IMAGE COUNT:",
-                    imageFiles.length
-                );
-
-
-                const newImages =
-                    imageFiles
-                        .map(file =>
-                            file.path ||
-                            file.secure_url ||
-                            file.url
-                        )
-                        .filter(Boolean);
-
-
-                let existingImages = [];
-
-
-                if (
-                    Array.isArray(
-                        product.images
-                    )
-                ) {
-
-                    existingImages =
-                        product.images
-                            .filter(Boolean);
-
-                }
-
-
-                // Old main image preserve
-
-                if (
-                    product.image &&
-                    !existingImages.includes(
-                        product.image
-                    )
-                ) {
-
-                    existingImages.push(
-                        product.image
+                product.image =
+                    getImageURL(
+                        product.images[0]
                     );
-
-                }
-
-
-                // Existing + New
-
-                product.images = [
-
-                    ...existingImages,
-
-                    ...newImages
-
-                ];
-
-
-                // Main image
-
-                if (
-                    !product.image &&
-                    newImages.length > 0
-                ) {
-
-                    product.image =
-                        newImages[0];
-
-                }
-
             }
 
 
-            // =================================================
-            // NEW VIDEO
-            // =================================================
+            // ==========================================
+            // VIDEO URL
+            // ==========================================
 
-            const videoFiles =
-                req.files?.video || [];
-
-
-            if (
-                videoFiles.length > 0
-            ) {
-
-                console.log(
-                    "NEW VIDEO COUNT:",
-                    videoFiles.length
-                );
+            product.videoUrl =
+                req.body.videoUrl || "";
 
 
-                const newVideo =
-                    videoFiles[0].path ||
-                    videoFiles[0].secure_url ||
-                    videoFiles[0].url;
-
-
-                console.log(
-                    "NEW VIDEO URL:",
-                    newVideo
-                );
-
-
-                if (newVideo) {
-
-                    // IMPORTANT:
-                    // Schema field = video
-
-                    product.video =
-                        newVideo;
-
-                }
-
-            }
-
-            else {
-
-                console.log(
-                    "NO NEW VIDEO - OLD VIDEO KEPT"
-                );
-
-            }
-
-
-            // =================================================
+            // ==========================================
             // SAVE
-            // =================================================
+            // ==========================================
 
             await product.save();
-
-
-            // =================================================
-            // FINAL LOG
-            // =================================================
-
-            console.log(
-                "================================="
-            );
-
-            console.log(
-                "PRODUCT UPDATED:",
-                product._id
-            );
-
-            console.log(
-                "TOTAL IMAGES:",
-                product.images?.length || 0
-            );
-
-            console.log(
-                "SAVED VIDEO:",
-                product.video
-            );
-
-            console.log(
-                "================================="
-            );
-
 
             return res.redirect(
                 "/admin/manage-products"
             );
 
-
-        } catch (err) {
+        }
+        catch (error) {
 
             console.error(
-                "UPDATE PRODUCT ERROR:",
-                err
+                "EDIT PRODUCT ERROR:",
+                error
             );
-
 
             return res
                 .status(500)
                 .send(
-                    "Product Update Error: " +
-                    err.message
+                    "Unable to update product: " +
+                    error.message
                 );
-
         }
-
     }
 );
 
