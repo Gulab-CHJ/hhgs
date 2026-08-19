@@ -2003,18 +2003,35 @@ body {
 
        <main class="dashboard-content">
 
-    <div class="manage-vegetable-box">
+    <div class="sabji-admin-buttons">
 
-        <a
-            href="/admin/sabji/products"
-            class="manage-vegetable-btn"
-        >
-            <i class="fa-solid fa-carrot"></i>
+    <a
+        href="/admin/sabji/products"
+        class="sabji-admin-btn manage-btn"
+    >
+        <i class="fa-solid fa-carrot"></i>
+        Manage Vegetables
+    </a>
 
-            Manage Vegetables
-        </a>
 
-    </div>
+    <a
+        href="/admin/sabji/shop-status"
+        class="sabji-admin-btn shop-btn"
+    >
+        <i class="fa-solid fa-store"></i>
+        Shop Open / Close
+    </a>
+
+
+    <a
+        href="/admin/sabji/orders"
+        class="sabji-admin-btn order-btn"
+    >
+        <i class="fa-solid fa-bell"></i>
+        Sabji Orders
+    </a>
+
+</div>
 
     ${DashboardStats(data)}
 
