@@ -2850,6 +2850,12 @@ header p{
         flex-direction:column;
     }
 }
+    .ring-buttons {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    flex-wrap: wrap;
+}
 
 </style>
 
@@ -2898,13 +2904,26 @@ header p{
             </div>
         </div>
 
-        <button
-            type="button"
-            class="ring-btn"
-            id="enableRing"
-        >
-            🔔 Enable Order Ring
-        </button>
+        <div class="ring-buttons">
+
+    <button
+        type="button"
+        class="ring-btn"
+        id="enableRing"
+    >
+        🔔 Enable Order Ring
+    </button>
+
+    <button
+        type="button"
+        class="ring-btn"
+        id="stopRingButton"
+        style="background:#dc2626"
+    >
+        🔕 Stop Ring
+    </button>
+
+</div>
 
     </div>
 
@@ -2921,6 +2940,17 @@ header p{
 
 let audioContext = null;
 let ringEnabled = false;
+
+let masterGain = null;
+let compressor = null;
+
+let ringInterval = null;
+let ringStopTimer = null;
+
+const activeOscillators = new Set();
+
+const RING_DURATION_MS =
+    60 * 1000; // 1 minute
 
 const knownOrderIds = new Set(
     Array.from(
@@ -2943,6 +2973,165 @@ function escapeHTML(value){
         .replace(/'/g,"&#039;");
 }
 
+function createLoudTone(
+    frequency,
+    startTime,
+    duration,
+    type,
+    volume
+){
+
+    const oscillator =
+        audioContext.createOscillator();
+
+    const gain =
+        audioContext.createGain();
+
+    oscillator.type =
+        type || "square";
+
+    oscillator.frequency.setValueAtTime(
+        frequency,
+        startTime
+    );
+
+    gain.gain.setValueAtTime(
+        0.001,
+        startTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        volume || 0.65,
+        startTime + 0.02
+    );
+
+    gain.gain.setValueAtTime(
+        volume || 0.65,
+        startTime + duration - 0.05
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+        0.001,
+        startTime + duration
+    );
+
+    oscillator.connect(gain);
+    gain.connect(masterGain);
+
+    activeOscillators.add(
+        oscillator
+    );
+
+    oscillator.onended =
+        function(){
+
+            activeOscillators.delete(
+                oscillator
+            );
+
+            try{
+                oscillator.disconnect();
+                gain.disconnect();
+            }catch(error){}
+        };
+
+    oscillator.start(
+        startTime
+    );
+
+    oscillator.stop(
+        startTime + duration + 0.02
+    );
+}
+
+
+function playDeliveryAlertPulse(){
+
+    if(
+        !ringEnabled ||
+        !audioContext ||
+        !masterGain
+    ){
+        return;
+    }
+
+    const now =
+        audioContext.currentTime;
+
+    const notes = [
+        {
+            delay: 0,
+            frequency: 920
+        },
+        {
+            delay: 0.18,
+            frequency: 1350
+        },
+        {
+            delay: 0.36,
+            frequency: 1050
+        },
+        {
+            delay: 0.54,
+            frequency: 1500
+        }
+    ];
+
+    notes.forEach(function(note){
+
+        // Main loud alert tone
+        createLoudTone(
+            note.frequency,
+            now + note.delay,
+            0.15,
+            "square",
+            0.68
+        );
+
+        // Second tone for powerful sound
+        createLoudTone(
+            note.frequency / 2,
+            now + note.delay,
+            0.15,
+            "sawtooth",
+            0.32
+        );
+    });
+}
+
+
+function stopRing(){
+
+    if(ringInterval){
+
+        clearInterval(
+            ringInterval
+        );
+
+        ringInterval = null;
+    }
+
+    if(ringStopTimer){
+
+        clearTimeout(
+            ringStopTimer
+        );
+
+        ringStopTimer = null;
+    }
+
+    activeOscillators.forEach(
+        function(oscillator){
+
+            try{
+                oscillator.stop();
+            }catch(error){}
+        }
+    );
+
+    activeOscillators.clear();
+}
+
 
 function playRing(){
 
@@ -2953,52 +3142,48 @@ function playRing(){
         return;
     }
 
-    const startTime =
-        audioContext.currentTime;
+    // पहले से ring चल रही है तो restart करें
+    stopRing();
 
-    [0,0.35,0.70].forEach(
-        function(delay){
+    if(
+        audioContext.state ===
+        "suspended"
+    ){
 
-            const oscillator =
-                audioContext.createOscillator();
+        audioContext
+            .resume()
+            .catch(function(){});
+    }
 
-            const gain =
-                audioContext.createGain();
+    // First alert immediately
+    playDeliveryAlertPulse();
 
-            oscillator.connect(gain);
-            gain.connect(
-                audioContext.destination
-            );
+    // Repeat urgent alert
+    ringInterval =
+        setInterval(
+            playDeliveryAlertPulse,
+            1100
+        );
 
-            oscillator.type = "sine";
-            oscillator.frequency.value = 900;
-
-            gain.gain.setValueAtTime(
-                0.001,
-                startTime + delay
-            );
-
-            gain.gain.exponentialRampToValueAtTime(
-                0.8,
-                startTime + delay + 0.02
-            );
-
-            gain.gain.exponentialRampToValueAtTime(
-                0.001,
-                startTime + delay + 0.25
-            );
-
-            oscillator.start(
-                startTime + delay
-            );
-
-            oscillator.stop(
-                startTime + delay + 0.28
-            );
-        }
-    );
+    // Stop automatically after 1 minute
+    ringStopTimer =
+        setTimeout(
+            stopRing,
+            RING_DURATION_MS
+        );
 }
 
+
+function playTestRing(){
+
+    if(
+        ringEnabled &&
+        audioContext
+    ){
+
+        playDeliveryAlertPulse();
+    }
+}
 
 document
     .getElementById("enableRing")
@@ -3019,11 +3204,34 @@ document
                 return;
             }
 
-            if(!audioContext){
+           if(!audioContext){
 
-                audioContext =
-                    new AudioContextClass();
-            }
+    audioContext =
+        new AudioContextClass();
+
+    masterGain =
+        audioContext.createGain();
+
+    compressor =
+        audioContext.createDynamicsCompressor();
+
+    // तेज और साफ आवाज
+    masterGain.gain.value = 1.4;
+
+    compressor.threshold.value = -18;
+    compressor.knee.value = 12;
+    compressor.ratio.value = 8;
+    compressor.attack.value = 0.003;
+    compressor.release.value = 0.25;
+
+    masterGain.connect(
+        compressor
+    );
+
+    compressor.connect(
+        audioContext.destination
+    );
+}
 
             await audioContext.resume();
 
@@ -3035,7 +3243,7 @@ document
             this.style.background =
                 "#16a34a";
 
-            playRing();
+            playTestRing();
         }
     );
 
