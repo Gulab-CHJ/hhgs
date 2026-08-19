@@ -282,6 +282,18 @@ app.use(
 );
 
 // ===============================
+// MINI SABJI SHOP
+// ===============================
+
+const vegetableRoutes =
+    require("./routes/vegetable");
+
+app.use(
+    "/",
+    vegetableRoutes
+);
+
+// ===============================
 // SERVER START
 // ===============================
 
