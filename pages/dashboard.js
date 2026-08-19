@@ -1932,6 +1932,59 @@ body {
     }
 }
 
+
+.manage-vegetable-box {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.manage-vegetable-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 12px 18px;
+
+    background: linear-gradient(
+        135deg,
+        #16a34a,
+        #15803d
+    );
+
+    color: #ffffff;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    border-radius: 11px;
+
+    box-shadow:
+        0 7px 18px
+        rgba(22, 163, 74, 0.25);
+
+    transition: 0.2s;
+}
+
+.manage-vegetable-btn:hover {
+    background: #166534;
+    transform: translateY(-2px);
+}
+
+@media(max-width:600px) {
+
+    .manage-vegetable-box {
+        justify-content: stretch;
+    }
+
+    .manage-vegetable-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 </style>
 </head>
 
@@ -1948,13 +2001,26 @@ body {
 
         ${DashboardHeader()}
 
-        <main class="dashboard-content">
+       <main class="dashboard-content">
 
-            ${DashboardStats(data)}
+    <div class="manage-vegetable-box">
 
-            ${DashboardSection(data)}
+        <a
+            href="/admin/sabji/products"
+            class="manage-vegetable-btn"
+        >
+            <i class="fa-solid fa-carrot"></i>
 
-        </main>
+            Manage Vegetables
+        </a>
+
+    </div>
+
+    ${DashboardStats(data)}
+
+    ${DashboardSection(data)}
+
+</main>
 
     </div>
 
