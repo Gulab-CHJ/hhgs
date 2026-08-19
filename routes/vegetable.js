@@ -11,6 +11,52 @@ const VegetableOrder =
 const ShopSetting =
     require("../models/ShopSetting");
 
+    const multer = require("multer");
+const path = require("path");
+
+
+// ========================================
+// SABJI IMAGE UPLOAD - MULTER
+// ========================================
+
+const storage = multer.diskStorage({
+
+    destination: function(req, file, cb) {
+
+        cb(
+            null,
+            path.join(
+                __dirname,
+                "../uploads/sabji"
+            )
+        );
+    },
+
+    filename: function(req, file, cb) {
+
+        const uniqueName =
+            Date.now() +
+            "-" +
+            Math.round(
+                Math.random() * 1e9
+            ) +
+            path.extname(file.originalname);
+
+        cb(null, uniqueName);
+    }
+});
+
+
+const upload = multer({
+
+    storage,
+
+    limits: {
+        fileSize: 5 * 1024 * 1024
+    }
+
+});
+
 
 // ========================================
 // GET SHOP SETTING
@@ -1419,7 +1465,8 @@ ${
 
 <form
     method="POST"
-    action="/admin/sabji/toggle-shop"
+    action="/admin/sabji/products"
+    enctype="multipart/form-data"
 >
 
 <button
@@ -2160,10 +2207,11 @@ td{
                     </label>
 
                     <input
-                        type="text"
-                        name="image"
-                        placeholder="https://example.com/aloo.jpg"
-                    >
+        type="file"
+        name="image"
+        accept="image/*"
+        required
+    >
 
                 </div>
 
@@ -2264,6 +2312,7 @@ td{
 
 router.post(
     "/admin/sabji/products",
+    upload.single("image"),
     async (req, res, next) => {
 
         try {
@@ -2275,7 +2324,6 @@ router.post(
                 mrp,
                 price,
                 stock,
-                image,
                 description
             } = req.body;
 
@@ -2287,6 +2335,17 @@ router.post(
                     .send(
                         "Product name and price required."
                     );
+            }
+
+
+            let image = "";
+
+
+            if (req.file) {
+
+                image =
+                    "/uploads/sabji/" +
+                    req.file.filename;
             }
 
 
@@ -2312,8 +2371,7 @@ router.post(
                 stock:
                     Number(stock || 0),
 
-                image:
-                    String(image || "").trim(),
+                image,
 
                 description:
                     String(
@@ -2336,8 +2394,6 @@ router.post(
         }
     }
 );
-
-
 
 // ========================================
 // ACTIVE / INACTIVE PRODUCT
