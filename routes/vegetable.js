@@ -1465,11 +1465,11 @@ ${
 
 <form
     method="POST"
-    action="/admin/sabji/products"
-    enctype="multipart/form-data"
+    action="/admin/sabji/toggle-shop"
 >
 
 <button
+    type="submit"
     class="
         ${
             setting.isOpen
