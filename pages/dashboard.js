@@ -1985,6 +1985,81 @@ body {
     }
 }
 
+.sabji-admin-buttons {
+    width: 100%;
+    margin-bottom: 22px;
+
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+
+    gap: 12px;
+}
+
+.sabji-admin-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+    padding: 12px 17px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    border-radius: 11px;
+
+    box-shadow:
+        0 7px 18px
+        rgba(15, 23, 42, 0.15);
+
+    transition: 0.2s;
+}
+
+.sabji-admin-btn:hover {
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.manage-btn {
+    background: #16a34a;
+}
+
+.manage-btn:hover {
+    background: #15803d;
+}
+
+.shop-btn {
+    background: #ea580c;
+}
+
+.shop-btn:hover {
+    background: #c2410c;
+}
+
+.order-btn {
+    background: #2563eb;
+}
+
+.order-btn:hover {
+    background: #1d4ed8;
+}
+
+@media(max-width:600px) {
+
+    .sabji-admin-buttons {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+
+    .sabji-admin-btn {
+        width: 100%;
+    }
+}
+
 </style>
 </head>
 
