@@ -397,6 +397,16 @@ return `
 
 }
 
+.navbar .vegetable-btn {
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.navbar .vegetable-btn:hover {
+    background: #15803d;
+    color: #ffffff;
+}
+
 </style>
 
 
@@ -472,6 +482,16 @@ return `
                 HumanHealth
 
             </a>
+
+
+            <a
+    href="/sabji"
+    class="vegetable-btn"
+>
+    <i class="fa-solid fa-carrot"></i>
+
+    Fresh Vegetables
+</a>
 
 
             <a href="/contact">
