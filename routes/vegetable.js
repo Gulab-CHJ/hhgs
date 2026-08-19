@@ -1491,5 +1491,925 @@ router.post(
     }
 );
 
+// ========================================
+// ADMIN - MANAGE SABJI PRODUCTS
+// GET /admin/sabji/products
+// ========================================
+
+router.get(
+    "/admin/sabji/products",
+    async (req, res, next) => {
+
+        try {
+
+            const products =
+                await VegetableProduct
+                    .find({})
+                    .sort({ createdAt: -1 })
+                    .lean();
+
+
+            const rows = products.length
+                ? products.map((product, index) => {
+
+                    return `
+                    <tr>
+
+                        <td>
+                            ${index + 1}
+                        </td>
+
+                        <td>
+
+                            ${
+                                product.image
+                                    ? `
+                                    <img
+                                        src="${product.image}"
+                                        style="
+                                            width:55px;
+                                            height:55px;
+                                            object-fit:cover;
+                                            border-radius:10px;
+                                        "
+                                    >
+                                    `
+                                    : "🥬"
+                            }
+
+                        </td>
+
+                        <td>
+                            <strong>
+                                ${product.name}
+                            </strong>
+
+                            <br>
+
+                            <small>
+                                ${product.category || "-"}
+                            </small>
+                        </td>
+
+                        <td>
+                            ${product.unit || "-"}
+                        </td>
+
+                        <td>
+                            ₹${Number(product.mrp || 0).toFixed(2)}
+                        </td>
+
+                        <td>
+                            ₹${Number(product.price || 0).toFixed(2)}
+                        </td>
+
+                        <td>
+                            ${Number(product.stock || 0)}
+                        </td>
+
+                        <td>
+
+                            ${
+                                product.isActive
+                                    ? `
+                                    <span class="active">
+                                        ACTIVE
+                                    </span>
+                                    `
+                                    : `
+                                    <span class="inactive">
+                                        INACTIVE
+                                    </span>
+                                    `
+                            }
+
+                        </td>
+
+                        <td class="actions">
+
+                            <form
+                                method="POST"
+                                action="/admin/sabji/product/${product._id}/toggle"
+                            >
+
+                                <button
+                                    class="toggle-btn"
+                                    type="submit"
+                                >
+                                    ${
+                                        product.isActive
+                                            ? "Disable"
+                                            : "Enable"
+                                    }
+                                </button>
+
+                            </form>
+
+
+                            <form
+                                method="POST"
+                                action="/admin/sabji/product/${product._id}/delete"
+                                onsubmit="
+                                    return confirm(
+                                        'Delete this product?'
+                                    )
+                                "
+                            >
+
+                                <button
+                                    class="delete-btn"
+                                    type="submit"
+                                >
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+                    `;
+
+                }).join("")
+
+                : `
+                <tr>
+
+                    <td
+                        colspan="9"
+                        style="
+                            text-align:center;
+                            padding:35px;
+                        "
+                    >
+                        No sabji products added.
+                    </td>
+
+                </tr>
+                `;
+
+
+            return res.send(`
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1.0"
+>
+
+<title>
+Manage Sabji Products
+</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:
+        Arial,
+        sans-serif;
+    background:#f1f5f2;
+    color:#17211b;
+}
+
+.header{
+    background:#14532d;
+    color:white;
+    padding:18px 20px;
+}
+
+.header-inner{
+    max-width:1200px;
+    margin:auto;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.header h2{
+    margin:0;
+}
+
+.header a{
+    color:white;
+    text-decoration:none;
+
+    background:
+        rgba(255,255,255,.14);
+
+    padding:9px 13px;
+
+    border-radius:8px;
+}
+
+.container{
+    max-width:1200px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.form-card{
+    background:white;
+    padding:22px;
+    border-radius:18px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.07);
+
+    margin-bottom:22px;
+}
+
+.form-card h3{
+    margin-top:0;
+}
+
+.grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+
+    gap:14px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    font-size:13px;
+    font-weight:bold;
+}
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:12px;
+
+    border:
+        1px solid #d7ded9;
+
+    border-radius:9px;
+
+    outline:none;
+
+    font-size:14px;
+}
+
+textarea{
+    resize:vertical;
+    min-height:85px;
+}
+
+.add-btn{
+    margin-top:17px;
+
+    border:0;
+    background:#16a34a;
+    color:white;
+
+    padding:13px 22px;
+
+    border-radius:10px;
+
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.table-card{
+    background:white;
+
+    border-radius:18px;
+
+    overflow:auto;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.07);
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+
+    min-width:900px;
+}
+
+th{
+    background:#f8faf9;
+
+    text-align:left;
+
+    font-size:12px;
+
+    padding:13px;
+
+    border-bottom:
+        1px solid #e5e7eb;
+}
+
+td{
+    padding:13px;
+
+    border-bottom:
+        1px solid #edf0ee;
+
+    font-size:13px;
+}
+
+.active,
+.inactive{
+    display:inline-block;
+
+    padding:6px 9px;
+
+    border-radius:50px;
+
+    font-size:10px;
+
+    font-weight:bold;
+}
+
+.active{
+    background:#dcfce7;
+    color:#15803d;
+}
+
+.inactive{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.actions{
+    display:flex;
+    gap:7px;
+}
+
+.actions form{
+    margin:0;
+}
+
+.toggle-btn,
+.delete-btn{
+
+    border:0;
+
+    padding:8px 10px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    font-size:12px;
+}
+
+.toggle-btn{
+    background:#e0f2fe;
+    color:#0369a1;
+}
+
+.delete-btn{
+    background:#fee2e2;
+    color:#b91c1c;
+}
+
+.links{
+    margin-bottom:15px;
+
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.links a{
+    text-decoration:none;
+
+    padding:10px 13px;
+
+    border-radius:9px;
+
+    background:white;
+    color:#14532d;
+
+    font-weight:bold;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0,0,0,.06);
+}
+
+@media(max-width:650px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    .header-inner{
+        align-items:flex-start;
+        flex-direction:column;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <div>
+
+            <h2>
+                🥬 GLOBAL MINI SABJI
+            </h2>
+
+            <small>
+                Product Management
+            </small>
+
+        </div>
+
+
+        <a href="/sabji">
+            View Customer Shop
+        </a>
+
+    </div>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="links">
+
+        <a
+            href="/admin/sabji/shop-status"
+        >
+            🟢 Shop Open / Close
+        </a>
+
+        <a
+            href="/sabji"
+            target="_blank"
+        >
+            🛒 Customer Shop
+        </a>
+
+    </div>
+
+
+    <section class="form-card">
+
+        <h3>
+            ➕ Add New Sabji
+        </h3>
+
+
+        <form
+            method="POST"
+            action="/admin/sabji/products"
+        >
+
+
+            <div class="grid">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Product Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Example: Aloo"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select name="category">
+
+                        <option value="Vegetable">
+                            Vegetable
+                        </option>
+
+                        <option value="Leafy Vegetable">
+                            Leafy Vegetable
+                        </option>
+
+                        <option value="Fruit">
+                            Fruit
+                        </option>
+
+                        <option value="Herbs">
+                            Herbs
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Unit / Pack *
+                    </label>
+
+                    <select
+                        name="unit"
+                        required
+                    >
+
+                        <option value="1 KG">
+                            1 KG
+                        </option>
+
+                        <option value="500 GM">
+                            500 GM
+                        </option>
+
+                        <option value="250 GM">
+                            250 GM
+                        </option>
+
+                        <option value="100 GM">
+                            100 GM
+                        </option>
+
+                        <option value="1 Piece">
+                            1 Piece
+                        </option>
+
+                        <option value="1 Dozen">
+                            1 Dozen
+                        </option>
+
+                        <option value="1 Bundle">
+                            1 Bundle
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        MRP ₹
+                    </label>
+
+                    <input
+                        type="number"
+                        name="mrp"
+                        min="0"
+                        step="0.01"
+                        placeholder="40"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Selling Price ₹ *
+                    </label>
+
+                    <input
+                        type="number"
+                        name="price"
+                        min="0"
+                        step="0.01"
+                        placeholder="30"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Stock Quantity *
+                    </label>
+
+                    <input
+                        type="number"
+                        name="stock"
+                        min="0"
+                        step="1"
+                        value="10"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Product Image URL
+                    </label>
+
+                    <input
+                        type="text"
+                        name="image"
+                        placeholder="https://example.com/aloo.jpg"
+                    >
+
+                </div>
+
+
+                <div class="form-group full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        name="description"
+                        placeholder="Fresh quality sabji..."
+                    ></textarea>
+
+                </div>
+
+
+            </div>
+
+
+            <button
+                class="add-btn"
+                type="submit"
+            >
+                ➕ ADD PRODUCT
+            </button>
+
+
+        </form>
+
+    </section>
+
+
+    <section class="table-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Image</th>
+
+                    <th>Product</th>
+
+                    <th>Unit</th>
+
+                    <th>MRP</th>
+
+                    <th>Price</th>
+
+                    <th>Stock</th>
+
+                    <th>Status</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                ${rows}
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+</div>
+
+
+</body>
+
+</html>
+            `);
+
+        } catch (error) {
+
+            next(error);
+        }
+    }
+);
+
+
+
+// ========================================
+// ADMIN - ADD PRODUCT
+// POST /admin/sabji/products
+// ========================================
+
+router.post(
+    "/admin/sabji/products",
+    async (req, res, next) => {
+
+        try {
+
+            const {
+                name,
+                category,
+                unit,
+                mrp,
+                price,
+                stock,
+                image,
+                description
+            } = req.body;
+
+
+            if (!name || price === undefined) {
+
+                return res
+                    .status(400)
+                    .send(
+                        "Product name and price required."
+                    );
+            }
+
+
+            await VegetableProduct.create({
+
+                name:
+                    String(name).trim(),
+
+                category:
+                    category ||
+                    "Vegetable",
+
+                unit:
+                    unit ||
+                    "1 KG",
+
+                mrp:
+                    Number(mrp || 0),
+
+                price:
+                    Number(price || 0),
+
+                stock:
+                    Number(stock || 0),
+
+                image:
+                    String(image || "").trim(),
+
+                description:
+                    String(
+                        description || ""
+                    ).trim(),
+
+                isActive:
+                    true
+
+            });
+
+
+            return res.redirect(
+                "/admin/sabji/products"
+            );
+
+        } catch (error) {
+
+            next(error);
+        }
+    }
+);
+
+
+
+// ========================================
+// ACTIVE / INACTIVE PRODUCT
+// ========================================
+
+router.post(
+    "/admin/sabji/product/:id/toggle",
+    async (req, res, next) => {
+
+        try {
+
+            const product =
+                await VegetableProduct.findById(
+                    req.params.id
+                );
+
+
+            if (!product) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Product not found"
+                    );
+            }
+
+
+            product.isActive =
+                !product.isActive;
+
+
+            await product.save();
+
+
+            return res.redirect(
+                "/admin/sabji/products"
+            );
+
+        } catch (error) {
+
+            next(error);
+        }
+    }
+);
+
+
+
+// ========================================
+// DELETE PRODUCT
+// ========================================
+
+router.post(
+    "/admin/sabji/product/:id/delete",
+    async (req, res, next) => {
+
+        try {
+
+            await VegetableProduct.findByIdAndDelete(
+                req.params.id
+            );
+
+
+            return res.redirect(
+                "/admin/sabji/products"
+            );
+
+        } catch (error) {
+
+            next(error);
+        }
+    }
+);
+
 
 module.exports = router;
