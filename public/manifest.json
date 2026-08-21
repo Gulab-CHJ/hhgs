@@ -11,16 +11,16 @@
   "theme_color": "#16a34a",
   "icons": [
     {
-      "src": "/images/hhgs-icon-192.png",
-      "sizes": "192x192",
+      "src": "/images/GS%20LOGO.png",
+      "sizes": "1024x1024",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/images/hhgs-icon-512.png",
-      "sizes": "512x512",
+      "src": "/images/GS%20LOGO.png",
+      "sizes": "1024x1024",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ]
 }
