@@ -1,14 +1,36 @@
 // =====================================
-// HHGS HOME PAGE SERVICE WORKER
-// File: public/service-worker.js
+// HHGS SERVICE WORKER
 // =====================================
 
-const CACHE_NAME = "hhgs-home-v2";
+const CACHE_VERSION =
+    "hhgs-home-v5";
 
-const STATIC_FILES = [
+const STATIC_CACHE =
+    "hhgs-static-v5";
+
+const IMAGE_CACHE =
+    "hhgs-images-v5";
+
+const PAGE_CACHE =
+    "hhgs-pages-v5";
+
+
+const PRECACHE_FILES = [
+
     "/",
+
     "/manifest.json",
-    "/images/GS%20LOGO.png"
+
+    "/images/hhgs-icon-192.png",
+
+    "/images/hhgs-icon-512.png",
+
+    "/css/style.css",
+
+    "/css/banner.css",
+
+    "/js/banner.js"
+
 ];
 
 
@@ -25,19 +47,21 @@ self.addEventListener(
         event.waitUntil(
 
             caches
-                .open(CACHE_NAME)
+                .open(STATIC_CACHE)
                 .then(function (cache) {
 
-                    return cache.addAll(
-                        STATIC_FILES
-                    );
+                    return Promise.allSettled(
 
-                })
-                .catch(function (error) {
+                        PRECACHE_FILES.map(
+                            function (file) {
 
-                    console.log(
-                        "Cache install failed:",
-                        error
+                                return cache.add(
+                                    file
+                                );
+
+                            }
+                        )
+
                     );
 
                 })
@@ -56,6 +80,16 @@ self.addEventListener(
     "activate",
     function (event) {
 
+        const activeCaches = [
+
+            STATIC_CACHE,
+
+            IMAGE_CACHE,
+
+            PAGE_CACHE
+
+        ];
+
         event.waitUntil(
 
             caches
@@ -68,9 +102,8 @@ self.addEventListener(
                             function (cacheName) {
 
                                 if (
-                                    cacheName !== CACHE_NAME &&
-                                    cacheName.startsWith(
-                                        "hhgs-home-"
+                                    !activeCaches.includes(
+                                        cacheName
                                     )
                                 ) {
 
@@ -106,41 +139,209 @@ self.addEventListener(
     "fetch",
     function (event) {
 
+        const request =
+            event.request;
+
+        const requestURL =
+            new URL(request.url);
+
+
         if (
-            event.request.method !== "GET"
+            request.method !== "GET"
         ) {
             return;
         }
 
+
+        // Do not cache external websites
+
+        if (
+            requestURL.origin !==
+            self.location.origin
+        ) {
+            return;
+        }
+
+
+        // =================================
+        // PRODUCT AND WEBSITE IMAGES
+        // Cache First
+        // =================================
+
+        if (
+            request.destination === "image"
+        ) {
+
+            event.respondWith(
+
+                caches
+                    .open(IMAGE_CACHE)
+                    .then(
+                        async function (cache) {
+
+                            const cachedImage =
+                                await cache.match(
+                                    request
+                                );
+
+                            if (cachedImage) {
+
+                                return cachedImage;
+
+                            }
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        request
+                                    );
+
+                                if (
+                                    response &&
+                                    response.ok
+                                ) {
+
+                                    cache.put(
+                                        request,
+                                        response.clone()
+                                    );
+
+                                }
+
+                                return response;
+
+                            } catch (error) {
+
+                                return new Response(
+                                    "",
+                                    {
+                                        status: 404
+                                    }
+                                );
+
+                            }
+
+                        }
+                    )
+
+            );
+
+            return;
+        }
+
+
+        // =================================
+        // HTML PAGES
+        // Network First
+        // =================================
+
+        if (
+            request.mode === "navigate"
+        ) {
+
+            event.respondWith(
+
+                caches
+                    .open(PAGE_CACHE)
+                    .then(
+                        async function (cache) {
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        request
+                                    );
+
+                                if (
+                                    response &&
+                                    response.ok
+                                ) {
+
+                                    cache.put(
+                                        request,
+                                        response.clone()
+                                    );
+
+                                }
+
+                                return response;
+
+                            } catch (error) {
+
+                                const cachedPage =
+                                    await cache.match(
+                                        request
+                                    );
+
+                                return (
+                                    cachedPage ||
+                                    caches.match("/")
+                                );
+
+                            }
+
+                        }
+                    )
+
+            );
+
+            return;
+        }
+
+
+        // =================================
+        // CSS, JS AND OTHER FILES
+        // Stale While Revalidate
+        // =================================
+
         event.respondWith(
 
-            fetch(event.request)
-                .then(function (response) {
+            caches
+                .open(STATIC_CACHE)
+                .then(
+                    async function (cache) {
 
-                    const responseCopy =
-                        response.clone();
-
-                    caches
-                        .open(CACHE_NAME)
-                        .then(function (cache) {
-
-                            cache.put(
-                                event.request,
-                                responseCopy
+                        const cachedResponse =
+                            await cache.match(
+                                request
                             );
 
-                        });
+                        const networkResponse =
+                            fetch(request)
+                                .then(
+                                    function (response) {
 
-                    return response;
+                                        if (
+                                            response &&
+                                            response.ok
+                                        ) {
 
-                })
-                .catch(function () {
+                                            cache.put(
+                                                request,
+                                                response.clone()
+                                            );
 
-                    return caches.match(
-                        event.request
-                    );
+                                        }
 
-                })
+                                        return response;
+
+                                    }
+                                )
+                                .catch(function () {
+
+                                    return null;
+
+                                });
+
+                        return (
+                            cachedResponse ||
+                            networkResponse
+                        );
+
+                    }
+                )
 
         );
 
