@@ -3,7 +3,7 @@
 // =====================================
 
 const CACHE_VERSION =
-    "hhgs-home-v5";
+     "hhgs-home-v6";
 
 const STATIC_CACHE =
     "hhgs-static-v5";
