@@ -1003,38 +1003,36 @@ function Home(
 
 
         /* PHONE VIEW */
+@media screen and (max-width: 768px) {
 
-        @media screen and (max-width: 768px) {
+    html,
+    body {
+        width: 100%;
+        max-width: 100%;
 
-            html,
-            body {
-                width: 100%;
-                max-width: 100%;
+        font-size: 14px;
+    }
 
-                font-size: 14px;
-            }
+    main,
+    section,
+    .container {
+        width: 100%;
+        max-width: 100%;
+    }
 
-            main,
-            section,
-            .container {
-                width: 100%;
-                max-width: 100%;
-            }
+    .container {
+        margin: 0 auto;
 
-            .container {
-                margin: 0 auto;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
 
-                padding-left: 10px;
-                padding-right: 10px;
-            }
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 
-            img {
-                max-width: 100%;
-                height: auto;
-            }
-
-        }
-
+}
     </style>
 
 </head>
