@@ -620,55 +620,18 @@ router.get(
 </title>
 
 
-// <link
-//     rel="manifest"
-//     href="/sabji-manifest.webmanifest"
-// >
 
-// <meta
-//     name="theme-color"
-//     content="#166534"
-// >
-
-// <meta
-//     name="mobile-web-app-capable"
-//     content="yes"
-// >
-
-// <meta
-//     name="apple-mobile-web-app-capable"
-//     content="yes"
-// >
-
-// <meta
-//     name="apple-mobile-web-app-status-bar-style"
-//     content="black-translucent"
-// >
-
-// <meta
-//     name="apple-mobile-web-app-title"
-//     content="MINI SABJI"
-// >
-
-// <link
-//     rel="apple-touch-icon"
-//     href="/images/GS LOGO.png"
-// >
 
 <link rel="manifest" href="/manifest.json">
 
 <link
     rel="apple-touch-icon"
-    href="/images/sabji-icon-192.png"
+    href="/images/hhgs-icon-192.png"
 >
 
 <meta name="theme-color" content="#16a34a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta
-    name="apple-mobile-web-app-status-bar-style"
-    content="default"
->
 
 
 <style>
