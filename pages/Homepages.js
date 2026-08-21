@@ -1521,6 +1521,90 @@
 
 // // // // module.exports = router;
 
+// const Header = require("../views/component/headercomponent");
+// const Banner = require("../views/component/bannercomponent");
+// const Footer = require("../views/component/footercomponent");
+
+// const DoctorSection = require("../views/component/doctorcomponent");
+// const StudentSection = require("../views/component/studentcomponent");
+// const ServiceSection = require("../views/component/servicecomponent");
+// const GovernmentSection = require("../views/component/governmentcomponent");
+
+
+// function Home(
+//     banners = [],
+//     doctors = [],
+//     governments = [],
+//     services = [],
+//     students = []
+// ) {
+
+//     return `
+// <!DOCTYPE html>
+// <html lang="en">
+
+// <head>
+
+//     <meta charset="UTF-8">
+
+//     <meta
+//         name="viewport"
+//         content="width=device-width, initial-scale=1.0"
+//     >
+
+//     <link
+//         rel="icon"
+//         type="image/png"
+//         href="/images/favicon.png"
+//     >
+
+//     <title>
+//         HHGS23 | Online Healthcare & Government Services
+//     </title>
+
+//     <link
+//         rel="stylesheet"
+//         href="/css/style.css"
+//     >
+
+//     <link
+//         rel="stylesheet"
+//         href="/css/banner.css"
+//     >
+
+// </head>
+
+// <body>
+
+//     ${Header()}
+
+//     ${Banner(banners)}
+
+//     ${DoctorSection(doctors)}
+
+//     ${StudentSection(students)}
+
+//     ${ServiceSection(services)}
+
+//     ${GovernmentSection(governments)}
+
+//     ${Footer()}
+
+//     <script src="/js/banner.js"></script>
+
+//     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+// </body>
+
+// </html>
+// `;
+
+// }
+
+
+// module.exports = Home;
+
+
 const Header = require("../views/component/headercomponent");
 const Banner = require("../views/component/bannercomponent");
 const Footer = require("../views/component/footercomponent");
@@ -1541,6 +1625,7 @@ function Home(
 
     return `
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -1552,10 +1637,40 @@ function Home(
         content="width=device-width, initial-scale=1.0"
     >
 
+    <meta
+        name="theme-color"
+        content="#16a34a"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-capable"
+        content="yes"
+    >
+
+    <meta
+        name="apple-mobile-web-app-status-bar-style"
+        content="default"
+    >
+
+    <link
+        rel="manifest"
+        href="/manifest.json"
+    >
+
     <link
         rel="icon"
         type="image/png"
-        href="/images/favicon.png"
+        href="/images/sabji-icon-192.png"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="/images/sabji-icon-192.png"
     >
 
     <title>
@@ -1571,6 +1686,56 @@ function Home(
         rel="stylesheet"
         href="/css/banner.css"
     >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        @media screen and (max-width: 768px) {
+
+            html,
+            body {
+                width: 100%;
+                max-width: 100%;
+                font-size: 14px;
+            }
+
+            main,
+            section,
+            .container {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .container {
+                margin: 0 auto;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -1593,6 +1758,36 @@ function Home(
     <script src="/js/banner.js"></script>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+
+        if ("serviceWorker" in navigator) {
+
+            window.addEventListener("load", function () {
+
+                navigator.serviceWorker
+                    .register("/service-worker.js")
+                    .then(function () {
+
+                        console.log(
+                            "Service Worker Registered"
+                        );
+
+                    })
+                    .catch(function (error) {
+
+                        console.log(
+                            "Service Worker Error:",
+                            error
+                        );
+
+                    });
+
+            });
+
+        }
+
+    </script>
 
 </body>
 
