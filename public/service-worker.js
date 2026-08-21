@@ -2,17 +2,14 @@
 // HHGS SERVICE WORKER
 // =====================================
 
-const CACHE_VERSION =
-     "hhgs-home-v6";
-
 const STATIC_CACHE =
-    "hhgs-static-v5";
+    "hhgs-static-v6";
 
 const IMAGE_CACHE =
-    "hhgs-images-v5";
+    "hhgs-images-v6";
 
 const PAGE_CACHE =
-    "hhgs-pages-v5";
+    "hhgs-pages-v6";
 
 
 const PRECACHE_FILES = [
