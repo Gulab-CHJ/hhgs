@@ -6607,6 +6607,8 @@ let shopIsOpen =
 let ringEnabled =
     false;
 
+
+
 let audioContext =
     null;
 
@@ -6869,6 +6871,33 @@ async function enableOrderRing() {
         "running";
 
 
+        // Phone audio को पूरी तरह unlock करें
+
+const unlockOscillator =
+    audioContext.createOscillator();
+
+const unlockGain =
+    audioContext.createGain();
+
+unlockGain.gain.value =
+    0.001;
+
+unlockOscillator.connect(
+    unlockGain
+);
+
+unlockGain.connect(
+    audioContext.destination
+);
+
+unlockOscillator.start();
+
+unlockOscillator.stop(
+    audioContext.currentTime +
+    0.05
+);
+
+
     if(
         "Notification" in window &&
         Notification.permission ===
@@ -6881,6 +6910,24 @@ async function enableOrderRing() {
 
 
     updateRingButton();
+
+
+    // Enable button दबाते ही test ring बजेगी
+
+if (ringEnabled) {
+
+    ringPulse();
+
+    setTimeout(
+        ringPulse,
+        900
+    );
+
+    alert(
+        "✅ Order Ring Active है। Test Ring बज रही है।"
+    );
+
+}
 }
 
 
