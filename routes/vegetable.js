@@ -8225,10 +8225,7 @@ document.addEventListener(
     }
 );
 
-setInterval(
-    checkNewOrders,
-    4000
-);
+setInterval(checkNewOrders, 4000);
 
 </script>
 
