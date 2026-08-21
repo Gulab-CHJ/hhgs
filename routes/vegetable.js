@@ -1634,7 +1634,6 @@ router.get(
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 
 <meta
@@ -1643,17 +1642,17 @@ router.get(
 >
 
 <title>
-    Sabji Cart
+    HHGS - Human Healthy Global Services
 </title>
 
 <link
     rel="manifest"
-    href="/sabji-manifest.webmanifest"
+    href="/manifest.json"
 >
 
 <meta
     name="theme-color"
-    content="#166534"
+    content="#16a34a"
 >
 
 <meta
@@ -1668,34 +1667,24 @@ router.get(
 
 <meta
     name="apple-mobile-web-app-status-bar-style"
-    content="black-translucent"
+    content="default"
 >
 
 <meta
     name="apple-mobile-web-app-title"
-    content="MINI SABJI"
+    content="HHGS"
+>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="/images/hhgs-icon-192.png"
 >
 
 <link
     rel="apple-touch-icon"
-    href="/images/GS LOGO.png"
+    href="/images/hhgs-icon-192.png"
 >
-
-// <link rel="manifest" href="/manifest.json">
-
-// <link
-//     rel="apple-touch-icon"
-//     href="/images/sabji-icon-192.png"
-// >
-
-// <meta name="theme-color" content="#16a34a">
-// <meta name="mobile-web-app-capable" content="yes">
-// <meta name="apple-mobile-web-app-capable" content="yes">
-// <meta
-//     name="apple-mobile-web-app-status-bar-style"
-//     content="default"
-// >
-
 <style>
 
 *{
