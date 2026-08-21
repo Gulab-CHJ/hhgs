@@ -3,13 +3,12 @@
 // File: public/service-worker.js
 // =====================================
 
-const CACHE_NAME = "hhgs-home-v1";
+const CACHE_NAME = "hhgs-home-v2";
 
 const STATIC_FILES = [
     "/",
     "/manifest.json",
-    "/images/hhgs-icon-192.png",
-    "/images/hhgs-icon-512.png"
+    "/images/GS%20LOGO.png"
 ];
 
 

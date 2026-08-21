@@ -1646,8 +1646,14 @@ router.get(
 </title>
 
 <link
-    rel="manifest"
-    href="/manifest.json"
+    rel="apple-touch-icon"
+    href="/images/GS%20LOGO.png"
+>
+
+<link
+    rel="icon"
+    type="image/png"
+    href="/images/GS%20LOGO.png"
 >
 
 <meta
