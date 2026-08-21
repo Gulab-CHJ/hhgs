@@ -7076,26 +7076,71 @@ function ringPulse() {
 // ======================================================
 // PLAY RING FOR 1 MINUTE
 // ======================================================
+async function playRing() {
 
-function playRing() {
-
-    if(
+    if (
         !shopIsOpen ||
-        !ringEnabled
+        !ringEnabled ||
+        !audioContext
     ) {
         return;
+    }
+
+
+    try {
+
+        if (
+            audioContext.state ===
+            "suspended"
+        ) {
+
+            await audioContext.resume();
+
+        }
+
+    } catch (error) {
+
+        console.log(
+            "Audio resume failed:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    if (
+        audioContext.state !==
+        "running"
+    ) {
+
+        ringEnabled = false;
+
+        updateRingButton();
+
+        return;
+
     }
 
 
     stopCurrentRing();
 
 
-    newOrderAlert.style.display =
-        "block";
+    if (newOrderAlert) {
+
+        newOrderAlert.style.display =
+            "block";
+
+    }
 
 
-    stopRingButton.disabled =
-        false;
+    if (stopRingButton) {
+
+        stopRingButton.disabled =
+            false;
+
+    }
 
 
     ringPulse();
@@ -7113,6 +7158,7 @@ function playRing() {
             stopCurrentRing,
             RING_DURATION_MS
         );
+
 }
 
 
@@ -8109,7 +8155,7 @@ async function checkNewOrders() {
             );
 
 
-            playRing();
+            await playRing();
 
 
             setTimeout(
@@ -8140,6 +8186,44 @@ async function checkNewOrders() {
 updateRingButton();
 
 checkNewOrders();
+
+
+// Phone app दोबारा foreground में आए तो audio resume करें
+
+document.addEventListener(
+    "visibilitychange",
+    async function () {
+
+        if (
+            document.visibilityState ===
+            "visible" &&
+            shopIsOpen &&
+            audioContext
+        ) {
+
+            try {
+
+                await audioContext.resume();
+
+                ringEnabled =
+                    audioContext.state ===
+                    "running";
+
+                updateRingButton();
+
+            } catch (error) {
+
+                console.log(
+                    "Audio resume error:",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+);
 
 setInterval(
     checkNewOrders,
