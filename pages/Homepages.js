@@ -2234,194 +2234,131 @@ function Home(
 
         if ("serviceWorker" in navigator) {
 
-            window.addEventListener(
-                "load",
-                function () {
+            // =====================================
+// CAPTURE CHROME INSTALL PROMPT
+// =====================================
 
-                    navigator.serviceWorker
-                        .register(
-                            "/service-worker.js"
-                        )
-                        .then(
-                            function (
-                                registration
-                            ) {
+window.addEventListener(
+    "beforeinstallprompt",
+    function (event) {
 
-                                console.log(
-                                    "HHGS Service Worker Registered:",
-                                    registration.scope
-                                );
+        event.preventDefault();
 
-                            }
-                        )
-                        .catch(
-                            function (error) {
+        hhgsInstallPrompt = event;
 
-                                console.log(
-                                    "Service Worker Error:",
-                                    error
-                                );
-
-                            }
-                        );
-
-                }
-            );
-
-        }
-
-
-        // =====================================
-        // INSTALL APP POPUP
-        // =====================================
-
-        let hhgsInstallPrompt = null;
-
-        const installPopup =
-            document.getElementById(
-                "installPopup"
-            );
-
-        const installNowButton =
-            document.getElementById(
-                "installNowButton"
-            );
-
-        const installLaterButton =
-            document.getElementById(
-                "installLaterButton"
-            );
-
-        const closeInstallPopup =
-            document.getElementById(
-                "closeInstallPopup"
-            );
-
-
-        function isHHGSInstalled() {
-
-            return (
-
-                window.matchMedia(
-                    "(display-mode: standalone)"
-                ).matches ||
-
-                window.navigator
-                    .standalone === true
-
-            );
-
-        }
-
-
-        function showInstallPopup() {
-
-            if (
-                installPopup &&
-                !isHHGSInstalled()
-            ) {
-
-                installPopup.classList.add(
-                    "show"
-                );
-
-            }
-
-        }
-
-
-        function hideInstallPopup() {
-
-            if (installPopup) {
-
-                installPopup.classList.remove(
-                    "show"
-                );
-
-            }
-
-        }
-
-
-        window.addEventListener(
-            "beforeinstallprompt",
-            function (event) {
-
-                event.preventDefault();
-
-                hhgsInstallPrompt = event;
-
-                setTimeout(
-                    showInstallPopup,
-                    1200
-                );
-
-            }
+        console.log(
+            "HHGS installation available"
         );
 
+        setTimeout(
+            showInstallPopup,
+            800
+        );
 
-        if (closeInstallPopup) {
+    }
+);
 
-            closeInstallPopup.addEventListener(
-                "click",
-                hideInstallPopup
+
+// =====================================
+// ALWAYS SHOW CUSTOM POPUP
+// =====================================
+
+window.addEventListener(
+    "load",
+    function () {
+
+        if (!isHHGSInstalled()) {
+
+            setTimeout(
+                function () {
+
+                    showInstallPopup();
+
+                },
+                1500
             );
 
         }
 
-
-        if (installLaterButton) {
-
-            installLaterButton.addEventListener(
-                "click",
-                hideInstallPopup
-            );
-
-        }
+    }
+);
 
 
-        if (installNowButton) {
+// =====================================
+// CLOSE POPUP
+// =====================================
 
-            installNowButton.addEventListener(
-                "click",
-                async function () {
+if (closeInstallPopup) {
 
-                    if (
-                        !hhgsInstallPrompt
-                    ) {
+    closeInstallPopup.addEventListener(
+        "click",
+        hideInstallPopup
+    );
 
-                        alert(
-                            "Chrome Menu खोलें और Install App दबाएँ।"
-                        );
+}
 
-                        return;
-                    }
 
-                    hideInstallPopup();
+if (installLaterButton) {
 
-                    hhgsInstallPrompt.prompt();
+    installLaterButton.addEventListener(
+        "click",
+        hideInstallPopup
+    );
 
-                    const installChoice =
-                        await hhgsInstallPrompt
-                            .userChoice;
+}
 
-                    if (
-                        installChoice.outcome ===
-                        "accepted"
-                    ) {
 
-                        console.log(
-                            "HHGS App Installed"
-                        );
+// =====================================
+// INSTALL NOW BUTTON
+// =====================================
 
-                    }
+if (installNowButton) {
 
-                    hhgsInstallPrompt = null;
+    installNowButton.addEventListener(
+        "click",
+        async function () {
+
+            if (hhgsInstallPrompt) {
+
+                hideInstallPopup();
+
+                hhgsInstallPrompt.prompt();
+
+                const installChoice =
+                    await hhgsInstallPrompt
+                        .userChoice;
+
+                if (
+                    installChoice.outcome ===
+                    "accepted"
+                ) {
+
+                    console.log(
+                        "HHGS App Installed"
+                    );
+
+                } else {
+
+                    console.log(
+                        "HHGS installation cancelled"
+                    );
 
                 }
-            );
+
+                hhgsInstallPrompt = null;
+
+            } else {
+
+                alert(
+                    "Chrome के ऊपर ⋮ Menu खोलें और Install and create shortcut दबाएँ।"
+                );
+
+            }
 
         }
+    );
+
+}
 
 
         window.addEventListener(
