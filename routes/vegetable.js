@@ -1970,12 +1970,176 @@ textarea{
     cursor:not-allowed;
 }
 
+/* =====================================
+   HHGS APP SPLASH SCREEN
+===================================== */
+
+#appSplashScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #eef7ff
+        );
+
+    transition:
+        opacity 0.5s ease,
+        visibility 0.5s ease;
+}
+
+#appSplashScreen.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.splash-content {
+    width: 100%;
+    padding: 25px;
+    text-align: center;
+}
+
+.splash-logo {
+    width: 85px;
+    height: 85px;
+
+    display: block;
+    margin: 0 auto 18px;
+
+    object-fit: contain;
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 28px
+        rgba(15, 23, 42, 0.16);
+}
+
+.splash-content h1 {
+    margin: 0 0 7px;
+
+    color: #123c77;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.splash-content p {
+    margin: 0 0 25px;
+
+    color: #64748b;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 13px;
+}
+
+.splash-content small {
+    display: block;
+    margin-top: 20px;
+
+    color: #64748b;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.splash-loader {
+    width: 42px;
+    height: 4px;
+
+    margin: auto;
+
+    overflow: hidden;
+    position: relative;
+
+    border-radius: 20px;
+    background: #dbeafe;
+}
+
+.splash-loader::after {
+    content: "";
+
+    width: 50%;
+    height: 100%;
+
+    position: absolute;
+    top: 0;
+    left: -50%;
+
+    border-radius: 20px;
+    background: #16a34a;
+
+    animation:
+        splashLoading 1s
+        infinite ease-in-out;
+}
+
+@keyframes splashLoading {
+
+    from {
+        left: -50%;
+    }
+
+    to {
+        left: 100%;
+    }
+
+}
+
 </style>
 
 </head>
 
 
 <body>
+
+<!-- HHGS APP SPLASH SCREEN -->
+
+<div id="appSplashScreen">
+
+    <div class="splash-content">
+
+        <img
+            src="/images/GS%20LOGO.png"
+            alt="HHGS Logo"
+            class="splash-logo"
+        >
+
+        <h1>Welcome to HHGS</h1>
+
+        <p>
+            Human Healthy Global Services
+        </p>
+
+        <div class="splash-loader"></div>
+
+        <small>
+            Developed by Gulab
+        </small>
+
+    </div>
+
+</div>
 
 
 <header class="header">
@@ -3197,6 +3361,44 @@ async function placeOrder(){
 renderCart();
 
 checkCustomerLocation();
+
+
+
+window.addEventListener(
+    "load",
+    function () {
+
+        const splashScreen =
+            document.getElementById(
+                "appSplashScreen"
+            );
+
+        setTimeout(
+            function () {
+
+                if (splashScreen) {
+
+                    splashScreen.classList.add(
+                        "hide"
+                    );
+
+                    setTimeout(
+                        function () {
+
+                            splashScreen.remove();
+
+                        },
+                        600
+                    );
+
+                }
+
+            },
+            1800
+        );
+
+    }
+);
 
 </script>
 
