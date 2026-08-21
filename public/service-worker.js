@@ -3,13 +3,13 @@
 // =====================================
 
 const STATIC_CACHE =
-    "hhgs-static-v6";
+    "hhgs-static-v8";
 
 const IMAGE_CACHE =
-    "hhgs-images-v6";
+    "hhgs-images-v8";
 
 const PAGE_CACHE =
-    "hhgs-pages-v6";
+    "hhgs-pages-v8";
 
 
 const PRECACHE_FILES = [

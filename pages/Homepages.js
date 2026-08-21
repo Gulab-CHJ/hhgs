@@ -1125,6 +1125,108 @@ function Home(
     ${Footer()}
 
 
+    <style>
+
+/* =====================================
+   FORCE PHONE APP VIEW
+===================================== */
+
+@media screen and (pointer: coarse) and (max-width: 1200px),
+       screen and (max-device-width: 768px) {
+
+    html,
+    body {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
+
+        overflow-x: hidden !important;
+    }
+
+    main,
+    section,
+    header,
+    footer,
+    .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* TWO DOCTORS PER ROW */
+
+    .doctor-grid {
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        gap: 10px !important;
+
+        width: 100% !important;
+    }
+
+    .doctor-card {
+        width: 100% !important;
+        min-width: 0 !important;
+
+        border-radius: 14px !important;
+    }
+
+    .doctor-img {
+        width: 100% !important;
+        height: 145px !important;
+
+        object-fit: cover !important;
+    }
+
+    .doctor-body {
+        padding: 10px !important;
+    }
+
+    .doctor-body h3 {
+        font-size: 15px !important;
+        line-height: 1.25 !important;
+    }
+
+    .doctor-info {
+        font-size: 11px !important;
+    }
+
+    /* TWO SERVICES PER ROW */
+
+    .services-grid {
+        display: grid !important;
+
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            ) !important;
+
+        gap: 10px !important;
+
+        width: 100% !important;
+    }
+
+    /* RESPONSIVE IMAGES */
+
+    img,
+    video,
+    iframe {
+        max-width: 100% !important;
+    }
+
+}
+
+</style>
+
     <script src="/js/banner.js"></script>
 
     <script
