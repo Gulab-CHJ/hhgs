@@ -2228,14 +2228,127 @@ function Home(
 
     <script>
 
-        // =====================================
-        // SERVICE WORKER REGISTRATION
-        // =====================================
+// =====================================
+// SERVICE WORKER
+// =====================================
 
-        if ("serviceWorker" in navigator) {
+if ("serviceWorker" in navigator) {
 
-            // =====================================
-// CAPTURE CHROME INSTALL PROMPT
+    window.addEventListener(
+        "load",
+        function () {
+
+            navigator.serviceWorker
+                .register(
+                    "/service-worker.js"
+                )
+                .then(function (registration) {
+
+                    console.log(
+                        "Service Worker Registered:",
+                        registration.scope
+                    );
+
+                })
+                .catch(function (error) {
+
+                    console.log(
+                        "Service Worker Error:",
+                        error
+                    );
+
+                });
+
+        }
+    );
+
+}
+
+
+// =====================================
+// INSTALL POPUP ELEMENTS
+// =====================================
+
+let hhgsInstallPrompt = null;
+
+const installPopup =
+    document.getElementById(
+        "installPopup"
+    );
+
+const installNowButton =
+    document.getElementById(
+        "installNowButton"
+    );
+
+const installLaterButton =
+    document.getElementById(
+        "installLaterButton"
+    );
+
+const closeInstallPopup =
+    document.getElementById(
+        "closeInstallPopup"
+    );
+
+
+// =====================================
+// CHECK APP INSTALLED
+// =====================================
+
+function isHHGSInstalled() {
+
+    return (
+        window.matchMedia(
+            "(display-mode: standalone)"
+        ).matches ||
+
+        window.navigator
+            .standalone === true
+    );
+
+}
+
+
+// =====================================
+// SHOW POPUP
+// =====================================
+
+function showInstallPopup() {
+
+    if (
+        installPopup &&
+        !isHHGSInstalled()
+    ) {
+
+        installPopup.classList.add(
+            "show"
+        );
+
+    }
+
+}
+
+
+// =====================================
+// HIDE POPUP
+// =====================================
+
+function hideInstallPopup() {
+
+    if (installPopup) {
+
+        installPopup.classList.remove(
+            "show"
+        );
+
+    }
+
+}
+
+
+// =====================================
+// CAPTURE INSTALL EVENT
 // =====================================
 
 window.addEventListener(
@@ -2270,11 +2383,7 @@ window.addEventListener(
         if (!isHHGSInstalled()) {
 
             setTimeout(
-                function () {
-
-                    showInstallPopup();
-
-                },
+                showInstallPopup,
                 1500
             );
 
@@ -2285,7 +2394,7 @@ window.addEventListener(
 
 
 // =====================================
-// CLOSE POPUP
+// CLOSE BUTTON
 // =====================================
 
 if (closeInstallPopup) {
@@ -2297,6 +2406,10 @@ if (closeInstallPopup) {
 
 }
 
+
+// =====================================
+// MAYBE LATER BUTTON
+// =====================================
 
 if (installLaterButton) {
 
@@ -2340,7 +2453,7 @@ if (installNowButton) {
                 } else {
 
                     console.log(
-                        "HHGS installation cancelled"
+                        "Installation cancelled"
                     );
 
                 }
@@ -2350,7 +2463,7 @@ if (installNowButton) {
             } else {
 
                 alert(
-                    "Chrome के ऊपर ⋮ Menu खोलें और Install and create shortcut दबाएँ।"
+                    "Chrome के ⋮ Menu में जाकर Install and create shortcut दबाएँ।"
                 );
 
             }
@@ -2361,31 +2474,35 @@ if (installNowButton) {
 }
 
 
-        window.addEventListener(
-            "appinstalled",
-            function () {
+// =====================================
+// INSTALLATION COMPLETE
+// =====================================
 
-                hideInstallPopup();
+window.addEventListener(
+    "appinstalled",
+    function () {
 
-                hhgsInstallPrompt = null;
+        hideInstallPopup();
 
-                console.log(
-                    "HHGS App Installation Complete"
-                );
+        hhgsInstallPrompt = null;
 
-            }
+        console.log(
+            "HHGS App Installation Complete"
         );
 
+    }
+);
 
-        // Installed app में popup नहीं दिखेगा
 
-        if (isHHGSInstalled()) {
+// Installed app में popup बंद रखें
 
-            hideInstallPopup();
+if (isHHGSInstalled()) {
 
-        }
+    hideInstallPopup();
 
-    </script>
+}
+
+</script>
 
 </body>
 
