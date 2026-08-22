@@ -1117,7 +1117,7 @@ function Home(
 
     ${Banner(banners)}
 
-    ${StarRankingSection()}
+    ${StarRankingSection(students)}
 
     ${DoctorSection(doctors)}
 
