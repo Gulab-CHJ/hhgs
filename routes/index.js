@@ -525,6 +525,9 @@ const Doctor = require("../models/Doctor");
 const GovernmentPerson = require("../models/GovernmentPerson");
 const Service = require("../models/Service");
 
+const Student =
+    require("../models/Student");
+
 
 const Home = require("../pages/Homepages");
 
