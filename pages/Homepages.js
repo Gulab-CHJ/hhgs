@@ -1589,12 +1589,7 @@ function StarRankingSection(
         </div>
 
 
-        <a
-            href="/admin/manage-students"
-            class="mongo-admin-button"
-        >
-            🔐 Admin Manage
-        </a>
+        
 
     </div>
 
