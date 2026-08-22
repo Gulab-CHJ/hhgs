@@ -736,6 +736,9 @@ const ServiceSection =
 const GovernmentSection =
     require("../views/component/governmentcomponent");
 
+    const StarRankingSection =
+    require("../views/component/starrankingcomponent");
+
 
 function Home(
     banners = [],
@@ -1113,6 +1116,8 @@ function Home(
     ${Header()}
 
     ${Banner(banners)}
+
+    ${StarRankingSection()}
 
     ${DoctorSection(doctors)}
 
