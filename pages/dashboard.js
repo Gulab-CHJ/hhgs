@@ -3220,6 +3220,27 @@ a {
 
 }
 
+.rapido-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4f46e5
+        );
+}
+
+.rapido-btn:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #6d28d9,
+            #4338ca
+        );
+
+    transform:
+        translateY(-2px);
+}
+
 </style>
 
 </head>
@@ -3272,77 +3293,81 @@ a {
             </section>
 
 
+            
+
             <nav
-                class="sabji-admin-buttons"
-                aria-label="Vegetable shop actions"
-            >
+    class="sabji-admin-buttons"
+    aria-label="Management actions"
+>
 
-                <a
-                    href="/admin/sabji/products"
-                    class="sabji-admin-btn manage-btn"
-                >
+    <a
+        href="/admin/sabji/products"
+        class="sabji-admin-btn manage-btn"
+    >
 
-                    <i class="fa-solid fa-carrot"></i>
+        <i class="fa-solid fa-carrot"></i>
 
-                    <span class="action-copy">
+        <span class="action-copy">
 
-                        <strong>
-                            Manage Vegetables
-                        </strong>
+            <strong>
+                Manage Vegetables
+            </strong>
 
-                        <small>
-                            Products, stock and prices
-                        </small>
+            <small>
+                Products, stock and prices
+            </small>
 
-                    </span>
+        </span>
 
-                </a>
-
-
-                <a
-                    href="/admin/sabji/shop-status"
-                    class="sabji-admin-btn shop-btn"
-                >
-
-                    <i class="fa-solid fa-store"></i>
-
-                    <span class="action-copy">
-
-                        <strong>
-                            Shop Open / Close
-                        </strong>
-
-                        <small>
-                            Control customer ordering
-                        </small>
-
-                    </span>
-
-                </a>
+    </a>
 
 
-                <a
-                    href="/admin/sabji/orders"
-                    class="sabji-admin-btn order-btn"
-                >
+    <a
+        href="/admin/sabji/orders"
+        class="sabji-admin-btn order-btn"
+    >
 
-                    <i class="fa-solid fa-bell"></i>
+        <i class="fa-solid fa-bell"></i>
 
-                    <span class="action-copy">
+        <span class="action-copy">
 
-                        <strong>
-                            Sabji Orders
-                        </strong>
+            <strong>
+                Sabji Orders
+            </strong>
 
-                        <small>
-                            View and update orders
-                        </small>
+            <small>
+                View and update orders
+            </small>
 
-                    </span>
+        </span>
 
-                </a>
+    </a>
 
-            </nav>
+
+    <!-- RAPIDO MANAGEMENT -->
+
+    <a
+        href="/rapido-tracker"
+        class="sabji-admin-btn rapido-btn"
+    >
+
+        <i class="fa-solid fa-motorcycle"></i>
+
+        <span class="action-copy">
+
+            <strong>
+                Rapido Management
+            </strong>
+
+            <small>
+                KM, earning, petrol & profit
+            </small>
+
+        </span>
+
+    </a>
+
+</nav>
 
 
             ${DashboardStats(data)}

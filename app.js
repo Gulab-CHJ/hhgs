@@ -281,6 +281,15 @@ app.use(
     cartRoutes
 );
 
+
+const rapidoRouter =
+    require("./routes/rapido");
+
+app.use(
+    "/api/rapido",
+    rapidoRouter
+);
+
 // ===============================
 // MINI SABJI SHOP
 // ===============================
@@ -293,6 +302,36 @@ app.use(
     vegetableRoutes
 );
 
+const RapidoTracker =
+    require("./views/RapidoTracker");
+
+app.get(
+    "/rapido-tracker",
+    (req, res) => {
+
+        try {
+
+            return res.send(
+                RapidoTracker()
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "RAPIDO TRACKER PAGE ERROR:",
+                error
+            );
+
+            return res
+                .status(500)
+                .send(
+                    "Rapido Tracker Page Error"
+                );
+        }
+
+    }
+);
 // ===============================
 // SERVER START
 // ===============================
