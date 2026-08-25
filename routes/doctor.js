@@ -4376,6 +4376,8 @@ router.get("/orders", async (req, res) => {
 
         </a>
 
+        
+
 
         ${
             canCancel
@@ -4612,6 +4614,47 @@ HEADER
 
     font-weight:900;
 
+}
+
+.order-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.invoice-btn,
+.delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 9px 14px;
+    border: none;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.invoice-btn {
+    color: #ffffff;
+    background: #2563eb;
+}
+
+.invoice-btn:hover {
+    background: #1d4ed8;
+}
+
+.delete-btn {
+    color: #ffffff;
+    background: #dc2626;
+}
+
+.delete-btn:hover {
+    background: #b91c1c;
 }
 
 
@@ -7959,6 +8002,60 @@ router.post(
 
         }
 
+    }
+);
+
+
+// =====================================
+// DELETE DOCTOR ORDER
+// POST /admin/doctor-order/:orderId/delete
+// =====================================
+router.post(
+    "/doctor-order/:orderId/delete",
+    async (req, res) => {
+
+        try {
+
+            const order = await DoctorOrder.findById(
+                req.params.orderId
+            );
+
+            if (!order) {
+                return res
+                    .status(404)
+                    .send("Order not found");
+            }
+
+            const doctorId =
+                req.body.doctorId ||
+                order.doctorId ||
+                order.doctor;
+
+            await DoctorOrder.findByIdAndDelete(
+                req.params.orderId
+            );
+
+            if (doctorId) {
+                return res.redirect(
+                    `/admin/doctor/${doctorId}/orders`
+                );
+            }
+
+            return res.redirect(
+                "/admin/doctor-orders"
+            );
+
+        } catch (error) {
+
+            console.error(
+                "DELETE DOCTOR ORDER ERROR:",
+                error
+            );
+
+            return res
+                .status(500)
+                .send("Doctor order delete failed");
+        }
     }
 );
 
