@@ -11927,63 +11927,187 @@ router.get(
 );
 
 
-router.post(
+   router.post(
     "/edit-student/:id",
+
+    // Multipart form और image दोनों parse होंगे
+    upload.single("image"),
+
     async (req, res) => {
 
         try {
 
-            const updateData = {
-
-                name: String(
-                    req.body.name || ""
-                ).trim(),
-
-                mobile: String(
-                    req.body.mobile || ""
-                ).trim(),
-
-                age: Number(
-                    req.body.age || 0
-                ),
-
-                course: String(
-                    req.body.course || ""
-                ).trim(),
-
-                plan: req.body.plan,
-
-                amount: Number(
-                    req.body.amount || 0
-                ),
-
-                paymentStatus:
-                    req.body.paymentStatus
-
-            };
+            const body =
+                req.body || {};
 
 
-            if (
-                req.body.password &&
-                req.body.password.trim() !== ""
-            ) {
+            console.log(
+                "STUDENT UPDATE BODY:",
+                body
+            );
 
-                updateData.password =
-                    req.body.password.trim();
+            console.log(
+                "STUDENT UPDATE IMAGE:",
+                req.file || "No new image"
+            );
+
+
+            const student =
+                await Student.findById(
+                    req.params.id
+                );
+
+
+            if (!student) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Student not found."
+                    );
 
             }
 
 
-            await Student.findByIdAndUpdate(
-                req.params.id,
-                updateData,
-                {
-                    new: true
+            const name =
+                String(
+                    body.name || ""
+                ).trim();
+
+            const mobile =
+                String(
+                    body.mobile || ""
+                ).trim();
+
+            const course =
+                String(
+                    body.course || ""
+                ).trim();
+
+            const password =
+                String(
+                    body.password || ""
+                ).trim();
+
+
+            if (!name) {
+
+                return res
+                    .status(400)
+                    .send(
+                        "Student name is required."
+                    );
+
+            }
+
+
+            if (!mobile) {
+
+                return res
+                    .status(400)
+                    .send(
+                        "Mobile number is required."
+                    );
+
+            }
+
+
+            if (!course) {
+
+                return res
+                    .status(400)
+                    .send(
+                        "Class or course is required."
+                    );
+
+            }
+
+
+            student.name = name;
+            student.mobile = mobile;
+            student.course = course;
+
+
+            if (
+                body.age !== undefined &&
+                body.age !== ""
+            ) {
+
+                const age =
+                    Number(body.age);
+
+                if (!Number.isNaN(age)) {
+                    student.age = age;
                 }
+
+            }
+
+
+            if (body.plan) {
+
+                student.plan =
+                    String(body.plan).trim();
+
+            }
+
+
+            if (
+                body.amount !== undefined &&
+                body.amount !== ""
+            ) {
+
+                const amount =
+                    Number(body.amount);
+
+                if (!Number.isNaN(amount)) {
+                    student.amount = amount;
+                }
+
+            }
+
+
+            if (body.paymentStatus) {
+
+                student.paymentStatus =
+                    body.paymentStatus === "Success"
+                        ? "Success"
+                        : "Pending";
+
+            }
+
+
+            // खाली password भेजने पर पुराना password रहेगा
+            if (password) {
+
+                student.password =
+                    password;
+
+            }
+
+
+            // नई image चुनी गई हो तभी image बदलेगी
+            if (req.file) {
+
+    student.image =
+        req.file.path ||
+        (
+            "/uploads/students/" +
+            req.file.filename
+        );
+
+}
+
+
+            await student.save();
+
+
+            console.log(
+                "✅ STUDENT UPDATED:",
+                student._id
             );
 
 
-            res.redirect(
+            return res.redirect(
                 "/admin/manage-students"
             );
 
@@ -11994,15 +12118,17 @@ router.post(
                 error
             );
 
-            res.status(500).send(
-                error.message
-            );
+            return res
+                .status(500)
+                .send(
+                    "Student update failed: " +
+                    error.message
+                );
 
         }
 
     }
 );
-
 router.post(
     "/update-student-payment/:id",
     async (req, res) => {

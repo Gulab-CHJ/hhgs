@@ -3207,19 +3207,26 @@ function AddDoctor() {
 
         <div class="form-group">
 
-            <label for="qualification">
-                Qualification
-            </label>
+    <label for="qualification">
+        Qualification
 
-            <input
-                id="qualification"
-                type="text"
-                name="qualification"
-                placeholder="MBBS, MD..."
-                required
-            >
+        <span style="
+            color:#64748b;
+            font-size:12px;
+            font-weight:500;
+        ">
+            (Optional)
+        </span>
+    </label>
 
-        </div>
+    <input
+        id="qualification"
+        type="text"
+        name="qualification"
+        placeholder="MBBS, MD... (Optional)"
+    >
+
+</div>
 
 
         <!-- Specialization -->
