@@ -2305,362 +2305,122 @@ function MedicineStoreSection(products = []) {
     gap: 18px;
 }
 
-
 .medicine-store-card {
     min-width: 0;
-
-    padding: 12px;
-
+    padding: 0;
     overflow: hidden;
-
     background: #ffffff;
-
     border: 1px solid #e2e8f0;
     border-radius: 18px;
-
     box-shadow:
         0 8px 25px
         rgba(15, 23, 42, 0.05);
-
     transition: 0.25s;
 }
 
-
 .medicine-store-card:hover {
     transform: translateY(-4px);
-
     box-shadow:
         0 18px 40px
         rgba(30, 64, 175, 0.13);
 }
 
-
 .medicine-store-image {
     width: 100%;
-    height: 200px;
-
-    margin-bottom: 12px;
-
+    height: 250px;
     display: block;
     position: relative;
-
+    margin: 0;
+    padding: 0;
     overflow: hidden;
-
-    background:
-        linear-gradient(
-            145deg,
-            #eff6ff,
-            #f8fafc
-        );
-
-    border-radius: 14px;
+    background: #f8fafc;
+    border-radius: 0;
 }
-
 
 .medicine-store-image img {
     width: 100%;
     height: 100%;
-
     display: block;
-
-    padding: 8px;
-
-    object-fit: contain;
+    margin: 0;
+    padding: 0;
+    object-fit: cover;
+    object-position: center;
 }
-
-
-.medicine-placeholder {
-    width: 100%;
-    height: 100%;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
-    color: #2563eb;
-
-    background:
-        linear-gradient(
-            145deg,
-            #eff6ff,
-            #f8fafc
-        );
-
-    font-size: 55px;
-}
-
-
-.medicine-placeholder.show {
-    display: flex;
-}
-
 
 .medicine-store-body {
-    padding: 0;
+    padding: 20px;
 }
 
 
-.medicine-store-category {
-    margin-bottom: 5px;
+/* TABLET */
 
-    color: #2563eb;
-
-    font-size: 10px;
-    font-weight: 900;
-
-    text-transform: uppercase;
-}
-
-
-.medicine-store-name {
-    min-height: 39px;
-
-    display: -webkit-box;
-
-    overflow: hidden;
-
-    color: #0f172a;
-
-    text-decoration: none;
-
-    font-size: 16px;
-    font-weight: 900;
-    line-height: 1.25;
-
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
-
-.medicine-store-name small {
-    color: #475569;
-
-    font-size: 11px;
-}
-
-
-.medicine-composition {
-    min-height: 32px;
-
-    display: -webkit-box;
-
-    margin: 0;
-
-    overflow: hidden;
-
-    color: #64748b;
-
-    font-size: 11px;
-    line-height: 1.45;
-
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
-
-.medicine-store-brand {
-    margin-top: 8px;
-
-    overflow: hidden;
-
-    color: #475569;
-
-    font-size: 10px;
-    font-weight: 800;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-
-.medicine-store-stock {
-    display: block;
-
-    margin-top: 8px;
-
-    font-size: 11px;
-    font-weight: 900;
-}
-
-
-.medicine-store-stock.in-stock {
-    color: #16a34a;
-}
-
-
-.medicine-store-stock.out-stock {
-    color: #dc2626;
-}
-
-
-.medicine-view-button {
-    width: 100%;
-
-    display: block;
-
-    margin-top: 10px;
-    padding: 11px;
-
-    color: #ffffff;
-
-    background:
-        linear-gradient(
-            135deg,
-            #2563eb,
-            #1d4ed8
-        );
-
-    border-radius: 9px;
-
-    text-decoration: none;
-    text-align: center;
-
-    font-size: 11px;
-    font-weight: 900;
-
-    box-shadow:
-        0 5px 12px
-        rgba(37, 99, 235, 0.18);
-
-    transition: 0.2s;
-}
-
-
-.medicine-view-button:hover {
-    transform: translateY(-1px);
-
-    box-shadow:
-        0 8px 16px
-        rgba(37, 99, 235, 0.25);
-}
-
-
-.medicine-store-empty {
-    grid-column: 1 / -1;
-
-    padding: 35px 15px;
-
-    text-align: center;
-
-    color: #64748b;
-    background: #f8fbff;
-
-    border-radius: 15px;
-}
-
-
-.medicine-store-empty div {
-    font-size: 36px;
-}
-
-
-.medicine-store-empty strong,
-.medicine-store-empty span {
-    display: block;
-
-    margin-top: 7px;
-}
-
-
-@media(max-width: 900px) {
-
+@media (max-width: 900px) {
     .medicine-store-grid {
         grid-template-columns:
-            repeat(
-                3,
-                minmax(0, 1fr)
-            );
+            repeat(3, minmax(0, 1fr));
     }
 
+    .medicine-store-image {
+        height: 220px;
+    }
 }
 
 
-@media(max-width: 700px) {
+/* MOBILE */
 
+@media (max-width: 700px) {
     .medicine-store-section {
         width: calc(100% - 18px);
-
         margin: 22px auto;
         padding: 17px 10px;
-
         border-radius: 18px;
     }
 
-
-    .medicine-store-heading {
-        align-items: flex-end;
-
-        gap: 8px;
-    }
-
-
-    .medicine-store-heading h2 {
-        font-size: 23px;
-    }
-
-
-    .medicine-store-heading p {
-        font-size: 11px;
-    }
-
-
-    .medicine-store-all {
-        padding: 9px 10px;
-
-        font-size: 10px;
-    }
-
-
     .medicine-store-grid {
         grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 1fr)
-            );
-
+            repeat(2, minmax(0, 1fr));
         gap: 10px;
     }
 
-
     .medicine-store-card {
-        padding: 9px;
-
+        padding: 0;
         border-radius: 13px;
     }
-
 
     .medicine-store-image {
         height: 145px;
     }
 
+    .medicine-store-body {
+        padding: 11px;
+    }
 
     .medicine-store-name {
         min-height: 34px;
-
         font-size: 13px;
     }
-
 
     .medicine-composition {
         font-size: 10px;
     }
 
-
     .medicine-view-button {
         padding: 10px 7px;
-
         font-size: 10px;
     }
-
 }
 
 
-@media(max-width: 380px) {
+/* SMALL PHONE */
 
+@media (max-width: 380px) {
     .medicine-store-image {
         height: 125px;
     }
 
+    .medicine-store-body {
+        padding: 9px;
+    }
 }
 
 </style>

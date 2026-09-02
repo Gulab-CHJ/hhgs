@@ -332,6 +332,324 @@ app.get(
 
     }
 );
+
+const AIPresenterVideo =
+    require("./views/AIPresenterVideo");
+
+app.get(
+    "/ai-video",
+    function(req, res) {
+
+        res.send(
+            AIPresenterVideo()
+        );
+
+    }
+);
+
+
+app.use(
+    express.json({
+        limit: "2mb"
+    })
+);
+
+
+// ======================================
+// AI TEXT TO SPEECH
+// ======================================
+
+app.post(
+    "/api/free-presenter-voice",
+    async function (req, res) {
+
+        try {
+
+            const text =
+                String(
+                    req.body.text || ""
+                ).trim();
+
+
+            if (!text) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Presenter Script required."
+                });
+
+            }
+
+
+            if (text.length > 4000) {
+
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "Script बहुत लंबा है।"
+                });
+
+            }
+
+
+            if (!process.env.OPENAI_API_KEY) {
+
+                return res.status(500).json({
+                    success: false,
+                    message:
+                        "OPENAI_API_KEY missing."
+                });
+
+            }
+
+
+            const aiResponse =
+                await fetch(
+                    "https://api.openai.com/v1/audio/speech",
+                    {
+                        method: "POST",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " +
+                                process.env.OPENAI_API_KEY,
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body: JSON.stringify({
+
+                            model:
+                                "gpt-4o-mini-tts",
+
+                            voice:
+                                "onyx",
+
+                            input:
+                                text,
+
+                            instructions:
+                                "Speak in natural, clear Hindi. Use a professional Indian male presenter style. Speak calmly and clearly like a healthcare explainer. Correctly pronounce Hindi and English product names."
+
+                        })
+
+                    }
+                );
+
+
+            if (!aiResponse.ok) {
+
+                const errorText =
+                    await aiResponse.text();
+
+
+                console.error(
+                    "AI VOICE ERROR:",
+                    errorText
+                );
+
+
+                return res.status(500).json({
+                    success: false,
+                    message:
+                        "AI voice generate नहीं हुई।"
+                });
+
+            }
+
+
+            const arrayBuffer =
+                await aiResponse.arrayBuffer();
+
+
+            const audioBuffer =
+                Buffer.from(
+                    arrayBuffer
+                );
+
+
+            res.setHeader(
+                "Content-Type",
+                "audio/mpeg"
+            );
+
+
+            res.setHeader(
+                "Content-Length",
+                audioBuffer.length
+            );
+
+
+            res.send(
+                audioBuffer
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "AI PRESENTER VOICE ERROR:",
+                error
+            );
+
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "AI Voice Generation Failed"
+            });
+
+        }
+
+    }
+);
+
+
+const fs = require("fs");
+
+const os = require("os");
+const crypto = require("crypto");
+
+const { EdgeTTS } = require("node-edge-tts");
+
+
+app.use(
+    express.json({
+        limit: "2mb"
+    })
+);
+
+
+app.post(
+    "/api/free-presenter-voice",
+    async function(req, res) {
+
+        let audioPath = null;
+
+        try {
+
+            const text =
+                String(
+                    req.body.text || ""
+                ).trim();
+
+
+            if (!text) {
+
+                return res.status(400).json({
+                    success: false,
+                    message: "Presenter Script required"
+                });
+
+            }
+
+
+            audioPath =
+                path.join(
+                    os.tmpdir(),
+                    "hhgs-" +
+                    crypto.randomUUID() +
+                    ".mp3"
+                );
+
+
+            const tts =
+                new EdgeTTS({
+
+                    voice:
+                        "hi-IN-MadhurNeural",
+
+                    lang:
+                        "hi-IN",
+
+                    outputFormat:
+                        "audio-24khz-96kbitrate-mono-mp3",
+
+                    rate:
+                        "+0%",
+
+                    pitch:
+                        "+0Hz",
+
+                    volume:
+                        "+0%",
+
+                    timeout:
+                        30000
+
+                });
+
+
+            await tts.ttsPromise(
+                text,
+                audioPath
+            );
+
+
+            res.setHeader(
+                "Content-Type",
+                "audio/mpeg"
+            );
+
+
+            const stream =
+                fs.createReadStream(
+                    audioPath
+                );
+
+
+            stream.pipe(res);
+
+
+            stream.on(
+                "close",
+                function() {
+
+                    fs.unlink(
+                        audioPath,
+                        function() {}
+                    );
+
+                }
+            );
+
+        }
+        catch(error) {
+
+            console.error(
+                "FREE TTS ERROR:",
+                error
+            );
+
+
+            if (
+                audioPath &&
+                fs.existsSync(audioPath)
+            ) {
+
+                fs.unlink(
+                    audioPath,
+                    function() {}
+                );
+
+            }
+
+
+            res.status(500).json({
+                success: false,
+                message:
+                    "Free Hindi voice generate नहीं हुई"
+            });
+
+        }
+
+    }
+);
+
 // ===============================
 // SERVER START
 // ===============================

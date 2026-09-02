@@ -52534,6 +52534,96 @@ body.modal-open {
         font-size: 22px;
     }
 }
+
+/* =====================================================
+   FINAL FULL-SIZE PRODUCT IMAGE
+===================================================== */
+
+.product-image {
+    width: 100%;
+    height: 250px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin: 0 !important;
+    padding: 0 !important;
+    object-fit: cover !important;
+    object-position: center;
+}
+
+
+/* TABLET */
+
+@media (max-width: 950px) {
+    .product-image {
+        height: 220px;
+    }
+}
+
+
+/* MOBILE — 2 CARDS PER ROW */
+
+@media (max-width: 700px) {
+
+    /* HEADER STICKY */
+
+    .header {
+        position: sticky !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 9999;
+
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+    }
+
+
+    /* TWO PRODUCT CARDS */
+
+    .products-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+    }
+
+
+    /* PRODUCT IMAGE */
+
+    .product-image {
+        height: 145px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        display: block;
+
+        padding: 0 !important;
+        margin: 0 !important;
+
+        object-fit: cover !important;
+        object-position: center;
+    }
+}
+
+/* SMALL PHONE */
+
+@media (max-width: 380px) {
+    .product-image {
+        height: 125px;
+    }
+}
+
 </style>
 
 </head>

@@ -476,7 +476,6 @@ router.get(
             width: 100%;
             height: 420px;
 
-            padding: 15px;
 
             object-fit: contain;
         }
