@@ -14564,6 +14564,15 @@ body{
 
     }
 );
+
+router.get("/add-doctor", async (req, res) => {
+    try {
+        res.render("admin/add-doctor");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Server Error");
+    }
+});
 // ======================================================
 // EXPORT
 // ======================================================
