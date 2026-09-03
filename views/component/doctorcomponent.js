@@ -2891,7 +2891,7 @@ function DoctorSection(doctors = []) {
                     </h3>
 
 
-                    <div class="doctor-info degree">
+                    <div  style=" display: none !important; " class="doctor-info degree">
 
                         🎓
                         ${doctor.degree || "Qualification N/A"}
@@ -3213,7 +3213,6 @@ function DoctorSection(doctors = []) {
 ========================================= */
 
 .doctor-info {
-
     margin-top: 8px;
 
     line-height: 1.4;

@@ -390,13 +390,15 @@ function DoctorProfile(doctor) {
 }
 
 
+
+
 </style>
 
 <div class="info-grid">
 
 <div class="info-card">
 <div class="info-label">🎓 Degree</div>
-<div class="info-value">
+<div  style=" display: none !important; " class="info-value">
 ${doctor.degree || "N/A"}
 </div>
 </div>
