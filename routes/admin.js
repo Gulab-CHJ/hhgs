@@ -14565,12 +14565,23 @@ body{
     }
 );
 
+const addDoctorPage = require("../pages/addpages/addDoctor");
+
 router.get("/add-doctor", async (req, res) => {
     try {
-        res.render("admin/add-doctor");
+
+        res.send(
+            addDoctorPage()
+        );
+
     } catch (error) {
-        console.error(error);
-        res.status(500).send("Server Error");
+
+        console.error("ADD DOCTOR PAGE ERROR:", error);
+
+        res.status(500).send(`
+            <h2>Server Error</h2>
+            <pre>${error.message}</pre>
+        `);
     }
 });
 // ======================================================
