@@ -15329,6 +15329,147 @@ router.get("/student/:id", async (req, res) => {
             );
     }
 });
+
+
+
+// =======================================
+// DELETE STUDENT PAYMENT
+// =======================================
+
+router.post(
+    "/delete-student-payment/:studentId/:paymentId",
+    async (req, res) => {
+
+        try {
+
+            const {
+                studentId,
+                paymentId
+            } = req.params;
+
+
+            const student =
+                await Student.findById(
+                    studentId
+                );
+
+
+            if (!student) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Student not found."
+                    );
+
+            }
+
+
+            if (
+                !Array.isArray(
+                    student.paymentHistory
+                )
+            ) {
+
+                student.paymentHistory =
+                    [];
+
+            }
+
+
+            const oldLength =
+                student.paymentHistory.length;
+
+
+            student.paymentHistory =
+                student.paymentHistory.filter(
+                    (payment) => {
+
+                        return (
+                            String(
+                                payment._id
+                            ) !==
+                            String(
+                                paymentId
+                            )
+                        );
+
+                    }
+                );
+
+
+            if (
+                student.paymentHistory.length ===
+                oldLength
+            ) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Payment not found."
+                    );
+
+            }
+
+
+            // अगर कोई payment नहीं बचा
+            if (
+                student.paymentHistory.length === 0
+            ) {
+
+                student.paymentStatus =
+                    "Pending";
+
+            }
+            else {
+
+                student.paymentStatus =
+                    "Success";
+
+            }
+
+
+            await student.save();
+
+
+            console.log(
+                "✅ STUDENT PAYMENT DELETED:",
+                {
+                    student:
+                        student.name,
+
+                    paymentId:
+                        paymentId
+                }
+            );
+
+
+            return res.redirect(
+                "/admin/edit-student/" +
+                studentId
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "DELETE STUDENT PAYMENT ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Payment delete failed: " +
+                    error.message
+                );
+
+        }
+
+    }
+);
+
 // ======================================================
 // EXPORT
 // ======================================================
