@@ -14584,6 +14584,42 @@ router.get("/add-doctor", async (req, res) => {
         `);
     }
 });
+
+router.get("/student/:id", async (req, res) => {
+    try {
+
+        const student = await Student.findById(
+            req.params.id
+        ).lean();
+
+        if (!student) {
+            return res
+                .status(404)
+                .send("Student Not Found");
+        }
+
+        return res.render(
+            "studentProfile",
+            {
+                student: student
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "STUDENT PROFILE ERROR:",
+            error
+        );
+
+        return res
+            .status(500)
+            .send(
+                "Student Profile Error: " +
+                error.message
+            );
+    }
+});
 // ======================================================
 // EXPORT
 // ======================================================

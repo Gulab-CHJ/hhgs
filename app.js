@@ -650,6 +650,117 @@ app.post(
     }
 );
 
+
+const StudentProfile =
+    require("./pages/studentProfile");
+
+const Student =
+    require("./models/Student");
+
+
+app.get(
+    "/student/:id",
+
+    async (req, res) => {
+
+        try {
+
+            const student =
+                await Student.findById(
+                    req.params.id
+                ).lean();
+
+
+            if (!student) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Student Not Found"
+                    );
+
+            }
+
+
+            return res.send(
+                StudentProfile(student)
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "STUDENT PROFILE ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Student Profile Error: " +
+                    error.message
+                );
+
+        }
+
+    }
+);
+
+
+const StudentIdCard =
+    require("./pages/studentIdCard");
+
+
+app.get(
+    "/student-id-card/:id",
+
+    async (req, res) => {
+
+        try {
+
+            const student =
+                await Student.findById(
+                    req.params.id
+                ).lean();
+
+
+            if (!student) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Student Not Found"
+                    );
+
+            }
+
+
+            return res.send(
+                StudentIdCard(student)
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "STUDENT ID CARD ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Student ID Card Error: " +
+                    error.message
+                );
+
+        }
+
+    }
+);
+
 // ===============================
 // SERVER START
 // ===============================
