@@ -12917,17 +12917,23 @@ router.get(
     (req, res) => {
 
         if (req.session) {
-            req.session.destroy(() => {
-                res.redirect(
-                    "/student-login"
-                );
-            });
+
+            req.session.destroy(
+                () => {
+
+                    return res.redirect(
+                        "/admin/student-login"
+                    );
+
+                }
+            );
 
             return;
+
         }
 
-        res.redirect(
-            "/student-login"
+        return res.redirect(
+            "/admin/student-login"
         );
 
     }
