@@ -18,6 +18,36 @@ module.exports = function StudentIdCard(student) {
         student?.phone ||
         "N/A";
 
+        const maskedMobile = (() => {
+
+    const number =
+        String(mobile || "")
+            .replace(/\D/g, "");
+
+    if (number.length >= 10) {
+
+        return (
+            number.slice(0, 4) +
+            "****" +
+            number.slice(-2)
+        );
+
+    }
+
+    if (number.length > 4) {
+
+        return (
+            number.slice(0, 2) +
+            "****" +
+            number.slice(-2)
+        );
+
+    }
+
+    return "****";
+
+})();
+
     const image =
         student?.image || "";
 
@@ -467,7 +497,7 @@ module.exports = function StudentIdCard(student) {
                 </span>
 
                 <span class="value">
-                    ${mobile}
+                    ${maskedMobile}
                 </span>
 
             </div>
