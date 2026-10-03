@@ -12102,10 +12102,213 @@ router.get(
 );
 
 
-   router.post(
+//    router.post(
+//     "/edit-student/:id",
+
+//     // Multipart form और image दोनों parse होंगे
+//     upload.single("image"),
+
+//     async (req, res) => {
+
+//         try {
+
+//             const body =
+//                 req.body || {};
+
+
+//             console.log(
+//                 "STUDENT UPDATE BODY:",
+//                 body
+//             );
+
+//             console.log(
+//                 "STUDENT UPDATE IMAGE:",
+//                 req.file || "No new image"
+//             );
+
+
+//             const student =
+//                 await Student.findById(
+//                     req.params.id
+//                 );
+
+
+//             if (!student) {
+
+//                 return res
+//                     .status(404)
+//                     .send(
+//                         "Student not found."
+//                     );
+
+//             }
+
+
+//             const name =
+//                 String(
+//                     body.name || ""
+//                 ).trim();
+
+//             const mobile =
+//                 String(
+//                     body.mobile || ""
+//                 ).trim();
+
+//             const course =
+//                 String(
+//                     body.course || ""
+//                 ).trim();
+
+//             const password =
+//                 String(
+//                     body.password || ""
+//                 ).trim();
+
+
+//             if (!name) {
+
+//                 return res
+//                     .status(400)
+//                     .send(
+//                         "Student name is required."
+//                     );
+
+//             }
+
+
+//             if (!mobile) {
+
+//                 return res
+//                     .status(400)
+//                     .send(
+//                         "Mobile number is required."
+//                     );
+
+//             }
+
+
+//             if (!course) {
+
+//                 return res
+//                     .status(400)
+//                     .send(
+//                         "Class or course is required."
+//                     );
+
+//             }
+
+
+//             student.name = name;
+//             student.mobile = mobile;
+//             student.course = course;
+
+
+//             if (
+//                 body.age !== undefined &&
+//                 body.age !== ""
+//             ) {
+
+//                 const age =
+//                     Number(body.age);
+
+//                 if (!Number.isNaN(age)) {
+//                     student.age = age;
+//                 }
+
+//             }
+
+
+//             if (body.plan) {
+
+//                 student.plan =
+//                     String(body.plan).trim();
+
+//             }
+
+
+//             if (
+//                 body.amount !== undefined &&
+//                 body.amount !== ""
+//             ) {
+
+//                 const amount =
+//                     Number(body.amount);
+
+//                 if (!Number.isNaN(amount)) {
+//                     student.amount = amount;
+//                 }
+
+//             }
+
+
+//             if (body.paymentStatus) {
+
+//                 student.paymentStatus =
+//                     body.paymentStatus === "Success"
+//                         ? "Success"
+//                         : "Pending";
+
+//             }
+
+
+//             // खाली password भेजने पर पुराना password रहेगा
+//             if (password) {
+
+//                 student.password =
+//                     password;
+
+//             }
+
+
+//             // नई image चुनी गई हो तभी image बदलेगी
+//             if (req.file) {
+
+//     student.image =
+//         req.file.path ||
+//         (
+//             "/uploads/students/" +
+//             req.file.filename
+//         );
+
+// }
+
+
+//             await student.save();
+
+
+//             console.log(
+//                 "✅ STUDENT UPDATED:",
+//                 student._id
+//             );
+
+
+//             return res.redirect(
+//                 "/admin/manage-students"
+//             );
+
+//         } catch (error) {
+
+//             console.error(
+//                 "UPDATE STUDENT ERROR:",
+//                 error
+//             );
+
+//             return res
+//                 .status(500)
+//                 .send(
+//                     "Student update failed: " +
+//                     error.message
+//                 );
+
+//         }
+
+//     }
+// );
+
+
+router.post(
     "/edit-student/:id",
 
-    // Multipart form और image दोनों parse होंगे
     upload.single("image"),
 
     async (req, res) => {
@@ -12119,11 +12322,6 @@ router.get(
             console.log(
                 "STUDENT UPDATE BODY:",
                 body
-            );
-
-            console.log(
-                "STUDENT UPDATE IMAGE:",
-                req.file || "No new image"
             );
 
 
@@ -12144,20 +12342,27 @@ router.get(
             }
 
 
+            // =====================================
+            // BASIC INFORMATION
+            // =====================================
+
             const name =
                 String(
                     body.name || ""
                 ).trim();
+
 
             const mobile =
                 String(
                     body.mobile || ""
                 ).trim();
 
+
             const course =
                 String(
                     body.course || ""
                 ).trim();
+
 
             const password =
                 String(
@@ -12198,10 +12403,19 @@ router.get(
             }
 
 
-            student.name = name;
-            student.mobile = mobile;
-            student.course = course;
+            student.name =
+                name;
 
+            student.mobile =
+                mobile;
+
+            student.course =
+                course;
+
+
+            // =====================================
+            // AGE
+            // =====================================
 
             if (
                 body.age !== undefined &&
@@ -12209,22 +12423,41 @@ router.get(
             ) {
 
                 const age =
-                    Number(body.age);
+                    Number(
+                        body.age
+                    );
 
-                if (!Number.isNaN(age)) {
-                    student.age = age;
+                if (
+                    !Number.isNaN(
+                        age
+                    )
+                ) {
+
+                    student.age =
+                        age;
+
                 }
 
             }
 
 
+            // =====================================
+            // PLAN
+            // =====================================
+
             if (body.plan) {
 
                 student.plan =
-                    String(body.plan).trim();
+                    String(
+                        body.plan
+                    ).trim();
 
             }
 
+
+            // =====================================
+            // PLAN AMOUNT
+            // =====================================
 
             if (
                 body.amount !== undefined &&
@@ -12232,26 +12465,45 @@ router.get(
             ) {
 
                 const amount =
-                    Number(body.amount);
+                    Number(
+                        body.amount
+                    );
 
-                if (!Number.isNaN(amount)) {
-                    student.amount = amount;
+                if (
+                    !Number.isNaN(
+                        amount
+                    )
+                ) {
+
+                    student.amount =
+                        amount;
+
                 }
 
             }
 
 
-            if (body.paymentStatus) {
+            // =====================================
+            // PAYMENT STATUS
+            // =====================================
+
+            if (
+                body.paymentStatus
+            ) {
 
                 student.paymentStatus =
-                    body.paymentStatus === "Success"
+                    body.paymentStatus ===
+                    "Success"
                         ? "Success"
                         : "Pending";
 
             }
 
 
-            // खाली password भेजने पर पुराना password रहेगा
+            // =====================================
+            // PASSWORD
+            // =====================================
+
             if (password) {
 
                 student.password =
@@ -12260,18 +12512,199 @@ router.get(
             }
 
 
-            // नई image चुनी गई हो तभी image बदलेगी
+            // =====================================
+            // IMAGE
+            // =====================================
+
             if (req.file) {
 
-    student.image =
-        req.file.path ||
-        (
-            "/uploads/students/" +
-            req.file.filename
-        );
+                student.image =
+                    req.file.path ||
+                    (
+                        "/uploads/students/" +
+                        req.file.filename
+                    );
 
-}
+            }
 
+
+            // =====================================
+            // PAYMENT HISTORY
+            // =====================================
+
+            const paymentMonthRaw =
+                String(
+                    body.paymentMonth || ""
+                ).trim();
+
+
+            const paymentAmount =
+                Number(
+                    body.paymentAmount || 0
+                );
+
+
+            const paymentNote =
+                String(
+                    body.paymentNote || ""
+                ).trim();
+
+
+            let paymentMonth =
+                "";
+
+
+            if (
+                paymentMonthRaw
+            ) {
+
+                const parts =
+                    paymentMonthRaw
+                        .split("-");
+
+
+                const year =
+                    Number(
+                        parts[0]
+                    );
+
+
+                const monthNumber =
+                    Number(
+                        parts[1]
+                    );
+
+
+                const monthNames = [
+
+                    "January",
+                    "February",
+                    "March",
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December"
+
+                ];
+
+
+                if (
+                    year &&
+                    monthNumber >= 1 &&
+                    monthNumber <= 12
+                ) {
+
+                    paymentMonth =
+                        monthNames[
+                            monthNumber - 1
+                        ] +
+                        " " +
+                        year;
+
+                }
+
+            }
+
+
+            let paidDate =
+                new Date();
+
+
+            if (
+                body.paidDate
+            ) {
+
+                const selectedDate =
+                    new Date(
+                        body.paidDate +
+                        "T00:00:00"
+                    );
+
+
+                if (
+                    !Number.isNaN(
+                        selectedDate.getTime()
+                    )
+                ) {
+
+                    paidDate =
+                        selectedDate;
+
+                }
+
+            }
+
+
+            // =====================================
+            // ADD PAYMENT ONLY IF ENTERED
+            // =====================================
+
+            if (
+                paymentMonth &&
+                paymentAmount > 0
+            ) {
+
+                if (
+                    !Array.isArray(
+                        student.paymentHistory
+                    )
+                ) {
+
+                    student.paymentHistory =
+                        [];
+
+                }
+
+
+                student.paymentHistory.push({
+
+                    month:
+                        paymentMonth,
+
+                    amount:
+                        paymentAmount,
+
+                    paidDate:
+                        paidDate,
+
+                    note:
+                        paymentNote
+
+                });
+
+
+                student.paymentStatus =
+                    "Success";
+
+
+                console.log(
+                    "✅ STUDENT PAYMENT ADDED:",
+                    {
+                        student:
+                            student.name,
+
+                        month:
+                            paymentMonth,
+
+                        amount:
+                            paymentAmount,
+
+                        paidDate:
+                            paidDate
+                    }
+                );
+
+            }
+
+
+            // =====================================
+            // SAVE STUDENT
+            // =====================================
 
             await student.save();
 
@@ -12286,12 +12719,14 @@ router.get(
                 "/admin/manage-students"
             );
 
+
         } catch (error) {
 
             console.error(
                 "UPDATE STUDENT ERROR:",
                 error
             );
+
 
             return res
                 .status(500)
@@ -12304,6 +12739,7 @@ router.get(
 
     }
 );
+
 router.post(
     "/update-student-payment/:id",
     async (req, res) => {
