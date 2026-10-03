@@ -11648,6 +11648,9 @@ router.get("/student-registration", (req, res) => {
 });
 
 
+
+
+
 router.post(
     "/student-registration",
     async (req, res) => {
@@ -11734,6 +11737,178 @@ router.post(
                 paymentStatus: "Pending"
 
             });
+
+            // =======================================
+// ADD STUDENT PAYMENT HISTORY
+// =======================================
+
+const paymentMonthRaw =
+    String(
+        body.paymentMonth || ""
+    ).trim();
+
+
+const paymentAmount =
+    Number(
+        body.paymentAmount || 0
+    );
+
+
+const paymentNote =
+    String(
+        body.paymentNote || ""
+    ).trim();
+
+
+let paymentMonth =
+    "";
+
+
+if (paymentMonthRaw) {
+
+    const parts =
+        paymentMonthRaw.split("-");
+
+    const year =
+        Number(parts[0]);
+
+    const monthNumber =
+        Number(parts[1]);
+
+
+    if (
+        year &&
+        monthNumber >= 1 &&
+        monthNumber <= 12
+    ) {
+
+        const monthNames = [
+
+            "January",
+
+            "February",
+
+            "March",
+
+            "April",
+
+            "May",
+
+            "June",
+
+            "July",
+
+            "August",
+
+            "September",
+
+            "October",
+
+            "November",
+
+            "December"
+
+        ];
+
+
+        paymentMonth =
+            monthNames[
+                monthNumber - 1
+            ] +
+            " " +
+            year;
+
+    }
+
+}
+
+
+let paidDate =
+    new Date();
+
+
+if (body.paidDate) {
+
+    const selectedDate =
+        new Date(
+            body.paidDate +
+            "T00:00:00"
+        );
+
+
+    if (
+        !Number.isNaN(
+            selectedDate.getTime()
+        )
+    ) {
+
+        paidDate =
+            selectedDate;
+
+    }
+
+}
+
+
+// Add only when month + amount entered
+if (
+    paymentMonth &&
+    paymentAmount > 0
+) {
+
+
+    if (
+        !Array.isArray(
+            student.paymentHistory
+        )
+    ) {
+
+        student.paymentHistory =
+            [];
+
+    }
+
+
+    student.paymentHistory.push({
+
+        month:
+            paymentMonth,
+
+        amount:
+            paymentAmount,
+
+        paidDate:
+            paidDate,
+
+        note:
+            paymentNote
+
+    });
+
+
+    // Latest payment successful
+    student.paymentStatus =
+        "Success";
+
+
+    console.log(
+        "✅ STUDENT PAYMENT ADDED:",
+        {
+            student:
+                student.name,
+
+            month:
+                paymentMonth,
+
+            amount:
+                paymentAmount,
+
+            paidDate:
+                paidDate
+        }
+    );
+
+}
 
 
             await student.save();
