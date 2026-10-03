@@ -12347,40 +12347,132 @@ router.post(
 
 const StudentLogin = require("../pages/studentLogin");
 const StudentInformation = require("../pages/studentInformation");
-router.post(
+
+router.get(
     "/student-login",
-    async (req, res) => {
+    (req, res) => {
 
-        const rollNo =
-            String(req.body.rollNo || "")
-                .trim()
-                .toUpperCase();
-
-        const student =
-            await Student.findOne({
-                rollNo: rollNo
-            });
-
-        if (!student) {
-            return res.send(
-                StudentLogin("Roll Number not found.")
-            );
-        }
-
-        if (student.password !== req.body.password) {
-            return res.send(
-                StudentLogin("Wrong password.")
-            );
-        }
-
-        res.send(
-    StudentInformation(student)
-);
+        return res.send(
+            StudentLogin()
+        );
 
     }
 );
 
+// router.post(
+//     "/student-login",
+//     async (req, res) => {
 
+//         const rollNo =
+//             String(req.body.rollNo || "")
+//                 .trim()
+//                 .toUpperCase();
+
+//         const student =
+//             await Student.findOne({
+//                 rollNo: rollNo
+//             });
+
+//         if (!student) {
+//             return res.send(
+//                 StudentLogin("Roll Number not found.")
+//             );
+//         }
+
+//         if (student.password !== req.body.password) {
+//             return res.send(
+//                 StudentLogin("Wrong password.")
+//             );
+//         }
+
+//         res.send(
+//     StudentInformation(student)
+// );
+
+//     }
+// );
+
+router.post(
+    "/student-login",
+    async (req, res) => {
+
+        try {
+
+            const rollNo =
+                String(
+                    req.body.rollNo || ""
+                )
+                .trim()
+                .toUpperCase();
+
+
+            const password =
+                String(
+                    req.body.password || ""
+                ).trim();
+
+
+            const student =
+                await Student.findOne({
+                    rollNo: rollNo
+                });
+
+
+            if (!student) {
+
+                return res.send(
+                    StudentLogin(
+                        "Roll Number not found."
+                    )
+                );
+
+            }
+
+
+            if (
+                String(student.password || "") !==
+                password
+            ) {
+
+                return res.send(
+                    StudentLogin(
+                        "Wrong password."
+                    )
+                );
+
+            }
+
+
+            req.session.studentId =
+                String(student._id);
+
+
+            return res.send(
+                StudentInformation(
+                    student
+                )
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "STUDENT LOGIN ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    "Student Login Error: " +
+                    error.message
+                );
+
+        }
+
+    }
+);
 
 
 
