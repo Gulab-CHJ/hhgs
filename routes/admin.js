@@ -14246,217 +14246,1562 @@ router.post(
 const path = require("path");
 const fs = require("fs");
 
-router.get("/student-receipt/:id", async (req, res) => {
-    try {
-        const student = await Student.findById(
-            req.params.id
-        ).lean();
+// router.get("/student-receipt/:id", async (req, res) => {
+//     try {
+//         const student = await Student.findById(
+//             req.params.id
+//         ).lean();
 
-        if (!student) {
-            return res.status(404).send("Student not found");
-        }
+//         if (!student) {
+//             return res.status(404).send("Student not found");
+//         }
 
-        const rollNumber =
-            student.roll ||
-            student.rollNo ||
-            "-";
+//         const rollNumber =
+//             student.roll ||
+//             student.rollNo ||
+//             "-";
 
-        const mobile =
-            student.mobile ||
-            student.phone ||
-            "-";
+//         const mobile =
+//             student.mobile ||
+//             student.phone ||
+//             "-";
 
-        const course =
-            student.className ||
-            student.course ||
-            "-";
+//         const course =
+//             student.className ||
+//             student.course ||
+//             "-";
 
-        const receiptNo = "GSR" + String(student._id)
-            .slice(-6)
-            .toUpperCase();
+//         const receiptNo = "GSR" + String(student._id)
+//             .slice(-6)
+//             .toUpperCase();
 
-        const date = student.createdAt
-            ? new Date(student.createdAt)
-                .toLocaleDateString("en-GB")
-            : new Date().toLocaleDateString("en-GB");
+//         const date = student.createdAt
+//             ? new Date(student.createdAt)
+//                 .toLocaleDateString("en-GB")
+//             : new Date().toLocaleDateString("en-GB");
 
-        res.setHeader("Content-Type", "application/pdf");
+//         res.setHeader("Content-Type", "application/pdf");
 
-        res.setHeader(
-            "Content-Disposition",
-            `attachment; filename=Receipt-${rollNumber}.pdf`
-        );
+//         res.setHeader(
+//             "Content-Disposition",
+//             `attachment; filename=Receipt-${rollNumber}.pdf`
+//         );
 
-        const pdf = new PDFDocument({
-            size: [595, 425],
-            margin: 0
-        });
+//         const pdf = new PDFDocument({
+//             size: [595, 425],
+//             margin: 0
+//         });
 
-        pdf.pipe(res);
+//         pdf.pipe(res);
 
-        const width = pdf.page.width;
-        const height = pdf.page.height;
+//         const width = pdf.page.width;
+//         const height = pdf.page.height;
 
-        // अपने logo को public/images/logo.png में रखें
-        const logoPath = path.join(
-            process.cwd(),
-            "public",
-            "images",
-            "GS LOGO.png"
-        );
+//         // अपने logo को public/images/logo.png में रखें
+//         const logoPath = path.join(
+//             process.cwd(),
+//             "public",
+//             "images",
+//             "GS LOGO.png"
+//         );
 
-        pdf.lineWidth(1)
-            .strokeColor("#0d6efd")
-            .rect(8, 8, width - 16, height - 16)
-            .stroke();
+//         pdf.lineWidth(1)
+//             .strokeColor("#0d6efd")
+//             .rect(8, 8, width - 16, height - 16)
+//             .stroke();
 
-        // ==================================================
-        // WEBSITE LOGO
-        // ==================================================
-        if (fs.existsSync(logoPath)) {
-            pdf.image(
-                logoPath,
-                42,
-                18,
-                {
-                    fit: [60, 60]
+//         // ==================================================
+//         // WEBSITE LOGO
+//         // ==================================================
+//         if (fs.existsSync(logoPath)) {
+//             pdf.image(
+//                 logoPath,
+//                 42,
+//                 18,
+//                 {
+//                     fit: [60, 60]
+//                 }
+//             );
+//         }
+
+//         // ==================================================
+//         // HEADER
+//         // ==================================================
+//         pdf.font("Helvetica-Bold")
+//             .fontSize(20)
+//             .fillColor("#0d6efd")
+//             .text(
+//                 "GLOBAL SERVICES",
+//                 110,
+//                 26,
+//                 {
+//                     width: 435,
+//                     align: "center"
+//                 }
+//             );
+
+//         pdf.font("Helvetica-Bold")
+//             .fontSize(9)
+//             .fillColor("#198754")
+//             .text(
+//                 "SAFE & SECURE Services",
+//                 110,
+//                 52,
+//                 {
+//                     width: 435,
+//                     align: "center"
+//                 }
+//             );
+
+//         pdf.font("Helvetica-Bold")
+//             .fontSize(13)
+//             .fillColor("#000")
+//             .text(
+//                 "STUDENT REGISTRATION RECEIPT",
+//                 25,
+//                 75,
+//                 {
+//                     width: width - 50,
+//                     align: "center"
+//                 }
+//             );
+
+//         pdf.lineWidth(0.7)
+//             .strokeColor("#999")
+//             .moveTo(28, 99)
+//             .lineTo(width - 28, 99)
+//             .stroke();
+
+//         const left = 45;
+//         const labelX = 45;
+//         const valueX = 220;
+//         let y = 116;
+
+//         const details = [
+//             ["Receipt No.", receiptNo],
+//             ["Date", date],
+//             ["Student Name", student.name || "-"],
+//             ["Roll Number", rollNumber],
+//             ["Mobile Number", mobile],
+//             ["Class / Course", course],
+//             ["Selected Plan", student.plan || "-"],
+//             [
+//                 "Amount",
+//                 `Rs.${Number(student.amount || 0).toFixed(2)}`
+//             ],
+//             [
+//                 "Payment Status",
+//                 student.paymentStatus || "Pending"
+//             ]
+//         ];
+
+//         details.forEach(([label, value]) => {
+//             pdf.font("Helvetica-Bold")
+//                 .fontSize(10)
+//                 .fillColor("#123b85")
+//                 .text(`${label} :`, labelX, y);
+
+//             pdf.font("Helvetica")
+//                 .fontSize(10)
+//                 .fillColor("#000")
+//                 .text(String(value), valueX, y);
+
+//             pdf.strokeColor("#e5e7eb")
+//                 .lineWidth(0.4)
+//                 .moveTo(left, y + 18)
+//                 .lineTo(width - 45, y + 18)
+//                 .stroke();
+
+//             y += 25;
+//         });
+
+//         pdf.lineWidth(0.7)
+//             .strokeColor("#999")
+//             .moveTo(28, 348)
+//             .lineTo(width - 28, 348)
+//             .stroke();
+
+//         pdf.font("Helvetica-Bold")
+//             .fontSize(11)
+//             .fillColor("#0d6efd")
+//             .text(
+//                 "GLOBAL SERVICES",
+//                 25,
+//                 363,
+//                 {
+//                     width: width - 50,
+//                     align: "center"
+//                 }
+//             );
+
+//         pdf.font("Helvetica")
+//             .fontSize(8)
+//             .fillColor("#555")
+//             .text(
+//                 "This is a computer generated registration receipt.",
+//                 25,
+//                 380,
+//                 {
+//                     width: width - 50,
+//                     align: "center"
+//                 }
+//             );
+
+//         pdf.end();
+
+//     } catch (error) {
+//         console.log("Student receipt error:", error);
+
+//         return res.status(500).send(
+//             "Receipt download failed: " + error.message
+//         );
+//     }
+// });
+
+
+// router.get(
+//     "/student-receipt/:id",
+//     async (req, res) => {
+
+//         try {
+
+//             const student =
+//                 await Student.findById(
+//                     req.params.id
+//                 ).lean();
+
+
+//             if (!student) {
+//                 return res
+//                     .status(404)
+//                     .send("Student not found");
+//             }
+
+
+//             const rollNumber =
+//                 student.roll ||
+//                 student.rollNo ||
+//                 "-";
+
+
+//             const mobile =
+//                 student.mobile ||
+//                 student.phone ||
+//                 "-";
+
+
+//             const course =
+//                 student.className ||
+//                 student.course ||
+//                 "-";
+
+
+//             // =============================
+//             // PAYMENT HISTORY
+//             // =============================
+
+//             const paymentHistory =
+//                 Array.isArray(
+//                     student.paymentHistory
+//                 )
+//                     ? student.paymentHistory
+//                     : [];
+
+
+//             const sortedPayments =
+//                 paymentHistory
+//                     .slice()
+//                     .sort(
+//                         (a, b) =>
+//                             new Date(
+//                                 b.paidDate || 0
+//                             ) -
+//                             new Date(
+//                                 a.paidDate || 0
+//                             )
+//                     );
+
+
+//             const latestPayment =
+//                 sortedPayments[0] ||
+//                 null;
+
+
+//             const totalPaid =
+//                 paymentHistory.reduce(
+//                     (
+//                         total,
+//                         payment
+//                     ) => {
+
+//                         return (
+//                             total +
+//                             Number(
+//                                 payment.amount || 0
+//                             )
+//                         );
+
+//                     },
+//                     0
+//                 );
+
+
+//             const paymentMonth =
+//                 latestPayment
+//                     ? latestPayment.month || "-"
+//                     : "-";
+
+
+//             const paymentAmount =
+//                 latestPayment
+//                     ? Number(
+//                         latestPayment.amount || 0
+//                     )
+//                     : 0;
+
+
+//             const paymentDate =
+//                 latestPayment &&
+//                 latestPayment.paidDate
+
+//                     ? new Date(
+//                         latestPayment.paidDate
+//                     ).toLocaleDateString(
+//                         "en-GB"
+//                     )
+
+//                     : "-";
+
+
+//             const paymentNote =
+//                 latestPayment
+//                     ? latestPayment.note || "-"
+//                     : "-";
+
+
+//             const receiptNo =
+//                 "GSR" +
+//                 String(
+//                     latestPayment?._id ||
+//                     student._id
+//                 )
+//                     .slice(-6)
+//                     .toUpperCase();
+
+
+//             // =============================
+//             // RESPONSE
+//             // =============================
+
+//             res.setHeader(
+//                 "Content-Type",
+//                 "application/pdf"
+//             );
+
+
+//             res.setHeader(
+//                 "Content-Disposition",
+//                 `attachment; filename=Receipt-${rollNumber}.pdf`
+//             );
+
+
+//             const pdf =
+//                 new PDFDocument({
+
+//                     size:
+//                         [595, 500],
+
+//                     margin:
+//                         0
+
+//                 });
+
+
+//             pdf.pipe(res);
+
+
+//             const width =
+//                 pdf.page.width;
+
+
+//             const height =
+//                 pdf.page.height;
+
+
+//             // =============================
+//             // LOGO
+//             // =============================
+
+//             const logoPath =
+//                 path.join(
+//                     process.cwd(),
+//                     "public",
+//                     "images",
+//                     "GS LOGO.png"
+//                 );
+
+
+//             // =============================
+//             // BORDER
+//             // =============================
+
+//             pdf
+//                 .lineWidth(1)
+//                 .strokeColor("#16a34a")
+//                 .rect(
+//                     8,
+//                     8,
+//                     width - 16,
+//                     height - 16
+//                 )
+//                 .stroke();
+
+
+//             if (
+//                 fs.existsSync(
+//                     logoPath
+//                 )
+//             ) {
+
+//                 pdf.image(
+//                     logoPath,
+//                     42,
+//                     18,
+//                     {
+//                         fit: [60, 60]
+//                     }
+//                 );
+
+//             }
+
+
+//             // =============================
+//             // HEADER
+//             // =============================
+
+//             pdf
+//                 .font("Helvetica-Bold")
+//                 .fontSize(20)
+//                 .fillColor("#15803d")
+//                 .text(
+//                     "GLOBAL SMART STUDY",
+//                     110,
+//                     26,
+//                     {
+//                         width: 435,
+//                         align: "center"
+//                     }
+//                 );
+
+
+//             pdf
+//                 .font("Helvetica-Bold")
+//                 .fontSize(9)
+//                 .fillColor("#198754")
+//                 .text(
+//                     "SAFE & SECURE",
+//                     110,
+//                     52,
+//                     {
+//                         width: 435,
+//                         align: "center"
+//                     }
+//                 );
+
+
+//             pdf
+//                 .font("Helvetica-Bold")
+//                 .fontSize(13)
+//                 .fillColor("#000")
+//                 .text(
+//                     "STUDENT PAYMENT RECEIPT",
+//                     25,
+//                     78,
+//                     {
+//                         width: width - 50,
+//                         align: "center"
+//                     }
+//                 );
+
+
+//             pdf
+//                 .lineWidth(0.7)
+//                 .strokeColor("#999")
+//                 .moveTo(28, 103)
+//                 .lineTo(width - 28, 103)
+//                 .stroke();
+
+
+//             // =============================
+//             // DETAILS
+//             // =============================
+
+//             const left =
+//                 45;
+
+//             const labelX =
+//                 45;
+
+//             const valueX =
+//                 220;
+
+//             let y =
+//                 120;
+
+
+//             const details = [
+
+//                 [
+//                     "Receipt No.",
+//                     receiptNo
+//                 ],
+
+//                 [
+//                     "Student Name",
+//                     student.name || "-"
+//                 ],
+
+//                 [
+//                     "Roll Number",
+//                     rollNumber
+//                 ],
+
+//                 [
+//                     "Mobile Number",
+//                     mobile
+//                 ],
+
+//                 [
+//                     "Class / Course",
+//                     course
+//                 ],
+
+//                 [
+//                     "Selected Plan",
+//                     student.plan || "-"
+//                 ],
+
+//                 [
+//                     "Plan Fee",
+//                     `Rs. ${Number(
+//                         student.amount || 0
+//                     ).toFixed(2)}`
+//                 ],
+
+//                 [
+//                     "Payment Month",
+//                     paymentMonth
+//                 ],
+
+//                 [
+//                     "Payment Date",
+//                     paymentDate
+//                 ],
+
+//                 [
+//                     "Paid Amount",
+//                     `Rs. ${paymentAmount.toFixed(2)}`
+//                 ],
+
+//                 [
+//                     "Total Paid",
+//                     `Rs. ${totalPaid.toFixed(2)}`
+//                 ],
+
+//                 [
+//                     "Payment Note",
+//                     paymentNote
+//                 ],
+
+//                 [
+//                     "Payment Status",
+//                     student.paymentStatus ||
+//                     "Pending"
+//                 ]
+
+//             ];
+
+
+//             details.forEach(
+//                 (
+//                     [
+//                         label,
+//                         value
+//                     ]
+//                 ) => {
+
+//                     pdf
+//                         .font("Helvetica-Bold")
+//                         .fontSize(9.5)
+//                         .fillColor("#123b85")
+//                         .text(
+//                             `${label} :`,
+//                             labelX,
+//                             y
+//                         );
+
+
+//                     pdf
+//                         .font("Helvetica")
+//                         .fontSize(9.5)
+//                         .fillColor("#000")
+//                         .text(
+//                             String(value),
+//                             valueX,
+//                             y,
+//                             {
+//                                 width:
+//                                     width -
+//                                     valueX -
+//                                     45
+//                             }
+//                         );
+
+
+//                     pdf
+//                         .strokeColor("#e5e7eb")
+//                         .lineWidth(0.4)
+//                         .moveTo(
+//                             left,
+//                             y + 17
+//                         )
+//                         .lineTo(
+//                             width - 45,
+//                             y + 17
+//                         )
+//                         .stroke();
+
+
+//                     y +=
+//                         23;
+
+//                 }
+//             );
+
+
+//             // =============================
+//             // PAYMENT MESSAGE
+//             // =============================
+
+//             y +=
+//                 8;
+
+
+//             if (
+//                 latestPayment
+//             ) {
+
+//                 pdf
+//                     .roundedRect(
+//                         45,
+//                         y,
+//                         width - 90,
+//                         43,
+//                         6
+//                     )
+//                     .fillAndStroke(
+//                         "#dcfce7",
+//                         "#16a34a"
+//                     );
+
+
+//                 pdf
+//                     .font("Helvetica-Bold")
+//                     .fontSize(12)
+//                     .fillColor("#15803d")
+//                     .text(
+//                         `PAYMENT RECEIVED - Rs. ${paymentAmount.toFixed(2)}`,
+//                         45,
+//                         y + 14,
+//                         {
+//                             width:
+//                                 width - 90,
+
+//                             align:
+//                                 "center"
+//                         }
+//                     );
+
+//             }
+//             else {
+
+//                 pdf
+//                     .roundedRect(
+//                         45,
+//                         y,
+//                         width - 90,
+//                         43,
+//                         6
+//                     )
+//                     .fillAndStroke(
+//                         "#fef3c7",
+//                         "#f59e0b"
+//                     );
+
+
+//                 pdf
+//                     .font("Helvetica-Bold")
+//                     .fontSize(12)
+//                     .fillColor("#92400e")
+//                     .text(
+//                         "NO PAYMENT RECORD FOUND",
+//                         45,
+//                         y + 14,
+//                         {
+//                             width:
+//                                 width - 90,
+
+//                             align:
+//                                 "center"
+//                         }
+//                     );
+
+//             }
+
+
+//             // =============================
+//             // FOOTER
+//             // =============================
+
+//             pdf
+//                 .font("Helvetica-Bold")
+//                 .fontSize(11)
+//                 .fillColor("#15803d")
+//                 .text(
+//                     "GLOBAL SMART STUDY",
+//                     25,
+//                     height - 55,
+//                     {
+//                         width:
+//                             width - 50,
+
+//                         align:
+//                             "center"
+//                     }
+//                 );
+
+
+//             pdf
+//                 .font("Helvetica")
+//                 .fontSize(8)
+//                 .fillColor("#555")
+//                 .text(
+//                     "This is a computer generated payment receipt.",
+//                     25,
+//                     height - 38,
+//                     {
+//                         width:
+//                             width - 50,
+
+//                         align:
+//                             "center"
+//                     }
+//                 );
+
+
+//             pdf.end();
+
+
+//         } catch (error) {
+
+//             console.log(
+//                 "Student receipt error:",
+//                 error
+//             );
+
+
+//             if (
+//                 !res.headersSent
+//             ) {
+
+//                 return res
+//                     .status(500)
+//                     .send(
+//                         "Receipt download failed: " +
+//                         error.message
+//                     );
+
+//             }
+
+//         }
+
+//     }
+// );
+
+
+
+router.get(
+    "/student-receipt/:id",
+    async (req, res) => {
+
+        try {
+
+            const student =
+                await Student.findById(
+                    req.params.id
+                ).lean();
+
+
+            if (!student) {
+
+                return res
+                    .status(404)
+                    .send(
+                        "Student not found"
+                    );
+
+            }
+
+
+            const rollNumber =
+                student.roll ||
+                student.rollNo ||
+                "-";
+
+
+            const mobile =
+                student.mobile ||
+                student.phone ||
+                "-";
+
+
+            // =====================================
+            // HIDE 4 DIGITS OF MOBILE
+            // Example: 7667164673 -> 7667****73
+            // =====================================
+
+            const maskedMobile = (() => {
+
+                const number =
+                    String(mobile || "")
+                        .replace(/\D/g, "");
+
+
+                if (
+                    number.length >= 10
+                ) {
+
+                    return (
+                        number.slice(0, 4) +
+                        "****" +
+                        number.slice(-2)
+                    );
+
                 }
-            );
-        }
 
-        // ==================================================
-        // HEADER
-        // ==================================================
-        pdf.font("Helvetica-Bold")
-            .fontSize(20)
-            .fillColor("#0d6efd")
-            .text(
-                "GLOBAL SERVICES",
-                110,
-                26,
-                {
-                    width: 435,
-                    align: "center"
+
+                if (
+                    number.length > 4
+                ) {
+
+                    return (
+                        number.slice(0, 2) +
+                        "****" +
+                        number.slice(-2)
+                    );
+
                 }
+
+
+                return "****";
+
+            })();
+
+
+            const course =
+                student.className ||
+                student.course ||
+                "-";
+
+
+            // =====================================
+            // PAYMENT HISTORY
+            // =====================================
+
+            const paymentHistory =
+                Array.isArray(
+                    student.paymentHistory
+                )
+                    ? student.paymentHistory
+                    : [];
+
+
+            const sortedPayments =
+                paymentHistory
+                    .slice()
+                    .sort(
+                        (a, b) => {
+
+                            return (
+                                new Date(
+                                    b.paidDate || 0
+                                ) -
+                                new Date(
+                                    a.paidDate || 0
+                                )
+                            );
+
+                        }
+                    );
+
+
+            const latestPayment =
+                sortedPayments[0] ||
+                null;
+
+
+            const totalPaid =
+                paymentHistory.reduce(
+                    (
+                        total,
+                        payment
+                    ) => {
+
+                        return (
+                            total +
+                            Number(
+                                payment.amount || 0
+                            )
+                        );
+
+                    },
+                    0
+                );
+
+
+            const paymentMonth =
+                latestPayment
+                    ? latestPayment.month || "-"
+                    : "-";
+
+
+            const paymentAmount =
+                latestPayment
+                    ? Number(
+                        latestPayment.amount || 0
+                    )
+                    : 0;
+
+
+            const paymentDate =
+                latestPayment &&
+                latestPayment.paidDate
+
+                    ? new Date(
+                        latestPayment.paidDate
+                    ).toLocaleDateString(
+                        "en-GB"
+                    )
+
+                    : "-";
+
+
+            const paymentNote =
+                latestPayment
+                    ? latestPayment.note || "-"
+                    : "-";
+
+
+            const receiptNo =
+                "GSR" +
+                String(
+                    latestPayment?._id ||
+                    student._id
+                )
+                    .slice(-6)
+                    .toUpperCase();
+
+
+            // =====================================
+            // PDF RESPONSE
+            // =====================================
+
+            res.setHeader(
+                "Content-Type",
+                "application/pdf"
             );
 
-        pdf.font("Helvetica-Bold")
-            .fontSize(9)
-            .fillColor("#198754")
-            .text(
-                "SAFE & SECURE Services",
-                110,
-                52,
-                {
-                    width: 435,
-                    align: "center"
-                }
+
+            res.setHeader(
+                "Content-Disposition",
+                `attachment; filename=Receipt-${rollNumber}.pdf`
             );
 
-        pdf.font("Helvetica-Bold")
-            .fontSize(13)
-            .fillColor("#000")
-            .text(
-                "STUDENT REGISTRATION RECEIPT",
-                25,
-                75,
-                {
-                    width: width - 50,
-                    align: "center"
-                }
-            );
 
-        pdf.lineWidth(0.7)
-            .strokeColor("#999")
-            .moveTo(28, 99)
-            .lineTo(width - 28, 99)
-            .stroke();
+            const pdf =
+                new PDFDocument({
 
-        const left = 45;
-        const labelX = 45;
-        const valueX = 220;
-        let y = 116;
+                    size:
+                        "A4",
 
-        const details = [
-            ["Receipt No.", receiptNo],
-            ["Date", date],
-            ["Student Name", student.name || "-"],
-            ["Roll Number", rollNumber],
-            ["Mobile Number", mobile],
-            ["Class / Course", course],
-            ["Selected Plan", student.plan || "-"],
-            [
-                "Amount",
-                `Rs.${Number(student.amount || 0).toFixed(2)}`
-            ],
-            [
-                "Payment Status",
-                student.paymentStatus || "Pending"
-            ]
-        ];
+                    margin:
+                        0
 
-        details.forEach(([label, value]) => {
-            pdf.font("Helvetica-Bold")
-                .fontSize(10)
-                .fillColor("#123b85")
-                .text(`${label} :`, labelX, y);
+                });
 
-            pdf.font("Helvetica")
-                .fontSize(10)
-                .fillColor("#000")
-                .text(String(value), valueX, y);
 
-            pdf.strokeColor("#e5e7eb")
-                .lineWidth(0.4)
-                .moveTo(left, y + 18)
-                .lineTo(width - 45, y + 18)
+            pdf.pipe(res);
+
+
+            const width =
+                pdf.page.width;
+
+
+            const height =
+                pdf.page.height;
+
+
+            // =====================================
+            // BORDER
+            // =====================================
+
+            pdf
+                .lineWidth(1.2)
+                .strokeColor("#16a34a")
+                .rect(
+                    15,
+                    15,
+                    width - 30,
+                    height - 30
+                )
                 .stroke();
 
-            y += 25;
-        });
 
-        pdf.lineWidth(0.7)
-            .strokeColor("#999")
-            .moveTo(28, 348)
-            .lineTo(width - 28, 348)
-            .stroke();
+            // =====================================
+            // LOGO
+            // =====================================
 
-        pdf.font("Helvetica-Bold")
-            .fontSize(11)
-            .fillColor("#0d6efd")
-            .text(
-                "GLOBAL SERVICES",
-                25,
-                363,
-                {
-                    width: width - 50,
-                    align: "center"
-                }
+            const logoPath =
+                path.join(
+                    process.cwd(),
+                    "public",
+                    "images",
+                    "GS LOGO.png"
+                );
+
+
+            if (
+                fs.existsSync(
+                    logoPath
+                )
+            ) {
+
+                pdf.image(
+                    logoPath,
+                    40,
+                    32,
+                    {
+                        fit: [
+                            65,
+                            65
+                        ]
+                    }
+                );
+
+            }
+
+
+            // =====================================
+            // HEADER
+            // =====================================
+
+            pdf
+                .font(
+                    "Helvetica-Bold"
+                )
+                .fontSize(20)
+                .fillColor(
+                    "#15803d"
+                )
+                .text(
+                    "GLOBAL SMART STUDY",
+                    115,
+                    38,
+                    {
+                        width:
+                            width - 155,
+
+                        align:
+                            "center"
+                    }
+                );
+
+
+            pdf
+                .font(
+                    "Helvetica-Bold"
+                )
+                .fontSize(9)
+                .fillColor(
+                    "#64748b"
+                )
+                .text(
+                    "SAFE & SECURE",
+                    115,
+                    66,
+                    {
+                        width:
+                            width - 155,
+
+                        align:
+                            "center"
+                    }
+                );
+
+
+            pdf
+                .font(
+                    "Helvetica-Bold"
+                )
+                .fontSize(13)
+                .fillColor(
+                    "#111827"
+                )
+                .text(
+                    "STUDENT PAYMENT RECEIPT",
+                    40,
+                    100,
+                    {
+                        width:
+                            width - 80,
+
+                        align:
+                            "center"
+                    }
+                );
+
+
+            pdf
+                .strokeColor(
+                    "#cbd5e1"
+                )
+                .lineWidth(0.7)
+                .moveTo(
+                    35,
+                    126
+                )
+                .lineTo(
+                    width - 35,
+                    126
+                )
+                .stroke();
+
+
+            // =====================================
+            // STUDENT DETAILS
+            // =====================================
+
+            const labelX =
+                55;
+
+
+            const valueX =
+                215;
+
+
+            const valueWidth =
+                width -
+                valueX -
+                55;
+
+
+            let y =
+                145;
+
+
+            function addRow(
+                label,
+                value
+            ) {
+
+                const safeValue =
+                    value === null ||
+                    value === undefined
+                        ? "-"
+                        : String(value);
+
+
+                const labelHeight =
+                    pdf.heightOfString(
+                        label + " :",
+                        {
+                            width:
+                                140
+                        }
+                    );
+
+
+                const valueHeight =
+                    pdf.heightOfString(
+                        safeValue,
+                        {
+                            width:
+                                valueWidth
+                        }
+                    );
+
+
+                const rowHeight =
+                    Math.max(
+                        labelHeight,
+                        valueHeight,
+                        14
+                    ) + 14;
+
+
+                pdf
+                    .font(
+                        "Helvetica-Bold"
+                    )
+                    .fontSize(10)
+                    .fillColor(
+                        "#1e3a8a"
+                    )
+                    .text(
+                        label + " :",
+                        labelX,
+                        y,
+                        {
+                            width:
+                                140
+                        }
+                    );
+
+
+                pdf
+                    .font(
+                        "Helvetica"
+                    )
+                    .fontSize(10)
+                    .fillColor(
+                        "#111827"
+                    )
+                    .text(
+                        safeValue,
+                        valueX,
+                        y,
+                        {
+                            width:
+                                valueWidth,
+
+                            lineGap:
+                                2
+                        }
+                    );
+
+
+                pdf
+                    .strokeColor(
+                        "#e5e7eb"
+                    )
+                    .lineWidth(
+                        0.4
+                    )
+                    .moveTo(
+                        labelX,
+                        y +
+                        rowHeight -
+                        4
+                    )
+                    .lineTo(
+                        width - 55,
+                        y +
+                        rowHeight -
+                        4
+                    )
+                    .stroke();
+
+
+                y +=
+                    rowHeight;
+
+            }
+
+
+            addRow(
+                "Receipt No.",
+                receiptNo
             );
 
-        pdf.font("Helvetica")
-            .fontSize(8)
-            .fillColor("#555")
-            .text(
-                "This is a computer generated registration receipt.",
-                25,
-                380,
-                {
-                    width: width - 50,
-                    align: "center"
-                }
+
+            addRow(
+                "Student Name",
+                student.name ||
+                "-"
             );
 
-        pdf.end();
 
-    } catch (error) {
-        console.log("Student receipt error:", error);
+            addRow(
+                "Roll Number",
+                rollNumber
+            );
 
-        return res.status(500).send(
-            "Receipt download failed: " + error.message
-        );
+
+            addRow(
+                "Mobile Number",
+                maskedMobile
+            );
+
+
+            addRow(
+                "Class / Course",
+                course
+            );
+
+
+            addRow(
+                "Selected Plan",
+                student.plan ||
+                "-"
+            );
+
+
+            addRow(
+                "Plan Fee",
+                "Rs. " +
+                Number(
+                    student.amount || 0
+                ).toFixed(
+                    2
+                )
+            );
+
+
+            addRow(
+                "Payment Month",
+                paymentMonth
+            );
+
+
+            addRow(
+                "Payment Date",
+                paymentDate
+            );
+
+
+            addRow(
+                "Paid Amount",
+                "Rs. " +
+                paymentAmount.toFixed(
+                    2
+                )
+            );
+
+
+            addRow(
+                "Total Paid",
+                "Rs. " +
+                totalPaid.toFixed(
+                    2
+                )
+            );
+
+
+            addRow(
+                "Payment Note",
+                paymentNote
+            );
+
+
+            addRow(
+                "Payment Status",
+                student.paymentStatus ||
+                "Pending"
+            );
+
+
+            // =====================================
+            // PAYMENT BOX
+            // =====================================
+
+            y +=
+                18;
+
+
+            if (
+                latestPayment
+            ) {
+
+                pdf
+                    .roundedRect(
+                        55,
+                        y,
+                        width - 110,
+                        55,
+                        7
+                    )
+                    .fillAndStroke(
+                        "#dcfce7",
+                        "#16a34a"
+                    );
+
+
+                pdf
+                    .font(
+                        "Helvetica-Bold"
+                    )
+                    .fontSize(14)
+                    .fillColor(
+                        "#15803d"
+                    )
+                    .text(
+                        "PAYMENT RECEIVED",
+                        55,
+                        y + 11,
+                        {
+                            width:
+                                width - 110,
+
+                            align:
+                                "center"
+                        }
+                    );
+
+
+                pdf
+                    .font(
+                        "Helvetica"
+                    )
+                    .fontSize(10)
+                    .fillColor(
+                        "#166534"
+                    )
+                    .text(
+                        "Rs. " +
+                        paymentAmount.toFixed(
+                            2
+                        ) +
+                        " received successfully",
+                        55,
+                        y + 31,
+                        {
+                            width:
+                                width - 110,
+
+                            align:
+                                "center"
+                        }
+                    );
+
+            }
+            else {
+
+                pdf
+                    .roundedRect(
+                        55,
+                        y,
+                        width - 110,
+                        50,
+                        7
+                    )
+                    .fillAndStroke(
+                        "#fef3c7",
+                        "#f59e0b"
+                    );
+
+
+                pdf
+                    .font(
+                        "Helvetica-Bold"
+                    )
+                    .fontSize(12)
+                    .fillColor(
+                        "#92400e"
+                    )
+                    .text(
+                        "NO PAYMENT RECORD FOUND",
+                        55,
+                        y + 17,
+                        {
+                            width:
+                                width - 110,
+
+                            align:
+                                "center"
+                        }
+                    );
+
+            }
+
+
+            // =====================================
+            // FOOTER
+            // =====================================
+
+            pdf
+                .font(
+                    "Helvetica-Bold"
+                )
+                .fontSize(11)
+                .fillColor(
+                    "#15803d"
+                )
+                .text(
+                    "GLOBAL SMART STUDY",
+                    40,
+                    height - 70,
+                    {
+                        width:
+                            width - 80,
+
+                        align:
+                            "center"
+                    }
+                );
+
+
+            pdf
+                .font(
+                    "Helvetica"
+                )
+                .fontSize(8)
+                .fillColor(
+                    "#64748b"
+                )
+                .text(
+                    "This is a computer generated payment receipt.",
+                    40,
+                    height - 52,
+                    {
+                        width:
+                            width - 80,
+
+                        align:
+                            "center"
+                    }
+                );
+
+
+            pdf.end();
+
+
+        } catch (error) {
+
+
+            console.error(
+                "STUDENT RECEIPT ERROR:",
+                error
+            );
+
+
+            if (
+                !res.headersSent
+            ) {
+
+                return res
+                    .status(500)
+                    .send(
+                        "Receipt download failed: " +
+                        error.message
+                    );
+
+            }
+
+
+        }
+
     }
-});
+);
 
 
 
