@@ -11656,7 +11656,7 @@ router.post(
     async (req, res) => {
 
         try {
-
+             const body = req.body || {};   // ✅ ADD THIS
             const {
                 name,
                 phone,
