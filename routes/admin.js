@@ -9312,7 +9312,13 @@ const Consultation = require("../pages/consultation");
 
 const ManageGovernment = require("../pages/manageGovernment");
 
-const ManageServices = require("../pages/services");
+const ManageServices = require("../pages/manageServices");
+
+const AddService =
+    require("../pages/addpages/addService");
+
+const EditService =
+    require("../pages/editpages/editService");
 
 
 // ======================================================
@@ -11432,13 +11438,21 @@ router.post(
 
         try {
 
-            const features =
-                req.body.features
-                    ? req.body.features
-                        .split("\n")
-                        .map(f => f.trim())
-                        .filter(Boolean)
-                    : [];
+            let features = [];
+
+            if (Array.isArray(req.body.features)) {
+
+                features = req.body.features
+                    .map(f => String(f).trim())
+                    .filter(Boolean);
+
+            } else if (req.body.features) {
+
+                features = [
+                    String(req.body.features).trim()
+                ];
+
+            }
 
 
             const service =
@@ -11449,6 +11463,9 @@ router.post(
 
                     description:
                         req.body.description,
+
+                    link:
+                        String(req.body.link || "").trim(),
 
                     features,
 
@@ -16814,6 +16831,180 @@ router.post(
 
     }
 );
+
+
+// ==========================================
+// ADMIN CHANGE PASSWORD PAGE
+// ==========================================
+
+router.get("/change-password", async (req, res) => {
+
+    try {
+
+        // Admin login check
+        if (!req.session.adminId) {
+            return res.redirect("/admin");
+        }
+
+        res.send(`
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Change Password</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 60px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #16a34a;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #15803d;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #333;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🔐 Change Admin Password</h2>
+
+    <form
+        method="POST"
+        action="/admin/change-password"
+    >
+
+        <label>Old Password</label>
+
+        <input
+            type="password"
+            name="oldPassword"
+            required
+        >
+
+
+        <label>New Password</label>
+
+        <input
+            type="password"
+            name="newPassword"
+            minlength="6"
+            required
+        >
+
+
+        <label>Confirm New Password</label>
+
+        <input
+            type="password"
+            name="confirmPassword"
+            minlength="6"
+            required
+        >
+
+
+        <button type="submit">
+            Change Password
+        </button>
+
+    </form>
+
+    <a
+        href="/admin/dashboard"
+        class="back"
+    >
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
+        `);
+
+    } catch (error) {
+
+        console.error(
+            "CHANGE PASSWORD PAGE ERROR:",
+            error
+        );
+
+        res.status(500).send(
+            "Something went wrong"
+        );
+    }
+
+});
+
+
+
 
 // ======================================================
 // EXPORT

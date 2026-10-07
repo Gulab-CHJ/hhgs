@@ -58,6 +58,8 @@ async function login(req, res) {
             return res.send(AdminLogin("Wrong Password"));
         }
 
+        req.session.adminId = admin._id;
+
 
         // Dashboard counts
         const doctorCount = await Doctor.countDocuments();
