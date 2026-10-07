@@ -3344,6 +3344,29 @@ a {
     </a>
 
 
+    <!-- GLOBAL QUICK SERVICES ADMIN -->
+
+<a
+    href="/admin/quick-service/shop-status"
+    class="sabji-admin-btn shop-btn"
+>
+
+    <i class="fa-solid fa-bolt"></i>
+
+    <span class="action-copy">
+
+        <strong>
+            Quick Service Admin
+        </strong>
+
+        <small>
+            Shop, services & orders manage करें
+        </small>
+
+    </span>
+
+</a>
+
     <!-- RAPIDO MANAGEMENT -->
 
     <a
