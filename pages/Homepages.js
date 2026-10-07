@@ -24,6 +24,10 @@ const GovernmentSection =
     require(
         "../views/component/medicinestorecomponent"
     );
+    const QuickServiceSection =
+    require("../views/component/quickservicecomponent");
+
+
 
     // const StarRankingSection =
     // require("../views/component/starrankingcomponent");
@@ -1291,6 +1295,8 @@ function Home(
     ${Header()}
 
     ${Banner(banners)}
+
+    ${QuickServiceSection()}
 
     ${MedicineStoreSection(products)}
 
