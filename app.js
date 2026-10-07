@@ -647,8 +647,7 @@ app.post(
 
         }
 
-    }
-);
+    });
 
 
 const StudentProfile =
