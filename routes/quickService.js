@@ -5176,6 +5176,127 @@ setting.isOpen
 
 <div class="links">
 
+    <a href="/admin/quick-service/orders">
+        🔔 ORDERS
+    </a>
+
+    <a href="/admin/quick-service/services">
+        🛠 MANAGE SERVICES
+    </a>
+
+    <a href="/quick-service">
+        👤 CUSTOMER PAGE
+    </a>
+
+</div>
+
+
+</div>
+
+
+<div class="setting">
+
+📦 Delivery Radius:
+<strong>
+${safeNumber(
+setting.deliveryRadiusKm,
+2
+)} KM
+</strong>
+
+<br>
+
+💵 Delivery Charge:
+<strong>
+₹${safeNumber(
+setting.deliveryCharge,
+20
+)}
+</strong>
+
+<br>
+
+📍 Shop Location:
+<strong>
+${
+locationSaved
+?
+"Saved ✅"
+:
+"Not Saved ❌"
+}
+</strong>
+
+</div>
+
+
+<form
+method="POST"
+action="/admin/quick-service/toggle-shop"
+id="toggleForm"
+>
+
+<input
+type="hidden"
+name="latitude"
+id="latitude"
+>
+
+<input
+type="hidden"
+name="longitude"
+id="longitude"
+>
+
+<input
+type="hidden"
+name="accuracy"
+id="accuracy"
+>
+
+
+<button
+type="button"
+id="toggleButton"
+class="${
+setting.isOpen
+?
+"close-btn"
+:
+"open-btn"
+}"
+>
+
+${
+setting.isOpen
+?
+"🔴 CLOSE SHOP"
+:
+"🟢 OPEN SHOP WITH LOCATION"
+}
+
+</button>
+
+</form>
+
+
+<p
+id="locationMessage"
+>
+
+${
+setting.isOpen
+?
+"✅ 2 KM के अंदर Customer order कर सकते हैं."
+:
+"Shop Open करने के लिए GPS Location Allow करें."
+}
+
+</p>
+
+
+<div class="links">
+
 <a href="/admin/quick-service/orders">
 🔔 ORDERS
 </a>
