@@ -5718,6 +5718,9 @@ router.post(
 // ======================================================
 // ADMIN ORDERS
 // ======================================================
+// ======================================================
+// ADMIN QUICK SERVICE ORDERS
+// ======================================================
 
 router.get(
     "/admin/quick-service/orders",
@@ -5725,6 +5728,175 @@ router.get(
     async(req,res)=>{
 
         try{
+
+            // ==================================================
+            // SYNC PENDING ORDERS WITH RAZORPAY
+            // ==================================================
+
+            const pendingOrders =
+                await QuickOrder.find({
+
+                    paymentStatus:
+                        "Pending",
+
+                    razorpayOrderId:{
+                        $exists:true,
+                        $ne:""
+                    }
+
+                });
+
+
+            for(
+                const pendingOrder
+                of pendingOrders
+            ){
+
+                try{
+
+                    const razorpayOrder =
+                        await razorpay
+                        .orders
+                        .fetch(
+                            pendingOrder
+                            .razorpayOrderId
+                        );
+
+
+                    console.log(
+                        "RAZORPAY ORDER:",
+                        pendingOrder.orderId,
+                        razorpayOrder.status
+                    );
+
+
+                    if(
+                        razorpayOrder &&
+                        razorpayOrder.status ===
+                        "paid"
+                    ){
+
+                        let paymentId =
+                            "";
+
+
+                        // ==========================================
+                        // GET PAYMENT ID
+                        // ==========================================
+
+                        try{
+
+                            const payments =
+                                await razorpay
+                                .orders
+                                .fetchPayments(
+                                    pendingOrder
+                                    .razorpayOrderId
+                                );
+
+
+                            if(
+                                payments &&
+                                Array.isArray(
+                                    payments.items
+                                ) &&
+                                payments.items.length >
+                                0
+                            ){
+
+                                const paidPayment =
+                                    payments.items.find(
+                                        function(payment){
+
+                                            return (
+                                                payment.status ===
+                                                "captured"
+                                            );
+
+                                        }
+                                    )
+                                    ||
+                                    payments.items[0];
+
+
+                                if(paidPayment){
+
+                                    paymentId =
+                                        paidPayment.id ||
+                                        "";
+
+                                }
+
+                            }
+
+                        }
+                        catch(paymentError){
+
+                            console.error(
+                                "FETCH PAYMENT ERROR:",
+                                pendingOrder.orderId,
+                                paymentError.message
+                            );
+
+                        }
+
+
+                        // ==========================================
+                        // MARK ORDER PAID
+                        // ==========================================
+
+                        pendingOrder.paymentStatus =
+                            "Paid";
+
+
+                        if(
+                            !pendingOrder.status ||
+                            pendingOrder.status ===
+                            "Pending"
+                        ){
+
+                            pendingOrder.status =
+                                "Pending";
+
+                        }
+
+
+                        if(paymentId){
+
+                            pendingOrder
+                            .razorpayPaymentId =
+                                paymentId;
+
+                        }
+
+
+                        await pendingOrder.save();
+
+
+                        console.log(
+                            "PAYMENT SYNCED:",
+                            pendingOrder.orderId
+                        );
+
+                    }
+
+                }
+                catch(syncError){
+
+                    console.error(
+                        "RAZORPAY SYNC ERROR:",
+                        pendingOrder.orderId,
+                        syncError.message
+                    );
+
+                }
+
+            }
+
+
+            // ==================================================
+            // GET PAID ORDERS
+            // ==================================================
 
             const orders =
                 await QuickOrder
@@ -5847,6 +6019,12 @@ border-radius:8px;
 background:#16a34a;
 color:white;
 border:0;
+cursor:pointer;
+}
+
+.payment-paid{
+color:#15803d;
+font-weight:bold;
 }
 
 </style>
@@ -5862,10 +6040,17 @@ border:0;
 🔔 Quick Service Orders
 </h1>
 
+
 <p>
 
 <a href="/admin/quick-service/shop-status">
 ← Shop Control
+</a>
+
+&nbsp;&nbsp;
+
+<a href="/admin/quick-service/orders">
+🔄 Refresh Payments
 </a>
 
 </p>
@@ -5884,15 +6069,18 @@ order=>`
 #${order.orderId}
 </h2>
 
+
 <p>
 <strong>
 ${order.serviceName}
 </strong>
 </p>
 
+
 <p>
 👤 ${order.customerName}
 </p>
+
 
 <p>
 📞
@@ -5901,39 +6089,81 @@ ${order.mobile}
 </a>
 </p>
 
+
 <p>
 🏠 ${order.address}
 </p>
 
+
 <p>
 📍 Distance:
 <strong>
-${order.distanceFromShopKm} KM
+${Number(
+    order.distanceFromShopKm ||
+    0
+).toFixed(2)} KM
 </strong>
 </p>
+
+
+<p>
+💰 Service:
+<strong>
+₹${Number(
+    order.serviceAmount ||
+    0
+).toFixed(2)}
+</strong>
+</p>
+
+
+<p>
+🚚 Delivery:
+<strong>
+₹${Number(
+    order.deliveryCharge ||
+    0
+).toFixed(2)}
+</strong>
+</p>
+
 
 <p>
 💰 Total:
 <strong>
-₹${order.totalAmount}
+₹${Number(
+    order.totalAmount ||
+    0
+).toFixed(2)}
 </strong>
 </p>
+
 
 <p>
 Payment:
-<strong style="color:green">
-${order.paymentStatus}
+<span class="payment-paid">
+${order.paymentStatus} ✅
+</span>
+</p>
+
+
+<p>
+Payment ID:
+<strong>
+${order.razorpayPaymentId || "N/A"}
 </strong>
 </p>
 
+
 <p>
 Copies:
-${order.copies}
+${order.copies || 1}
 </p>
+
 
 <p>
 Print:
-${order.printType}
+${order.printType || "Black & White"}
 </p>
 
 
@@ -5980,9 +6210,11 @@ background:#fee2e2;
 `
 <img
 src="/admin/quick-service/document/${order._id}/${index}"
+onerror="this.style.display='none'"
 >
 `
 }
+
 
 <a
 href="/admin/quick-service/document/${order._id}/${index}?download=1"
@@ -6019,17 +6251,14 @@ status=>`
 <option
 value="${status}"
 ${
-order.status ===
-status
+order.status === status
 ?
 "selected"
 :
 ""
 }
 >
-
 ${status}
-
 </option>
 
 `
@@ -6040,11 +6269,10 @@ ${status}
 
 
 <button
+type="submit"
 class="status-btn"
 >
-
 UPDATE STATUS
-
 </button>
 
 </form>
@@ -6076,11 +6304,12 @@ UPDATE STATUS
         catch(error){
 
             console.error(
+                "QUICK ORDERS ERROR:",
                 error
             );
 
 
-            res
+            return res
             .status(500)
             .send(
                 error.message
@@ -6090,7 +6319,6 @@ UPDATE STATUS
 
     }
 );
-
 
 // ======================================================
 // UPDATE ORDER STATUS
