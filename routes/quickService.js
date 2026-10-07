@@ -2609,7 +2609,7 @@ async function getQuickShopSetting(){
                         2,
 
                     deliveryCharge:
-                        20
+                        0
 
                 });
 
