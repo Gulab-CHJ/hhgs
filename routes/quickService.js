@@ -3454,46 +3454,66 @@ multiple
     }
 
 
-    requirements.forEach(
-    function(item,index){
+requirements.forEach(
+function(item,index){
 
-        const box =
-            document.createElement(
-                "div"
-            );
-
-
-        box.className =
-            "document-box";
-
-
-        box.innerHTML = \`
-
-<label>
-📷 ${item.name}
-${item.required ? "*" : ""}
-</label>
-
-<input
-type="file"
-id="doc_${index}"
-data-doc-name="${item.name}"
-accept="image/*"
-capture="environment"
-${item.required ? "required" : ""}
->
-
-        \`;
-
-
-        documentsArea.appendChild(
-            box
+    const box =
+        document.createElement(
+            "div"
         );
 
-    });
+    box.className =
+        "document-box";
+
+
+    const requiredMark =
+        item.required
+            ? "*"
+            : "";
+
+
+    const requiredAttribute =
+        item.required
+            ? "required"
+            : "";
+
+
+    box.innerHTML =
+
+        '<label>' +
+
+        '📷 ' +
+        item.name +
+        requiredMark +
+
+        '</label>' +
+
+        '<input ' +
+
+        'type="file" ' +
+
+        'id="doc_' +
+        index +
+        '" ' +
+
+        'data-doc-name="' +
+        item.name +
+        '" ' +
+
+        'accept="image/*" ' +
+
+        'capture="environment" ' +
+
+        requiredAttribute +
+
+        '>';
+
+
+    documentsArea.appendChild(
+        box
+    );
 
 });
-
 
 function calculateDistanceKm(
 lat1,
