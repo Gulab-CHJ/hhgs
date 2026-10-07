@@ -3217,11 +3217,7 @@ Service:
 <br>
 
 Delivery:
-₹${safeNumber(
-setting.deliveryCharge,
-0
-)}
-
+₹0
 <br>
 
 <strong>
@@ -3289,11 +3285,7 @@ setting.deliveryRadiusKm,
 2
 )};
 
-const DELIVERY_CHARGE =
-${safeNumber(
-setting.deliveryCharge,
-0
-)};
+const DELIVERY_CHARGE =0;
 
 
 let customerLatitude =
