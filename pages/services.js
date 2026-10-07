@@ -1006,20 +1006,20 @@ services.map(service => {
 
 
     const imageUrl =
-        service.image
+    service.image
+    ?
+    (
+        String(service.image).startsWith("http")
         ?
-        (
-            String(service.image).startsWith("http")
-            ?
-            service.image
-            :
-            "/" +
-            String(service.image)
-            .replace(/\\\\/g, "/")
-            .replace(/^\\/+/, "")
-        )
+        service.image
         :
-        "/images/no-image.png";
+        "/" +
+        String(service.image)
+        .replace(/\\/g, "/")
+        .replace(/^\/+/, "")
+    )
+    :
+    "/images/no-image.png";
 
 
     return `
