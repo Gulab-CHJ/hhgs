@@ -11503,6 +11503,10 @@ router.post(
 );
 
 
+
+
+
+
 // ======================================================
 // EDIT SERVICE
 // ======================================================
@@ -11560,6 +11564,23 @@ router.post(
 
         try {
 
+            let features = [];
+
+            if (Array.isArray(req.body.features)) {
+
+                features = req.body.features
+                    .map(f => String(f).trim())
+                    .filter(Boolean);
+
+            } else if (req.body.features) {
+
+                features = [
+                    String(req.body.features).trim()
+                ];
+
+            }
+
+
             const updateData = {
 
                 title:
@@ -11568,13 +11589,10 @@ router.post(
                 description:
                     req.body.description,
 
-                features:
-                    req.body.features
-                        ? req.body.features
-                            .split("\n")
-                            .map(f => f.trim())
-                            .filter(Boolean)
-                        : []
+                link:
+                    String(req.body.link || "").trim(),
+
+                features
 
             };
 
@@ -11621,7 +11639,6 @@ router.post(
 
     }
 );
-
 
 // ======================================================
 // DELETE SERVICE
