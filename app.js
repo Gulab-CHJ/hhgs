@@ -761,6 +761,16 @@ app.get(
     }
 );
 
+// Government
+
+const governmentRoutes =
+    require("./routes/government");
+
+app.use(
+    "/government",
+    governmentRoutes
+);
+
 // ===============================
 // SERVER START
 // ===============================
