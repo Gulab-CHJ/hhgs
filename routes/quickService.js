@@ -3466,14 +3466,21 @@ function(item,index){
 
     const requiredMark =
         item.required
-            ? "*"
-            : "";
+        ? "*"
+        : "";
 
 
     const requiredAttribute =
         item.required
-            ? "required"
-            : "";
+        ? "required"
+        : "";
+
+
+    const documentName =
+        String(
+            item.name ||
+            "Document"
+        );
 
 
     box.innerHTML =
@@ -3481,7 +3488,7 @@ function(item,index){
         '<label>' +
 
         '📷 ' +
-        item.name +
+        documentName +
         requiredMark +
 
         '</label>' +
@@ -3495,7 +3502,11 @@ function(item,index){
         '" ' +
 
         'data-doc-name="' +
-        item.name +
+        documentName
+            .replace(
+                /"/g,
+                '&quot;'
+            ) +
         '" ' +
 
         'accept="image/*" ' +
@@ -3513,11 +3524,21 @@ function(item,index){
 
 });
 
+
+updateTotal();
+
+});   // serviceSelect.addEventListener ka closing
+
+
+// ======================================================
+// DISTANCE
+// ======================================================
+
 function calculateDistanceKm(
-lat1,
-lon1,
-lat2,
-lon2
+    lat1,
+    lon1,
+    lat2,
+    lon2
 ){
 
     const R =
@@ -3525,10 +3546,15 @@ lon2
 
 
     const rad =
-        value =>
-            value *
-            Math.PI /
-            180;
+        function(value){
+
+            return (
+                value *
+                Math.PI /
+                180
+            );
+
+        };
 
 
     const dLat =
@@ -3548,25 +3574,31 @@ lon2
     const a =
 
         Math.sin(
-            dLat / 2
+            dLat /
+            2
         ) ** 2
 
         +
 
         Math.cos(
-            rad(lat1)
+            rad(
+                lat1
+            )
         )
 
         *
 
         Math.cos(
-            rad(lat2)
+            rad(
+                lat2
+            )
         )
 
         *
 
         Math.sin(
-            dLon / 2
+            dLon /
+            2
         ) ** 2;
 
 
@@ -3577,14 +3609,26 @@ lon2
         2 *
 
         Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1-a)
+
+            Math.sqrt(
+                a
+            ),
+
+            Math.sqrt(
+                1 -
+                a
+            )
+
         )
 
     );
 
 }
 
+
+// ======================================================
+// CHECK LOCATION
+// ======================================================
 
 function checkLocation(){
 
@@ -3608,16 +3652,21 @@ function checkLocation(){
         true;
 
 
-    if(!SHOP_OPEN){
+    if(
+        !SHOP_OPEN
+    ){
 
         box.className =
             "location-box error";
 
+
         box.innerHTML =
             "🔴 Shop अभी Closed है।";
 
+
         button.textContent =
             "SHOP CLOSED";
+
 
         return;
 
@@ -3632,8 +3681,14 @@ function checkLocation(){
         box.className =
             "location-box error";
 
+
         box.innerHTML =
             "❌ Shop Location save नहीं है।";
+
+
+        button.textContent =
+            "SHOP LOCATION NOT AVAILABLE";
+
 
         return;
 
@@ -3647,12 +3702,26 @@ function checkLocation(){
         box.className =
             "location-box error";
 
+
         box.innerHTML =
             "❌ GPS support नहीं है।";
+
 
         return;
 
     }
+
+
+    checkLocationButton.disabled =
+        true;
+
+
+    checkLocationButton.textContent =
+        "📍 CHECKING LOCATION...";
+
+
+    box.className =
+        "location-box";
 
 
     box.innerHTML =
@@ -3662,138 +3731,210 @@ function checkLocation(){
     navigator.geolocation
     .getCurrentPosition(
 
-    function(position){
+        function(position){
 
-        customerLatitude =
-            position.coords.latitude;
-
-        customerLongitude =
-            position.coords.longitude;
-
-        customerAccuracy =
-            position.coords.accuracy;
+            customerLatitude =
+                Number(
+                    position.coords.latitude
+                );
 
 
-        customerDistance =
-            calculateDistanceKm(
-
-                SHOP_LATITUDE,
-
-                SHOP_LONGITUDE,
-
-                customerLatitude,
-
-                customerLongitude
-
-            );
+            customerLongitude =
+                Number(
+                    position.coords.longitude
+                );
 
 
-        if(
-            customerDistance <=
-            DELIVERY_RADIUS
-        ){
-
-            locationAllowed =
-                true;
+            customerAccuracy =
+                Number(
+                    position.coords.accuracy ||
+                    0
+                );
 
 
-            box.className =
-                "location-box success";
+            customerDistance =
+                calculateDistanceKm(
+
+                    Number(
+                        SHOP_LATITUDE
+                    ),
+
+                    Number(
+                        SHOP_LONGITUDE
+                    ),
+
+                    customerLatitude,
+
+                    customerLongitude
+
+                );
 
 
-            box.innerHTML =
-
-                "✅ DELIVERY AVAILABLE" +
-
-                "<br>" +
-
-                "Distance: " +
-
-                customerDistance
-                .toFixed(2) +
-
-                " KM";
-
-
-            button.disabled =
+            checkLocationButton.disabled =
                 false;
 
 
-            button.textContent =
-                "CONTINUE TO PAYMENT";
+            checkLocationButton.textContent =
+                "📍 CHECK LOCATION AGAIN";
 
-        }
-        else{
+
+            if(
+                customerDistance <=
+                DELIVERY_RADIUS
+            ){
+
+                locationAllowed =
+                    true;
+
+
+                box.className =
+                    "location-box success";
+
+
+                box.innerHTML =
+
+                    "✅ DELIVERY AVAILABLE" +
+
+                    "<br>" +
+
+                    "Distance: " +
+
+                    customerDistance
+                    .toFixed(2) +
+
+                    " KM";
+
+
+                button.disabled =
+                    false;
+
+
+                button.textContent =
+                    "💳 CONTINUE TO PAYMENT";
+
+            }
+            else{
+
+                locationAllowed =
+                    false;
+
+
+                box.className =
+                    "location-box error";
+
+
+                box.innerHTML =
+
+                    "❌ Delivery Available नहीं है." +
+
+                    "<br>" +
+
+                    "Distance: " +
+
+                    customerDistance
+                    .toFixed(2) +
+
+                    " KM" +
+
+                    "<br>" +
+
+                    "Maximum Radius: " +
+
+                    DELIVERY_RADIUS +
+
+                    " KM";
+
+
+                button.disabled =
+                    true;
+
+
+                button.textContent =
+                    "OUTSIDE DELIVERY AREA";
+
+            }
+
+        },
+
+
+        function(error){
+
+            console.error(
+                "LOCATION ERROR:",
+                error
+            );
+
+
+            checkLocationButton.disabled =
+                false;
+
+
+            checkLocationButton.textContent =
+                "📍 CHECK MY LOCATION";
+
 
             box.className =
                 "location-box error";
 
 
-            box.innerHTML =
+            if(
+                error.code === 1
+            ){
 
-                "❌ Delivery Available नहीं है." +
+                box.innerHTML =
+                    "❌ Location Permission Denied. Browser में Location Allow करें.";
 
-                "<br>" +
+            }
+            else if(
+                error.code === 2
+            ){
 
-                "Distance: " +
+                box.innerHTML =
+                    "❌ GPS Location नहीं मिल रही. Phone Location ON करें.";
 
-                customerDistance
-                .toFixed(2) +
+            }
+            else if(
+                error.code === 3
+            ){
 
-                " KM" +
+                box.innerHTML =
+                    "❌ Location Timeout. फिर से कोशिश करें.";
 
-                "<br>" +
+            }
+            else{
 
-                "Maximum Radius: " +
+                box.innerHTML =
+                    "❌ Location Check नहीं हो सकी.";
 
-                DELIVERY_RADIUS +
+            }
 
-                " KM";
-
-
-            button.disabled =
-                true;
+        },
 
 
-            button.textContent =
-                "OUTSIDE DELIVERY AREA";
+        {
+            enableHighAccuracy:
+                true,
 
+            timeout:
+                20000,
+
+            maximumAge:
+                0
         }
-
-    },
-
-    function(error){
-
-        console.error(
-            error
-        );
-
-
-        box.className =
-            "location-box error";
-
-
-        box.innerHTML =
-            "❌ Location Permission Allow करें.";
-
-    },
-
-    {
-
-        enableHighAccuracy:
-            true,
-
-        timeout:
-            20000,
-
-        maximumAge:
-            0
-
-    }
 
     );
 
 }
+
+
+// ======================================================
+// LOCATION BUTTON EVENT
+// ======================================================
+
+checkLocationButton.addEventListener(
+    "click",
+    checkLocation
+);
 
 
 async function placeOrder(){
