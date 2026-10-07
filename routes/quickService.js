@@ -4641,11 +4641,7 @@ router.post(
             }
 
 
-            const deliveryCharge =
-                safeNumber(
-                    setting.deliveryCharge,
-                    0
-                );
+            const deliveryCharge = 0;
 
 
             const totalAmount =
