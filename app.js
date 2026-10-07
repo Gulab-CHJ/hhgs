@@ -771,6 +771,14 @@ app.use(
     governmentRoutes
 );
 
+// const quickServiceRoutes =
+//     require("./routes/quickService");
+
+// app.use(
+//     "/",
+//     quickServiceRoutes
+// );
+
 const quickServiceRoutes =
     require("./routes/quickService");
 

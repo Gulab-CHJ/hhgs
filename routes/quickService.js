@@ -1,3 +1,2418 @@
+// require("dotenv").config();
+
+// const express = require("express");
+// const router = express.Router();
+
+// const path = require("path");
+// const fs = require("fs");
+// const multer = require("multer");
+// const crypto = require("crypto");
+// const Razorpay = require("razorpay");
+
+// const QuickService =
+//     require("../models/QuickService");
+
+// const QuickOrder =
+//     require("../models/QuickOrder");
+
+// const QuickShopSetting =
+//     require("../models/QuickShopSetting");
+
+
+// // ======================================================
+// // RAZORPAY
+// // ======================================================
+
+// const razorpay =
+// new Razorpay({
+
+//     key_id:
+//         process.env.RAZORPAY_KEY_ID,
+
+//     key_secret:
+//         process.env.RAZORPAY_KEY_SECRET
+
+// });
+
+
+// // ======================================================
+// // PRIVATE DOCUMENT STORAGE
+// // ======================================================
+
+// const privateFolder =
+// path.join(
+//     process.cwd(),
+//     "storage",
+//     "quick-orders"
+// );
+
+// if(
+//     !fs.existsSync(privateFolder)
+// ){
+
+//     fs.mkdirSync(
+//         privateFolder,
+//         {
+//             recursive:true
+//         }
+//     );
+
+// }
+
+
+// const storage =
+// multer.diskStorage({
+
+//     destination:
+//     function(req,file,cb){
+
+//         cb(
+//             null,
+//             privateFolder
+//         );
+
+//     },
+
+//     filename:
+//     function(req,file,cb){
+
+//         const ext =
+//             path.extname(
+//                 file.originalname
+//             ).toLowerCase();
+
+//         const filename =
+//             "doc-" +
+//             Date.now() +
+//             "-" +
+//             Math.round(
+//                 Math.random() *
+//                 1000000000
+//             ) +
+//             ext;
+
+//         cb(
+//             null,
+//             filename
+//         );
+
+//     }
+
+// });
+
+
+// const upload =
+// multer({
+
+//     storage,
+
+//     limits:{
+//         fileSize:
+//             8 * 1024 * 1024,
+
+//         files:20
+//     },
+
+//     fileFilter:
+//     function(req,file,cb){
+
+//         const allowed = [
+
+//             "image/jpeg",
+//             "image/png",
+//             "image/webp",
+//             "application/pdf"
+
+//         ];
+
+//         if(
+//             allowed.includes(
+//                 file.mimetype
+//             )
+//         ){
+
+//             return cb(
+//                 null,
+//                 true
+//             );
+
+//         }
+
+//         cb(
+//             new Error(
+//                 "Only JPG, PNG, WEBP and PDF allowed"
+//             )
+//         );
+
+//     }
+
+// });
+
+
+// // ======================================================
+// // ADMIN CHECK
+// // ======================================================
+
+// function requireAdmin(
+//     req,
+//     res,
+//     next
+// ){
+
+//     if(
+//         !req.session ||
+//         !req.session.adminId
+//     ){
+
+//         return res
+//             .status(403)
+//             .send(
+//                 "Admin Login Required"
+//             );
+
+//     }
+
+//     next();
+
+// }
+
+
+// // ======================================================
+// // DISTANCE FUNCTION
+// // ======================================================
+
+// function calculateDistance(
+//     lat1,
+//     lon1,
+//     lat2,
+//     lon2
+// ){
+
+//     const R = 6371;
+
+//     const toRad =
+//         value =>
+//         value * Math.PI / 180;
+
+//     const dLat =
+//         toRad(
+//             lat2 - lat1
+//         );
+
+//     const dLon =
+//         toRad(
+//             lon2 - lon1
+//         );
+
+//     const a =
+
+//         Math.sin(
+//             dLat / 2
+//         ) ** 2
+
+//         +
+
+//         Math.cos(
+//             toRad(lat1)
+//         )
+
+//         *
+
+//         Math.cos(
+//             toRad(lat2)
+//         )
+
+//         *
+
+//         Math.sin(
+//             dLon / 2
+//         ) ** 2;
+
+
+//     const c =
+//         2 *
+//         Math.atan2(
+//             Math.sqrt(a),
+//             Math.sqrt(1-a)
+//         );
+
+
+//     return R * c;
+
+// }
+
+
+// // ======================================================
+// // GENERATE ORDER ID
+// // ======================================================
+
+// async function createOrderId(){
+
+//     const lastOrder =
+//         await QuickOrder
+//             .findOne()
+//             .sort({
+//                 createdAt:-1
+//             });
+
+//     let number = 1001;
+
+//     if(
+//         lastOrder &&
+//         lastOrder.orderId
+//     ){
+
+//         const old =
+//             parseInt(
+//                 String(
+//                     lastOrder.orderId
+//                 )
+//                 .replace(
+//                     "GH",
+//                     ""
+//                 )
+//             );
+
+//         if(!isNaN(old)){
+
+//             number =
+//                 old + 1;
+
+//         }
+
+//     }
+
+//     return "GH" + number;
+
+// }
+
+
+// // ======================================================
+// // CUSTOMER QUICK SERVICE PAGE
+// // ======================================================
+
+// router.get(
+//     "/quick-service",
+//     async(req,res)=>{
+
+//         try{
+
+//             const services =
+//                 await QuickService
+//                     .find({
+//                         active:true
+//                     })
+//                     .sort({
+//                         createdAt:-1
+//                     })
+//                     .lean();
+
+
+//             let setting =
+//                 await QuickShopSetting
+//                     .findOne()
+//                     .lean();
+
+
+//             if(!setting){
+
+//                 setting = {
+//                     isOpen:true,
+//                     deliveryRadiusKm:2,
+//                     deliveryCharge:20
+//                 };
+
+//             }
+
+
+//             return res.send(`
+
+// <!DOCTYPE html>
+
+// <html>
+
+// <head>
+
+// <meta
+// name="viewport"
+// content="width=device-width,initial-scale=1">
+
+// <title>
+// Quick Document Service
+// </title>
+
+// <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+// <style>
+
+// *{
+// box-sizing:border-box;
+// font-family:Arial,sans-serif;
+// }
+
+// body{
+// margin:0;
+// background:#f5f7fb;
+// color:#111827;
+// }
+
+// .header{
+// background:
+// linear-gradient(
+// 135deg,
+// #0d604b,
+// #18a47b
+// );
+// color:white;
+// padding:25px 15px;
+// text-align:center;
+// }
+
+// .container{
+// max-width:650px;
+// margin:20px auto;
+// padding:15px;
+// }
+
+// .card{
+// background:white;
+// padding:20px;
+// border-radius:20px;
+// box-shadow:
+// 0 10px 30px
+// rgba(0,0,0,.10);
+// }
+
+// .shop-open{
+// padding:12px;
+// background:#dcfce7;
+// color:#166534;
+// border-radius:10px;
+// text-align:center;
+// font-weight:bold;
+// margin-bottom:15px;
+// }
+
+// .shop-close{
+// padding:15px;
+// background:#fee2e2;
+// color:#991b1b;
+// border-radius:10px;
+// text-align:center;
+// font-weight:bold;
+// margin-bottom:15px;
+// }
+
+// label{
+// display:block;
+// margin-top:16px;
+// margin-bottom:6px;
+// font-weight:bold;
+// }
+
+// input,
+// select,
+// textarea{
+// width:100%;
+// padding:13px;
+// border:1px solid #ddd;
+// border-radius:10px;
+// font-size:15px;
+// }
+
+// textarea{
+// min-height:90px;
+// }
+
+// .document-box{
+// margin-top:15px;
+// padding:15px;
+// background:#f8fafc;
+// border:1px solid #dbeafe;
+// border-radius:14px;
+// }
+
+// .camera{
+// display:block;
+// margin-top:8px;
+// }
+
+// .total-box{
+// margin-top:20px;
+// padding:18px;
+// background:#eff6ff;
+// border-radius:15px;
+// }
+
+// .pay-btn{
+// width:100%;
+// margin-top:20px;
+// padding:16px;
+// border:0;
+// border-radius:12px;
+// background:#16a34a;
+// color:#fff;
+// font-size:17px;
+// font-weight:bold;
+// cursor:pointer;
+// }
+
+// .pay-btn:disabled{
+// background:#94a3b8;
+// cursor:not-allowed;
+// }
+
+// .hidden{
+// display:none;
+// }
+
+// .location-box{
+// margin-top:15px;
+// padding:12px;
+// border-radius:10px;
+// background:#f1f5f9;
+// }
+
+// </style>
+
+// </head>
+
+
+// <body>
+
+// <div class="header">
+
+// <h2>
+// ⚡ GLOBAL QUICK SERVICES
+// </h2>
+
+// <p>
+// Document Service at Your Doorstep
+// </p>
+
+// </div>
+
+
+// <div class="container">
+
+// <div class="card">
+
+
+// ${
+// setting.isOpen
+
+// ?
+
+// `
+// <div class="shop-open">
+// 🟢 Shop Open
+// </div>
+// `
+
+// :
+
+// `
+// <div class="shop-close">
+// 🔴 Shop is currently closed
+// </div>
+// `
+
+// }
+
+
+// <form
+// id="orderForm"
+// enctype="multipart/form-data"
+// >
+
+
+// <label>
+// Select Service
+// </label>
+
+// <select
+// name="serviceId"
+// id="service"
+// required
+// >
+
+// <option value="">
+// Select Service
+// </option>
+
+// ${
+// services.map(service=>`
+
+// <option
+// value="${service._id}"
+// data-type="${service.type}"
+// data-price="${service.price}"
+// data-requirements='${JSON.stringify(service.requirements || [])}'
+// >
+// ${service.name} - ₹${service.price}
+// </option>
+
+// `).join("")
+// }
+
+// </select>
+
+
+// <div
+// id="documentsArea"
+// ></div>
+
+
+// <div
+// id="photoCopyOptions"
+// class="hidden"
+// >
+
+// <label>
+// Print Type
+// </label>
+
+// <select name="printType">
+
+// <option>
+// Black & White
+// </option>
+
+// <option>
+// Color
+// </option>
+
+// </select>
+
+
+// <label>
+// Number of Copies
+// </label>
+
+// <input
+// type="number"
+// name="copies"
+// min="1"
+// value="1"
+// >
+
+// </div>
+
+
+// <label>
+// Customer Name
+// </label>
+
+// <input
+// type="text"
+// name="customerName"
+// required
+// >
+
+
+// <label>
+// Phone Number
+// </label>
+
+// <input
+// type="tel"
+// name="phone"
+// maxlength="10"
+// required
+// >
+
+
+// <label>
+// Full Delivery Address
+// </label>
+
+// <textarea
+// name="address"
+// required
+// ></textarea>
+
+
+// <input
+// type="hidden"
+// name="latitude"
+// id="latitude"
+// >
+
+// <input
+// type="hidden"
+// name="longitude"
+// id="longitude"
+// >
+
+
+// <div
+// class="location-box"
+// id="locationStatus"
+// >
+
+// 📍 Checking delivery location...
+
+// </div>
+
+
+// <div class="total-box">
+
+// Service:
+// ₹<span id="servicePrice">0</span>
+
+// <br><br>
+
+// Delivery:
+// ₹${Number(setting.deliveryCharge || 0)}
+
+// <br><br>
+
+// <strong>
+// Total:
+// ₹<span id="totalPrice">0</span>
+// </strong>
+
+// </div>
+
+
+// <button
+// type="submit"
+// class="pay-btn"
+// id="payButton"
+// ${setting.isOpen ? "" : "disabled"}
+// >
+
+// 💳 Continue to Payment
+
+// </button>
+
+
+// </form>
+
+// </div>
+
+// </div>
+
+
+// <script>
+
+// const shopOpen =
+// ${setting.isOpen ? "true" : "false"};
+
+// const deliveryCharge =
+// ${Number(setting.deliveryCharge || 0)};
+
+
+// const service =
+// document.getElementById(
+//     "service"
+// );
+
+// const documentsArea =
+// document.getElementById(
+//     "documentsArea"
+// );
+
+// const photoCopyOptions =
+// document.getElementById(
+//     "photoCopyOptions"
+// );
+
+// const servicePrice =
+// document.getElementById(
+//     "servicePrice"
+// );
+
+// const totalPrice =
+// document.getElementById(
+//     "totalPrice"
+// );
+
+
+// // ======================================================
+// // SERVICE CHANGE
+// // ======================================================
+
+// service.addEventListener(
+// "change",
+// function(){
+
+//     documentsArea.innerHTML = "";
+
+//     photoCopyOptions.classList.add(
+//         "hidden"
+//     );
+
+
+//     const option =
+//         this.options[
+//             this.selectedIndex
+//         ];
+
+
+//     if(!option.value){
+
+//         return;
+
+//     }
+
+
+//     const type =
+//         option.dataset.type;
+
+//     const price =
+//         Number(
+//             option.dataset.price ||
+//             0
+//         );
+
+
+//     servicePrice.textContent =
+//         price;
+
+//     totalPrice.textContent =
+//         price +
+//         deliveryCharge;
+
+
+//     if(
+//         type ===
+//         "photocopy"
+//     ){
+
+//         photoCopyOptions
+//             .classList
+//             .remove(
+//                 "hidden"
+//             );
+
+
+//         documentsArea.innerHTML = \`
+
+// <div class="document-box">
+
+// <label>
+// 📄 Scan / Upload Pages
+// </label>
+
+// <input
+// type="file"
+// name="photocopyPages"
+// accept="image/*"
+// capture="environment"
+// multiple
+// required
+// >
+
+// <small>
+// Multiple pages select kar sakte hain.
+// </small>
+
+// </div>
+
+//         \`;
+
+//         return;
+
+//     }
+
+
+//     let requirements = [];
+
+//     try{
+
+//         requirements =
+//             JSON.parse(
+//                 option.dataset
+//                     .requirements ||
+//                 "[]"
+//             );
+
+//     }
+//     catch(error){
+
+//         requirements = [];
+
+//     }
+
+
+//     requirements.forEach(
+//     function(item,index){
+
+//         const box =
+//             document.createElement(
+//                 "div"
+//             );
+
+//         box.className =
+//             "document-box";
+
+
+//         box.innerHTML = \`
+
+// <label>
+// 📷 ${item.name}
+// ${item.required ? "*" : ""}
+// </label>
+
+// <input
+// type="file"
+// name="doc_${index}"
+// accept="image/*"
+// capture="environment"
+// ${item.required ? "required" : ""}
+// >
+
+// <input
+// type="hidden"
+// name="docName_${index}"
+// value="${item.name}"
+// >
+
+//         \`;
+
+
+//         documentsArea
+//             .appendChild(
+//                 box
+//             );
+
+//     });
+
+// });
+
+
+// // ======================================================
+// // LOCATION
+// // ======================================================
+
+// const locationStatus =
+// document.getElementById(
+//     "locationStatus"
+// );
+
+// if(
+// navigator.geolocation
+// ){
+
+// navigator.geolocation
+// .getCurrentPosition(
+
+// function(position){
+
+//     document
+//     .getElementById(
+//         "latitude"
+//     )
+//     .value =
+//         position.coords
+//             .latitude;
+
+
+//     document
+//     .getElementById(
+//         "longitude"
+//     )
+//     .value =
+//         position.coords
+//             .longitude;
+
+
+//     locationStatus.innerHTML =
+//         "✅ Location captured";
+
+// },
+
+// function(){
+
+//     locationStatus.innerHTML =
+//         "❌ Location permission required";
+
+// }
+
+// );
+
+// }
+
+
+// // ======================================================
+// // SUBMIT ORDER
+// // ======================================================
+
+// document
+// .getElementById(
+//     "orderForm"
+// )
+// .addEventListener(
+// "submit",
+// async function(event){
+
+//     event.preventDefault();
+
+
+//     if(!shopOpen){
+
+//         alert(
+//             "Shop is currently closed"
+//         );
+
+//         return;
+
+//     }
+
+
+//     const lat =
+//         document
+//         .getElementById(
+//             "latitude"
+//         )
+//         .value;
+
+
+//     const lng =
+//         document
+//         .getElementById(
+//             "longitude"
+//         )
+//         .value;
+
+
+//     if(!lat || !lng){
+
+//         alert(
+//             "Please allow location permission"
+//         );
+
+//         return;
+
+//     }
+
+
+//     const button =
+//         document
+//         .getElementById(
+//             "payButton"
+//         );
+
+//     button.disabled = true;
+
+//     button.innerText =
+//         "Please wait...";
+
+
+//     try{
+
+//         const formData =
+//             new FormData(
+//                 this
+//             );
+
+
+//         const response =
+//             await fetch(
+//                 "/quick-service/create-order",
+//                 {
+//                     method:"POST",
+//                     body:formData
+//                 }
+//             );
+
+
+//         const data =
+//             await response.json();
+
+
+//         if(!data.success){
+
+//             alert(
+//                 data.message ||
+//                 "Order failed"
+//             );
+
+//             button.disabled=false;
+
+//             button.innerText=
+//                 "💳 Continue to Payment";
+
+//             return;
+
+//         }
+
+
+//         const options = {
+
+//             key:
+//                 data.key,
+
+//             amount:
+//                 data.amount,
+
+//             currency:
+//                 "INR",
+
+//             name:
+//                 "GLOBAL QUICK SERVICES",
+
+//             description:
+//                 data.serviceName,
+
+//             order_id:
+//                 data.razorpayOrderId,
+
+//             handler:
+//             async function(response){
+
+//                 const verify =
+//                     await fetch(
+//                         "/quick-service/verify-payment",
+//                         {
+
+//                             method:"POST",
+
+//                             headers:{
+//                                 "Content-Type":
+//                                 "application/json"
+//                             },
+
+//                             body:
+//                             JSON.stringify({
+
+//                                 orderId:
+//                                     data.orderId,
+
+//                                 razorpay_order_id:
+//                                     response
+//                                     .razorpay_order_id,
+
+//                                 razorpay_payment_id:
+//                                     response
+//                                     .razorpay_payment_id,
+
+//                                 razorpay_signature:
+//                                     response
+//                                     .razorpay_signature
+
+//                             })
+
+//                         }
+//                     );
+
+
+//                 const result =
+//                     await verify.json();
+
+
+//                 if(result.success){
+
+//                     window.location.href =
+//                         "/quick-service/success/" +
+//                         data.orderId;
+
+//                 }
+//                 else{
+
+//                     alert(
+//                         "Payment verification failed"
+//                     );
+
+//                 }
+
+//             }
+
+//         };
+
+
+//         const rzp =
+//             new Razorpay(
+//                 options
+//             );
+
+//         rzp.open();
+
+
+//         button.disabled=false;
+
+//         button.innerText=
+//             "💳 Continue to Payment";
+
+
+//     }
+//     catch(error){
+
+//         console.error(error);
+
+//         alert(
+//             "Something went wrong"
+//         );
+
+//         button.disabled=false;
+
+//         button.innerText=
+//             "💳 Continue to Payment";
+
+//     }
+
+// }
+// );
+
+// </script>
+
+// </body>
+
+// </html>
+
+//             `);
+
+//         }
+//         catch(err){
+
+//             console.error(err);
+
+//             res.status(500)
+//             .send(err.message);
+
+//         }
+
+//     }
+// );
+
+
+// // ======================================================
+// // CREATE ORDER
+// // ======================================================
+
+// router.post(
+//     "/quick-service/create-order",
+
+//     upload.any(),
+
+//     async(req,res)=>{
+
+//         try{
+
+//             const setting =
+//                 await QuickShopSetting
+//                     .findOne();
+
+
+//             if(
+//                 setting &&
+//                 setting.isOpen === false
+//             ){
+
+//                 return res.json({
+
+//                     success:false,
+
+//                     message:
+//                     "Shop is currently closed"
+
+//                 });
+
+//             }
+
+
+//             const service =
+//                 await QuickService
+//                     .findById(
+//                         req.body.serviceId
+//                     );
+
+
+//             if(
+//                 !service ||
+//                 service.active === false
+//             ){
+
+//                 return res.json({
+
+//                     success:false,
+
+//                     message:
+//                     "Service not available"
+
+//                 });
+
+//             }
+
+
+//             const latitude =
+//                 Number(
+//                     req.body.latitude
+//                 );
+
+//             const longitude =
+//                 Number(
+//                     req.body.longitude
+//                 );
+
+
+//             if(
+//                 !latitude ||
+//                 !longitude
+//             ){
+
+//                 return res.json({
+
+//                     success:false,
+
+//                     message:
+//                     "Location required"
+
+//                 });
+
+//             }
+
+
+//             const shopLat =
+//                 Number(
+//                     setting?.shopLatitude
+//                 );
+
+//             const shopLng =
+//                 Number(
+//                     setting?.shopLongitude
+//                 );
+
+
+//             if(
+//                 !shopLat ||
+//                 !shopLng
+//             ){
+
+//                 return res.json({
+
+//                     success:false,
+
+//                     message:
+//                     "Shop location not configured"
+
+//                 });
+
+//             }
+
+
+//             const distance =
+//                 calculateDistance(
+
+//                     shopLat,
+//                     shopLng,
+
+//                     latitude,
+//                     longitude
+
+//                 );
+
+
+//             const radius =
+//                 Number(
+//                     setting
+//                     ?.deliveryRadiusKm ||
+//                     2
+//                 );
+
+
+//             if(
+//                 distance >
+//                 radius
+//             ){
+
+//                 return res.json({
+
+//                     success:false,
+
+//                     message:
+//                     "Delivery only available within " +
+//                     radius +
+//                     " KM"
+
+//                 });
+
+//             }
+
+
+// // ======================================================
+// // DOCUMENTS
+// // ======================================================
+
+//             const documents = [];
+
+
+//             for(
+//                 const file
+//                 of
+//                 req.files || []
+//             ){
+
+//                 let name =
+//                     "Document";
+
+
+//                 if(
+//                     file.fieldname ===
+//                     "photocopyPages"
+//                 ){
+
+//                     name =
+//                         "Photo Copy Page";
+
+//                 }
+//                 else if(
+//                     file.fieldname
+//                     .startsWith(
+//                         "doc_"
+//                     )
+//                 ){
+
+//                     const index =
+//                         file.fieldname
+//                         .replace(
+//                             "doc_",
+//                             ""
+//                         );
+
+
+//                     name =
+//                         req.body[
+//                             "docName_" +
+//                             index
+//                         ]
+//                         ||
+//                         "Document";
+
+//                 }
+
+
+//                 documents.push({
+
+//                     documentName:
+//                         name,
+
+//                     fileName:
+//                         file.filename,
+
+//                     originalName:
+//                         file.originalname
+
+//                 });
+
+//             }
+
+
+// // ======================================================
+// // AMOUNT
+// // ======================================================
+
+//             const copies =
+//                 Math.max(
+//                     1,
+//                     Number(
+//                         req.body.copies ||
+//                         1
+//                     )
+//                 );
+
+
+//             let serviceAmount =
+//                 Number(
+//                     service.price ||
+//                     0
+//                 );
+
+
+//             if(
+//                 service.type ===
+//                 "photocopy"
+//             ){
+
+//                 const pageCount =
+//                     documents.length ||
+//                     1;
+
+//                 serviceAmount =
+//                     Number(
+//                         service.price
+//                     )
+//                     *
+//                     pageCount
+//                     *
+//                     copies;
+
+//             }
+
+
+//             const deliveryCharge =
+//                 Number(
+//                     setting
+//                     ?.deliveryCharge ||
+//                     0
+//                 );
+
+
+//             const totalAmount =
+//                 serviceAmount +
+//                 deliveryCharge;
+
+
+//             const orderId =
+//                 await createOrderId();
+
+
+//             const paymentOrder =
+//                 await razorpay
+//                     .orders
+//                     .create({
+
+//                         amount:
+//                             Math.round(
+//                                 totalAmount *
+//                                 100
+//                             ),
+
+//                         currency:
+//                             "INR",
+
+//                         receipt:
+//                             orderId
+
+//                     });
+
+
+//             const order =
+//                 new QuickOrder({
+
+//                     orderId,
+
+//                     customerName:
+//                         req.body
+//                         .customerName,
+
+//                     phone:
+//                         req.body.phone,
+
+//                     address:
+//                         req.body.address,
+
+//                     latitude,
+
+//                     longitude,
+
+//                     distanceKm:
+//                         Number(
+//                             distance
+//                             .toFixed(2)
+//                         ),
+
+//                     serviceId:
+//                         service._id,
+
+//                     serviceName:
+//                         service.name,
+
+//                     serviceType:
+//                         service.type,
+
+//                     documents,
+
+//                     copies,
+
+//                     printType:
+//                         req.body
+//                         .printType ||
+//                         "Black & White",
+
+//                     serviceAmount,
+
+//                     deliveryCharge,
+
+//                     totalAmount,
+
+//                     razorpayOrderId:
+//                         paymentOrder.id,
+
+//                     paymentStatus:
+//                         "PENDING",
+
+//                     status:
+//                         "NEW"
+
+//                 });
+
+
+//             await order.save();
+
+
+//             return res.json({
+
+//                 success:true,
+
+//                 key:
+//                     process.env
+//                     .RAZORPAY_KEY_ID,
+
+//                 orderId:
+//                     order._id,
+
+//                 orderNumber:
+//                     order.orderId,
+
+//                 serviceName:
+//                     service.name,
+
+//                 razorpayOrderId:
+//                     paymentOrder.id,
+
+//                 amount:
+//                     paymentOrder.amount
+
+//             });
+
+//         }
+//         catch(err){
+
+//             console.error(
+//                 "CREATE QUICK ORDER:",
+//                 err
+//             );
+
+//             return res
+//                 .status(500)
+//                 .json({
+
+//                     success:false,
+
+//                     message:
+//                         err.message
+
+//                 });
+
+//         }
+
+//     }
+// );
+
+
+// // ======================================================
+// // VERIFY PAYMENT
+// // ======================================================
+
+// router.post(
+//     "/quick-service/verify-payment",
+//     async(req,res)=>{
+
+//         try{
+
+//             const {
+
+//                 orderId,
+
+//                 razorpay_order_id,
+
+//                 razorpay_payment_id,
+
+//                 razorpay_signature
+
+//             } = req.body;
+
+
+//             const body =
+//                 razorpay_order_id +
+//                 "|" +
+//                 razorpay_payment_id;
+
+
+//             const expected =
+//                 crypto
+//                 .createHmac(
+//                     "sha256",
+//                     process.env
+//                     .RAZORPAY_KEY_SECRET
+//                 )
+//                 .update(body)
+//                 .digest("hex");
+
+
+//             if(
+//                 expected !==
+//                 razorpay_signature
+//             ){
+
+//                 return res.json({
+
+//                     success:false
+
+//                 });
+
+//             }
+
+
+//             const order =
+//                 await QuickOrder
+//                     .findByIdAndUpdate(
+
+//                         orderId,
+
+//                         {
+
+//                             paymentStatus:
+//                                 "PAID",
+
+//                             razorpayPaymentId:
+//                                 razorpay_payment_id,
+
+//                             status:
+//                                 "NEW"
+
+//                         },
+
+//                         {
+//                             new:true
+//                         }
+
+//                     );
+
+
+//             return res.json({
+
+//                 success:true,
+
+//                 orderNumber:
+//                     order.orderId
+
+//             });
+
+//         }
+//         catch(err){
+
+//             console.error(err);
+
+//             return res
+//                 .status(500)
+//                 .json({
+
+//                     success:false
+
+//                 });
+
+//         }
+
+//     }
+// );
+
+
+// // ======================================================
+// // SUCCESS PAGE
+// // ======================================================
+
+// router.get(
+//     "/quick-service/success/:id",
+//     async(req,res)=>{
+
+//         const order =
+//             await QuickOrder
+//                 .findById(
+//                     req.params.id
+//                 )
+//                 .lean();
+
+
+//         if(!order){
+
+//             return res.send(
+//                 "Order Not Found"
+//             );
+
+//         }
+
+
+//         res.send(`
+
+// <!DOCTYPE html>
+
+// <html>
+
+// <head>
+
+// <meta name="viewport"
+// content="width=device-width,initial-scale=1">
+
+// <title>
+// Order Successful
+// </title>
+
+// </head>
+
+// <body style="
+// font-family:Arial;
+// background:#f0fdf4;
+// text-align:center;
+// padding:40px;
+// ">
+
+// <h1>
+// ✅ Payment Successful
+// </h1>
+
+// <h2>
+// Order:
+// ${order.orderId}
+// </h2>
+
+// <p>
+// Your order has been received.
+// </p>
+
+// <a href="/">
+// Back Home
+// </a>
+
+// </body>
+
+// </html>
+
+//         `);
+
+//     }
+// );
+
+
+// // ======================================================
+// // ADMIN DASHBOARD
+// // ======================================================
+
+// router.get(
+//     "/admin/quick-service",
+
+//     requireAdmin,
+
+//     async(req,res)=>{
+
+//         try{
+
+//             const orders =
+//                 await QuickOrder
+//                     .find({
+//                         paymentStatus:"PAID"
+//                     })
+//                     .sort({
+//                         createdAt:-1
+//                     })
+//                     .lean();
+
+
+//             let setting =
+//                 await QuickShopSetting
+//                     .findOne()
+//                     .lean();
+
+
+//             if(!setting){
+
+//                 setting = {
+//                     isOpen:true,
+//                     deliveryRadiusKm:2,
+//                     deliveryCharge:20
+//                 };
+
+//             }
+
+
+//             res.send(`
+
+// <!DOCTYPE html>
+
+// <html>
+
+// <head>
+
+// <meta name="viewport"
+// content="width=device-width,initial-scale=1">
+
+// <title>
+// Quick Service Admin
+// </title>
+
+// <style>
+
+// *{
+// box-sizing:border-box;
+// font-family:Arial;
+// }
+
+// body{
+// margin:0;
+// background:#f1f5f9;
+// }
+
+// .container{
+// max-width:1100px;
+// margin:auto;
+// padding:20px;
+// }
+
+// .control{
+// background:white;
+// padding:20px;
+// border-radius:18px;
+// margin-bottom:20px;
+// }
+
+// .status-open{
+// color:#15803d;
+// }
+
+// .status-close{
+// color:#dc2626;
+// }
+
+// button{
+// padding:10px 16px;
+// border:0;
+// border-radius:8px;
+// cursor:pointer;
+// font-weight:bold;
+// }
+
+// .open{
+// background:#16a34a;
+// color:white;
+// }
+
+// .close{
+// background:#dc2626;
+// color:white;
+// }
+
+// .order{
+// background:white;
+// padding:20px;
+// border-radius:18px;
+// margin-bottom:20px;
+// box-shadow:
+// 0 5px 20px
+// rgba(0,0,0,.08);
+// }
+
+// .documents{
+// display:grid;
+// grid-template-columns:
+// repeat(
+// auto-fit,
+// minmax(180px,1fr)
+// );
+// gap:15px;
+// margin-top:15px;
+// }
+
+// .document{
+// border:1px solid #ddd;
+// padding:10px;
+// border-radius:12px;
+// }
+
+// .document img{
+// width:100%;
+// height:180px;
+// object-fit:contain;
+// background:#f8fafc;
+// }
+
+// .download{
+// display:block;
+// margin-top:8px;
+// padding:9px;
+// text-align:center;
+// background:#2563eb;
+// color:white;
+// text-decoration:none;
+// border-radius:8px;
+// }
+
+// select{
+// padding:10px;
+// border-radius:8px;
+// }
+
+// </style>
+
+// </head>
+
+// <body>
+
+// <div class="container">
+
+
+// <div class="control">
+
+// <h2>
+// 🏪 Shop Control
+// </h2>
+
+// <h3
+// class="${
+// setting.isOpen
+// ?
+// "status-open"
+// :
+// "status-close"
+// }"
+// >
+
+// ${
+// setting.isOpen
+// ?
+// "🟢 SHOP OPEN"
+// :
+// "🔴 SHOP CLOSED"
+// }
+
+// </h3>
+
+
+// <form
+// action="/admin/quick-service/shop-status"
+// method="POST"
+// style="display:inline"
+// >
+
+// <input
+// type="hidden"
+// name="isOpen"
+// value="true"
+// >
+
+// <button class="open">
+// OPEN SHOP
+// </button>
+
+// </form>
+
+
+// <form
+// action="/admin/quick-service/shop-status"
+// method="POST"
+// style="display:inline"
+// >
+
+// <input
+// type="hidden"
+// name="isOpen"
+// value="false"
+// >
+
+// <button class="close">
+// CLOSE SHOP
+// </button>
+
+// </form>
+
+
+// <p>
+// Delivery Radius:
+// <strong>
+// ${setting.deliveryRadiusKm} KM
+// </strong>
+// </p>
+
+// </div>
+
+
+// <h2>
+// 📦 Customer Orders
+// </h2>
+
+
+// ${
+// orders.length
+// ?
+
+// orders.map(order=>`
+
+// <div class="order">
+
+// <h2>
+// ${order.orderId}
+// </h2>
+
+// <p>
+// <strong>
+// ${order.serviceName}
+// </strong>
+// </p>
+
+// <p>
+// 👤 ${order.customerName}
+// </p>
+
+// <p>
+// 📞
+// <a href="tel:${order.phone}">
+// ${order.phone}
+// </a>
+// </p>
+
+// <p>
+// 🏠 ${order.address}
+// </p>
+
+// <p>
+// 📍 Distance:
+// <strong>
+// ${order.distanceKm} KM
+// </strong>
+// </p>
+
+// <p>
+// 💰 ₹${order.totalAmount}
+// -
+// <strong style="color:green">
+// PAID
+// </strong>
+// </p>
+
+// <p>
+// Print:
+// ${order.printType}
+// </p>
+
+// <p>
+// Copies:
+// ${order.copies}
+// </p>
+
+
+// <h3>
+// 📄 Customer Documents
+// </h3>
+
+
+// <div class="documents">
+
+// ${
+// (order.documents || [])
+// .map((doc,index)=>`
+
+// <div class="document">
+
+// <strong>
+// ${doc.documentName}
+// </strong>
+
+// <br><br>
+
+// <img
+// src="/admin/quick-service/document/${order._id}/${index}"
+// onerror="
+// this.style.display='none'
+// "
+// >
+
+// <a
+// href="/admin/quick-service/document/${order._id}/${index}?download=1"
+// class="download"
+// >
+
+// ⬇ Download
+
+// </a>
+
+// </div>
+
+// `).join("")
+// }
+
+// </div>
+
+
+// <br>
+
+
+// <form
+// method="POST"
+// action="/admin/quick-service/order-status/${order._id}"
+// >
+
+// <select
+// name="status"
+// >
+
+// ${[
+// "NEW",
+// "PROCESSING",
+// "READY",
+// "PACKED",
+// "OUT_FOR_DELIVERY",
+// "DELIVERED",
+// "CANCELLED"
+// ]
+// .map(status=>`
+
+// <option
+// value="${status}"
+// ${order.status === status ? "selected" : ""}
+// >
+// ${status}
+// </option>
+
+// `).join("")}
+
+// </select>
+
+// <button
+// style="
+// background:#0d604b;
+// color:white;
+// "
+// >
+// Update Status
+// </button>
+
+// </form>
+
+
+// </div>
+
+// `).join("")
+
+// :
+
+// "<p>No paid orders yet.</p>"
+// }
+
+
+// </div>
+
+// </body>
+
+// </html>
+
+//             `);
+
+//         }
+//         catch(err){
+
+//             console.error(err);
+
+//             res.status(500)
+//             .send(err.message);
+
+//         }
+
+//     }
+// );
+
+
+// // ======================================================
+// // SHOP OPEN / CLOSE
+// // ======================================================
+
+// router.post(
+//     "/admin/quick-service/shop-status",
+
+//     requireAdmin,
+
+//     async(req,res)=>{
+
+//         try{
+
+//             const isOpen =
+//                 req.body.isOpen ===
+//                 "true";
+
+
+//             await QuickShopSetting
+//                 .findOneAndUpdate(
+
+//                     {},
+
+//                     {
+//                         isOpen,
+//                         updatedAt:
+//                             new Date()
+//                     },
+
+//                     {
+//                         upsert:true,
+//                         new:true
+//                     }
+
+//                 );
+
+
+//             res.redirect(
+//                 "/admin/quick-service"
+//             );
+
+//         }
+//         catch(err){
+
+//             console.error(err);
+
+//             res.status(500)
+//             .send(err.message);
+
+//         }
+
+//     }
+// );
+
+
+// // ======================================================
+// // ORDER STATUS
+// // ======================================================
+
+// router.post(
+//     "/admin/quick-service/order-status/:id",
+
+//     requireAdmin,
+
+//     async(req,res)=>{
+
+//         try{
+
+//             await QuickOrder
+//                 .findByIdAndUpdate(
+
+//                     req.params.id,
+
+//                     {
+//                         status:
+//                             req.body.status
+//                     }
+
+//                 );
+
+
+//             res.redirect(
+//                 "/admin/quick-service"
+//             );
+
+//         }
+//         catch(err){
+
+//             console.error(err);
+
+//             res.status(500)
+//             .send(err.message);
+
+//         }
+
+//     }
+// );
+
+
+// // ======================================================
+// // PRIVATE DOCUMENT VIEW / DOWNLOAD
+// // ======================================================
+
+// router.get(
+//     "/admin/quick-service/document/:orderId/:index",
+
+//     requireAdmin,
+
+//     async(req,res)=>{
+
+//         try{
+
+//             const order =
+//                 await QuickOrder
+//                     .findById(
+//                         req.params.orderId
+//                     );
+
+
+//             if(!order){
+
+//                 return res
+//                     .status(404)
+//                     .send(
+//                         "Order Not Found"
+//                     );
+
+//             }
+
+
+//             const index =
+//                 Number(
+//                     req.params.index
+//                 );
+
+
+//             const document =
+//                 order.documents[
+//                     index
+//                 ];
+
+
+//             if(!document){
+
+//                 return res
+//                     .status(404)
+//                     .send(
+//                         "Document Not Found"
+//                     );
+
+//             }
+
+
+//             const file =
+//                 path.join(
+//                     privateFolder,
+//                     document.fileName
+//                 );
+
+
+//             if(
+//                 !fs.existsSync(file)
+//             ){
+
+//                 return res
+//                     .status(404)
+//                     .send(
+//                         "File Not Found"
+//                     );
+
+//             }
+
+
+//             if(
+//                 req.query.download ===
+//                 "1"
+//             ){
+
+//                 return res.download(
+
+//                     file,
+
+//                     document.originalName ||
+//                     document.fileName
+
+//                 );
+
+//             }
+
+
+//             return res.sendFile(
+//                 file
+//             );
+
+//         }
+//         catch(err){
+
+//             console.error(err);
+
+//             res.status(500)
+//             .send(err.message);
+
+//         }
+
+//     }
+// );
+
+
+// module.exports = router;
+
+
 require("dotenv").config();
 
 const express = require("express");
@@ -36,22 +2451,24 @@ new Razorpay({
 
 
 // ======================================================
-// PRIVATE DOCUMENT STORAGE
+// PRIVATE DOCUMENT FOLDER
 // ======================================================
 
-const privateFolder =
+const uploadDirectory =
 path.join(
     process.cwd(),
     "storage",
-    "quick-orders"
+    "quick-service"
 );
 
 if(
-    !fs.existsSync(privateFolder)
+    !fs.existsSync(
+        uploadDirectory
+    )
 ){
 
     fs.mkdirSync(
-        privateFolder,
+        uploadDirectory,
         {
             recursive:true
         }
@@ -60,40 +2477,50 @@ if(
 }
 
 
+// ======================================================
+// MULTER
+// ======================================================
+
 const storage =
 multer.diskStorage({
 
-    destination:
-    function(req,file,cb){
+    destination:function(
+        req,
+        file,
+        cb
+    ){
 
         cb(
             null,
-            privateFolder
+            uploadDirectory
         );
 
     },
 
-    filename:
-    function(req,file,cb){
+    filename:function(
+        req,
+        file,
+        cb
+    ){
 
-        const ext =
+        const extension =
             path.extname(
                 file.originalname
             ).toLowerCase();
 
-        const filename =
-            "doc-" +
+        const fileName =
+            "quick-" +
             Date.now() +
             "-" +
             Math.round(
                 Math.random() *
-                1000000000
+                1e9
             ) +
-            ext;
+            extension;
 
         cb(
             null,
-            filename
+            fileName
         );
 
     }
@@ -110,38 +2537,44 @@ multer({
         fileSize:
             8 * 1024 * 1024,
 
-        files:20
+        files:25
     },
 
-    fileFilter:
-    function(req,file,cb){
+    fileFilter:function(
+        req,
+        file,
+        cb
+    ){
 
         const allowed = [
 
             "image/jpeg",
+            "image/jpg",
             "image/png",
             "image/webp",
             "application/pdf"
 
         ];
 
+
         if(
-            allowed.includes(
+            !allowed.includes(
                 file.mimetype
             )
         ){
 
             return cb(
-                null,
-                true
+                new Error(
+                    "Only JPG, PNG, WEBP and PDF allowed."
+                )
             );
 
         }
 
+
         cb(
-            new Error(
-                "Only JPG, PNG, WEBP and PDF allowed"
-            )
+            null,
+            true
         );
 
     }
@@ -150,103 +2583,213 @@ multer({
 
 
 // ======================================================
-// ADMIN CHECK
+// GET SHOP SETTING
 // ======================================================
 
-function requireAdmin(
-    req,
-    res,
-    next
-){
+async function getQuickShopSetting(){
 
-    if(
-        !req.session ||
-        !req.session.adminId
-    ){
+    let setting =
+        await QuickShopSetting
+            .findOne();
 
-        return res
-            .status(403)
-            .send(
-                "Admin Login Required"
-            );
+
+    if(!setting){
+
+        setting =
+            await QuickShopSetting
+                .create({
+
+                    shopName:
+                        "GLOBAL QUICK SERVICES",
+
+                    isOpen:
+                        false,
+
+                    deliveryRadiusKm:
+                        2,
+
+                    deliveryCharge:
+                        20
+
+                });
 
     }
 
-    next();
+
+    return setting;
 
 }
 
 
 // ======================================================
-// DISTANCE FUNCTION
+// SAFE NUMBER
 // ======================================================
 
-function calculateDistance(
-    lat1,
-    lon1,
-    lat2,
-    lon2
+function safeNumber(
+    value,
+    defaultValue = 0
 ){
 
-    const R = 6371;
+    const number =
+        Number(value);
 
-    const toRad =
+    return Number.isFinite(
+        number
+    )
+        ? number
+        : defaultValue;
+
+}
+
+
+// ======================================================
+// VALID GPS
+// ======================================================
+
+function validCoordinates(
+    latitude,
+    longitude
+){
+
+    if(
+        latitude === null ||
+        latitude === undefined ||
+        latitude === "" ||
+
+        longitude === null ||
+        longitude === undefined ||
+        longitude === ""
+    ){
+
+        return false;
+
+    }
+
+
+    const lat =
+        Number(latitude);
+
+    const lng =
+        Number(longitude);
+
+
+    return (
+
+        Number.isFinite(lat) &&
+
+        Number.isFinite(lng) &&
+
+        lat >= -90 &&
+        lat <= 90 &&
+
+        lng >= -180 &&
+        lng <= 180
+
+    );
+
+}
+
+
+// ======================================================
+// DISTANCE
+// ======================================================
+
+function calculateDistanceKm(
+    latitude1,
+    longitude1,
+    latitude2,
+    longitude2
+){
+
+    const earthRadiusKm =
+        6371;
+
+
+    const toRadians =
         value =>
-        value * Math.PI / 180;
+            value *
+            Math.PI /
+            180;
 
-    const dLat =
-        toRad(
-            lat2 - lat1
+
+    const latitudeDifference =
+        toRadians(
+            latitude2 -
+            latitude1
         );
 
-    const dLon =
-        toRad(
-            lon2 - lon1
+
+    const longitudeDifference =
+        toRadians(
+            longitude2 -
+            longitude1
         );
 
-    const a =
+
+    const calculation =
 
         Math.sin(
-            dLat / 2
+            latitudeDifference /
+            2
         ) ** 2
 
         +
 
         Math.cos(
-            toRad(lat1)
+            toRadians(
+                latitude1
+            )
         )
 
         *
 
         Math.cos(
-            toRad(lat2)
+            toRadians(
+                latitude2
+            )
         )
 
         *
 
         Math.sin(
-            dLon / 2
+            longitudeDifference /
+            2
         ) ** 2;
 
 
-    const c =
+    return (
+
+        earthRadiusKm *
+
         2 *
+
         Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1-a)
-        );
 
+            Math.sqrt(
+                calculation
+            ),
 
-    return R * c;
+            Math.sqrt(
+                1 -
+                calculation
+            )
+
+        )
+
+    );
 
 }
 
 
 // ======================================================
-// GENERATE ORDER ID
+// ORDER NUMBER
 // ======================================================
 
-async function createOrderId(){
+async function generateOrderNumber(){
+
+    let number =
+        1001;
+
 
     const lastOrder =
         await QuickOrder
@@ -255,47 +2798,64 @@ async function createOrderId(){
                 createdAt:-1
             });
 
-    let number = 1001;
 
     if(
         lastOrder &&
         lastOrder.orderId
     ){
 
-        const old =
-            parseInt(
+        const oldNumber =
+            Number(
+
                 String(
                     lastOrder.orderId
                 )
                 .replace(
-                    "GH",
+                    "GQ",
                     ""
                 )
+
             );
 
-        if(!isNaN(old)){
+
+        if(
+            Number.isFinite(
+                oldNumber
+            )
+        ){
 
             number =
-                old + 1;
+                oldNumber +
+                1;
 
         }
 
     }
 
-    return "GH" + number;
+
+    return (
+        "GQ" +
+        number
+    );
 
 }
 
 
 // ======================================================
-// CUSTOMER QUICK SERVICE PAGE
+// CUSTOMER PAGE
+// GET /quick-service
 // ======================================================
 
 router.get(
     "/quick-service",
+
     async(req,res)=>{
 
         try{
+
+            const setting =
+                await getQuickShopSetting();
+
 
             const services =
                 await QuickService
@@ -308,23 +2868,6 @@ router.get(
                     .lean();
 
 
-            let setting =
-                await QuickShopSetting
-                    .findOne()
-                    .lean();
-
-
-            if(!setting){
-
-                setting = {
-                    isOpen:true,
-                    deliveryRadiusKm:2,
-                    deliveryCharge:20
-                };
-
-            }
-
-
             return res.send(`
 
 <!DOCTYPE html>
@@ -334,14 +2877,21 @@ router.get(
 <head>
 
 <meta
+charset="UTF-8"
+>
+
+<meta
 name="viewport"
-content="width=device-width,initial-scale=1">
+content="width=device-width,initial-scale=1"
+>
 
 <title>
-Quick Document Service
+GLOBAL QUICK SERVICES
 </title>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script
+src="https://checkout.razorpay.com/v1/checkout.js"
+></script>
 
 <style>
 
@@ -352,60 +2902,58 @@ font-family:Arial,sans-serif;
 
 body{
 margin:0;
-background:#f5f7fb;
-color:#111827;
+background:#f1f5f9;
+color:#0f172a;
 }
 
 .header{
+padding:22px;
+text-align:center;
+color:white;
 background:
 linear-gradient(
 135deg,
 #0d604b,
-#18a47b
+#16a34a
 );
-color:white;
-padding:25px 15px;
-text-align:center;
 }
 
 .container{
 max-width:650px;
-margin:20px auto;
+margin:auto;
 padding:15px;
 }
 
 .card{
 background:white;
 padding:20px;
-border-radius:20px;
+border-radius:18px;
 box-shadow:
 0 10px 30px
 rgba(0,0,0,.10);
 }
 
-.shop-open{
-padding:12px;
-background:#dcfce7;
-color:#166534;
-border-radius:10px;
+.status{
+padding:13px;
+border-radius:12px;
 text-align:center;
 font-weight:bold;
-margin-bottom:15px;
+margin-bottom:18px;
 }
 
-.shop-close{
-padding:15px;
+.status.open{
+background:#dcfce7;
+color:#166534;
+}
+
+.status.closed{
 background:#fee2e2;
 color:#991b1b;
-border-radius:10px;
-text-align:center;
-font-weight:bold;
-margin-bottom:15px;
 }
 
 label{
 display:block;
-margin-top:16px;
+margin-top:15px;
 margin-bottom:6px;
 font-weight:bold;
 }
@@ -415,7 +2963,7 @@ select,
 textarea{
 width:100%;
 padding:13px;
-border:1px solid #ddd;
+border:1px solid #cbd5e1;
 border-radius:10px;
 font-size:15px;
 }
@@ -428,57 +2976,74 @@ min-height:90px;
 margin-top:15px;
 padding:15px;
 background:#f8fafc;
+border-radius:13px;
 border:1px solid #dbeafe;
-border-radius:14px;
 }
 
-.camera{
-display:block;
-margin-top:8px;
+.location-box{
+margin-top:15px;
+padding:13px;
+border-radius:10px;
+background:#fef3c7;
+color:#92400e;
+font-weight:bold;
 }
 
-.total-box{
+.location-box.success{
+background:#dcfce7;
+color:#166534;
+}
+
+.location-box.error{
+background:#fee2e2;
+color:#991b1b;
+}
+
+.location-btn{
+width:100%;
+margin-top:10px;
+padding:13px;
+border:0;
+border-radius:10px;
+background:#f59e0b;
+color:white;
+font-weight:bold;
+}
+
+.total{
 margin-top:20px;
-padding:18px;
+padding:15px;
 background:#eff6ff;
-border-radius:15px;
+border-radius:12px;
+line-height:1.9;
 }
 
 .pay-btn{
 width:100%;
 margin-top:20px;
-padding:16px;
+padding:15px;
 border:0;
-border-radius:12px;
+border-radius:10px;
 background:#16a34a;
-color:#fff;
-font-size:17px;
+color:white;
+font-size:16px;
 font-weight:bold;
-cursor:pointer;
 }
 
 .pay-btn:disabled{
 background:#94a3b8;
-cursor:not-allowed;
 }
 
 .hidden{
 display:none;
 }
 
-.location-box{
-margin-top:15px;
-padding:12px;
-border-radius:10px;
-background:#f1f5f9;
-}
-
 </style>
 
 </head>
 
-
 <body>
+
 
 <div class="header">
 
@@ -487,7 +3052,7 @@ background:#f1f5f9;
 </h2>
 
 <p>
-Document Service at Your Doorstep
+Fast Document Service at Your Doorstep
 </p>
 
 </div>
@@ -498,32 +3063,25 @@ Document Service at Your Doorstep
 <div class="card">
 
 
+<div
+class="status ${
+setting.isOpen
+?
+"open"
+:
+"closed"
+}"
+>
+
 ${
 setting.isOpen
-
 ?
-
-`
-<div class="shop-open">
-🟢 Shop Open
-</div>
-`
-
+"🟢 SHOP OPEN"
 :
-
-`
-<div class="shop-close">
-🔴 Shop is currently closed
-</div>
-`
-
+"🔴 SHOP CLOSED"
 }
 
-
-<form
-id="orderForm"
-enctype="multipart/form-data"
->
+</div>
 
 
 <label>
@@ -531,9 +3089,7 @@ Select Service
 </label>
 
 <select
-name="serviceId"
 id="service"
-required
 >
 
 <option value="">
@@ -541,7 +3097,8 @@ Select Service
 </option>
 
 ${
-services.map(service=>`
+services.map(
+service=>`
 
 <option
 value="${service._id}"
@@ -549,10 +3106,14 @@ data-type="${service.type}"
 data-price="${service.price}"
 data-requirements='${JSON.stringify(service.requirements || [])}'
 >
-${service.name} - ₹${service.price}
+
+${service.name}
+- ₹${service.price}
+
 </option>
 
-`).join("")
+`
+).join("")
 }
 
 </select>
@@ -572,7 +3133,7 @@ class="hidden"
 Print Type
 </label>
 
-<select name="printType">
+<select id="printType">
 
 <option>
 Black & White
@@ -586,14 +3147,14 @@ Color
 
 
 <label>
-Number of Copies
+Copies
 </label>
 
 <input
 type="number"
-name="copies"
-min="1"
+id="copies"
 value="1"
+min="1"
 >
 
 </div>
@@ -605,89 +3166,86 @@ Customer Name
 
 <input
 type="text"
-name="customerName"
-required
+id="customerName"
 >
 
 
 <label>
-Phone Number
+Mobile Number
 </label>
 
 <input
 type="tel"
-name="phone"
+id="mobile"
 maxlength="10"
-required
 >
 
 
 <label>
-Full Delivery Address
+Delivery Address
 </label>
 
 <textarea
-name="address"
-required
+id="address"
 ></textarea>
 
 
-<input
-type="hidden"
-name="latitude"
-id="latitude"
->
-
-<input
-type="hidden"
-name="longitude"
-id="longitude"
->
-
-
 <div
-class="location-box"
 id="locationStatus"
+class="location-box"
 >
 
-📍 Checking delivery location...
+📍 Location check करें
 
 </div>
 
 
-<div class="total-box">
+<button
+type="button"
+class="location-btn"
+onclick="checkLocation()"
+>
+
+📍 CHECK MY LOCATION
+
+</button>
+
+
+<div class="total">
 
 Service:
-₹<span id="servicePrice">0</span>
+₹<span id="serviceAmount">0</span>
 
-<br><br>
+<br>
 
 Delivery:
-₹${Number(setting.deliveryCharge || 0)}
+₹${safeNumber(
+setting.deliveryCharge,
+20
+)}
 
-<br><br>
+<br>
 
 <strong>
 Total:
-₹<span id="totalPrice">0</span>
+₹<span id="totalAmount">0</span>
 </strong>
 
 </div>
 
 
 <button
-type="submit"
+type="button"
 class="pay-btn"
-id="payButton"
-${setting.isOpen ? "" : "disabled"}
+id="orderButton"
+onclick="placeOrder()"
+disabled
 >
 
-💳 Continue to Payment
+CHECK LOCATION FIRST
 
 </button>
 
-
-</form>
 
 </div>
 
@@ -696,53 +3254,75 @@ ${setting.isOpen ? "" : "disabled"}
 
 <script>
 
-const shopOpen =
+const SHOP_OPEN =
 ${setting.isOpen ? "true" : "false"};
 
-const deliveryCharge =
-${Number(setting.deliveryCharge || 0)};
+const SHOP_LATITUDE =
+${
+validCoordinates(
+setting.shopLocation?.latitude,
+setting.shopLocation?.longitude
+)
+?
+Number(
+setting.shopLocation.latitude
+)
+:
+"null"
+};
+
+const SHOP_LONGITUDE =
+${
+validCoordinates(
+setting.shopLocation?.latitude,
+setting.shopLocation?.longitude
+)
+?
+Number(
+setting.shopLocation.longitude
+)
+:
+"null"
+};
+
+const DELIVERY_RADIUS =
+${safeNumber(
+setting.deliveryRadiusKm,
+2
+)};
+
+const DELIVERY_CHARGE =
+${safeNumber(
+setting.deliveryCharge,
+20
+)};
 
 
-const service =
+let customerLatitude =
+null;
+
+let customerLongitude =
+null;
+
+let customerAccuracy =
+null;
+
+let customerDistance =
+null;
+
+let locationAllowed =
+false;
+
+
+const serviceSelect =
 document.getElementById(
     "service"
 );
 
-const documentsArea =
-document.getElementById(
-    "documentsArea"
-);
 
-const photoCopyOptions =
-document.getElementById(
-    "photoCopyOptions"
-);
-
-const servicePrice =
-document.getElementById(
-    "servicePrice"
-);
-
-const totalPrice =
-document.getElementById(
-    "totalPrice"
-);
-
-
-// ======================================================
-// SERVICE CHANGE
-// ======================================================
-
-service.addEventListener(
+serviceSelect.addEventListener(
 "change",
 function(){
-
-    documentsArea.innerHTML = "";
-
-    photoCopyOptions.classList.add(
-        "hidden"
-    );
-
 
     const option =
         this.options[
@@ -750,15 +3330,45 @@ function(){
         ];
 
 
+    const documentsArea =
+        document.getElementById(
+            "documentsArea"
+        );
+
+
+    const photoCopyOptions =
+        document.getElementById(
+            "photoCopyOptions"
+        );
+
+
+    documentsArea.innerHTML =
+        "";
+
+
+    photoCopyOptions
+        .classList
+        .add(
+            "hidden"
+        );
+
+
     if(!option.value){
+
+        document.getElementById(
+            "serviceAmount"
+        ).textContent =
+            "0";
+
+        document.getElementById(
+            "totalAmount"
+        ).textContent =
+            "0";
 
         return;
 
     }
 
-
-    const type =
-        option.dataset.type;
 
     const price =
         Number(
@@ -767,16 +3377,21 @@ function(){
         );
 
 
-    servicePrice.textContent =
+    document.getElementById(
+        "serviceAmount"
+    ).textContent =
         price;
 
-    totalPrice.textContent =
+
+    document.getElementById(
+        "totalAmount"
+    ).textContent =
         price +
-        deliveryCharge;
+        DELIVERY_CHARGE;
 
 
     if(
-        type ===
+        option.dataset.type ===
         "photocopy"
     ){
 
@@ -792,46 +3407,49 @@ function(){
 <div class="document-box">
 
 <label>
-📄 Scan / Upload Pages
+📷 Scan / Upload Document Pages
 </label>
 
 <input
 type="file"
-name="photocopyPages"
+id="photocopyPages"
 accept="image/*"
 capture="environment"
 multiple
-required
 >
 
-<small>
-Multiple pages select kar sakte hain.
-</small>
+<p>
+एक से ज्यादा pages select कर सकते हैं।
+</p>
 
 </div>
 
         \`;
+
 
         return;
 
     }
 
 
-    let requirements = [];
+    let requirements =
+        [];
+
 
     try{
 
         requirements =
             JSON.parse(
                 option.dataset
-                    .requirements ||
+                .requirements ||
                 "[]"
             );
 
     }
     catch(error){
 
-        requirements = [];
+        requirements =
+            [];
 
     }
 
@@ -843,6 +3461,7 @@ Multiple pages select kar sakte hain.
             document.createElement(
                 "div"
             );
+
 
         box.className =
             "document-box";
@@ -857,103 +3476,328 @@ ${item.required ? "*" : ""}
 
 <input
 type="file"
-name="doc_${index}"
+id="doc_${index}"
+data-doc-name="${item.name}"
 accept="image/*"
 capture="environment"
 ${item.required ? "required" : ""}
 >
 
-<input
-type="hidden"
-name="docName_${index}"
-value="${item.name}"
->
-
         \`;
 
 
-        documentsArea
-            .appendChild(
-                box
-            );
+        documentsArea.appendChild(
+            box
+        );
 
     });
 
 });
 
 
-// ======================================================
-// LOCATION
-// ======================================================
-
-const locationStatus =
-document.getElementById(
-    "locationStatus"
-);
-
-if(
-navigator.geolocation
+function calculateDistanceKm(
+lat1,
+lon1,
+lat2,
+lon2
 ){
 
-navigator.geolocation
-.getCurrentPosition(
-
-function(position){
-
-    document
-    .getElementById(
-        "latitude"
-    )
-    .value =
-        position.coords
-            .latitude;
+    const R =
+        6371;
 
 
-    document
-    .getElementById(
-        "longitude"
-    )
-    .value =
-        position.coords
-            .longitude;
+    const rad =
+        value =>
+            value *
+            Math.PI /
+            180;
 
 
-    locationStatus.innerHTML =
-        "✅ Location captured";
+    const dLat =
+        rad(
+            lat2 -
+            lat1
+        );
 
-},
 
-function(){
+    const dLon =
+        rad(
+            lon2 -
+            lon1
+        );
 
-    locationStatus.innerHTML =
-        "❌ Location permission required";
+
+    const a =
+
+        Math.sin(
+            dLat / 2
+        ) ** 2
+
+        +
+
+        Math.cos(
+            rad(lat1)
+        )
+
+        *
+
+        Math.cos(
+            rad(lat2)
+        )
+
+        *
+
+        Math.sin(
+            dLon / 2
+        ) ** 2;
+
+
+    return (
+
+        R *
+
+        2 *
+
+        Math.atan2(
+            Math.sqrt(a),
+            Math.sqrt(1-a)
+        )
+
+    );
 
 }
 
-);
+
+function checkLocation(){
+
+    const box =
+        document.getElementById(
+            "locationStatus"
+        );
+
+
+    const button =
+        document.getElementById(
+            "orderButton"
+        );
+
+
+    locationAllowed =
+        false;
+
+
+    button.disabled =
+        true;
+
+
+    if(!SHOP_OPEN){
+
+        box.className =
+            "location-box error";
+
+        box.innerHTML =
+            "🔴 Shop अभी Closed है।";
+
+        button.textContent =
+            "SHOP CLOSED";
+
+        return;
+
+    }
+
+
+    if(
+        SHOP_LATITUDE === null ||
+        SHOP_LONGITUDE === null
+    ){
+
+        box.className =
+            "location-box error";
+
+        box.innerHTML =
+            "❌ Shop Location save नहीं है।";
+
+        return;
+
+    }
+
+
+    if(
+        !navigator.geolocation
+    ){
+
+        box.className =
+            "location-box error";
+
+        box.innerHTML =
+            "❌ GPS support नहीं है।";
+
+        return;
+
+    }
+
+
+    box.innerHTML =
+        "📍 Location check हो रही है...";
+
+
+    navigator.geolocation
+    .getCurrentPosition(
+
+    function(position){
+
+        customerLatitude =
+            position.coords.latitude;
+
+        customerLongitude =
+            position.coords.longitude;
+
+        customerAccuracy =
+            position.coords.accuracy;
+
+
+        customerDistance =
+            calculateDistanceKm(
+
+                SHOP_LATITUDE,
+
+                SHOP_LONGITUDE,
+
+                customerLatitude,
+
+                customerLongitude
+
+            );
+
+
+        if(
+            customerDistance <=
+            DELIVERY_RADIUS
+        ){
+
+            locationAllowed =
+                true;
+
+
+            box.className =
+                "location-box success";
+
+
+            box.innerHTML =
+
+                "✅ DELIVERY AVAILABLE" +
+
+                "<br>" +
+
+                "Distance: " +
+
+                customerDistance
+                .toFixed(2) +
+
+                " KM";
+
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "CONTINUE TO PAYMENT";
+
+        }
+        else{
+
+            box.className =
+                "location-box error";
+
+
+            box.innerHTML =
+
+                "❌ Delivery Available नहीं है." +
+
+                "<br>" +
+
+                "Distance: " +
+
+                customerDistance
+                .toFixed(2) +
+
+                " KM" +
+
+                "<br>" +
+
+                "Maximum Radius: " +
+
+                DELIVERY_RADIUS +
+
+                " KM";
+
+
+            button.disabled =
+                true;
+
+
+            button.textContent =
+                "OUTSIDE DELIVERY AREA";
+
+        }
+
+    },
+
+    function(error){
+
+        console.error(
+            error
+        );
+
+
+        box.className =
+            "location-box error";
+
+
+        box.innerHTML =
+            "❌ Location Permission Allow करें.";
+
+    },
+
+    {
+
+        enableHighAccuracy:
+            true,
+
+        timeout:
+            20000,
+
+        maximumAge:
+            0
+
+    }
+
+    );
 
 }
 
 
-// ======================================================
-// SUBMIT ORDER
-// ======================================================
+async function placeOrder(){
 
-document
-.getElementById(
-    "orderForm"
-)
-.addEventListener(
-"submit",
-async function(event){
+    if(
+        !SHOP_OPEN ||
+        !locationAllowed
+    ){
 
-    event.preventDefault();
+        return;
+
+    }
 
 
-    if(!shopOpen){
+    const serviceId =
+        serviceSelect.value;
+
+
+    if(!serviceId){
 
         alert(
-            "Shop is currently closed"
+            "Service select करें."
         );
 
         return;
@@ -961,52 +3805,227 @@ async function(event){
     }
 
 
-    const lat =
+    const customerName =
         document
         .getElementById(
-            "latitude"
+            "customerName"
         )
-        .value;
+        .value
+        .trim();
 
 
-    const lng =
+    const mobile =
         document
         .getElementById(
-            "longitude"
+            "mobile"
         )
-        .value;
+        .value
+        .trim();
 
 
-    if(!lat || !lng){
+    const address =
+        document
+        .getElementById(
+            "address"
+        )
+        .value
+        .trim();
+
+
+    if(
+        !customerName ||
+        !mobile ||
+        !address
+    ){
 
         alert(
-            "Please allow location permission"
+            "Name, Mobile और Address जरूरी है."
         );
 
         return;
+
+    }
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "serviceId",
+        serviceId
+    );
+
+
+    formData.append(
+        "customerName",
+        customerName
+    );
+
+
+    formData.append(
+        "mobile",
+        mobile
+    );
+
+
+    formData.append(
+        "address",
+        address
+    );
+
+
+    formData.append(
+        "latitude",
+        customerLatitude
+    );
+
+
+    formData.append(
+        "longitude",
+        customerLongitude
+    );
+
+
+    formData.append(
+        "accuracy",
+        customerAccuracy || ""
+    );
+
+
+    formData.append(
+        "copies",
+        document
+        .getElementById(
+            "copies"
+        )
+        ?.value ||
+        1
+    );
+
+
+    formData.append(
+        "printType",
+        document
+        .getElementById(
+            "printType"
+        )
+        ?.value ||
+        "Black & White"
+    );
+
+
+    const option =
+        serviceSelect.options[
+            serviceSelect.selectedIndex
+        ];
+
+
+    if(
+        option.dataset.type ===
+        "photocopy"
+    ){
+
+        const input =
+            document.getElementById(
+                "photocopyPages"
+            );
+
+
+        if(
+            !input ||
+            !input.files.length
+        ){
+
+            alert(
+                "Document image upload करें."
+            );
+
+            return;
+
+        }
+
+
+        Array.from(
+            input.files
+        )
+        .forEach(
+        function(file){
+
+            formData.append(
+                "photocopyPages",
+                file
+            );
+
+        });
+
+    }
+    else{
+
+        const documentInputs =
+            document.querySelectorAll(
+                '[id^="doc_"]'
+            );
+
+
+        for(
+            const input
+            of documentInputs
+        ){
+
+            if(
+                input.required &&
+                !input.files.length
+            ){
+
+                alert(
+                    input.dataset.docName +
+                    " upload करें."
+                );
+
+                return;
+
+            }
+
+
+            if(
+                input.files.length
+            ){
+
+                formData.append(
+                    input.id,
+                    input.files[0]
+                );
+
+
+                formData.append(
+                    "name_" +
+                    input.id,
+                    input.dataset.docName
+                );
+
+            }
+
+        }
 
     }
 
 
     const button =
-        document
-        .getElementById(
-            "payButton"
+        document.getElementById(
+            "orderButton"
         );
 
-    button.disabled = true;
 
-    button.innerText =
-        "Please wait...";
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "PLEASE WAIT...";
 
 
     try{
-
-        const formData =
-            new FormData(
-                this
-            );
-
 
         const response =
             await fetch(
@@ -1025,14 +4044,17 @@ async function(event){
         if(!data.success){
 
             alert(
-                data.message ||
-                "Order failed"
+                data.message
             );
 
-            button.disabled=false;
 
-            button.innerText=
-                "💳 Continue to Payment";
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "CONTINUE TO PAYMENT";
+
 
             return;
 
@@ -1102,7 +4124,9 @@ async function(event){
                     await verify.json();
 
 
-                if(result.success){
+                if(
+                    result.success
+                ){
 
                     window.location.href =
                         "/quick-service/success/" +
@@ -1122,40 +4146,41 @@ async function(event){
         };
 
 
-        const rzp =
+        const razorpayObject =
             new Razorpay(
                 options
             );
 
-        rzp.open();
 
-
-        button.disabled=false;
-
-        button.innerText=
-            "💳 Continue to Payment";
+        razorpayObject.open();
 
 
     }
     catch(error){
 
-        console.error(error);
-
-        alert(
-            "Something went wrong"
+        console.error(
+            error
         );
 
-        button.disabled=false;
 
-        button.innerText=
-            "💳 Continue to Payment";
+        alert(
+            "Order create नहीं हुआ."
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "CONTINUE TO PAYMENT";
 
     }
 
 }
-);
 
 </script>
+
 
 </body>
 
@@ -1164,12 +4189,19 @@ async function(event){
             `);
 
         }
-        catch(err){
+        catch(error){
 
-            console.error(err);
+            console.error(
+                "QUICK SERVICE PAGE ERROR:",
+                error
+            );
 
-            res.status(500)
-            .send(err.message);
+
+            res
+            .status(500)
+            .send(
+                error.message
+            );
 
         }
 
@@ -1191,21 +4223,21 @@ router.post(
         try{
 
             const setting =
-                await QuickShopSetting
-                    .findOne();
+                await getQuickShopSetting();
 
 
             if(
-                setting &&
-                setting.isOpen === false
+                !setting.isOpen
             ){
 
-                return res.json({
+                return res
+                .status(400)
+                .json({
 
                     success:false,
 
                     message:
-                    "Shop is currently closed"
+                        "Shop अभी Closed है."
 
                 });
 
@@ -1214,100 +4246,115 @@ router.post(
 
             const service =
                 await QuickService
-                    .findById(
-                        req.body.serviceId
-                    );
+                .findById(
+                    req.body.serviceId
+                );
 
 
             if(
                 !service ||
-                service.active === false
+                !service.active
             ){
 
-                return res.json({
+                return res
+                .status(404)
+                .json({
 
                     success:false,
 
                     message:
-                    "Service not available"
+                        "Service available नहीं है."
 
                 });
 
             }
 
 
-            const latitude =
+            if(
+                !validCoordinates(
+                    req.body.latitude,
+                    req.body.longitude
+                )
+            ){
+
+                return res
+                .status(400)
+                .json({
+
+                    success:false,
+
+                    message:
+                        "Customer Location required."
+
+                });
+
+            }
+
+
+            if(
+                !validCoordinates(
+                    setting
+                    .shopLocation
+                    ?.latitude,
+
+                    setting
+                    .shopLocation
+                    ?.longitude
+                )
+            ){
+
+                return res
+                .status(400)
+                .json({
+
+                    success:false,
+
+                    message:
+                        "Shop Location available नहीं है."
+
+                });
+
+            }
+
+
+            const customerLatitude =
                 Number(
                     req.body.latitude
                 );
 
-            const longitude =
+
+            const customerLongitude =
                 Number(
                     req.body.longitude
                 );
 
 
-            if(
-                !latitude ||
-                !longitude
-            ){
-
-                return res.json({
-
-                    success:false,
-
-                    message:
-                    "Location required"
-
-                });
-
-            }
-
-
-            const shopLat =
-                Number(
-                    setting?.shopLatitude
-                );
-
-            const shopLng =
-                Number(
-                    setting?.shopLongitude
-                );
-
-
-            if(
-                !shopLat ||
-                !shopLng
-            ){
-
-                return res.json({
-
-                    success:false,
-
-                    message:
-                    "Shop location not configured"
-
-                });
-
-            }
-
-
             const distance =
-                calculateDistance(
+                calculateDistanceKm(
 
-                    shopLat,
-                    shopLng,
+                    Number(
+                        setting
+                        .shopLocation
+                        .latitude
+                    ),
 
-                    latitude,
-                    longitude
+                    Number(
+                        setting
+                        .shopLocation
+                        .longitude
+                    ),
+
+                    customerLatitude,
+
+                    customerLongitude
 
                 );
 
 
             const radius =
-                Number(
+                safeNumber(
                     setting
-                    ?.deliveryRadiusKm ||
+                    .deliveryRadiusKm,
                     2
                 );
 
@@ -1317,14 +4364,16 @@ router.post(
                 radius
             ){
 
-                return res.json({
+                return res
+                .status(400)
+                .json({
 
                     success:false,
 
                     message:
-                    "Delivery only available within " +
-                    radius +
-                    " KM"
+                        "Delivery केवल " +
+                        radius +
+                        " KM तक available है."
 
                 });
 
@@ -1335,7 +4384,8 @@ router.post(
 // DOCUMENTS
 // ======================================================
 
-            const documents = [];
+            const documents =
+                [];
 
 
             for(
@@ -1344,7 +4394,7 @@ router.post(
                 req.files || []
             ){
 
-                let name =
+                let documentName =
                     "Document";
 
 
@@ -1353,29 +4403,16 @@ router.post(
                     "photocopyPages"
                 ){
 
-                    name =
+                    documentName =
                         "Photo Copy Page";
 
                 }
-                else if(
-                    file.fieldname
-                    .startsWith(
-                        "doc_"
-                    )
-                ){
+                else{
 
-                    const index =
-                        file.fieldname
-                        .replace(
-                            "doc_",
-                            ""
-                        );
-
-
-                    name =
+                    documentName =
                         req.body[
-                            "docName_" +
-                            index
+                            "name_" +
+                            file.fieldname
                         ]
                         ||
                         "Document";
@@ -1385,14 +4422,16 @@ router.post(
 
                 documents.push({
 
-                    documentName:
-                        name,
+                    documentName,
 
                     fileName:
                         file.filename,
 
                     originalName:
-                        file.originalname
+                        file.originalname,
+
+                    mimeType:
+                        file.mimetype
 
                 });
 
@@ -1405,17 +4444,20 @@ router.post(
 
             const copies =
                 Math.max(
+
                     1,
-                    Number(
-                        req.body.copies ||
+
+                    safeNumber(
+                        req.body.copies,
                         1
                     )
+
                 );
 
 
             let serviceAmount =
-                Number(
-                    service.price ||
+                safeNumber(
+                    service.price,
                     0
                 );
 
@@ -1425,26 +4467,32 @@ router.post(
                 "photocopy"
             ){
 
-                const pageCount =
+                const pages =
                     documents.length ||
                     1;
 
+
                 serviceAmount =
-                    Number(
-                        service.price
+
+                    safeNumber(
+                        service.price,
+                        0
                     )
+
                     *
-                    pageCount
+
+                    pages
+
                     *
+
                     copies;
 
             }
 
 
             const deliveryCharge =
-                Number(
-                    setting
-                    ?.deliveryCharge ||
+                safeNumber(
+                    setting.deliveryCharge,
                     0
                 );
 
@@ -1455,49 +4503,78 @@ router.post(
 
 
             const orderId =
-                await createOrderId();
+                await generateOrderNumber();
 
 
-            const paymentOrder =
+// ======================================================
+// RAZORPAY ORDER
+// ======================================================
+
+            const razorpayOrder =
                 await razorpay
-                    .orders
-                    .create({
+                .orders
+                .create({
 
-                        amount:
-                            Math.round(
-                                totalAmount *
-                                100
-                            ),
+                    amount:
+                        Math.round(
+                            totalAmount *
+                            100
+                        ),
 
-                        currency:
-                            "INR",
+                    currency:
+                        "INR",
 
-                        receipt:
-                            orderId
+                    receipt:
+                        orderId
 
-                    });
+                });
 
+
+// ======================================================
+// SAVE ORDER
+// ======================================================
 
             const order =
-                new QuickOrder({
+                await QuickOrder
+                .create({
 
                     orderId,
 
                     customerName:
-                        req.body
-                        .customerName,
+                        String(
+                            req.body.customerName ||
+                            ""
+                        ).trim(),
 
-                    phone:
-                        req.body.phone,
+                    mobile:
+                        String(
+                            req.body.mobile ||
+                            ""
+                        ).trim(),
 
                     address:
-                        req.body.address,
+                        String(
+                            req.body.address ||
+                            ""
+                        ).trim(),
 
-                    latitude,
+                    customerLocation:{
 
-                    longitude,
+                        latitude:
+                            customerLatitude,
 
-                    distanceKm:
+                        longitude:
+                            customerLongitude,
+
+                        accuracy:
+                            safeNumber(
+                                req.body.accuracy,
+                                0
+                            )
+
+                    },
+
+                    distanceFromShopKm:
                         Number(
                             distance
                             .toFixed(2)
@@ -1527,19 +4604,16 @@ router.post(
 
                     totalAmount,
 
-                    razorpayOrderId:
-                        paymentOrder.id,
-
                     paymentStatus:
-                        "PENDING",
+                        "Pending",
+
+                    razorpayOrderId:
+                        razorpayOrder.id,
 
                     status:
-                        "NEW"
+                        "Pending"
 
                 });
-
-
-            await order.save();
 
 
             return res.json({
@@ -1557,34 +4631,35 @@ router.post(
                     order.orderId,
 
                 serviceName:
-                    service.name,
-
-                razorpayOrderId:
-                    paymentOrder.id,
+                    order.serviceName,
 
                 amount:
-                    paymentOrder.amount
+                    razorpayOrder.amount,
+
+                razorpayOrderId:
+                    razorpayOrder.id
 
             });
 
         }
-        catch(err){
+        catch(error){
 
             console.error(
-                "CREATE QUICK ORDER:",
-                err
+                "CREATE QUICK ORDER ERROR:",
+                error
             );
 
+
             return res
-                .status(500)
-                .json({
+            .status(500)
+            .json({
 
-                    success:false,
+                success:false,
 
-                    message:
-                        err.message
+                message:
+                    error.message
 
-                });
+            });
 
         }
 
@@ -1598,6 +4673,7 @@ router.post(
 
 router.post(
     "/quick-service/verify-payment",
+
     async(req,res)=>{
 
         try{
@@ -1616,30 +4692,46 @@ router.post(
 
 
             const body =
+
                 razorpay_order_id +
+
                 "|" +
+
                 razorpay_payment_id;
 
 
-            const expected =
+            const expectedSignature =
+
                 crypto
+
                 .createHmac(
                     "sha256",
                     process.env
                     .RAZORPAY_KEY_SECRET
                 )
-                .update(body)
-                .digest("hex");
+
+                .update(
+                    body
+                )
+
+                .digest(
+                    "hex"
+                );
 
 
             if(
-                expected !==
+                expectedSignature !==
                 razorpay_signature
             ){
 
-                return res.json({
+                return res
+                .status(400)
+                .json({
 
-                    success:false
+                    success:false,
+
+                    message:
+                        "Invalid Payment Signature"
 
                 });
 
@@ -1648,28 +4740,28 @@ router.post(
 
             const order =
                 await QuickOrder
-                    .findByIdAndUpdate(
+                .findByIdAndUpdate(
 
-                        orderId,
+                    orderId,
 
-                        {
+                    {
 
-                            paymentStatus:
-                                "PAID",
+                        paymentStatus:
+                            "Paid",
 
-                            razorpayPaymentId:
-                                razorpay_payment_id,
+                        razorpayPaymentId:
+                            razorpay_payment_id,
 
-                            status:
-                                "NEW"
+                        status:
+                            "Pending"
 
-                        },
+                    },
 
-                        {
-                            new:true
-                        }
+                    {
+                        new:true
+                    }
 
-                    );
+                );
 
 
             return res.json({
@@ -1682,17 +4774,21 @@ router.post(
             });
 
         }
-        catch(err){
+        catch(error){
 
-            console.error(err);
+            console.error(
+                "VERIFY PAYMENT ERROR:",
+                error
+            );
+
 
             return res
-                .status(500)
-                .json({
+            .status(500)
+            .json({
 
-                    success:false
+                success:false
 
-                });
+            });
 
         }
 
@@ -1706,26 +4802,29 @@ router.post(
 
 router.get(
     "/quick-service/success/:id",
+
     async(req,res)=>{
 
         const order =
             await QuickOrder
-                .findById(
-                    req.params.id
-                )
-                .lean();
+            .findById(
+                req.params.id
+            )
+            .lean();
 
 
         if(!order){
 
-            return res.send(
+            return res
+            .status(404)
+            .send(
                 "Order Not Found"
             );
 
         }
 
 
-        res.send(`
+        return res.send(`
 
 <!DOCTYPE html>
 
@@ -1733,8 +4832,10 @@ router.get(
 
 <head>
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
 
 <title>
 Order Successful
@@ -1742,28 +4843,42 @@ Order Successful
 
 </head>
 
+
 <body style="
 font-family:Arial;
 background:#f0fdf4;
-text-align:center;
 padding:40px;
+text-align:center;
 ">
 
 <h1>
-✅ Payment Successful
+✅ PAYMENT SUCCESSFUL
 </h1>
 
 <h2>
-Order:
 ${order.orderId}
 </h2>
 
 <p>
-Your order has been received.
+आपका Order मिल गया है।
+</p>
+
+<p>
+Service:
+<strong>
+${order.serviceName}
+</strong>
+</p>
+
+<p>
+Amount:
+<strong>
+₹${order.totalAmount}
+</strong>
 </p>
 
 <a href="/">
-Back Home
+HOME
 </a>
 
 </body>
@@ -1777,47 +4892,36 @@ Back Home
 
 
 // ======================================================
-// ADMIN DASHBOARD
+// ADMIN SHOP STATUS
+// GET /admin/quick-service/shop-status
 // ======================================================
 
 router.get(
-    "/admin/quick-service",
-
-    requireAdmin,
+    "/admin/quick-service/shop-status",
 
     async(req,res)=>{
 
         try{
 
-            const orders =
-                await QuickOrder
-                    .find({
-                        paymentStatus:"PAID"
-                    })
-                    .sort({
-                        createdAt:-1
-                    })
-                    .lean();
+            const setting =
+                await getQuickShopSetting();
 
 
-            let setting =
-                await QuickShopSetting
-                    .findOne()
-                    .lean();
+            const locationSaved =
+                validCoordinates(
+
+                    setting
+                    .shopLocation
+                    ?.latitude,
+
+                    setting
+                    .shopLocation
+                    ?.longitude
+
+                );
 
 
-            if(!setting){
-
-                setting = {
-                    isOpen:true,
-                    deliveryRadiusKm:2,
-                    deliveryCharge:20
-                };
-
-            }
-
-
-            res.send(`
+            return res.send(`
 
 <!DOCTYPE html>
 
@@ -1825,11 +4929,582 @@ router.get(
 
 <head>
 
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
 
 <title>
-Quick Service Admin
+Quick Service Shop Control
+</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+margin:0;
+padding:20px;
+background:#f1f5f9;
+}
+
+.card{
+max-width:470px;
+margin:30px auto;
+padding:25px;
+background:white;
+border-radius:20px;
+text-align:center;
+box-shadow:
+0 15px 45px
+rgba(0,0,0,.12);
+}
+
+.status{
+padding:15px;
+margin:20px 0;
+border-radius:12px;
+font-size:20px;
+font-weight:bold;
+}
+
+.open{
+background:#dcfce7;
+color:#166534;
+}
+
+.closed{
+background:#fee2e2;
+color:#991b1b;
+}
+
+.setting{
+padding:15px;
+background:#f8fafc;
+border-radius:12px;
+text-align:left;
+line-height:1.9;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:18px;
+border:0;
+border-radius:12px;
+color:white;
+font-weight:bold;
+font-size:16px;
+}
+
+.open-btn{
+background:#16a34a;
+}
+
+.close-btn{
+background:#dc2626;
+}
+
+.links a{
+display:block;
+margin-top:10px;
+padding:12px;
+background:#2563eb;
+color:white;
+text-decoration:none;
+border-radius:10px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="card">
+
+<h1>
+⚡ GLOBAL QUICK SERVICES
+</h1>
+
+
+<div
+class="status ${
+setting.isOpen
+?
+"open"
+:
+"closed"
+}"
+>
+
+${
+setting.isOpen
+?
+"🟢 SHOP OPEN"
+:
+"🔴 SHOP CLOSED"
+}
+
+</div>
+
+
+<div class="setting">
+
+📦 Delivery Radius:
+<strong>
+${safeNumber(
+setting.deliveryRadiusKm,
+2
+)} KM
+</strong>
+
+<br>
+
+💵 Delivery Charge:
+<strong>
+₹${safeNumber(
+setting.deliveryCharge,
+20
+)}
+</strong>
+
+<br>
+
+📍 Shop Location:
+<strong>
+${
+locationSaved
+?
+"Saved ✅"
+:
+"Not Saved ❌"
+}
+</strong>
+
+</div>
+
+
+<form
+method="POST"
+action="/admin/quick-service/toggle-shop"
+id="toggleForm"
+>
+
+<input
+type="hidden"
+name="latitude"
+id="latitude"
+>
+
+<input
+type="hidden"
+name="longitude"
+id="longitude"
+>
+
+<input
+type="hidden"
+name="accuracy"
+id="accuracy"
+>
+
+
+<button
+type="button"
+id="toggleButton"
+class="${
+setting.isOpen
+?
+"close-btn"
+:
+"open-btn"
+}"
+>
+
+${
+setting.isOpen
+?
+"🔴 CLOSE SHOP"
+:
+"🟢 OPEN SHOP WITH LOCATION"
+}
+
+</button>
+
+</form>
+
+
+<p
+id="locationMessage"
+>
+
+${
+setting.isOpen
+?
+"✅ 2 KM के अंदर Customer order कर सकते हैं."
+:
+"Shop Open करने के लिए GPS Location Allow करें."
+}
+
+</p>
+
+
+<div class="links">
+
+<a href="/admin/quick-service/orders">
+🔔 ORDERS
+</a>
+
+<a href="/quick-service">
+👤 CUSTOMER PAGE
+</a>
+
+</div>
+
+</div>
+
+
+<script>
+
+const SHOP_OPEN =
+${setting.isOpen ? "true" : "false"};
+
+
+const button =
+document.getElementById(
+    "toggleButton"
+);
+
+
+const form =
+document.getElementById(
+    "toggleForm"
+);
+
+
+const message =
+document.getElementById(
+    "locationMessage"
+);
+
+
+button.addEventListener(
+"click",
+function(){
+
+    if(SHOP_OPEN){
+
+        button.disabled =
+            true;
+
+        button.textContent =
+            "CLOSING SHOP...";
+
+        form.submit();
+
+        return;
+
+    }
+
+
+    if(
+        !navigator.geolocation
+    ){
+
+        alert(
+            "GPS support नहीं है."
+        );
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "📍 GETTING LOCATION...";
+
+
+    navigator.geolocation
+    .getCurrentPosition(
+
+    function(position){
+
+        document
+        .getElementById(
+            "latitude"
+        )
+        .value =
+            position.coords
+            .latitude;
+
+
+        document
+        .getElementById(
+            "longitude"
+        )
+        .value =
+            position.coords
+            .longitude;
+
+
+        document
+        .getElementById(
+            "accuracy"
+        )
+        .value =
+            position.coords
+            .accuracy;
+
+
+        message.innerHTML =
+            "✅ Location मिली. Shop Open हो रही है...";
+
+
+        form.submit();
+
+    },
+
+    function(error){
+
+        console.error(
+            error
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "🟢 OPEN SHOP WITH LOCATION";
+
+
+        message.innerHTML =
+            "❌ Location Permission Allow करें.";
+
+    },
+
+    {
+
+        enableHighAccuracy:
+            true,
+
+        timeout:
+            20000,
+
+        maximumAge:
+            0
+
+    }
+
+    );
+
+});
+
+</script>
+
+
+</body>
+
+</html>
+
+            `);
+
+        }
+        catch(error){
+
+            console.error(
+                error
+            );
+
+            res
+            .status(500)
+            .send(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// TOGGLE SHOP
+// ======================================================
+
+router.post(
+    "/admin/quick-service/toggle-shop",
+
+    async(req,res)=>{
+
+        try{
+
+            const setting =
+                await getQuickShopSetting();
+
+
+            const nextStatus =
+                !setting.isOpen;
+
+
+            if(nextStatus){
+
+                const {
+
+                    latitude,
+
+                    longitude,
+
+                    accuracy
+
+                } = req.body;
+
+
+                if(
+                    !validCoordinates(
+                        latitude,
+                        longitude
+                    )
+                ){
+
+                    return res
+                    .status(400)
+                    .send(
+                        "Shop Open करने के लिए GPS Location जरूरी है."
+                    );
+
+                }
+
+
+                setting.shopLocation = {
+
+                    latitude:
+                        Number(
+                            latitude
+                        ),
+
+                    longitude:
+                        Number(
+                            longitude
+                        ),
+
+                    accuracy:
+                        safeNumber(
+                            accuracy,
+                            0
+                        ),
+
+                    updatedAt:
+                        new Date()
+
+                };
+
+
+                setting.deliveryRadiusKm =
+                    2;
+
+            }
+
+
+            setting.isOpen =
+                nextStatus;
+
+
+            await setting.save();
+
+
+            return res.redirect(
+                "/admin/quick-service/shop-status"
+            );
+
+        }
+        catch(error){
+
+            console.error(
+                error
+            );
+
+
+            return res
+            .status(500)
+            .send(
+                error.message
+            );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// ADMIN ORDERS
+// ======================================================
+
+router.get(
+    "/admin/quick-service/orders",
+
+    async(req,res)=>{
+
+        try{
+
+            const orders =
+                await QuickOrder
+                .find({
+                    paymentStatus:"Paid"
+                })
+                .sort({
+                    createdAt:-1
+                })
+                .lean();
+
+
+            const statuses = [
+
+                "Pending",
+
+                "Accepted",
+
+                "Processing",
+
+                "Ready",
+
+                "Packed",
+
+                "Out for Delivery",
+
+                "Delivered",
+
+                "Cancelled"
+
+            ];
+
+
+            return res.send(`
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
+<title>
+Quick Service Orders
 </title>
 
 <style>
@@ -1850,46 +5525,13 @@ margin:auto;
 padding:20px;
 }
 
-.control{
-background:white;
-padding:20px;
-border-radius:18px;
-margin-bottom:20px;
-}
-
-.status-open{
-color:#15803d;
-}
-
-.status-close{
-color:#dc2626;
-}
-
-button{
-padding:10px 16px;
-border:0;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.open{
-background:#16a34a;
-color:white;
-}
-
-.close{
-background:#dc2626;
-color:white;
-}
-
 .order{
 background:white;
 padding:20px;
-border-radius:18px;
 margin-bottom:20px;
+border-radius:18px;
 box-shadow:
-0 5px 20px
+0 8px 25px
 rgba(0,0,0,.08);
 }
 
@@ -1900,19 +5542,18 @@ repeat(
 auto-fit,
 minmax(180px,1fr)
 );
-gap:15px;
-margin-top:15px;
+gap:12px;
 }
 
 .document{
-border:1px solid #ddd;
 padding:10px;
+border:1px solid #ddd;
 border-radius:12px;
 }
 
 .document img{
 width:100%;
-height:180px;
+height:190px;
 object-fit:contain;
 background:#f8fafc;
 }
@@ -1920,118 +5561,59 @@ background:#f8fafc;
 .download{
 display:block;
 margin-top:8px;
-padding:9px;
-text-align:center;
+padding:10px;
+border-radius:8px;
 background:#2563eb;
 color:white;
+text-align:center;
 text-decoration:none;
+}
+
+select,
+button{
+padding:10px;
 border-radius:8px;
 }
 
-select{
-padding:10px;
-border-radius:8px;
+.status-btn{
+background:#16a34a;
+color:white;
+border:0;
 }
 
 </style>
 
 </head>
 
+
 <body>
 
 <div class="container">
 
-
-<div class="control">
-
-<h2>
-🏪 Shop Control
-</h2>
-
-<h3
-class="${
-setting.isOpen
-?
-"status-open"
-:
-"status-close"
-}"
->
-
-${
-setting.isOpen
-?
-"🟢 SHOP OPEN"
-:
-"🔴 SHOP CLOSED"
-}
-
-</h3>
-
-
-<form
-action="/admin/quick-service/shop-status"
-method="POST"
-style="display:inline"
->
-
-<input
-type="hidden"
-name="isOpen"
-value="true"
->
-
-<button class="open">
-OPEN SHOP
-</button>
-
-</form>
-
-
-<form
-action="/admin/quick-service/shop-status"
-method="POST"
-style="display:inline"
->
-
-<input
-type="hidden"
-name="isOpen"
-value="false"
->
-
-<button class="close">
-CLOSE SHOP
-</button>
-
-</form>
-
+<h1>
+🔔 Quick Service Orders
+</h1>
 
 <p>
-Delivery Radius:
-<strong>
-${setting.deliveryRadiusKm} KM
-</strong>
+
+<a href="/admin/quick-service/shop-status">
+← Shop Control
+</a>
+
 </p>
-
-</div>
-
-
-<h2>
-📦 Customer Orders
-</h2>
 
 
 ${
 orders.length
 ?
 
-orders.map(order=>`
+orders.map(
+order=>`
 
 <div class="order">
 
 <h2>
-${order.orderId}
+#${order.orderId}
 </h2>
 
 <p>
@@ -2046,8 +5628,8 @@ ${order.serviceName}
 
 <p>
 📞
-<a href="tel:${order.phone}">
-${order.phone}
+<a href="tel:${order.mobile}">
+${order.mobile}
 </a>
 </p>
 
@@ -2058,26 +5640,32 @@ ${order.phone}
 <p>
 📍 Distance:
 <strong>
-${order.distanceKm} KM
+${order.distanceFromShopKm} KM
 </strong>
 </p>
 
 <p>
-💰 ₹${order.totalAmount}
--
+💰 Total:
+<strong>
+₹${order.totalAmount}
+</strong>
+</p>
+
+<p>
+Payment:
 <strong style="color:green">
-PAID
+${order.paymentStatus}
 </strong>
-</p>
-
-<p>
-Print:
-${order.printType}
 </p>
 
 <p>
 Copies:
 ${order.copies}
+</p>
+
+<p>
+Print:
+${order.printType}
 </p>
 
 
@@ -2090,7 +5678,8 @@ ${order.copies}
 
 ${
 (order.documents || [])
-.map((doc,index)=>`
+.map(
+(doc,index)=>`
 
 <div class="document">
 
@@ -2100,25 +5689,46 @@ ${doc.documentName}
 
 <br><br>
 
-<img
-src="/admin/quick-service/document/${order._id}/${index}"
-onerror="
-this.style.display='none'
+${
+doc.mimeType ===
+"application/pdf"
+
+?
+
+`
+<div
+style="
+padding:50px 10px;
+text-align:center;
+background:#fee2e2;
 "
 >
+📄 PDF DOCUMENT
+</div>
+`
+
+:
+
+`
+<img
+src="/admin/quick-service/document/${order._id}/${index}"
+>
+`
+}
 
 <a
 href="/admin/quick-service/document/${order._id}/${index}?download=1"
 class="download"
 >
 
-⬇ Download
+⬇ DOWNLOAD
 
 </a>
 
 </div>
 
-`).join("")
+`
+).join("")
 }
 
 </div>
@@ -2129,42 +5739,44 @@ class="download"
 
 <form
 method="POST"
-action="/admin/quick-service/order-status/${order._id}"
+action="/admin/quick-service/order/${order._id}/status"
 >
 
-<select
-name="status"
->
+<select name="status">
 
-${[
-"NEW",
-"PROCESSING",
-"READY",
-"PACKED",
-"OUT_FOR_DELIVERY",
-"DELIVERED",
-"CANCELLED"
-]
-.map(status=>`
+${
+statuses.map(
+status=>`
 
 <option
 value="${status}"
-${order.status === status ? "selected" : ""}
+${
+order.status ===
+status
+?
+"selected"
+:
+""
+}
 >
+
 ${status}
+
 </option>
 
-`).join("")}
+`
+).join("")
+}
 
 </select>
 
+
 <button
-style="
-background:#0d604b;
-color:white;
-"
+class="status-btn"
 >
-Update Status
+
+UPDATE STATUS
+
 </button>
 
 </form>
@@ -2172,13 +5784,17 @@ Update Status
 
 </div>
 
-`).join("")
+`
+).join("")
 
 :
 
-"<p>No paid orders yet.</p>"
+`
+<p>
+अभी कोई Paid Order नहीं है।
+</p>
+`
 }
-
 
 </div>
 
@@ -2189,86 +5805,80 @@ Update Status
             `);
 
         }
-        catch(err){
+        catch(error){
 
-            console.error(err);
-
-            res.status(500)
-            .send(err.message);
-
-        }
-
-    }
-);
+            console.error(
+                error
+            );
 
 
-// ======================================================
-// SHOP OPEN / CLOSE
-// ======================================================
-
-router.post(
-    "/admin/quick-service/shop-status",
-
-    requireAdmin,
-
-    async(req,res)=>{
-
-        try{
-
-            const isOpen =
-                req.body.isOpen ===
-                "true";
-
-
-            await QuickShopSetting
-                .findOneAndUpdate(
-
-                    {},
-
-                    {
-                        isOpen,
-                        updatedAt:
-                            new Date()
-                    },
-
-                    {
-                        upsert:true,
-                        new:true
-                    }
-
-                );
-
-
-            res.redirect(
-                "/admin/quick-service"
+            res
+            .status(500)
+            .send(
+                error.message
             );
 
         }
-        catch(err){
-
-            console.error(err);
-
-            res.status(500)
-            .send(err.message);
-
-        }
 
     }
 );
 
 
 // ======================================================
-// ORDER STATUS
+// UPDATE ORDER STATUS
 // ======================================================
 
 router.post(
-    "/admin/quick-service/order-status/:id",
-
-    requireAdmin,
+    "/admin/quick-service/order/:id/status",
 
     async(req,res)=>{
 
         try{
+
+            const allowedStatuses = [
+
+                "Pending",
+
+                "Accepted",
+
+                "Processing",
+
+                "Ready",
+
+                "Packed",
+
+                "Out for Delivery",
+
+                "Delivered",
+
+                "Cancelled"
+
+            ];
+
+
+            const status =
+                String(
+                    req.body.status ||
+                    ""
+                )
+                .trim();
+
+
+            if(
+                !allowedStatuses
+                .includes(
+                    status
+                )
+            ){
+
+                return res
+                .status(400)
+                .send(
+                    "Invalid Status"
+                );
+
+            }
+
 
             await QuickOrder
                 .findByIdAndUpdate(
@@ -2276,24 +5886,29 @@ router.post(
                     req.params.id,
 
                     {
-                        status:
-                            req.body.status
+                        status
                     }
 
                 );
 
 
-            res.redirect(
-                "/admin/quick-service"
+            return res.redirect(
+                "/admin/quick-service/orders"
             );
 
         }
-        catch(err){
+        catch(error){
 
-            console.error(err);
+            console.error(
+                error
+            );
 
-            res.status(500)
-            .send(err.message);
+
+            res
+            .status(500)
+            .send(
+                error.message
+            );
 
         }
 
@@ -2302,13 +5917,11 @@ router.post(
 
 
 // ======================================================
-// PRIVATE DOCUMENT VIEW / DOWNLOAD
+// DOCUMENT VIEW / DOWNLOAD
 // ======================================================
 
 router.get(
     "/admin/quick-service/document/:orderId/:index",
-
-    requireAdmin,
 
     async(req,res)=>{
 
@@ -2316,18 +5929,18 @@ router.get(
 
             const order =
                 await QuickOrder
-                    .findById(
-                        req.params.orderId
-                    );
+                .findById(
+                    req.params.orderId
+                );
 
 
             if(!order){
 
                 return res
-                    .status(404)
-                    .send(
-                        "Order Not Found"
-                    );
+                .status(404)
+                .send(
+                    "Order Not Found"
+                );
 
             }
 
@@ -2347,30 +5960,35 @@ router.get(
             if(!document){
 
                 return res
-                    .status(404)
-                    .send(
-                        "Document Not Found"
-                    );
+                .status(404)
+                .send(
+                    "Document Not Found"
+                );
 
             }
 
 
-            const file =
+            const filePath =
                 path.join(
-                    privateFolder,
+
+                    uploadDirectory,
+
                     document.fileName
+
                 );
 
 
             if(
-                !fs.existsSync(file)
+                !fs.existsSync(
+                    filePath
+                )
             ){
 
                 return res
-                    .status(404)
-                    .send(
-                        "File Not Found"
-                    );
+                .status(404)
+                .send(
+                    "File Not Found"
+                );
 
             }
 
@@ -2382,7 +6000,7 @@ router.get(
 
                 return res.download(
 
-                    file,
+                    filePath,
 
                     document.originalName ||
                     document.fileName
@@ -2393,16 +6011,22 @@ router.get(
 
 
             return res.sendFile(
-                file
+                filePath
             );
 
         }
-        catch(err){
+        catch(error){
 
-            console.error(err);
+            console.error(
+                error
+            );
 
-            res.status(500)
-            .send(err.message);
+
+            res
+            .status(500)
+            .send(
+                error.message
+            );
 
         }
 
@@ -2410,4 +6034,5 @@ router.get(
 );
 
 
-module.exports = router;
+module.exports =
+router;
