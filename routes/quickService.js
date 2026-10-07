@@ -6174,6 +6174,1513 @@ router.get(
     }
 );
 
+// ======================================================
+// ADMIN MANAGE QUICK SERVICES
+// GET /admin/quick-service/services
+// ======================================================
+
+router.get(
+    "/admin/quick-service/services",
+    async (req, res) => {
+
+        try {
+
+            const services =
+                await QuickService
+                    .find({})
+                    .sort({
+                        createdAt: -1
+                    })
+                    .lean();
+
+
+            return res.send(`
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Manage Quick Services
+</title>
+
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:#f1f5f9;
+    font-family:Arial,sans-serif;
+    color:#0f172a;
+}
+
+.header{
+    padding:20px;
+    color:white;
+    text-align:center;
+    background:
+        linear-gradient(
+            135deg,
+            #065f46,
+            #16a34a
+        );
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding:18px;
+}
+
+.nav{
+    display:grid;
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(150px,1fr)
+        );
+    gap:10px;
+    margin-bottom:18px;
+}
+
+.nav a{
+    padding:12px;
+    border-radius:10px;
+    background:#2563eb;
+    color:white;
+    text-align:center;
+    text-decoration:none;
+    font-weight:800;
+}
+
+.card{
+    padding:20px;
+    margin-bottom:18px;
+    border-radius:18px;
+    background:white;
+    box-shadow:
+        0 8px 25px
+        rgba(15,23,42,.08);
+}
+
+label{
+    display:block;
+    margin-top:14px;
+    margin-bottom:5px;
+    font-weight:800;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:
+        1px solid
+        #cbd5e1;
+    border-radius:9px;
+    font-size:15px;
+}
+
+textarea{
+    min-height:80px;
+}
+
+.requirements-box{
+    margin-top:15px;
+    padding:15px;
+    border-radius:12px;
+    background:#f8fafc;
+}
+
+.requirement-row{
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+}
+
+.requirement-row input{
+    flex:1;
+}
+
+.remove-btn{
+    width:45px;
+    border:0;
+    border-radius:8px;
+    background:#dc2626;
+    color:white;
+    cursor:pointer;
+}
+
+.add-doc-btn{
+    margin-top:10px;
+    padding:10px 14px;
+    border:0;
+    border-radius:8px;
+    background:#0ea5e9;
+    color:white;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.save-btn{
+    width:100%;
+    margin-top:18px;
+    padding:14px;
+    border:0;
+    border-radius:10px;
+    background:#16a34a;
+    color:white;
+    font-weight:900;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.service{
+    padding:16px;
+    margin-bottom:12px;
+    border:
+        1px solid
+        #e2e8f0;
+    border-radius:13px;
+}
+
+.service-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+}
+
+.service-name{
+    font-size:18px;
+    font-weight:900;
+}
+
+.active{
+    color:#15803d;
+    font-weight:900;
+}
+
+.inactive{
+    color:#dc2626;
+    font-weight:900;
+}
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:12px;
+}
+
+.actions a{
+    padding:9px 12px;
+    border-radius:8px;
+    text-decoration:none;
+    color:white;
+    font-weight:800;
+    font-size:13px;
+}
+
+.edit{
+    background:#2563eb;
+}
+
+.toggle{
+    background:#f59e0b;
+}
+
+.delete{
+    background:#dc2626;
+}
+
+.documents{
+    margin-top:8px;
+    color:#475569;
+    font-size:13px;
+    line-height:1.7;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+<h1>
+⚡ Manage Quick Services
+</h1>
+
+<p>
+Service, Price और Required Documents Control करें
+</p>
+
+</header>
+
+
+<main class="container">
+
+
+<div class="nav">
+
+<a href="/admin/quick-service/shop-status">
+🏪 SHOP CONTROL
+</a>
+
+<a href="/admin/quick-service/orders">
+🔔 ORDERS
+</a>
+
+<a href="/quick-service">
+👤 CUSTOMER PAGE
+</a>
+
+</div>
+
+
+<!-- ======================================= -->
+<!-- ADD SERVICE -->
+<!-- ======================================= -->
+
+<section class="card">
+
+<h2>
+➕ Add New Service
+</h2>
+
+
+<form
+    method="POST"
+    action="/admin/quick-service/services"
+>
+
+
+<label>
+Service Name *
+</label>
+
+<input
+    type="text"
+    name="name"
+    placeholder="Example: New PAN Card"
+    required
+>
+
+
+<label>
+Service Type *
+</label>
+
+<select
+    name="type"
+    id="serviceType"
+>
+
+<option value="normal">
+Normal Document Service
+</option>
+
+<option value="photocopy">
+Photo Copy
+</option>
+
+</select>
+
+
+<label>
+Price ₹ *
+</label>
+
+<input
+    type="number"
+    name="price"
+    min="0"
+    step="0.01"
+    placeholder="150"
+    required
+>
+
+
+<label>
+Description
+</label>
+
+<textarea
+    name="description"
+    placeholder="Service details"
+></textarea>
+
+
+<div
+    class="requirements-box"
+    id="requirementsBox"
+>
+
+<strong>
+📄 Required Documents
+</strong>
+
+<div id="requirementsList"></div>
+
+
+<button
+    type="button"
+    class="add-doc-btn"
+    onclick="addRequirement()"
+>
+
++ ADD REQUIRED DOCUMENT
+
+</button>
+
+</div>
+
+
+<button
+    type="submit"
+    class="save-btn"
+>
+
+✅ SAVE SERVICE
+
+</button>
+
+
+</form>
+
+</section>
+
+
+<!-- ======================================= -->
+<!-- EXISTING SERVICES -->
+<!-- ======================================= -->
+
+<section class="card">
+
+<h2>
+🛠 Existing Services
+</h2>
+
+
+${
+    services.length
+
+    ?
+
+    services.map(
+        function(service){
+
+            const requirements =
+                Array.isArray(
+                    service.requirements
+                )
+                ? service.requirements
+                : [];
+
+
+            return `
+
+<div class="service">
+
+<div class="service-head">
+
+<div>
+
+<div class="service-name">
+${service.name}
+</div>
+
+<div>
+₹${Number(service.price || 0).toFixed(2)}
+</div>
+
+</div>
+
+
+<div
+class="${
+    service.active
+        ? "active"
+        : "inactive"
+}"
+>
+
+${
+    service.active
+        ? "● ACTIVE"
+        : "● OFF"
+}
+
+</div>
+
+</div>
+
+
+<div class="documents">
+
+<strong>
+Type:
+</strong>
+
+${
+    service.type === "photocopy"
+        ? "Photo Copy"
+        : "Normal"
+}
+
+<br>
+
+
+<strong>
+Required Documents:
+</strong>
+
+${
+    requirements.length
+
+    ?
+
+    requirements
+        .map(
+            function(item){
+
+                return (
+                    "• " +
+                    item.name
+                );
+
+            }
+        )
+        .join("<br>")
+
+    :
+
+    "No required document"
+
+}
+
+</div>
+
+
+<div class="actions">
+
+<a
+    class="edit"
+    href="/admin/quick-service/services/edit/${service._id}"
+>
+✏ EDIT
+</a>
+
+
+<a
+    class="toggle"
+    href="/admin/quick-service/services/toggle/${service._id}"
+>
+${
+    service.active
+        ? "🔴 TURN OFF"
+        : "🟢 TURN ON"
+}
+</a>
+
+
+<a
+    class="delete"
+    href="/admin/quick-service/services/delete/${service._id}"
+    onclick="return confirm('Delete this service?')"
+>
+🗑 DELETE
+</a>
+
+</div>
+
+
+</div>
+
+            `;
+
+        }
+    ).join("")
+
+    :
+
+    `
+    <p>
+        अभी कोई Service Add नहीं है।
+    </p>
+    `
+}
+
+
+</section>
+
+
+</main>
+
+
+<script>
+
+let requirementIndex =
+    0;
+
+
+function addRequirement(){
+
+    const list =
+        document.getElementById(
+            "requirementsList"
+        );
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "requirement-row";
+
+
+    row.innerHTML =
+
+        '<input ' +
+        'type="text" ' +
+        'name="requirements[]" ' +
+        'placeholder="Example: Aadhaar Card" ' +
+        'required' +
+        '>' +
+
+        '<button ' +
+        'type="button" ' +
+        'class="remove-btn" ' +
+        'onclick="this.parentElement.remove()"' +
+        '>' +
+
+        '✕' +
+
+        '</button>';
+
+
+    list.appendChild(
+        row
+    );
+
+
+    requirementIndex++;
+
+}
+
+
+const serviceType =
+    document.getElementById(
+        "serviceType"
+    );
+
+
+const requirementsBox =
+    document.getElementById(
+        "requirementsBox"
+    );
+
+
+function updateRequirementBox(){
+
+    if(
+        serviceType.value ===
+        "photocopy"
+    ){
+
+        requirementsBox.style.display =
+            "none";
+
+    }
+    else{
+
+        requirementsBox.style.display =
+            "block";
+
+    }
+
+}
+
+
+serviceType.addEventListener(
+    "change",
+    updateRequirementBox
+);
+
+
+updateRequirementBox();
+
+</script>
+
+
+</body>
+
+</html>
+
+            `);
+
+        }
+        catch(error){
+
+            console.error(
+                "MANAGE QUICK SERVICES ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    error.message
+                );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// ADD QUICK SERVICE
+// POST /admin/quick-service/services
+// ======================================================
+
+router.post(
+    "/admin/quick-service/services",
+    async (req, res) => {
+
+        try {
+
+            const name =
+                String(
+                    req.body.name ||
+                    ""
+                ).trim();
+
+
+            const type =
+                req.body.type ===
+                "photocopy"
+                    ? "photocopy"
+                    : "normal";
+
+
+            const price =
+                Math.max(
+                    0,
+                    Number(
+                        req.body.price ||
+                        0
+                    )
+                );
+
+
+            if(!name){
+
+                return res
+                    .status(400)
+                    .send(
+                        "Service Name Required"
+                    );
+
+            }
+
+
+            let requirements =
+                req.body[
+                    "requirements[]"
+                ]
+                ||
+                req.body.requirements
+                ||
+                [];
+
+
+            if(
+                !Array.isArray(
+                    requirements
+                )
+            ){
+
+                requirements =
+                    [requirements];
+
+            }
+
+
+            requirements =
+                requirements
+
+                .map(
+                    function(item){
+
+                        return String(
+                            item ||
+                            ""
+                        ).trim();
+
+                    }
+                )
+
+                .filter(Boolean)
+
+                .map(
+                    function(item){
+
+                        return {
+
+                            name:
+                                item,
+
+                            required:
+                                true
+
+                        };
+
+                    }
+                );
+
+
+            if(
+                type ===
+                "photocopy"
+            ){
+
+                requirements =
+                    [];
+
+            }
+
+
+            await QuickService.create({
+
+                name,
+
+                type,
+
+                price,
+
+                description:
+                    String(
+                        req.body.description ||
+                        ""
+                    ).trim(),
+
+                active:
+                    true,
+
+                requirements
+
+            });
+
+
+            return res.redirect(
+                "/admin/quick-service/services"
+            );
+
+        }
+        catch(error){
+
+            console.error(
+                "ADD QUICK SERVICE ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    error.message
+                );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// TOGGLE SERVICE
+// ======================================================
+
+router.get(
+    "/admin/quick-service/services/toggle/:id",
+    async (req, res) => {
+
+        try {
+
+            const service =
+                await QuickService.findById(
+                    req.params.id
+                );
+
+
+            if(!service){
+
+                return res
+                    .status(404)
+                    .send(
+                        "Service Not Found"
+                    );
+
+            }
+
+
+            service.active =
+                !service.active;
+
+
+            await service.save();
+
+
+            return res.redirect(
+                "/admin/quick-service/services"
+            );
+
+        }
+        catch(error){
+
+            console.error(
+                "TOGGLE QUICK SERVICE ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    error.message
+                );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// DELETE SERVICE
+// ======================================================
+
+router.get(
+    "/admin/quick-service/services/delete/:id",
+    async (req, res) => {
+
+        try {
+
+            await QuickService
+                .findByIdAndDelete(
+                    req.params.id
+                );
+
+
+            return res.redirect(
+                "/admin/quick-service/services"
+            );
+
+        }
+        catch(error){
+
+            console.error(
+                "DELETE QUICK SERVICE ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    error.message
+                );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// EDIT SERVICE PAGE
+// ======================================================
+
+router.get(
+    "/admin/quick-service/services/edit/:id",
+    async (req, res) => {
+
+        try {
+
+            const service =
+                await QuickService
+                    .findById(
+                        req.params.id
+                    )
+                    .lean();
+
+
+            if(!service){
+
+                return res
+                    .status(404)
+                    .send(
+                        "Service Not Found"
+                    );
+
+            }
+
+
+            const requirements =
+                Array.isArray(
+                    service.requirements
+                )
+                ? service.requirements
+                : [];
+
+
+            return res.send(`
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
+<title>
+Edit Service
+</title>
+
+<style>
+
+*{
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+margin:0;
+padding:20px;
+background:#f1f5f9;
+}
+
+.card{
+max-width:600px;
+margin:auto;
+padding:22px;
+background:white;
+border-radius:18px;
+}
+
+label{
+display:block;
+margin-top:14px;
+margin-bottom:5px;
+font-weight:bold;
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+border:1px solid #cbd5e1;
+border-radius:9px;
+}
+
+textarea{
+min-height:80px;
+}
+
+.req{
+display:flex;
+gap:8px;
+margin-top:8px;
+}
+
+.req button{
+width:45px;
+border:0;
+border-radius:8px;
+background:#dc2626;
+color:white;
+}
+
+.add{
+margin-top:10px;
+padding:10px;
+border:0;
+border-radius:8px;
+background:#2563eb;
+color:white;
+}
+
+.save{
+width:100%;
+margin-top:18px;
+padding:14px;
+border:0;
+border-radius:10px;
+background:#16a34a;
+color:white;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+<h2>
+✏ Edit Service
+</h2>
+
+
+<form
+method="POST"
+action="/admin/quick-service/services/edit/${service._id}"
+>
+
+
+<label>
+Service Name
+</label>
+
+<input
+type="text"
+name="name"
+value="${service.name || ""}"
+required
+>
+
+
+<label>
+Service Type
+</label>
+
+<select
+name="type"
+id="serviceType"
+>
+
+<option
+value="normal"
+${
+service.type === "normal"
+?
+"selected"
+:
+""
+}
+>
+Normal
+</option>
+
+<option
+value="photocopy"
+${
+service.type === "photocopy"
+?
+"selected"
+:
+""
+}
+>
+Photo Copy
+</option>
+
+</select>
+
+
+<label>
+Price ₹
+</label>
+
+<input
+type="number"
+name="price"
+step="0.01"
+min="0"
+value="${Number(service.price || 0)}"
+required
+>
+
+
+<label>
+Description
+</label>
+
+<textarea
+name="description"
+>${service.description || ""}</textarea>
+
+
+<div id="requirementsBox">
+
+<label>
+Required Documents
+</label>
+
+<div id="requirements">
+
+${
+requirements
+.map(
+function(item){
+
+return `
+
+<div class="req">
+
+<input
+type="text"
+name="requirements[]"
+value="${item.name || ""}"
+required
+>
+
+<button
+type="button"
+onclick="this.parentElement.remove()"
+>
+✕
+</button>
+
+</div>
+
+`;
+
+}
+)
+.join("")
+}
+
+</div>
+
+
+<button
+type="button"
+class="add"
+onclick="addRequirement()"
+>
++ ADD DOCUMENT
+</button>
+
+</div>
+
+
+<button
+class="save"
+>
+✅ UPDATE SERVICE
+</button>
+
+</form>
+
+
+<br>
+
+<a href="/admin/quick-service/services">
+← Back
+</a>
+
+
+</div>
+
+
+<script>
+
+const type =
+document.getElementById(
+    "serviceType"
+);
+
+
+const box =
+document.getElementById(
+    "requirementsBox"
+);
+
+
+function updateBox(){
+
+    box.style.display =
+
+        type.value ===
+        "photocopy"
+
+        ?
+
+        "none"
+
+        :
+
+        "block";
+
+}
+
+
+type.addEventListener(
+    "change",
+    updateBox
+);
+
+
+updateBox();
+
+
+function addRequirement(){
+
+    const list =
+        document.getElementById(
+            "requirements"
+        );
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "req";
+
+
+    row.innerHTML =
+
+        '<input ' +
+        'type="text" ' +
+        'name="requirements[]" ' +
+        'placeholder="Document Name" ' +
+        'required' +
+        '>' +
+
+        '<button ' +
+        'type="button" ' +
+        'onclick="this.parentElement.remove()"' +
+        '>' +
+
+        '✕' +
+
+        '</button>';
+
+
+    list.appendChild(
+        row
+    );
+
+}
+
+</script>
+
+
+</body>
+
+</html>
+
+            `);
+
+        }
+        catch(error){
+
+            console.error(
+                "EDIT SERVICE PAGE ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    error.message
+                );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// UPDATE SERVICE
+// ======================================================
+
+router.post(
+    "/admin/quick-service/services/edit/:id",
+    async (req, res) => {
+
+        try {
+
+            let requirements =
+                req.body[
+                    "requirements[]"
+                ]
+                ||
+                req.body.requirements
+                ||
+                [];
+
+
+            if(
+                !Array.isArray(
+                    requirements
+                )
+            ){
+
+                requirements =
+                    [requirements];
+
+            }
+
+
+            requirements =
+                requirements
+
+                .map(
+                    function(item){
+
+                        return String(
+                            item ||
+                            ""
+                        ).trim();
+
+                    }
+                )
+
+                .filter(Boolean)
+
+                .map(
+                    function(item){
+
+                        return {
+
+                            name:
+                                item,
+
+                            required:
+                                true
+
+                        };
+
+                    }
+                );
+
+
+            const type =
+                req.body.type ===
+                "photocopy"
+
+                ?
+
+                "photocopy"
+
+                :
+
+                "normal";
+
+
+            if(
+                type ===
+                "photocopy"
+            ){
+
+                requirements =
+                    [];
+
+            }
+
+
+            await QuickService
+                .findByIdAndUpdate(
+
+                    req.params.id,
+
+                    {
+
+                        name:
+                            String(
+                                req.body.name ||
+                                ""
+                            ).trim(),
+
+                        type,
+
+                        price:
+                            Math.max(
+                                0,
+                                Number(
+                                    req.body.price ||
+                                    0
+                                )
+                            ),
+
+                        description:
+                            String(
+                                req.body.description ||
+                                ""
+                            ).trim(),
+
+                        requirements
+
+                    }
+
+                );
+
+
+            return res.redirect(
+                "/admin/quick-service/services"
+            );
+
+        }
+        catch(error){
+
+            console.error(
+                "UPDATE QUICK SERVICE ERROR:",
+                error
+            );
+
+
+            return res
+                .status(500)
+                .send(
+                    error.message
+                );
+
+        }
+
+    }
+);
+
 
 module.exports =
 router;
