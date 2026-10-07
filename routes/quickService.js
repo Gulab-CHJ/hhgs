@@ -3219,7 +3219,7 @@ Service:
 Delivery:
 ₹${safeNumber(
 setting.deliveryCharge,
-20
+0
 )}
 
 <br>
@@ -3292,7 +3292,7 @@ setting.deliveryRadiusKm,
 const DELIVERY_CHARGE =
 ${safeNumber(
 setting.deliveryCharge,
-20
+0
 )};
 
 
@@ -5228,7 +5228,7 @@ setting.deliveryRadiusKm,
 <strong>
 ₹${safeNumber(
 setting.deliveryCharge,
-20
+0
 )}
 </strong>
 
@@ -5349,7 +5349,7 @@ setting.deliveryRadiusKm,
 <strong>
 ₹${safeNumber(
 setting.deliveryCharge,
-20
+0
 )}
 </strong>
 
