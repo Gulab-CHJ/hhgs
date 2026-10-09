@@ -2673,4 +2673,50 @@ router.post(
 );
 
 
+
+/* ==========================================
+   HOME PAGE - PUBLIC CUSTOMER BAKAYA API
+========================================== */
+
+router.get("/api/public-bakaya", publicLimit, async (req, res) => {
+  try {
+    res.set("Cache-Control", "no-store");
+
+    const customers = await Customer.find({
+      active: { $ne: false },
+      publicBalanceVisible: true
+    })
+      .select("phoneLast4 aadhaarLast4 entries")
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .lean();
+
+    const result = customers.map(c => {
+      const t = totals(c);
+
+      return {
+        phoneLast4: c.phoneLast4,
+        aadhaarLast4: c.aadhaarLast4,
+        totalDue: t.due,
+        totalPaid: t.paid,
+        bakaya: Math.max(0, t.balance)
+      };
+    });
+
+    return res.json({
+      success: true,
+      customers: result
+    });
+
+  } catch (err) {
+    console.error("Public Bakaya API Error:", err);
+
+    return res.status(500).json({
+      success: false,
+      message: "Customer data load failed"
+    });
+  }
+});
+
+
 module.exports = router;
