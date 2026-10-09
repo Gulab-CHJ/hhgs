@@ -2296,9 +2296,13 @@ A4 Premium Print Preview
 
 <div class="front-top-inner">
 
-<img class="front-logo"
-     src="/images/apna-work-logo.png"
-     alt="APNA WORK Logo">
+
+<img
+  src="/images/apna-work-logo.png"
+  alt="APNA WORK Logo"
+  class="front-logo"
+>
+
 
 <div class="front-title">
 <h2>RATION CARD</h2>
@@ -2363,9 +2367,13 @@ PHOTO
 
 <div class="back-frame">
 
-<img class="back-logo"
-     src="/images/apna-work-logo.png"
-     alt="APNA WORK Logo">
+
+<img
+  src="/images/apna-work-logo.png"
+  alt="APNA WORK Logo"
+  class="front-logo"
+>
+
 
 <h2 class="back-brand" id="vshopName">
 APNA WORK
