@@ -314,4 +314,69 @@ router.post("/admin/bakaya/payment/:id", requireAdmin,
   }
 });
 
+
+
+router.get("/admin/bakaya/customer", requireAdmin, (req, res) => {
+  res.send(layout("Add Customer", `
+    <div class="card">
+      <h2>GLOBAL SERVICES – Add Customer</h2>
+      <p>नया ग्राहक जोड़ें और उसका बकाया हिसाब शुरू करें।</p>
+
+      <form id="customerForm">
+        <label>Customer Name</label>
+        <input name="name" placeholder="Customer Name" required>
+
+        <label>Mobile Number – Last 4 Digits</label>
+        <input name="phoneLast4" maxlength="4"
+          pattern="[0-9]{4}" inputmode="numeric" required>
+
+        <label>Aadhaar Number – Last 4 Digits</label>
+        <input name="aadhaarLast4" maxlength="4"
+          pattern="[0-9]{4}" inputmode="numeric" required>
+
+        <label>Customer Security PIN</label>
+        <input name="pin" type="password"
+          minlength="6" maxlength="72" required>
+
+        <button type="submit">Save Customer</button>
+      </form>
+
+      <p id="message"></p>
+      <p><a class="btn" href="/admin">Admin Dashboard</a></p>
+    </div>
+
+    <script>
+      document.getElementById("customerForm")
+        .addEventListener("submit", async function(e) {
+          e.preventDefault();
+
+          const message = document.getElementById("message");
+          const data = Object.fromEntries(new FormData(this));
+
+          try {
+            const response = await fetch("/admin/bakaya/customer", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+              message.textContent = "Customer save failed";
+              return;
+            }
+
+            const result = await response.json();
+            message.textContent = "Customer Saved Successfully!";
+            this.reset();
+          } catch (err) {
+            message.textContent = "Server connection error";
+          }
+        });
+    </script>
+  `));
+});
+
+
 module.exports = router;
