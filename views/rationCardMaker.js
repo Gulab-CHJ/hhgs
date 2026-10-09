@@ -1904,26 +1904,32 @@ button {
   min-width: 0;
 }
 
+
+/* BIG AND BOLD CARD TEXT */
+
 .info-line {
-  margin-bottom: 2.3mm;
+  margin-bottom: 2.5mm;
 }
 
 .info-label {
   display: block;
-  font-size: 7.5px;
-  color: #536779;
-  font-weight: bold;
-  margin-bottom: 0.5mm;
+  font-size: 11px;
+  font-weight: 900;
+  color: #102c49;
+  margin-bottom: 0.7mm;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .info-value {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
-  color: #102c49;
+  color: #071c33;
   line-height: 1.2;
   overflow-wrap: anywhere;
 }
+
 
 .photo-box {
   width: 23mm;
