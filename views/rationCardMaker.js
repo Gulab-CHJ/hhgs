@@ -725,16 +725,16 @@ Personal printing service • Not an official ID
     'shopMobile'
   ];
 
-  function maskAadhaar(value) {
-    const digits = String(value || '')
-      .replace(/\\D/g, '');
+  
+function maskAadhaar(value) {
+  const digits = String(value || '')
+    .replace(/\D/g, '');
 
-    if (digits.length !== 12) {
-      return 'XXXX XXXX XXXX';
-    }
+  return digits.length === 12
+    ? digits.replace(/(\d{4})(\d{4})(\d{4})/, '$1 $2 $3')
+    : '—';
+}
 
-    return 'XXXX XXXX ' + digits.slice(-4);
-  }
 
   function update() {
     idList.forEach(function(id) {
