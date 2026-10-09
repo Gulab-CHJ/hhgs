@@ -142,86 +142,252 @@
 
 module.exports = function CustomerBakayaSection() {
 
-  return `
+  
+return `
 <section id="customer-bakaya-home" style="
   max-width:1100px;
-  margin:25px auto;
-  padding:20px;
-  background:white;
-  border:1px solid #d1e7dc;
-  border-radius:18px;
+  margin:30px auto;
+  padding:24px;
+  background:linear-gradient(145deg,#ffffff,#f0fdf4);
+  border:1px solid #bbf7d0;
+  border-radius:22px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.07);
   font-family:Arial,sans-serif;
+  color:#1e293b;
 ">
 
-  <h2 style="color:#065f46">
-    GLOBAL SERVICES – बकाया भुगतान
-  </h2>
-
-  <p>
-    मोबाइल या आधार के आखिरी 4 अंक से
-    Payment और बकाया हिसाब देखें।
-  </p>
-
-  <a href="/customer-bakaya" style="
-    display:inline-block;
-    padding:13px 22px;
-    background:#047857;
+  <!-- HEADER -->
+  <div style="
+    background:linear-gradient(135deg,#064e3b,#059669);
+    padding:28px 20px;
+    text-align:center;
+    border-radius:17px;
     color:white;
-    border-radius:10px;
-    text-decoration:none;
-    font-weight:bold;
   ">
-    ₹ Check My Payment
-  </a>
+    <div style="font-size:32px;margin-bottom:8px">
+      💳
+    </div>
 
-  <h3 style="margin-top:25px">
-    All Customers
-  </h3>
-
-  <input
-    id="bakayaHomeSearch"
-    type="search"
-    maxlength="4"
-    inputmode="numeric"
-    placeholder="Search Mobile / Aadhaar Last 4 Digits"
-    style="
-      width:100%;
-      padding:13px;
-      border:1px solid #cbd5e1;
-      border-radius:10px;
-      margin-bottom:15px;
-    "
-  >
-
-  <div style="overflow-x:auto">
-    <table style="
-      width:100%;
-      min-width:670px;
-      border-collapse:collapse;
-      text-align:left;
+    <h2 style="
+      margin:0;
+      color:white;
+      font-size:clamp(21px,4vw,29px);
+      font-weight:800;
     ">
-      <thead style="background:#ecfdf5">
-        <tr>
-          <th>S.No.</th>
-          <th>Mobile</th>
-          <th>Aadhaar</th>
-          <th>Total Due</th>
-          <th>Total Paid</th>
-          <th>Bakaya</th>
-        </tr>
-      </thead>
+      GLOBAL SERVICES
+    </h2>
 
-      <tbody id="bakayaHomeRows">
-        <tr>
-          <td colspan="6">
-            Loading Customers...
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <p style="
+      margin:8px 0 0;
+      font-size:17px;
+      font-weight:bold;
+    ">
+      बकाया भुगतान सेवा
+    </p>
+
+    <p style="
+      margin:12px auto 0;
+      max-width:650px;
+      font-size:14px;
+      line-height:1.8;
+      color:#ecfdf5;
+    ">
+      अपने मोबाइल या आधार नंबर के अंतिम 4 अंक
+      डालकर अपना भुगतान और बकाया राशि देखें।
+    </p>
+  </div>
+
+  <!-- IMPORTANT NOTICE -->
+  <div style="
+    background:#fffbeb;
+    border:1px solid #fcd34d;
+    border-left:5px solid #f59e0b;
+    border-radius:13px;
+    padding:20px;
+    margin-top:20px;
+  ">
+
+    <h3 style="
+      margin:0 0 12px;
+      color:#92400e;
+      font-size:18px;
+    ">
+      ⚠️ महत्वपूर्ण सूचना
+    </h3>
+
+    <p style="
+      font-size:15px;
+      line-height:1.9;
+      color:#78350f;
+      margin:0;
+    ">
+      प्रिय ग्राहक, कृपया अपनी
+      <strong>बकाया राशि का भुगतान समय पर करें।</strong>
+
+      समय पर भुगतान नहीं करने से
+      भविष्य में हमारी सेवाएँ प्राप्त करने में
+      असुविधा हो सकती है।
+    </p>
+
+    <p style="
+      margin:12px 0 0;
+      font-size:13px;
+      line-height:1.8;
+      color:#92400e;
+    ">
+      नोट: यदि आपका भुगतान किसी बैंक या
+      क्रेडिट संस्थान से जुड़े लोन का है,
+      तो भुगतान में देरी से आपका
+      <strong>CIBIL Score</strong> प्रभावित हो सकता है।
+      सामान्य सर्विस के बकाया पर यह लागू नहीं होता।
+    </p>
+
+  </div>
+
+  <!-- PAYMENT MESSAGE -->
+  <div style="
+    text-align:center;
+    margin-top:20px;
+    padding:17px;
+    background:#ecfdf5;
+    border:1px solid #a7f3d0;
+    border-radius:13px;
+  ">
+    <strong style="
+      color:#065f46;
+      font-size:17px;
+      line-height:1.7;
+    ">
+      ✅ समय पर भुगतान करें और
+      अपना भरोसा बनाए रखें।
+    </strong>
+  </div>
+
+  <!-- PAYMENT BUTTON -->
+  <div style="
+    text-align:center;
+    margin:24px 0;
+  ">
+
+    <a href="/customer-bakaya" style="
+      display:inline-block;
+      background:linear-gradient(135deg,#059669,#047857);
+      color:white;
+      padding:16px 30px;
+      border-radius:12px;
+      font-size:16px;
+      font-weight:800;
+      text-decoration:none;
+      box-shadow:0 6px 18px rgba(5,150,105,0.25);
+    ">
+      ₹ अपना बकाया चेक करें
+    </a>
+
+  </div>
+
+  <!-- CUSTOMER LIST -->
+  <div style="
+    border-top:1px solid #d1fae5;
+    padding-top:22px;
+  ">
+
+    <h3 style="
+      margin:0 0 8px;
+      color:#065f46;
+      font-size:21px;
+    ">
+      📋 सभी ग्राहकों का भुगतान विवरण
+    </h3>
+
+    <p style="
+      font-size:13px;
+      color:#64748b;
+      line-height:1.6;
+    ">
+      मोबाइल या आधार के अंतिम 4 अंक से
+      ग्राहक का भुगतान रिकॉर्ड खोजें।
+      केवल सार्वजनिक किए गए रिकॉर्ड यहाँ दिखाई देंगे।
+    </p>
+
+    <!-- SEARCH INPUT -->
+    <input
+      id="bakayaHomeSearch"
+      type="search"
+      maxlength="4"
+      inputmode="numeric"
+      placeholder="🔍 मोबाइल / आधार के अंतिम 4 अंक"
+      style="
+        width:100%;
+        padding:15px;
+        margin:12px 0 18px;
+        border:2px solid #d1fae5;
+        background:white;
+        border-radius:12px;
+        font-size:15px;
+        outline:none;
+        box-sizing:border-box;
+      "
+    >
+
+    <!-- TABLE -->
+    <div style="
+      overflow-x:auto;
+      border:1px solid #e2e8f0;
+      border-radius:13px;
+    ">
+
+      <table style="
+        width:100%;
+        min-width:680px;
+        border-collapse:collapse;
+        text-align:left;
+        font-size:14px;
+      ">
+
+        <thead style="
+          background:#065f46;
+          color:white;
+        ">
+          <tr>
+            <th style="padding:15px 12px">S.No.</th>
+            <th style="padding:15px 12px">Mobile</th>
+            <th style="padding:15px 12px">Aadhaar</th>
+            <th style="padding:15px 12px">Total Due</th>
+            <th style="padding:15px 12px">Total Paid</th>
+            <th style="padding:15px 12px">Bakaya</th>
+          </tr>
+        </thead>
+
+        <tbody id="bakayaHomeRows">
+          <tr>
+            <td colspan="6" style="
+              padding:25px;
+              text-align:center;
+              color:#64748b;
+            ">
+              ⏳ ग्राहकों का विवरण लोड हो रहा है...
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="
+    margin-top:25px;
+    text-align:center;
+    padding-top:15px;
+    border-top:1px solid #d1fae5;
+    font-size:12px;
+    color:#64748b;
+  ">
+    🔒 GLOBAL SERVICES – सुरक्षित भुगतान विवरण
   </div>
 
 </section>
+
 
 <script>
 (function () {
