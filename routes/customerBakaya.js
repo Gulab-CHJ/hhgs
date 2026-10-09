@@ -2311,7 +2311,7 @@ router.get("/admin/bakaya/:id", requireAdmin,
 
       <div class="card">
         <h2>📋 Payment History</h2>
-        ${history(c)}
+        ${history(c, true)}
       </div>
 
       <script>
