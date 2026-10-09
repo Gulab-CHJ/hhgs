@@ -5,136 +5,201 @@ return `
 <html lang="hi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ration Card PVC Maker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Premium PVC Card Maker | Apna Work</title>
 
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
-  padding: 20px;
-  background: #eef2f7;
+  padding: 24px 12px;
   font-family: Arial, sans-serif;
-  color: #17212b;
+  background: #edf2f8;
+  color: #14243b;
 }
 
 .wrap {
-  max-width: 960px;
+  max-width: 1100px;
   margin: auto;
 }
 
-h1 {
+.page-title {
   text-align: center;
-  font-size: 25px;
+  font-size: 27px;
+  margin: 0 0 6px;
+  color: #102c52;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: #65758a;
+  margin-bottom: 25px;
 }
 
 .form {
-  background: white;
-  padding: 22px;
-  border-radius: 12px;
-  box-shadow: 0 3px 12px #0001;
+  background: #fff;
+  border: 1px solid #dbe3ed;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 30px #1b365315;
+}
+
+.form h3 {
+  color: #16375a;
+  border-bottom: 2px solid #d6aa54;
+  padding-bottom: 12px;
+  margin: 0 0 19px;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px 18px;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 15px 20px;
 }
 
 .field label {
   display: block;
-  font-weight: 700;
   font-size: 13px;
-  margin-bottom: 6px;
+  font-weight: bold;
+  margin-bottom: 7px;
+  color: #34455b;
 }
 
 .field input {
   width: 100%;
+  padding: 12px;
   border: 1px solid #cbd5e1;
-  border-radius: 7px;
-  padding: 11px;
+  border-radius: 8px;
+  outline: none;
   font-size: 14px;
+  background: #fcfdff;
+}
+
+.field input:focus {
+  border-color: #c89d45;
+  box-shadow: 0 0 0 3px #d6aa5428;
 }
 
 .actions {
-  margin-top: 17px;
+  margin-top: 22px;
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
 }
 
 button {
-  border: 0;
-  border-radius: 7px;
-  padding: 12px 20px;
+  border: none;
+  padding: 13px 22px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: bold;
   cursor: pointer;
-  color: white;
-  background: #126c42;
-  font-weight: 700;
+}
+
+.print-btn {
+  background: linear-gradient(135deg,#153c68,#09203c);
+  color: #fff;
+}
+
+.reset-btn {
+  background: #e7edf5;
+  color: #334155;
 }
 
 .note {
+  margin-top: 17px;
   font-size: 12px;
+  line-height: 1.7;
   color: #64748b;
 }
 
 .preview-title {
   text-align: center;
-  margin: 26px 0 12px;
+  font-size: 20px;
+  margin: 26px 0 16px;
 }
 
-/* A4 PORTRAIT */
+.sheet-holder {
+  overflow-x: auto;
+}
+
 .sheet {
   width: 210mm;
   height: 297mm;
-  margin: 0 auto;
-  background: white;
-  position: relative;
-  box-shadow: 0 6px 25px #0002;
   padding: 15mm 10mm;
+  margin: auto;
+  background: #fff;
+  box-shadow: 0 8px 30px #0002;
 }
 
 .cards {
+  width: 190mm;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: 190mm;
 }
 
-/* PVC CARD SIZE */
+/* STANDARD PVC */
 .pvc-card {
+  position: relative;
   width: 86mm;
   height: 54mm;
   flex: 0 0 86mm;
   overflow: hidden;
-  background: #d9e8ef;
-  border: 1px solid #26383d;
-  padding: 2mm;
-  color: #0b1516;
-}
-
-.frame {
-  width: 100%;
-  height: 100%;
-  border: 1.4px solid #192b31;
-  padding: 1.6mm 2mm;
-  overflow: hidden;
+  border-radius: 3mm;
+  border: 0.3mm solid #17314d;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 /* FRONT SIDE */
-.front-title {
-  font-family: Georgia, serif;
-  font-size: 19px;
-  letter-spacing: 4px;
+.front {
+  background: linear-gradient(
+    145deg,
+    #fafdff 0%,
+    #e1eef8 65%,
+    #c3d6e5 100%
+  );
+}
+
+.front-top {
+  background: linear-gradient(
+    120deg,
+    #082541,
+    #164c7b,
+    #092946
+  );
+  height: 12mm;
   text-align: center;
-  font-weight: 400;
-  margin: 0 0 2mm;
+  padding-top: 1.5mm;
+  border-bottom: 0.8mm solid #d7ae5a;
+}
+
+.front-top h2 {
+  margin: 0;
+  color: #f4d58d;
+  font-family: Georgia,serif;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+.front-top small {
+  color: #d6e4f0;
+  font-size: 6px;
+  letter-spacing: 0.5px;
+}
+
+.front-content {
+  padding: 2.5mm 3mm 1mm;
 }
 
 .front-row {
   display: flex;
-  gap: 1.5mm;
+  gap: 2mm;
 }
 
 .front-info {
@@ -142,125 +207,235 @@ button {
   min-width: 0;
 }
 
-.front p {
-  font-size: 9px;
-  font-weight: 700;
+.info-line {
+  margin-bottom: 1.35mm;
+  font-size: 8px;
   line-height: 1.17;
-  margin: 0 0 1.4mm;
   overflow-wrap: anywhere;
 }
 
-.photo {
+.info-label {
+  display: block;
+  color: #526779;
+  font-size: 6px;
+  font-weight: bold;
+  margin-bottom: 0.3mm;
+}
+
+.info-value {
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  color: #102944;
+}
+
+.photo-box {
   width: 18mm;
   height: 22mm;
-  flex: none;
-  border: 2px solid #142226;
+  flex-shrink: 0;
+  border: 1.5px solid #bc964a;
+  background: #fff;
+  border-radius: 1mm;
+  overflow: hidden;
+}
+
+.photo-box img {
+  width: 100%;
+  height: 100%;
+  display: none;
   object-fit: cover;
-  background: #f8fafc;
+}
+
+.photo-placeholder {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #789;
+  font-size: 8px;
 }
 
 .front-bottom {
-  margin-top: 1.2mm;
+  margin-top: 1.5mm;
+  border-top: 1px solid #b2c4d4;
+  padding-top: 1.5mm;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 2mm;
+  row-gap: 1mm;
 }
 
-.front-foot {
-  font-size: 6px;
-  text-align: right;
-  color: #586772;
-  margin-top: 1mm;
+.front-bottom .info-line {
+  margin: 0;
 }
 
-/* BACK SIDE */
+.front-bottom .wide {
+  grid-column: 1 / -1;
+}
+
+.front-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #123452;
+  color: #e2e8f0;
+  padding: 1.1mm 3mm;
+  font-size: 5.5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* PREMIUM BACK SIDE */
 .back {
-  background: #c9e2e7;
-}
-
-.back .frame {
-  border: 2px solid #1d3333;
-  border-radius: 5mm;
-  text-align: center;
+  background: linear-gradient(
+    145deg,
+    #071b32,
+    #133e63 55%,
+    #061a31
+  );
+  border: 0.35mm solid #cfa85b;
+  color: #fff;
   padding: 2mm;
 }
 
+.back-frame {
+  height: 100%;
+  width: 100%;
+  border: 0.25mm solid #d4ad63;
+  border-radius: 2mm;
+  padding: 1.7mm 2.5mm;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6mm;
+  text-align: center;
+  overflow: hidden;
+}
+
+.back-brand {
+  font-family: Georgia,serif;
+  font-size: 15px;
+  line-height: 1.1;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  color: #f2d18a;
+  margin: 0;
+}
+
+.back-tagline {
+  font-size: 7px;
+  color: #e0ebf4;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.gold-divider {
+  width: 70%;
+  height: 0.25mm;
+  background: #cfa85b;
+  flex-shrink: 0;
+}
+
 .back-heading {
-  font-family: Georgia, serif;
-  font-weight: 700;
-  font-size: 11px;
-  margin: 1.8mm 0 1mm;
-  color: #463c20;
+  margin: 0;
+  font-size: 8.5px;
+  font-weight: bold;
+  color: #ffe2a0;
+  line-height: 1.2;
 }
 
 .back-sub {
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1.2;
-  margin: 0 0 1.2mm;
+  margin: 0;
+  max-width: 100%;
+  font-size: 7px;
+  color: #fff;
+  line-height: 1.25;
 }
 
-.blackbar {
-  margin: 0.8mm auto;
-  background: #080e0c;
-  color: #d3d0b8;
-  border-radius: 15px;
-  font-size: 12px;
-  font-weight: bold;
+.contact-bar {
+  width: 95%;
+  border: 1px solid #c8a45e;
+  border-radius: 2mm;
   padding: 1mm 2mm;
+  background: #081c32;
+  font-size: 10px;
+  font-weight: bold;
+  color: #ffe3a0;
   line-height: 1.15;
-  width: 91%;
-  text-align: left;
   white-space: nowrap;
 }
 
-.checks {
+.services {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 1mm 2mm;
   text-align: left;
-  padding: 0 8mm;
-  gap: 1mm 6mm;
-  margin: 1.7mm 0 1.2mm;
-  font-size: 10px;
-  font-weight: 800;
+  font-size: 7.5px;
+  font-weight: 700;
+  color: #f2f6fc;
+  line-height: 1.2;
+}
+
+.services span {
+  padding: 0.5mm;
 }
 
 .back-footer {
-  font-size: 10px;
-  font-weight: 800;
-  line-height: 1.3;
-  color: #4e421f;
-  margin-top: 1mm;
+  color: #f1d18a;
+  font-size: 7px;
+  line-height: 1.2;
+  font-weight: bold;
+  margin: 0;
 }
 
-@media(max-width:900px) {
-  .sheet-holder {
-    overflow-x: auto;
-  }
+.back-disclaimer {
+  font-size: 5.4px;
+  color: #b7c6d4;
+  margin: 0;
+}
 
+/* MOBILE */
+@media(max-width:900px) {
   .grid {
     grid-template-columns: 1fr;
   }
+
+  .form {
+    padding: 17px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
 }
 
-/* PRINT */
+/* A4 PRINT */
 @page {
   size: A4 portrait;
   margin: 0;
 }
 
 @media print {
-  body {
-    margin: 0;
-    padding: 0;
-    background: white;
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
   }
 
   .form,
-  h1,
+  .page-title,
+  .subtitle,
   .preview-title {
     display: none !important;
   }
 
   .wrap {
     max-width: none;
+    margin: 0;
   }
 
   .sheet-holder {
@@ -273,13 +448,18 @@ button {
     margin: 0;
     padding: 15mm 10mm;
     box-shadow: none;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
+    page-break-after: avoid;
   }
 
-  .pvc-card {
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
+  .pvc-card,
+  .front,
+  .back,
+  .front-top,
+  .front-footer,
+  .back-frame,
+  .contact-bar {
+    print-color-adjust: exact !important;
+    -webkit-print-color-adjust: exact !important;
   }
 }
 </style>
@@ -288,7 +468,13 @@ button {
 <body>
 <div class="wrap">
 
-<h1>Ration Card PVC Maker</h1>
+<h1 class="page-title">
+  Premium PVC Card Maker
+</h1>
+
+<p class="subtitle">
+  APNA WORK | Professional Personal Card Printing
+</p>
 
 <div class="form">
 
@@ -298,160 +484,222 @@ button {
 
 <div class="field">
 <label>पहला Head of Family</label>
-<input id="name1" value="Jalifan Khatun">
+<input id="name1" placeholder="Enter Name">
 </div>
 
 <div class="field">
-<label>मोबाइल नंबर</label>
-<input id="mobile" value="9142264714">
+<label>Mobile Number</label>
+<input id="mobile"
+       maxlength="10"
+       inputmode="numeric"
+       placeholder="Enter Mobile Number">
 </div>
 
 <div class="field">
-<label>पहला राशन कार्ड नंबर</label>
-<input id="ration1" value="10140150132068600015">
+<label>पहला Ration Card Number</label>
+<input id="ration1"
+       placeholder="Enter Ration Card Number">
 </div>
 
 <div class="field">
-<label>पहला आधार नंबर</label>
+<label>पहला Aadhaar Number</label>
 <input id="aadhaar1"
        maxlength="12"
        inputmode="numeric"
-       placeholder="12 digit Aadhaar">
+       placeholder="12 Digit Aadhaar">
 </div>
 
 <div class="field">
 <label>दूसरा Head of Family</label>
-<input id="name2" value="Md Hasim">
+<input id="name2"
+       placeholder="Enter Second Name">
 </div>
 
 <div class="field">
-<label>दूसरा राशन कार्ड नंबर</label>
-<input id="ration2" value="10140080121028800014">
+<label>दूसरा Ration Card Number</label>
+<input id="ration2"
+       placeholder="Enter Second Ration Card Number">
 </div>
 
 <div class="field">
-<label>दूसरा आधार नंबर</label>
+<label>दूसरा Aadhaar Number</label>
 <input id="aadhaar2"
        maxlength="12"
        inputmode="numeric"
-       placeholder="12 digit Aadhaar">
+       placeholder="12 Digit Aadhaar">
 </div>
 
 <div class="field">
 <label>फोटो अपलोड करें</label>
-<input id="photoInput" type="file" accept="image/*">
+<input id="photoInput"
+       type="file"
+       accept="image/*">
+</div>
+
+<div class="field">
+<label>Shop Name</label>
+<input id="shopName" value="APNA WORK">
+</div>
+
+<div class="field">
+<label>Shop Contact Number</label>
+<input id="shopMobile"
+       value="9142264714"
+       maxlength="10"
+       inputmode="numeric">
 </div>
 
 </div>
 
 <div class="actions">
 
-<button type="button" onclick="window.print()">
-🖨 Print / Save PDF
+<button class="print-btn"
+        type="button"
+        onclick="window.print()">
+  🖨 Print / Save PDF
 </button>
 
-<button type="button"
-        onclick="resetFields()"
-        style="background:#475569">
-Reset Form
+<button class="reset-btn"
+        type="button"
+        onclick="resetFields()">
+  Reset Form
 </button>
 
 </div>
 
 <p class="note">
-A4 Portrait | PVC Size 86 × 54 mm |
-Scale 100% | Background Graphics ON
+  A4 Portrait | PVC 86 × 54mm |
+  Print Scale 100% | Background Graphics ON
 </p>
 
 </div>
 
 <h3 class="preview-title">
-A4 Portrait — Front Left | Back Right
+  A4 Premium Print Preview
 </h3>
 
 <div class="sheet-holder">
 <div class="sheet">
-
 <div class="cards">
 
-<!-- FRONT -->
+<!-- FRONT CARD -->
 <div class="pvc-card front">
-<div class="frame">
 
-<h2 class="front-title">Ration card</h2>
+<div class="front-top">
+<h2>RATION CARD</h2>
+<small>PERSONAL REFERENCE CARD</small>
+</div>
+
+<div class="front-content">
 
 <div class="front-row">
 
 <div class="front-info">
-<p>Head of Family:
-<span id="vname1"></span></p>
 
-<p>Mobile:
-<span id="vmobile"></span></p>
-
-<p>Ration Card No.:
-<span id="vration1"></span></p>
-
-<p>Aadhaar No.:
-<span id="vaadhaar1"></span></p>
+<div class="info-line">
+<span class="info-label">HEAD OF FAMILY</span>
+<span class="info-value" id="vname1">—</span>
 </div>
 
-<img class="photo" id="vphoto" alt="Photo">
+<div class="info-line">
+<span class="info-label">MOBILE NUMBER</span>
+<span class="info-value" id="vmobile">—</span>
+</div>
+
+<div class="info-line">
+<span class="info-label">RATION CARD NUMBER</span>
+<span class="info-value" id="vration1">—</span>
+</div>
+
+<div class="info-line">
+<span class="info-label">AADHAAR NUMBER</span>
+<span class="info-value" id="vaadhaar1">—</span>
+</div>
+
+</div>
+
+<div class="photo-box">
+<img id="vphoto" alt="Holder Photo">
+<div class="photo-placeholder" id="photoPlaceholder">
+PHOTO
+</div>
+</div>
 
 </div>
 
 <div class="front-bottom">
 
-<p>Head of Family:
-<span id="vname2"></span></p>
+<div class="info-line">
+<span class="info-label">SECOND FAMILY HEAD</span>
+<span class="info-value" id="vname2">—</span>
+</div>
 
-<p>Ration Card No.:
-<span id="vration2"></span></p>
+<div class="info-line">
+<span class="info-label">AADHAAR NUMBER</span>
+<span class="info-value" id="vaadhaar2">—</span>
+</div>
 
-<p>Aadhaar No.:
-<span id="vaadhaar2"></span></p>
+<div class="info-line wide">
+<span class="info-label">RATION CARD NUMBER</span>
+<span class="info-value" id="vration2">—</span>
+</div>
 
 </div>
 
-<div class="front-foot">
-Personal Reference Copy
+</div>
+
+<div class="front-footer">
+<span>PERSONAL REFERENCE COPY</span>
+<span>Not a Government-Issued Card</span>
 </div>
 
 </div>
-</div>
 
-<!-- BACK -->
+<!-- BACK CARD -->
 <div class="pvc-card back">
-<div class="frame">
 
-<div class="back-heading">
-✦ Premium PVC Card Design Available ✦
-</div>
+<div class="back-frame">
 
-<p class="back-sub">
-इस तरह का शानदार और प्रीमियम लुक वाला कार्ड
-बनवाने के लिए संपर्क करें.
+<h2 class="back-brand" id="vshopName">
+APNA WORK
+</h2>
+
+<p class="back-tagline">
+Premium PVC Card Printing Service
 </p>
 
-<div class="blackbar">
-☎ मोबाइल: 9142264714
+<div class="gold-divider"></div>
+
+<p class="back-heading">
+आपका भरोसा, हमारी पहचान
+</p>
+
+<p class="back-sub">
+शानदार डिजाइन और बेहतरीन फिनिश के साथ
+अपना पर्सनल कार्ड बनवाएँ।
+</p>
+
+<div class="contact-bar">
+☎ <span id="vshopMobile">9142264714</span>
 </div>
 
-<div class="blackbar">
-▣ Shop Name: Apna Work
+<div class="services">
+<span>✓ PVC कार्ड</span>
+<span>✓ फोटो कार्ड</span>
+<span>✓ आईडी कार्ड</span>
+<span>✓ कस्टम डिजाइन</span>
 </div>
 
-<div class="checks">
-<span>✅ बैंक कार्ड</span>
-<span>✅ आधार कार्ड</span>
-<span>✅ आईडी कार्ड</span>
-<span>✅ कस्टम डिजाइन उपलब्ध</span>
-</div>
+<div class="gold-divider"></div>
 
-<div class="back-footer">
-👉 आज ही अपना कार्ड बनवाएँ<br>
-बेहतर क्वालिटी, शानदार फिनिश के साथ.
-</div>
+<p class="back-footer">
+आज ही संपर्क करें!<br>
+Premium Quality • Beautiful Finish
+</p>
+
+<p class="back-disclaimer">
+Personal printing service • Not an official ID
+</p>
 
 </div>
 </div>
@@ -463,79 +711,111 @@ Personal Reference Copy
 </div>
 
 <script>
-const idList = [
-  'name1',
-  'mobile',
-  'ration1',
-  'aadhaar1',
-  'name2',
-  'ration2',
-  'aadhaar2'
-];
+(function() {
 
-function mask(v) {
-  const digits = v.replace(/[^0-9]/g, '');
+  const idList = [
+    'name1',
+    'mobile',
+    'ration1',
+    'aadhaar1',
+    'name2',
+    'ration2',
+    'aadhaar2',
+    'shopName',
+    'shopMobile'
+  ];
 
-  return 'XXXX XXXX ' +
-    (digits.length >= 4
-      ? digits.slice(-4)
-      : 'XXXX');
-}
+  function maskAadhaar(value) {
+    const digits = String(value || '')
+      .replace(/\\D/g, '');
 
-function update() {
+    if (digits.length !== 12) {
+      return 'XXXX XXXX XXXX';
+    }
+
+    return 'XXXX XXXX ' + digits.slice(-4);
+  }
+
+  function update() {
+    idList.forEach(function(id) {
+      const input = document.getElementById(id);
+      const output = document.getElementById('v' + id);
+
+      if (!input || !output) return;
+
+      let value = input.value.trim();
+
+      if (id.startsWith('aadhaar')) {
+        value = maskAadhaar(value);
+      }
+
+      output.textContent = value || '—';
+    });
+  }
+
   idList.forEach(function(id) {
     const input = document.getElementById(id);
-    const output = document.getElementById('v' + id);
 
-    let value = input.value.trim();
-
-    if (id.startsWith('aadhaar')) {
-      value = mask(value);
+    if (input) {
+      input.addEventListener('input', update);
     }
-
-    output.textContent = value || '—';
-  });
-}
-
-idList.forEach(function(id) {
-  document.getElementById(id)
-    .addEventListener('input', update);
-});
-
-document.getElementById('photoInput')
-  .addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    if (!file.type.startsWith('image/')) {
-      alert('Image चुनें');
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function() {
-      document.getElementById('vphoto').src =
-        reader.result;
-    };
-
-    reader.readAsDataURL(file);
   });
 
-function resetFields() {
-  document.querySelectorAll(
-    '.grid input:not([type=file])'
-  ).forEach(function(input) {
-    input.value = '';
-  });
+  document.getElementById('photoInput')
+    .addEventListener('change', function(event) {
 
-  document.getElementById('photoInput').value = '';
-  document.getElementById('vphoto').removeAttribute('src');
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        alert('कृपया सही फोटो चुनें।');
+        this.value = '';
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = function() {
+        const photo = document.getElementById('vphoto');
+        const placeholder =
+          document.getElementById('photoPlaceholder');
+
+        photo.src = reader.result;
+        photo.style.display = 'block';
+        placeholder.style.display = 'none';
+      };
+
+      reader.readAsDataURL(file);
+    });
+
+  window.resetFields = function() {
+
+    idList.forEach(function(id) {
+      const input = document.getElementById(id);
+      if (input) input.value = '';
+    });
+
+    document.getElementById('photoInput').value = '';
+
+    const photo = document.getElementById('vphoto');
+    photo.removeAttribute('src');
+    photo.style.display = 'none';
+
+    document.getElementById('photoPlaceholder')
+      .style.display = 'flex';
+
+    document.getElementById('shopName').value =
+      'APNA WORK';
+
+    document.getElementById('shopMobile').value =
+      '9142264714';
+
+    update();
+  };
 
   update();
-}
 
-update();
+})();
 </script>
 
 </body>
