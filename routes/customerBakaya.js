@@ -1839,46 +1839,91 @@ function summary(customer) {
 // PAYMENT HISTORY
 // ======================================
 
-function history(customer) {
+
+function history(customer, isAdmin = false) {
+
   const entries = [...(customer.entries || [])]
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const rows = entries.map((e, i) => `
+
     <tr>
       <td>${i + 1}</td>
+
       <td>${dateText(e.date)}</td>
+
       <td>${esc(e.reason || "-")}</td>
+
       <td>${money(e.amount)}</td>
-      <td>${e.type === "PAID"
-        ? esc(e.paymentMode || "CASH")
-        : "-"}</td>
+
+      <td>
+        ${e.type === "PAID"
+          ? esc(e.paymentMode || "CASH")
+          : "-"}
+      </td>
+
       <td>
         <span class="tag ${
           e.type === "PAID" ? "tag-paid" : "tag-due"
-        }">${esc(e.type)}</span>
+        }">
+          ${esc(e.type)}
+        </span>
       </td>
+
+      ${isAdmin ? `
+      <td>
+        <form
+          method="POST"
+          action="/admin/bakaya/payment/${customer._id}/delete/${e._id}"
+          onsubmit="return confirm('क्या आप इस Payment Entry को Delete करना चाहते हैं?')"
+        >
+          <button type="submit" style="
+            background:#dc2626;
+            color:white;
+            padding:9px 13px;
+            border:0;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:bold;
+          ">
+            🗑 Delete
+          </button>
+        </form>
+      </td>
+      ` : ""}
     </tr>
+
   `).join("");
 
   return `
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>S.No.</th>
-          <th>Date</th>
-          <th>Reason</th>
-          <th>Amount</th>
-          <th>Mode</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${rows || '<tr><td colspan="6">No Payment History</td></tr>'}
-      </tbody>
-    </table>
-  </div>`;
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>S.No.</th>
+            <th>Date</th>
+            <th>Reason</th>
+            <th>Amount</th>
+            <th>Mode</th>
+            <th>Status</th>
+            ${isAdmin ? "<th>Action</th>" : ""}
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows || `
+            <tr>
+              <td colspan="${isAdmin ? 7 : 6}">
+                No Payment History
+              </td>
+            </tr>
+          `}
+        </tbody>
+      </table>
+    </div>
+  `;
 }
+
 
 function adminNav() {
   return `
@@ -2572,5 +2617,60 @@ router.get("/customer-bakaya/view/:reference",
     res.status(500).send("Payment View Failed");
   }
 });
+
+
+router.post(
+  "/admin/bakaya/payment/:id/delete/:entryId",
+  requireAdmin,
+  async (req, res) => {
+    try {
+
+      const { id, entryId } = req.params;
+
+      if (
+        !mongoose.isValidObjectId(id) ||
+        !mongoose.isValidObjectId(entryId)
+      ) {
+        return res.status(400).send(
+          "Invalid Customer or Payment ID"
+        );
+      }
+
+      const customer = await Customer.findById(id);
+
+      if (!customer) {
+        return res.status(404).send(
+          "Customer Not Found"
+        );
+      }
+
+      const payment = customer.entries.id(entryId);
+
+      if (!payment) {
+        return res.status(404).send(
+          "Payment Entry Not Found"
+        );
+      }
+
+      // Delete selected entry only
+      customer.entries.pull({ _id: entryId });
+
+      await customer.save();
+
+      return res.redirect(
+        "/admin/bakaya/" + customer._id
+      );
+
+    } catch (err) {
+
+      console.error("Delete Payment Error:", err);
+
+      return res.status(500).send(
+        "Payment Delete Failed"
+      );
+    }
+  }
+);
+
 
 module.exports = router;
