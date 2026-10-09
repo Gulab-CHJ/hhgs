@@ -1298,6 +1298,8 @@ function Home(
 
     ${QuickServiceSection()}
 
+    ${QuickServiceSection()}
+
     ${MedicineStoreSection(products)}
 
 

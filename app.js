@@ -786,6 +786,12 @@ app.use(
     quickServiceRoutes
 );
 
+
+const customerBakayaRoutes = require("./routes/customerBakaya");
+
+app.use(customerBakayaRoutes);
+
+
 // ===============================
 // SERVER START
 // ===============================
