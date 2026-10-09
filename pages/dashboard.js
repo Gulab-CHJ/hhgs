@@ -3344,6 +3344,20 @@ a {
     </a>
 
 
+    
+<a href="/admin/ration-card-maker"
+   class="btn-action"
+   style="text-decoration:none;">
+
+  <i class="fa-solid fa-id-card"
+     style="color:#16a34a;"></i>
+
+  <span>Ration Card PVC Maker</span>
+
+</a>
+
+
+
     <!-- GLOBAL QUICK SERVICES ADMIN -->
 
 <a

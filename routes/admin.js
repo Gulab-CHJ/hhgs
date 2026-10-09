@@ -17021,6 +17021,18 @@ router.get("/change-password", async (req, res) => {
 });
 
 
+const RationCardMaker = require("../views/rationCardMaker");
+
+router.get("/ration-card-maker", (req, res) => {
+    if (!req.session?.adminId) {
+        return res.redirect("/admin/login");
+    }
+
+    res.send(RationCardMaker());
+});
+
+
+
 
 
 // ======================================================
