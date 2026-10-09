@@ -3358,6 +3358,26 @@ a {
 
 
 
+<!-- CUSTOMER BAKAYA MANAGEMENT -->
+<a
+    href="/admin/bakaya/customer"
+    class="sabji-admin-btn bakaya-btn"
+>
+    <i class="fa-solid fa-wallet"></i>
+
+    <span class="action-copy">
+        <strong>
+            Customer Bakaya Management
+        </strong>
+
+        <small>
+            Add Customer, Due, Paid & Payment History
+        </small>
+    </span>
+</a>
+
+
+
     <!-- GLOBAL QUICK SERVICES ADMIN -->
 
 <a
