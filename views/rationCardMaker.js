@@ -1491,7 +1491,7 @@
 // <div class="back-frame">
 
 // <h2 class="back-brand" id="vshopName">
-// APNA WORK
+// GLOBAL SERVICES
 // </h2>
 
 // <p class="back-tagline">
@@ -1646,7 +1646,7 @@
 //     document.getElementById(id).value = '';
 //   });
 
-//   document.getElementById('shopName').value = 'APNA WORK';
+//   document.getElementById('shopName').value = 'GLOBAL SERVICES';
 //   document.getElementById('shopMobile').value = '9142264714';
 
 //   photoInput.value = '';
@@ -1683,7 +1683,7 @@ return `
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Premium Ration Card Maker - APNA WORK</title>
+<title>Premium Ration Card Maker - GLOBAL SERVICES</title>
 
 <style>
 * {
@@ -2194,7 +2194,7 @@ button {
 <h1>Premium Ration Card Maker</h1>
 
 <p class="subtitle">
-APNA WORK | Premium Personal Card Printing
+GLOBAL SERVICES | Premium Personal Card Printing
 </p>
 
 <!-- INPUT FORM -->
@@ -2376,7 +2376,7 @@ PHOTO
 
 
 <h2 class="back-brand" id="vshopName">
-APNA WORK
+GLOBAL SERVICES
 </h2>
 
 <p class="back-tagline">
@@ -2557,7 +2557,7 @@ Personal printing service • Not an official ID
     });
 
     document.getElementById('shopName').value =
-      'APNA WORK';
+      'GLOBAL SERVICES';
 
     document.getElementById('shopMobile').value =
       '9142264714';
