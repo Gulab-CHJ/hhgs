@@ -10,7 +10,14 @@ module.exports = function CustomerBakayaSection(
 
   const money = n => "₹" + Number(n || 0).toFixed(2);
 
-  const rows = customers.map((c, i) => {
+  const visibleCustomers = Array.isArray(customers)
+  ? customers.filter(c =>
+      c.active !== false &&
+      c.publicBalanceVisible === true
+    )
+  : [];
+
+const rows = visibleCustomers.map((c, i) => {
     const due = (c.entries || [])
       .filter(e => e.type === "DUE")
       .reduce((s, e) => s + Number(e.amount || 0), 0);
