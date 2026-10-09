@@ -130,7 +130,7 @@ button {
 .sheet {
   width: 210mm;
   height: 297mm;
-  padding: 2mm 10mm;
+  padding: 5mm 10mm;
   margin: auto;
   background: #fff;
   box-shadow: 0 8px 30px #0002;
