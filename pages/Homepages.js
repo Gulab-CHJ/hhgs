@@ -1296,9 +1296,42 @@ function Home(
 
     ${Banner(banners)}
 
-    ${QuickServiceSection()}
 
     ${QuickServiceSection()}
+
+
+    
+<section style="
+  max-width:1100px;
+  margin:25px auto;
+  padding:25px;
+  border-radius:18px;
+  background:linear-gradient(135deg,#064e3b,#059669);
+  color:white;
+  text-align:center;
+  font-family:Arial,sans-serif;
+">
+  <h2 style="margin:0 0 10px;">
+    GLOBAL SERVICES – बकाया भुगतान
+  </h2>
+  <p>
+    अपने मोबाइल या आधार के आखिरी 4 अंक से
+    Payment और बकाया हिसाब देखें।
+  </p>
+  <a href="/customer-bakaya" style="
+    display:inline-block;
+    padding:13px 25px;
+    margin-top:12px;
+    background:white;
+    color:#065f46;
+    font-weight:800;
+    border-radius:10px;
+    text-decoration:none;
+  ">
+    ₹ Check My Payment
+  </a>
+</section>
+
 
     ${MedicineStoreSection(products)}
 
