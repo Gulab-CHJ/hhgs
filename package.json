@@ -1,4 +1,3 @@
-
 {
   "name": "hhgs",
   "version": "1.0.0",
@@ -8,6 +7,8 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "ejs": "^7.0.1",
+    "express": "^5.1.0",
+    "mongoose": "^9.11.2"
   }
 }
