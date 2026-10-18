@@ -1,14 +1,33 @@
 {
-  "name": "hhgs",
+  "name": "allapnawork",
   "version": "1.0.0",
-  "description": "HHGS Website",
+  "description": "",
+  "homepage": "https://github.com/Gulab-CHJ/allapnawork#readme",
+  "bugs": {
+    "url": "https://github.com/Gulab-CHJ/allapnawork/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gulab-CHJ/allapnawork.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "ejs": "^7.0.1",
-    "express": "^5.1.0",
-    "mongoose": "^9.11.2"
+    "bcrypt": "^6.0.0",
+    "cloudinary": "^1.41.3",
+    "dotenv": "^18.0.7",
+    "express-rate-limit": "^8.7.1",
+    "express-session": "^1.19.0",
+    "mongoose": "^9.11.1",
+    "multer": "^2.4.0",
+    "multer-storage-cloudinary": "^4.0.0",
+    "node-edge-tts": "^1.2.10",
+    "pdfkit": "^0.20.2",
+    "razorpay": "^2.9.8"
   }
 }
