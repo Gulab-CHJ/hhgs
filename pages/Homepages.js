@@ -1307,7 +1307,7 @@ ${QuickServiceSection()}
 
 ${CustomerBakayaSection(customers)}
 
-     <!-- ${MedicineStoreSection(products)} -->
+     
 
 
     ${StarRankingSection(students)}
