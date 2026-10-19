@@ -795,6 +795,25 @@ const customerBakayaRoutes = require("./routes/customerBakaya");
 app.use(customerBakayaRoutes);
 
 
+
+
+app.post("/admin/deactivate-banner/:id", async (req, res) => {
+    try {
+        const bannerId = req.params.id;
+
+        // Yahan apne Banner model ka naam use karein
+        await Banner.findByIdAndUpdate(bannerId, {
+            isActive: false
+        });
+
+        res.redirect("/admin/banners");
+    } catch (error) {
+        console.error("Deactivate Banner Error:", error);
+        res.status(500).send("Banner deactivate karne mein error aaya");
+    }
+});
+
+
 // ===============================
 // SERVER START
 // ===============================
