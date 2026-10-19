@@ -1317,9 +1317,9 @@ ${CustomerBakayaSection(customers)}
 
     ${StudentSection(students)}
 
-    ${ServiceSection(services)}
+    
 
-    ${GovernmentSection(governments)}
+    
 
     ${Footer()}
 
