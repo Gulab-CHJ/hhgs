@@ -1307,12 +1307,13 @@ ${QuickServiceSection()}
 
 ${CustomerBakayaSection(customers)}
 
-     /* ${MedicineStoreSection(products)} */
+     <!-- ${MedicineStoreSection(products)} -->
 
 
     ${StarRankingSection(students)}
 
-    ${DoctorSection(doctors)}
+   
+   
 
     ${StudentSection(students)}
 
