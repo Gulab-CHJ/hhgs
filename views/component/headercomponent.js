@@ -478,14 +478,14 @@ return `
 </a>
 -->
 
-
+<!--
             <a href="/services">
 
                 <i class="fa-solid fa-briefcase-medical"></i>
 
                 Services
 
-            </a>
+            </a>  -->
 
 
             <!-- <a href="/doctor/store">
@@ -501,7 +501,7 @@ return `
     Quick Service
 </a>
 
-
+<!--
             <a
     href="/sabji"
     class="vegetable-btn"
@@ -509,7 +509,7 @@ return `
     <i class="fa-solid fa-carrot"></i>
 
     Fresh Vegetables
-</a>
+</a>  -->
 
 
             <a href="/contact">
