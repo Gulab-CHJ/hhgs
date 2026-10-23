@@ -814,6 +814,324 @@ app.post("/admin/deactivate-banner/:id", async (req, res) => {
 });
 
 
+
+
+/* ==========================================
+   MD GULAB CYBER CAFE
+   Passport Photo Maker - JPG + A4 PDF
+   Add before app.listen() in app.js
+========================================== */
+
+const multer = require("multer");
+const sharp = require("sharp");
+const PDFDocument = require("pdfkit");
+
+// AI background removal package ko dynamically load karenge,
+// taaki CommonJS app.js mein ESM compatibility ki dikkat kam ho.
+const passportUpload = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 10 * 1024 * 1024
+    },
+    fileFilter: (req, file, cb) => {
+        if (!["image/jpeg", "image/png", "image/webp"].includes(file.mimetype)) {
+            return cb(new Error("Sirf JPG, PNG ya WEBP photo upload karein."));
+        }
+        cb(null, true);
+    }
+});
+
+// Passport Photo Maker page
+app.get("/passport-photo", (req, res) => {
+    res.send(`<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Passport Photo Maker | MD Gulab Cyber Cafe</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f1f5f9;font-family:Arial,sans-serif;color:#172033}
+header{background:#0756a5;color:white;padding:22px 15px;text-align:center}
+header h1{font-size:23px;margin:0 0 7px}
+header p{margin:0;font-size:14px}
+main{max-width:600px;margin:24px auto;padding:0 14px}
+.card{background:white;padding:22px;border-radius:15px;box-shadow:0 4px 20px #0000000b}
+label{display:block;font-weight:bold;margin:15px 0 8px}
+input[type=file]{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px}
+button,.download{display:block;width:100%;padding:14px;margin-top:14px;border:0;
+border-radius:9px;background:#0756a5;color:white;font-size:16px;
+font-weight:bold;text-align:center;text-decoration:none;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+.note{font-size:13px;line-height:1.6;color:#64748b}
+#status{margin-top:16px;line-height:1.6;overflow-wrap:anywhere}
+#results{display:none;margin-top:18px}
+.preview{width:100%;border:1px solid #ddd;margin-top:12px}
+</style>
+</head>
+<body>
+<header>
+<h1>MD Gulab Cyber Cafe</h1>
+<p>Passport Size Photo Maker</p>
+</header>
+<main>
+<div class="card">
+<h2>पासपोर्ट फोटो बनाएं</h2>
+<p class="note">अपनी फोटो अपलोड करें। AI background हटाने के बाद सफेद background और A4 शीट तैयार होगी।</p>
+
+<form id="photoForm">
+<label for="photo">अपनी फोटो चुनें</label>
+<input id="photo" name="photo" type="file"
+accept="image/jpeg,image/png,image/webp" required>
+<button id="submitBtn" type="submit">फोटो बनाएं</button>
+</form>
+
+<div id="status" role="status"></div>
+
+<div id="results">
+<h3>आपकी फोटो तैयार है</h3>
+<img id="preview" class="preview" alt="A4 passport photo sheet preview">
+<a id="jpgDownload" class="download" download="passport-photos-a4.jpg">JPG डाउनलोड करें</a>
+<a id="pdfDownload" class="download" download="passport-photos-a4.pdf">A4 PDF डाउनलोड करें</a>
+</div>
+</div>
+</main>
+
+<script>
+const form = document.getElementById("photoForm");
+const btn = document.getElementById("submitBtn");
+const statusBox = document.getElementById("status");
+const results = document.getElementById("results");
+
+form.addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    if (!document.getElementById("photo").files.length) return;
+
+    btn.disabled = true;
+    results.style.display = "none";
+    statusBox.textContent =
+        "AI background remove kar raha hai. Pehli baar thoda samay lag sakta hai...";
+
+    try {
+        const response = await fetch("/process-passport-photos", {
+            method: "POST",
+            body: new FormData(form)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Photo process nahi ho saki.");
+        }
+
+        document.getElementById("preview").src =
+            "data:image/jpeg;base64," + data.jpg;
+
+        document.getElementById("jpgDownload").href =
+            "data:image/jpeg;base64," + data.jpg;
+
+        document.getElementById("pdfDownload").href =
+            "data:application/pdf;base64," + data.pdf;
+
+        results.style.display = "block";
+        statusBox.textContent = "फोटो सफलतापूर्वक तैयार हो गई।";
+    } catch (err) {
+        statusBox.textContent = "समस्या: " + err.message;
+    } finally {
+        btn.disabled = false;
+    }
+});
+</script>
+</body>
+</html>`);
+});
+
+
+
+
+// Passport Photo Maker: backend connection test
+app.get("/passport-photo-test", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Passport Photo backend connected"
+    });
+});
+
+// Process uploaded passport photo
+app.post(
+    "/process-passport-photos",
+    passportUpload.single("photo"),
+    async (req, res) => {
+        try {
+            if (!req.file) {
+                return res.status(400).json({
+                    error: "Kripya ek photo upload karein."
+                });
+            }
+
+            // 1. AI se background remove karna
+            const { removeBackground } =
+                await import("@imgly/background-removal-node");
+
+            const sourceBlob = new Blob(
+                [req.file.buffer],
+                { type: req.file.mimetype }
+            );
+
+            const transparentBlob = await removeBackground(sourceBlob);
+
+            const transparentBuffer = Buffer.from(
+                await transparentBlob.arrayBuffer()
+            );
+
+            // 2. Passport photo: 35 x 45 mm at approx 300 DPI
+            // Transparent background ko white background mein convert karna
+            const photoWidth = 413;
+            const photoHeight = 531;
+
+            const photoBuffer = await sharp(transparentBuffer)
+                .rotate()
+                .resize(photoWidth, photoHeight, {
+                    fit: "cover",
+                    position: "centre"
+                })
+                .flatten({
+                    background: { r: 255, g: 255, b: 255 }
+                })
+                .jpeg({ quality: 95 })
+                .toBuffer();
+
+            // 3. A4 sheet: 2480 x 3508 pixels, approx 300 DPI
+            const a4Width = 2480;
+            const a4Height = 3508;
+
+            const cols = 5;
+            const rows = 2;
+            const gapX = 20;
+            const gapY = 80;
+
+            const totalWidth =
+                cols * photoWidth + (cols - 1) * gapX;
+
+            const totalHeight =
+                rows * photoHeight + (rows - 1) * gapY;
+
+            const startX = Math.round((a4Width - totalWidth) / 2);
+            const startY = Math.round((a4Height - totalHeight) / 2);
+
+            const composites = [];
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    const left = startX + c * (photoWidth + gapX);
+                    const top = startY + r * (photoHeight + gapY);
+
+                    composites.push({
+                        input: photoBuffer,
+                        left,
+                        top
+                    });
+
+                    // Black border around each photo
+                    const borderSvg = Buffer.from(
+                        '<svg xmlns="http://www.w3.org/2000/svg" ' +
+                        'width="' + photoWidth + '" height="' + photoHeight + '">' +
+                        '<rect x="1" y="1" width="' + (photoWidth - 2) +
+                        '" height="' + (photoHeight - 2) +
+                        '" fill="none" stroke="#000" stroke-width="2"/>' +
+                        '</svg>'
+                    );
+
+                    composites.push({
+                        input: borderSvg,
+                        left,
+                        top
+                    });
+                }
+            }
+
+            const jpgBuffer = await sharp({
+                create: {
+                    width: a4Width,
+                    height: a4Height,
+                    channels: 3,
+                    background: "#ffffff"
+                }
+            })
+                .composite(composites)
+                .jpeg({ quality: 95 })
+                .toBuffer();
+
+            // 4. A4 PDF banana
+            const pdfBuffer = await new Promise((resolve, reject) => {
+                const doc = new PDFDocument({
+                    size: "A4",
+                    margin: 0,
+                    autoFirstPage: true,
+                    compress: true
+                });
+
+                const chunks = [];
+
+                doc.on("data", chunk => chunks.push(chunk));
+                doc.on("end", () => resolve(Buffer.concat(chunks)));
+                doc.on("error", reject);
+
+                // Full A4 page par sheet fit karna
+                doc.image(jpgBuffer, 0, 0, {
+                    width: 595.28,
+                    height: 841.89
+                });
+
+                doc.end();
+            });
+
+            // 5. JPG aur PDF browser ko dena
+            res.json({
+                success: true,
+                jpg: jpgBuffer.toString("base64"),
+                pdf: pdfBuffer.toString("base64")
+            });
+
+        }catch (error) {
+    console.error("PASSPORT PHOTO ERROR:", error);
+
+    if (!res.headersSent) {
+        res.status(500).json({
+            success: false,
+            error: error.message || "Photo processing failed"
+        });
+    }
+}
+
+});
+
+
+// Multer upload errors ko JSON mein return karna
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        return res.status(400).json({
+            error: err.code === "LIMIT_FILE_SIZE"
+                ? "Photo 10 MB se chhoti honi chahiye."
+                : err.message
+        });
+    }
+
+    if (req.path === "/process-passport-photos") {
+        return res.status(400).json({
+            error: err.message || "Photo upload mein samasya aayi."
+        });
+    }
+
+    next(err);
+});
+
+// IMPORTANT:
+// Apne existing app.listen() ko waise hi rehne dein.
+
+
+
 // ===============================
 // SERVER START
 // ===============================

@@ -1229,73 +1229,39 @@ function Home(
 
 
     <!-- INSTALL HHGS APP POPUP -->
+<div id="installPopup" class="install-popup">
+    <div class="install-box">
 
-    <div
-        id="installPopup"
-        class="install-popup"
-    >
+        <button
+            type="button"
+            id="closeInstallPopup"
+            class="install-close"
+            aria-label="Close"
+        >×</button>
 
-        <div class="install-box">
+        <img
+            src="/images/hhgs-icon-192.png"
+            alt="HHGS Logo"
+            class="install-logo"
+        >
 
-            <button
-                type="button"
-                id="closeInstallPopup"
-                class="install-close"
-            >
-                ×
-            </button>
+        <h2>Install HHGS App</h2>
 
-            <img
-                src="/images/hhgs-icon-192.png"
-                alt="HHGS Logo"
-                class="install-logo"
-            >
+        <button
+            type="button"
+            id="installNowButton"
+            class="install-now"
+        >⬇ Install Now</button>
 
-            <h2>
-                Install HHGS App
-            </h2>
-
-            <p>
-                सभी Healthcare और Government
-                Services को तेजी से इस्तेमाल करने
-                के लिए HHGS App install करें।
-            </p>
-
-            <div class="install-benefits">
-
-                <span>
-                    ✓ Fast Loading
-                </span>
-
-                <span>
-                    ✓ Direct Home Screen Access
-                </span>
-
-                <span>
-                    ✓ Quick Services Access
-                </span>
-
-            </div>
-
-            <button
-                type="button"
-                id="installNowButton"
-                class="install-now"
-            >
-                ⬇ Install Now
-            </button>
-
-            <button
-                type="button"
-                id="installLaterButton"
-                class="install-later"
-            >
-                Maybe Later
-            </button>
-
-        </div>
+        <button
+            type="button"
+            id="installLaterButton"
+            class="install-later"
+        >Maybe Later</button>
 
     </div>
+</div>
+
 
 
     ${Header()}
