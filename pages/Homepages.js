@@ -1276,12 +1276,12 @@ ${CustomerBakayaSection(customers)}
      
 
 
-    ${StarRankingSection(students)}
+    
 
    
    
 
-    ${StudentSection(students)}
+   
 
     
 

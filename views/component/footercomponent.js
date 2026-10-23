@@ -662,9 +662,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
                         <a href="/">Home</a>
                     </li>
 
-                    <li>
-                        <a href="/services">Services</a>
-                    </li>
+                    
 
                     <li>
                         <a href="/about">About</a>
