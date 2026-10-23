@@ -460,13 +460,13 @@ return `
             id="navbar"
         >
 
-            <a href="/student-login">
+          <!--  <a href="/student-login">
 
                 <i class="fa-solid fa-user-graduate"></i>
 
                 Student
 
-            </a>
+            </a> -->
 
 
             
