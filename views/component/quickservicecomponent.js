@@ -227,8 +227,7 @@ function QuickServiceSection() {
                 <h2>⚡ GLOBAL QUICK SERVICES</h2>
 
                 <p>
-                    Photocopy, Document Upload और अन्य सेवाएँ
-                    सीधे Home Page से इस्तेमाल करें।
+                    Photocopy
                 </p>
             </div>
 
