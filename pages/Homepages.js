@@ -1271,7 +1271,6 @@ function Home(
 ${QuickServiceSection()}
     
 
-${CustomerBakayaSection(customers)}
 
      
 
