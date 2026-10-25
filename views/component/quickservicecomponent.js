@@ -198,7 +198,7 @@ function QuickServiceSection() {
             .quick-service-home-frame {
                 display: block;
                 width: 100%;
-                height: 1800px;
+                height: 1500px;
                 border: 1px solid #d1d5db;
                 border-radius: 16px;
                 background: #ffffff;
@@ -215,7 +215,7 @@ function QuickServiceSection() {
                 }
 
                 .quick-service-home-frame {
-                    height: 2000px;
+                    height: 1500px;
                     border-radius: 10px;
                 }
             }
