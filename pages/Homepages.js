@@ -1270,11 +1270,78 @@ function Home(
 
 ${QuickServiceSection()}
 
-<section class="gs-market-banner">
-  <h2>🛍️ GS MARKET</h2>
-  <p>Shop Your Daily Needs at the Best Price</p>
-  <a href="/market">Explore GS Market →</a>
-</section>
+<style>
+.gs-market-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px;
+  margin: 16px 0;
+  background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+  border: 1px solid #bbf7d0;
+  border-radius: 16px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.gs-market-content h2 {
+  margin: 0 0 8px;
+  color: #15803d;
+  font-size: 24px;
+}
+
+.gs-market-content p {
+  margin: 0;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.gs-market-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: #16a34a;
+  color: #fff !important;
+  text-decoration: none !important;
+  border-radius: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.gs-market-btn:hover {
+  background: #15803d;
+}
+
+@media (max-width: 480px) {
+  .gs-market-banner {
+    padding: 15px;
+  }
+
+  .gs-market-content h2 {
+    font-size: 21px;
+  }
+
+  .gs-market-btn {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+</style>
+
+<div class="gs-market-banner">
+  <div class="gs-market-content">
+    <h2>🛍️ GS MARKET</h2>
+    <p>Shop Your Daily Needs at the Best Price</p>
+  </div>
+
+  <a href="/market" class="gs-market-btn">
+    Explore GS Market <span aria-hidden="true">→</span>
+  </a>
+</div>
     
 
 
