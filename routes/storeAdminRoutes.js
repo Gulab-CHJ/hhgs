@@ -1570,6 +1570,329 @@ router.get("/orders", async (req, res) => {
   }
 });
 
+
+// Market orders auto-refresh API
+router.get("/orders/data", async (req, res) => {
+  try {
+    const orders = await Order.find()
+      .sort({ createdAt: -1 })
+      .lean();
+
+    res.set("Cache-Control", "no-store");
+
+    return res.json({
+      success: true,
+      orders
+    });
+  } catch (error) {
+    console.error("Market orders data error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Orders load failed"
+    });
+  }
+});
+
+
+// ========================================
+// MARKET ORDER - DOWNLOAD PDF BILL
+// ========================================
+
+router.get("/orders/:id/bill.pdf", async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id).lean();
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        const PDFDocument = require("pdfkit");
+
+        const doc = new PDFDocument({
+            size: "A4",
+            margin: 45
+        });
+
+        const fileName = `Bill-${order.orderNumber || order._id}.pdf`;
+
+        res.setHeader("Content-Type", "application/pdf");
+        res.setHeader(
+            "Content-Disposition",
+            `attachment; filename="${fileName}"`
+        );
+
+        doc.pipe(res);
+
+        // Bill heading
+        doc.fontSize(20)
+            .font("Helvetica-Bold")
+            .text("HHGS23 - MARKET ORDER BILL", {
+                align: "center"
+            });
+
+        doc.moveDown();
+
+        doc.fontSize(11)
+            .font("Helvetica")
+            .text(`Order Number: ${order.orderNumber || order._id}`);
+
+        doc.text(
+            `Order Date: ${
+                order.createdAt
+                    ? new Date(order.createdAt).toLocaleString("en-IN")
+                    : "-"
+            }`
+        );
+
+        doc.text(`Payment Status: ${order.paymentStatus || "-"}`);
+
+        doc.moveDown();
+
+        doc.font("Helvetica-Bold").text("CUSTOMER DETAILS");
+
+        doc.font("Helvetica")
+            .text(`Name: ${order.customer?.name || "-"}`)
+            .text(`Mobile: ${order.customer?.phone || "-"}`)
+            .text(`Address: ${order.customer?.address || "-"}`);
+
+        doc.moveDown();
+
+        doc.font("Helvetica-Bold").text("PRODUCT DETAILS");
+
+        doc.moveDown(0.5);
+
+        // Product table headings
+        doc.font("Helvetica-Bold")
+            .text("Product", 45, doc.y, { continued: true })
+            .text("Qty", 300, doc.y, { continued: true })
+            .text("Amount", 390, doc.y);
+
+        doc.moveDown(0.5);
+
+        doc.moveTo(45, doc.y)
+            .lineTo(550, doc.y)
+            .stroke();
+
+        doc.moveDown(0.5);
+
+        doc.font("Helvetica");
+
+        (order.items || []).forEach((item) => {
+            const productName = item.name || "Product";
+            const quantity = Number(item.quantity || 0);
+            const amount = Number(item.subtotal || 0);
+
+            doc.text(productName, 45, doc.y, {
+                width: 240,
+                continued: true
+            });
+
+            doc.text(String(quantity), 300, doc.y, {
+                continued: true
+            });
+
+            doc.text(`Rs. ${amount.toFixed(2)}`, 390, doc.y);
+
+            doc.moveDown(0.5);
+        });
+
+        doc.moveDown();
+
+        doc.moveTo(45, doc.y)
+            .lineTo(550, doc.y)
+            .stroke();
+
+        doc.moveDown();
+
+        const subtotal = Number(order.subtotal || 0);
+        const deliveryCharge = Number(order.deliveryCharge || 0);
+        const totalAmount = Number(order.totalAmount || 0);
+
+        doc.font("Helvetica")
+            .text(`Subtotal: Rs. ${subtotal.toFixed(2)}`, {
+                align: "right"
+            });
+
+        doc.text(
+            `Delivery Charge: Rs. ${deliveryCharge.toFixed(2)}`,
+            { align: "right" }
+        );
+
+        doc.moveDown(0.5);
+
+        doc.font("Helvetica-Bold")
+            .fontSize(14)
+            .text(`TOTAL: Rs. ${totalAmount.toFixed(2)}`, {
+                align: "right"
+            });
+
+        doc.moveDown(2);
+
+        doc.fontSize(10)
+            .font("Helvetica")
+            .text("Thank you for shopping with HHGS23!", {
+                align: "center"
+            });
+
+        doc.end();
+
+    } catch (error) {
+        console.error("PDF bill error:", error);
+        res.status(500).send("Unable to generate bill");
+    }
+});
+
+
+// ========================================
+// MARKET ORDER - PRINT BILL
+// ========================================
+
+router.get("/orders/:id/bill/print", async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id).lean();
+
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
+
+        const safe = (value) =>
+            String(value ?? "-").replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            }[char]));
+
+        const products = (order.items || []).map((item) => `
+            <tr>
+                <td>${safe(item.name || "Product")}</td>
+                <td>${safe(item.quantity || 0)}</td>
+                <td>₹${Number(item.subtotal || 0).toFixed(2)}</td>
+            </tr>
+        `).join("");
+
+        res.send(`
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <title>Order Bill</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        max-width: 700px;
+                        margin: 25px auto;
+                        padding: 20px;
+                        color: #111;
+                    }
+
+                    h2, .center {
+                        text-align: center;
+                    }
+
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 20px;
+                    }
+
+                    th, td {
+                        border: 1px solid #ccc;
+                        padding: 9px;
+                        text-align: left;
+                    }
+
+                    .total {
+                        text-align: right;
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin-top: 20px;
+                    }
+
+                    .print-btn {
+                        display: block;
+                        margin: 20px auto;
+                        padding: 10px 20px;
+                        cursor: pointer;
+                    }
+
+                    @media print {
+                        .print-btn {
+                            display: none;
+                        }
+
+                        body {
+                            margin: 0;
+                            padding: 10px;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <h2>HHGS23 - MARKET ORDER BILL</h2>
+
+                <p><b>Order Number:</b> ${safe(order.orderNumber || order._id)}</p>
+                <p><b>Order Date:</b> ${
+                    order.createdAt
+                        ? safe(new Date(order.createdAt).toLocaleString("en-IN"))
+                        : "-"
+                }</p>
+                <p><b>Payment Status:</b> ${safe(order.paymentStatus)}</p>
+
+                <hr>
+
+                <h3>Customer Details</h3>
+                <p><b>Name:</b> ${safe(order.customer?.name)}</p>
+                <p><b>Mobile:</b> ${safe(order.customer?.phone)}</p>
+                <p><b>Address:</b> ${safe(order.customer?.address)}</p>
+
+                <h3>Product Details</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Qty</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${products}
+                    </tbody>
+                </table>
+
+                <p style="text-align:right">
+                    Subtotal: ₹${Number(order.subtotal || 0).toFixed(2)}
+                </p>
+
+                <p style="text-align:right">
+                    Delivery Charge: ₹${Number(order.deliveryCharge || 0).toFixed(2)}
+                </p>
+
+                <div class="total">
+                    Total: ₹${Number(order.totalAmount || 0).toFixed(2)}
+                </div>
+
+                <p class="center">Thank you for shopping with HHGS23!</p>
+
+                <button class="print-btn" onclick="window.print()">
+                    Print Bill
+                </button>
+            </body>
+            </html>
+        `);
+
+    } catch (error) {
+        console.error("Print bill error:", error);
+        res.status(500).send("Unable to open bill");
+    }
+});
+
+
+
+
 // =====================================
 // UPDATE ORDER STATUS
 // =====================================
