@@ -518,21 +518,22 @@
     }
   }
 
-  function syncMarketAlarm(orders) {
-    latestOrders = Array.isArray(orders) ? orders : [];
+ function syncMarketAlarm(orders) {
+  latestOrders = Array.isArray(orders) ? orders : [];
 
-    // Assumption: Pending = waiting for Admin acceptance; Confirmed = accepted.
-    const waitingForAcceptance = latestOrders.some(order =>
-      String(order.paymentStatus || "").toLowerCase() === "paid" &&
-      String(order.orderStatus || "").toLowerCase() === "pending"
-    );
+  // Ring only while a newly arrived order is awaiting attention.
+  // Confirmed orders should not keep the alarm running.
+  const waitingForAcceptance = latestOrders.some(order =>
+    String(order.paymentStatus || "").toLowerCase() === "paid" &&
+    String(order.orderStatus || "").toLowerCase() === "pending"
+  );
 
-    if (waitingForAcceptance && soundEnabled) {
-      startMarketAlarm();
-    } else {
-      stopMarketAlarm();
-    }
+  if (waitingForAcceptance && soundEnabled) {
+    startMarketAlarm();
+  } else {
+    stopMarketAlarm();
   }
+}
 
   soundButton.addEventListener("click", async () => {
     soundEnabled = !soundEnabled;
@@ -774,30 +775,39 @@
           : "block";
       }
 
-      if (newOrders.length) {
-        newOrders.forEach(order => {
-          seenIds.add(String(order._id));
-        });
+    if (newOrders.length) {
+  newOrders.forEach(order => {
+    seenIds.add(String(order._id));
+  });
 
-        saveSeenIds();
+  saveSeenIds();
 
-        notice.textContent =
-          `🔔 ${newOrders.length} नया Market order आया है!`;
+  notice.textContent =
+    `🔔 ${newOrders.length} नया Market order आया है!`;
 
-        notice.style.display = "block";
+  notice.style.display = "block";
 
-      } else if (manual) {
-        notice.textContent =
-          "Orders refresh हो गए। कोई नया order नहीं है।";
+  // New order aane par ek baar alarm bajao
+  if (
+    soundEnabled &&
+    audioContext &&
+    audioContext.state === "running"
+  ) {
+    playAlarmTone();
+  }
 
-        notice.style.display = "block";
-      }
+} else if (manual) {
+  notice.textContent =
+    "Orders refresh हो गए। कोई नया order नहीं है।";
 
-      knownIds = currentIds;
+  notice.style.display = "block";
+}
 
-      lastUpdated.textContent =
-        "Last checked: " +
-        new Date().toLocaleTimeString("en-IN");
+knownIds = currentIds;
+
+lastUpdated.textContent =
+  "Last checked: " +
+  new Date().toLocaleTimeString("en-IN");
 
     } catch (error) {
       console.error(

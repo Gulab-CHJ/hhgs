@@ -1570,21 +1570,30 @@ router.get("/orders", async (req, res) => {
   }
 });
 
-// Market orders auto-refresh API
-// Show only payment-confirmed orders
+// =====================================
+// MARKET ORDERS AUTO-REFRESH API
+// All orders returned, including Pending
+// =====================================
 router.get("/orders/data", async (req, res) => {
   try {
-    const orders = await Order.find({
-      paymentStatus: "Paid"
-    })
+    const orders = await Order.find({})
       .sort({ createdAt: -1 })
       .lean();
 
-    res.set("Cache-Control", "no-store");
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate");
+    res.set("Pragma", "no-cache");
 
     return res.json({
       success: true,
-      orders
+      orders: orders.map(order => ({
+        _id: String(order._id),
+        orderNumber: order.orderNumber || String(order._id),
+        orderStatus: order.orderStatus || "Pending",
+        paymentStatus: order.paymentStatus || "Pending",
+        createdAt: order.createdAt || null,
+        totalAmount: Number(order.totalAmount || 0),
+        customerName: order.customer?.name || "Customer"
+      }))
     });
   } catch (error) {
     console.error("Market orders data error:", error);
