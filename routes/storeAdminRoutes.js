@@ -1550,26 +1550,50 @@ router.post("/products/delete/:id", async (req, res) => {
 
 // =====================================
 // CUSTOMER ORDERS
+// केवल Paid orders Admin list में दिखेंगे
 // =====================================
-router.get("/orders", async (req, res) => {
+// =====================================
+// MARKET ORDERS AUTO-REFRESH API
+// केवल Paid orders लौटाएँ
+// सभी order fields उपलब्ध रखें
+// =====================================
+router.get("/orders/data", async (req, res) => {
   try {
-    const orders = await Order.find()
+    const orders = await Order.find({
+      paymentStatus: /^paid$/i
+    })
       .sort({ createdAt: -1 })
       .lean();
 
-    return res.render("store/admin-orders", {
-      orders,
-      message: req.query.message || ""
+    res.set({
+      "Cache-Control": "no-store, no-cache, must-revalidate, private",
+      "Pragma": "no-cache",
+      "Expires": "0"
+    });
+
+    return res.status(200).json({
+      success: true,
+      orders: orders.map(order => ({
+        ...order,
+        _id: String(order._id),
+        orderNumber: order.orderNumber || String(order._id),
+        orderStatus: order.orderStatus || "Pending",
+        paymentStatus: order.paymentStatus || "Pending",
+        createdAt: order.createdAt || null,
+        totalAmount: Number(order.totalAmount || 0),
+        customer: order.customer || {},
+        items: Array.isArray(order.items) ? order.items : []
+      }))
     });
   } catch (error) {
-    console.error("Admin orders error:", error);
+    console.error("Market orders data error:", error);
 
-    return res.status(500).send(
-      "Orders load नहीं हो सके।"
-    );
+    return res.status(500).json({
+      success: false,
+      message: "Orders load failed"
+    });
   }
 });
-
 // =====================================
 // MARKET ORDERS AUTO-REFRESH API
 // All orders returned, including Pending
@@ -1905,6 +1929,10 @@ router.get("/orders/:id/bill/print", async (req, res) => {
 // =====================================
 // UPDATE ORDER STATUS
 // =====================================
+// =====================================
+// UPDATE ORDER STATUS
+// केवल Paid orders को Confirm/Ship/Deliver करें
+// =====================================
 router.post("/orders/status/:id", async (req, res) => {
   try {
     const allowedStatuses = [
@@ -1915,9 +1943,10 @@ router.post("/orders/status/:id", async (req, res) => {
       "Cancelled"
     ];
 
+    const { id } = req.params;
     const status = req.body.orderStatus;
 
-    if (!mongoose.isValidObjectId(req.params.id)) {
+    if (!mongoose.isValidObjectId(id)) {
       return res.status(400).send("Invalid order ID");
     }
 
@@ -1925,18 +1954,21 @@ router.post("/orders/status/:id", async (req, res) => {
       return res.status(400).send("Invalid order status");
     }
 
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(id);
 
     if (!order) {
       return res.status(404).send("Order नहीं मिला।");
     }
 
+    const isPaid =
+      String(order.paymentStatus || "").toLowerCase() === "paid";
+
     if (
       ["Confirmed", "Shipped", "Delivered"].includes(status) &&
-      order.paymentStatus !== "Paid"
+      !isPaid
     ) {
       return res.status(400).send(
-        "Payment verify होने के बाद ही order confirm/ship/deliver करें।"
+        "Payment verify होने के बाद ही order confirm, ship या deliver करें।"
       );
     }
 
@@ -1957,4 +1989,3 @@ router.post("/orders/status/:id", async (req, res) => {
 });
 
 module.exports = router;
-
