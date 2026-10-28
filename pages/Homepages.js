@@ -32,6 +32,9 @@ const GovernmentSection =
   require("../views/component/customerbakayacomponent");
 
 
+  const GSMarketBanner = require("../views/component/GSMarketBanner");
+
+
 
     // const StarRankingSection =
     // require("../views/component/starrankingcomponent");
