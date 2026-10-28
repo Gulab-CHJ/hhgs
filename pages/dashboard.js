@@ -3345,15 +3345,37 @@ a {
 
 
     
-<a href="/admin/ration-card-maker"
-   class="btn-action"
-   style="text-decoration:none;">
+<!-- RATION CARD PVC MAKER -->
+<a
+    href="/admin/ration-card-maker"
+    class="sabji-admin-btn manage-btn"
+>
+    <i class="fa-solid fa-id-card"></i>
 
-  <i class="fa-solid fa-id-card"
-     style="color:#16a34a;"></i>
+    <span class="action-copy">
+        <strong>Ration Card PVC Maker</strong>
 
-  <span>Ration Card PVC Maker</span>
+        <small>
+            Create and manage PVC cards
+        </small>
+    </span>
+</a>
 
+<!-- GS MARKET ADMIN DASHBOARD -->
+
+<a
+    href="/admin/gs-market"
+    class="sabji-admin-btn order-btn"
+>
+    <i class="fa-solid fa-store"></i>
+
+    <span class="action-copy">
+        <strong>GS Market Admin Dashboard</strong>
+
+        <small>
+            Manage products, stock, orders & sales
+        </small>
+    </span>
 </a>
 
 

@@ -1269,6 +1269,12 @@ function Home(
     ${Banner(banners)}
 
 ${QuickServiceSection()}
+
+<section class="gs-market-banner">
+  <h2>🛍️ GS MARKET</h2>
+  <p>Shop Your Daily Needs at the Best Price</p>
+  <a href="/market">Explore GS Market →</a>
+</section>
     
 
 

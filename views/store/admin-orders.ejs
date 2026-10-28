@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GS Market - Customer Orders</title>
+  <link rel="stylesheet" href="/css/store.css">
+  <style>
+    body { padding: 20px; }
+    .orders-wrap { max-width: 1200px; margin: auto; }
+    .order-card {
+      background: white; border: 1px solid #e1e8e4;
+      border-radius: 15px; padding: 18px; margin: 15px 0;
+      overflow-wrap: anywhere;
+    }
+    .order-top {
+      display: flex; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap;
+    }
+    .order-meta { color: #53615a; line-height: 1.7; }
+    .order-items { padding-left: 20px; line-height: 1.8; }
+    .status-form { display: flex; gap: 8px; flex-wrap: wrap; }
+    .status-form select {
+      padding: 10px; border: 1px solid #d9e2dc;
+      border-radius: 9px;
+    }
+    .status-form button {
+      border: 0; border-radius: 9px; padding: 10px 14px;
+      background: #176b50; color: white; font-weight: bold;
+    }
+    .order-status { font-weight: bold; }
+    .order-links { display: flex; gap: 15px; flex-wrap: wrap; }
+    .order-links a { color: #176b50; }
+    @media(max-width:600px) { body { padding: 10px; } }
+  </style>
+</head>
+<body>
+<div class="orders-wrap">
+  <div class="order-top">
+    <h1>GS Market — Customer Orders</h1>
+    <div class="order-links">
+      <a href="/admin/market/products">Manage Products</a>
+      <a href="/market">Open Store</a>
+    </div>
+  </div>
+
+  <% if (message) { %>
+    <p><%= message %></p>
+  <% } %>
+
+  <p>Total orders: <strong><%= orders.length %></strong></p>
+
+  <% orders.forEach(order => { %>
+    <section class="order-card">
+      <div class="order-top">
+        <h2>Order #<%= order.orderNumber %></h2>
+        <span class="order-status"><%= order.orderStatus %></span>
+      </div>
+
+      <p class="order-meta">
+        Date: <%= new Date(order.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) %><br>
+        Customer: <strong><%= order.customer.name %></strong><br>
+        Mobile: <%= order.customer.phone %><br>
+        Address: <%= order.customer.address %><br>
+        Payment: <strong><%= order.paymentStatus %></strong><br>
+        Method: <%= order.paymentMethod %><br>
+        Razorpay Payment ID: <%= order.razorpayPaymentId || "Not paid yet" %>
+      </p>
+
+      <h3>Products</h3>
+      <ul class="order-items">
+        <% order.items.forEach(item => { %>
+          <li>
+            <%= item.name %> × <%= item.quantity %>
+            — ₹<%= Number(item.subtotal).toFixed(2) %>
+          </li>
+        <% }) %>
+      </ul>
+
+      <p>
+        Subtotal: ₹<%= Number(order.subtotal).toFixed(2) %><br>
+        Delivery: ₹<%= Number(order.deliveryCharge).toFixed(2) %><br>
+        <strong>Total: ₹<%= Number(order.totalAmount).toFixed(2) %></strong>
+      </p>
+
+      <form class="status-form"
+            action="/admin/market/orders/status/<%= order._id %>"
+            method="POST">
+        <select name="orderStatus" aria-label="Order status">
+          <% ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"].forEach(status => { %>
+            <option value="<%= status %>"
+              <%= order.orderStatus === status ? "selected" : "" %>>
+              <%= status %>
+            </option>
+          <% }) %>
+        </select>
+
+        <button type="submit">Update Status</button>
+      </form>
+    </section>
+  <% }) %>
+
+  <% if (!orders.length) { %>
+    <p>अभी कोई customer order नहीं आया है।</p>
+  <% } %>
+</div>
+</body>
+</html>

@@ -15634,6 +15634,52 @@ router.get("/ration-card-maker", (req, res) => {
 
 
 
+// GS Market Admin Dashboard
+router.get("/gs-market", async (req, res) => {
+    if (!req.session || !req.session.adminId) {
+        return res.redirect("/admin");
+    }
+
+    try {
+        const GSMarketAdmin =
+            require("../pages/addpages/gsMarketAdmin");
+
+        const Order = require("../models/Order");
+
+        const [products, orders, pending] = await Promise.all([
+            Product.countDocuments(),
+            Order.countDocuments(),
+            Order.countDocuments({
+                orderStatus: "Pending"
+            })
+        ]);
+
+        return res.send(
+            GSMarketAdmin({
+                products,
+                orders,
+                pending,
+                sales: 0,
+                shopOpen: true
+            })
+        );
+    } catch (error) {
+        console.error("GS MARKET DASHBOARD ERROR:", error);
+        return res.status(500).send("GS Market Dashboard load nahi ho paya.");
+    }
+});
+
+
+router.get("/gs-market", (req, res) => {
+  if (!req.session?.adminId && !req.session?.admin) {
+    return res.redirect("/admin");
+  }
+
+  return res.redirect("/admin/market/dashboard");
+});
+
+
+
 
 
 

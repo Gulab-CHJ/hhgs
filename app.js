@@ -1127,6 +1127,16 @@ app.use((err, req, res, next) => {
     next(err);
 });
 
+// GS Market Store
+const storeRoutes = require("./routes/storeRoutes");
+const storeAdminRoutes = require("./routes/storeAdminRoutes");
+
+// Customer Store: https://hhgs23.com/market
+app.use("/market", storeRoutes);
+
+// Admin: reuse the project's existing admin session
+app.use("/admin/market", storeAdminRoutes);
+
 // IMPORTANT:
 // Apne existing app.listen() ko waise hi rehne dein.
 

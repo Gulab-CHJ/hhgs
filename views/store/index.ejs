@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5146ee">
+  <meta name="description" content="GS Market by HHGS23 — shop your favourite products.">
+  <title>GS Market | HHGS23</title>
+
+  <link rel="stylesheet" href="/css/store.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <style>
+    :root {
+      --primary: #5146ee;
+      --dark: #191a35;
+      --muted: #6b7280;
+      --border: #e8e9f2;
+      --bg: #f7f8fc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--dark);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .market-sidebar {
+      background: #fff;
+      border-right: 1px solid var(--border);
+    }
+
+    .market-logo, .store-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .market-logo {
+      padding: 22px 18px;
+      font-size: 20px;
+    }
+
+    .market-logo-icon {
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border-radius: 14px;
+      background: #eeedff;
+    }
+
+    .market-categories { padding: 0 12px 20px; }
+
+    .category-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 5px;
+      border: 0;
+      border-radius: 12px;
+      text-align: left;
+      background: transparent;
+      color: #52536a;
+    }
+
+    .category-item.active,
+    .category-item:hover {
+      background: #eeedff;
+      color: var(--primary);
+    }
+
+    .market-main { min-width: 0; }
+
+    .store-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 24px;
+      background: #ffffffed;
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .store-brand {
+      min-width: 145px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .store-brand strong { font-size: 20px; }
+    .store-brand small { color: var(--muted); }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+      max-width: 540px;
+      padding: 0 15px;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      background: #f8f8fc;
+    }
+
+    .search-box input {
+      width: 100%;
+      min-width: 0;
+      height: 44px;
+      border: 0;
+      outline: none;
+      background: transparent;
+    }
+
+    .cart-open {
+      padding: 12px 17px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      white-space: nowrap;
+    }
+
+    #cartCount {
+      display: inline-grid;
+      place-items: center;
+      min-width: 22px;
+      height: 22px;
+      margin-left: 5px;
+      padding: 0 5px;
+      border-radius: 20px;
+      background: white;
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .store-container {
+      width: 100%;
+      max-width: 1450px;
+      margin: auto;
+      padding: 25px;
+    }
+
+    /* SHOP STATUS TOP */
+    .shop-status-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 17px;
+      margin-bottom: 18px;
+      border: 1px solid;
+      border-radius: 15px;
+    }
+
+    .shop-status-bar.shop-open {
+      color: #166534;
+      background: #f0fdf4;
+      border-color: #bbf7d0;
+    }
+
+    .shop-status-bar.shop-closed {
+      color: #991b1b;
+      background: #fef2f2;
+      border-color: #fecaca;
+    }
+
+    .shop-status-dot {
+      width: 12px;
+      height: 12px;
+      flex: 0 0 12px;
+      border-radius: 50%;
+      background: #dc2626;
+    }
+
+    .shop-open .shop-status-dot { background: #16a34a; }
+
+    #shopStatusTitle {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    #shopStatusText {
+      margin: 4px 0 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .store-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 205px;
+      padding: 35px;
+      overflow: hidden;
+      border-radius: 24px;
+      background: linear-gradient(115deg, #5146ee, #8178ff);
+      color: white;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+    }
+
+    .store-hero h1 {
+      max-width: 620px;
+      margin: 0 0 12px;
+      font-size: clamp(25px, 3.2vw, 39px);
+      line-height: 1.2;
+    }
+
+    .store-hero p {
+      margin: 0;
+      color: #f0efff;
+      line-height: 1.6;
+    }
+
+    .hero-symbol {
+      flex-shrink: 0;
+      font-size: clamp(65px, 9vw, 105px);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin: 30px 0 17px;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 6px;
+      font-size: 23px;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    #categoryFilter {
+      max-width: 48%;
+      padding: 11px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: white;
+    }
+
+    .store-message {
+      padding: 14px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-grid > * { min-width: 0; }
+
+    /* SHOP CLOSED: disable all product cards */
+    #productGrid.shop-is-closed > * {
+      opacity: .48;
+      filter: grayscale(.85);
+      pointer-events: none;
+      position: relative;
+    }
+
+    #productGrid.shop-is-closed > *::after {
+      content: "SHOP CLOSED";
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 5;
+      padding: 6px 9px;
+      border-radius: 7px;
+      background: #991b1b;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      filter: none;
+    }
+
+    .store-footer {
+      padding: 25px 15px 100px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .market-cart-bar {
+      position: fixed;
+      z-index: 20;
+      right: 22px;
+      bottom: 18px;
+      left: 22px;
+      display: none;
+      align-items: center;
+      gap: 13px;
+      max-width: 560px;
+      margin-left: auto;
+      padding: 13px 16px;
+      border-radius: 18px;
+      background: var(--dark);
+      color: white;
+      box-shadow: 0 10px 35px #17172e35;
+    }
+
+    .market-cart-bar.has-items { display: flex; }
+    .market-cart-icon { font-size: 25px; }
+
+    .market-cart-info {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .market-cart-info strong { font-size: 12px; }
+    .market-cart-info span { font-weight: 700; }
+
+    #bottomViewCart {
+      padding: 12px 15px;
+      border: 0;
+      border-radius: 11px;
+      background: white;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .cart-overlay {
+      position: fixed;
+      z-index: 29;
+      inset: 0;
+      display: none;
+      background: #11132680;
+    }
+
+    .cart-overlay.is-visible { display: block; }
+
+    .cart-drawer {
+      position: fixed;
+      z-index: 30;
+      top: 0;
+      right: 0;
+      display: none;
+      flex-direction: column;
+      width: min(440px, 100%);
+      height: 100dvh;
+      overflow-y: auto;
+      padding: 22px;
+      background: white;
+      box-shadow: -10px 0 40px #00000012;
+    }
+
+    .cart-drawer.is-open { display: flex; }
+
+    .cart-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .cart-heading h2 { margin: 0 0 7px; }
+    .cart-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .icon-button {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+    }
+
+    .cart-items { flex: 1; padding: 18px 0; }
+
+    .cart-summary {
+      display: grid;
+      gap: 12px;
+      padding: 18px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .cart-summary > div {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .cart-total {
+      padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      font-size: 18px;
+    }
+
+    .checkout-form {
+      display: grid;
+      gap: 9px;
+      padding-top: 12px;
+    }
+
+    .checkout-form h3 { margin: 5px 0 8px; }
+
+    .checkout-form input,
+    .checkout-form textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #dedfea;
+      border-radius: 11px;
+      outline-color: var(--primary);
+      background: white;
+    }
+
+    .checkout-form textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+
+    .primary-button {
+      margin-top: 8px;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+    }
+
+    .primary-button:disabled {
+      cursor: not-allowed;
+      opacity: .6;
+    }
+
+    .secure-note, .checkout-message {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1100px) {
+      .product-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .market-sidebar { display: none; }
+
+      .store-header {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 12px 14px;
+      }
+
+      .store-brand { flex: 1; }
+      .store-brand strong { font-size: 18px; }
+      .store-brand small { font-size: 11px; }
+
+      .search-box {
+        order: 3;
+        flex-basis: 100%;
+        max-width: none;
+      }
+
+      .cart-open { padding: 10px 12px; }
+      .store-container { padding: 15px; }
+
+      .store-hero {
+        min-height: 170px;
+        padding: 23px 19px;
+        border-radius: 19px;
+      }
+
+      .store-hero h1 { font-size: 26px; }
+      .store-hero p { font-size: 13px; }
+      .hero-symbol { font-size: 55px; }
+
+      .section-heading { align-items: flex-start; }
+      .section-heading h2 { font-size: 20px; }
+      .section-heading p { font-size: 12px; }
+
+      .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .market-cart-bar { right: 10px; bottom: 10px; left: 10px; }
+      .store-footer { padding-bottom: 100px; }
+    }
+
+    @media (max-width: 380px) {
+      .store-hero { padding: 18px 14px; }
+      .store-hero h1 { font-size: 22px; }
+      .hero-symbol { font-size: 43px; }
+      #bottomViewCart { padding: 10px; font-size: 12px; }
+    }
+  </style>
+</head>
+
+<body>
+  <aside class="market-sidebar">
+    <a href="/market" class="market-logo">
+      <span class="market-logo-icon">🏪</span>
+      <strong>GS Market</strong>
+    </a>
+
+    <nav id="sideCategories" class="market-categories"
+         aria-label="Product categories">
+      <button type="button" class="category-item active" data-category="all">
+        <span class="category-icon">▦</span>
+        <span>All Items</span>
+      </button>
+    </nav>
+  </aside>
+
+  <div class="market-main">
+    <header class="store-header">
+      <a href="/market" class="store-brand">
+        <strong>GS Market</strong>
+        <small>Quick Shop · HHGS23</small>
+      </a>
+
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input id="productSearch" type="search"
+               placeholder="Search products..."
+               autocomplete="off" aria-label="Search products">
+      </label>
+
+      <button type="button" id="openCart" class="cart-open">
+        🛒 Cart <span id="cartCount">0</span>
+      </button>
+    </header>
+
+    <main class="store-container">
+
+      <!-- SHOP STATUS: PAGE TOP -->
+      <div id="shopStatusBar" class="shop-status-bar shop-closed"
+           role="status" aria-live="polite">
+        <span class="shop-status-dot"></span>
+        <div>
+          <strong id="shopStatusTitle">SHOP CLOSED</strong>
+          <p id="shopStatusText">
+            दुकान का status चेक किया जा रहा है...
+          </p>
+        </div>
+      </div>
+
+      <section class="store-hero">
+        <div>
+          <span class="eyebrow">WELCOME TO GS MARKET</span>
+          <h1>Discover Products You'll Love</h1>
+          <p>Great finds, great prices, easy shopping.</p>
+        </div>
+        <div class="hero-symbol" aria-hidden="true">🛍️</div>
+      </section>
+
+      <div class="section-heading">
+        <div>
+          <h2>Explore Products</h2>
+          <p>आपके लिए चुने गए products</p>
+        </div>
+
+        <select id="categoryFilter" aria-label="Filter category">
+          <option value="all">All Categories</option>
+        </select>
+      </div>
+
+      <p id="storeMessage" class="store-message"
+         role="status" aria-live="polite">
+        Products लोड हो रहे हैं...
+      </p>
+
+      <section id="productGrid" class="product-grid"
+               aria-label="Products"></section>
+    </main>
+
+    <footer class="store-footer">
+      © <span id="currentYear"></span> GS Market · Powered by HHGS23
+    </footer>
+  </div>
+
+  <div class="market-cart-bar" id="bottomCartBar">
+    <div class="market-cart-icon" aria-hidden="true">🛒</div>
+    <div class="market-cart-info">
+      <strong id="bottomCartStatus">CART IS EMPTY</strong>
+      <span id="bottomCartTotal">₹0</span>
+    </div>
+    <button type="button" id="bottomViewCart">VIEW CART →</button>
+  </div>
+
+  <div id="cartOverlay" class="cart-overlay"></div>
+
+  <aside id="cartDrawer" class="cart-drawer"
+         aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-heading">
+      <div>
+        <h2>Your Cart</h2>
+        <p>Review your items before checkout</p>
+      </div>
+      <button type="button" id="closeCart" class="icon-button"
+              aria-label="Close cart">✕</button>
+    </div>
+
+    <div id="cartItems" class="cart-items"></div>
+
+    <div class="cart-summary">
+      <div><span>Subtotal</span><strong id="cartSubtotal">₹0</strong></div>
+      <div><span>Delivery</span><strong id="cartDelivery">₹0</strong></div>
+      <div class="cart-total"><span>Total</span><strong id="cartTotal">₹0</strong></div>
+    </div>
+
+    <form id="checkoutForm" class="checkout-form">
+      <h3>Delivery Details</h3>
+
+      <label for="customerName">पूरा नाम</label>
+      <input id="customerName" name="name" type="text"
+             required maxlength="100" autocomplete="name"
+             placeholder="अपना नाम लिखें">
+
+      <label for="customerPhone">मोबाइल नंबर</label>
+      <input id="customerPhone" name="phone" type="tel"
+             inputmode="numeric" pattern="[0-9]{10}"
+             minlength="10" maxlength="10" required
+             autocomplete="tel" placeholder="10 अंकों का नंबर">
+
+      <label for="customerAddress">पूरा पता</label>
+      <textarea id="customerAddress" name="address"
+                required maxlength="1000" autocomplete="street-address"
+                placeholder="घर, मोहल्ला, शहर, राज्य और PIN Code"></textarea>
+
+      <button type="submit" id="payButton" class="primary-button" disabled>
+        Shop status checking...
+      </button>
+
+      <p class="secure-note">🔒 Secure payment powered by Razorpay</p>
+      <p id="checkoutMessage" class="checkout-message"
+         role="status" aria-live="polite"></p>
+    </form>
+  </aside>
+
+  <script>
+    window.GS_MARKET_CONFIG = {
+      razorpayKeyId: ""
+    };
+
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+
+    // Cart drawer controls
+    (() => {
+      const drawer = document.getElementById("cartDrawer");
+      const overlay = document.getElementById("cartOverlay");
+
+      function openCartDrawer() {
+        drawer.classList.add("is-open");
+        overlay.classList.add("is-visible");
+        drawer.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeCartDrawer() {
+        drawer.classList.remove("is-open");
+        overlay.classList.remove("is-visible");
+        drawer.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      document.getElementById("openCart")
+        .addEventListener("click", openCartDrawer);
+
+      document.getElementById("bottomViewCart")
+        .addEventListener("click", openCartDrawer);
+
+      document.getElementById("closeCart")
+        .addEventListener("click", closeCartDrawer);
+
+      overlay.addEventListener("click", closeCartDrawer);
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeCartDrawer();
+      });
+    })();
+
+    // Live shop status
+    (() => {
+      const statusBar = document.getElementById("shopStatusBar");
+      const statusTitle = document.getElementById("shopStatusTitle");
+      const statusText = document.getElementById("shopStatusText");
+      const productGrid = document.getElementById("productGrid");
+      const payButton = document.getElementById("payButton");
+      const checkoutMessage = document.getElementById("checkoutMessage");
+
+      let shopIsOpen = false;
+      let statusConfirmed = false;
+
+      function applyShopStatus(isOpen) {
+        shopIsOpen = isOpen;
+        statusConfirmed = true;
+
+        statusBar.classList.toggle("shop-open", isOpen);
+        statusBar.classList.toggle("shop-closed", !isOpen);
+
+        statusTitle.textContent = isOpen ? "SHOP OPEN" : "SHOP CLOSED";
+
+        statusText.textContent = isOpen
+          ? "दुकान खुली है। आप products ऑर्डर कर सकते हैं।"
+          : "दुकान बंद है। अभी नए ऑर्डर स्वीकार नहीं किए जा रहे हैं।";
+
+        productGrid.classList.toggle("shop-is-closed", !isOpen);
+
+        // Disable/enable product buttons without overriding original state.
+        productGrid.querySelectorAll("button, input, select").forEach(element => {
+          if (!element.dataset.shopStatusTracked) {
+            element.dataset.shopStatusTracked = "true";
+            element.dataset.shopOriginalDisabled =
+              element.disabled ? "true" : "false";
+          }
+
+          element.disabled = !isOpen ||
+            element.dataset.shopOriginalDisabled === "true";
+        });
+
+        if (payButton) {
+          payButton.disabled = !isOpen;
+          payButton.textContent = isOpen
+            ? "Continue to Payment"
+            : "Shop Closed";
+        }
+
+        if (!isOpen && checkoutMessage) {
+          checkoutMessage.textContent =
+            "दुकान बंद है। अभी payment/order नहीं किया जा सकता।";
+        } else if (checkoutMessage) {
+          checkoutMessage.textContent = "";
+        }
+      }
+
+    //   async function refreshShopStatus() {
+    //     try {
+    //       const response = await fetch("/api/market/shop-status", {
+    //         cache: "no-store",
+    //         headers: { "Accept": "application/json" }
+    //       });
+
+    //       if (!response.ok) throw new Error("Shop status unavailable");
+
+    //       const data = await response.json();
+
+    //       if (typeof data.isOpen !== "boolean") {
+    //         throw new Error("Invalid shop status response");
+    //       }
+
+    //       applyShopStatus(data.isOpen);
+    //     } catch (error) {
+    //       shopIsOpen = false;
+    //       statusConfirmed = false;
+
+    //       statusBar.classList.remove("shop-open");
+    //       statusBar.classList.add("shop-closed");
+    //       statusTitle.textContent = "SHOP STATUS UNAVAILABLE";
+    //       statusText.textContent =
+    //         "Status चेक नहीं हो सका। सुरक्षा के लिए ऑर्डर रोक दिए गए हैं।";
+
+    //       productGrid.classList.add("shop-is-closed");
+    //       if (payButton) {
+    //         payButton.disabled = true;
+    //         payButton.textContent = "Shop Status Unavailable";
+    //       }
+    //     }
+    //   }
+
+
+    
+async function refreshShopStatus() {
+  try {
+    const response = await fetch("/market/api/shop-status", {
+      cache: "no-store",
+      headers: { "Accept": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error("Shop status API returned " + response.status);
+    }
+
+    const data = await response.json();
+
+    if (
+      data.success !== true ||
+      typeof data.shopOpen !== "boolean"
+    ) {
+      throw new Error("Invalid shop status response");
+    }
+
+    applyShopStatus(data.shopOpen);
+
+  } catch (error) {
+    console.error("GS Market status check failed:", error);
+
+    shopIsOpen = false;
+    statusConfirmed = false;
+
+    statusBar.classList.remove("shop-open");
+    statusBar.classList.add("shop-closed");
+
+    statusTitle.textContent = "SHOP STATUS UNAVAILABLE";
+    statusText.textContent =
+      "Status चेक नहीं हो सका। सुरक्षा के लिए ऑर्डर रोक दिए गए हैं।";
+
+    productGrid.classList.add("shop-is-closed");
+
+    if (payButton) {
+      payButton.disabled = true;
+      payButton.textContent = "Shop Status Unavailable";
+    }
+  }
+}
+
+
+      window.GS_MARKET_SHOP = {
+        isOpen: () => shopIsOpen && statusConfirmed,
+        refresh: refreshShopStatus
+      };
+
+      // Initial check and refresh every five seconds.
+      refreshShopStatus();
+      setInterval(refreshShopStatus, 5000);
+
+      // Stop checkout immediately when the shop is closed.
+      document.getElementById("checkoutForm").addEventListener("submit", event => {
+        if (!shopIsOpen || !statusConfirmed) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+
+          checkoutMessage.textContent = !statusConfirmed
+            ? "Shop status confirm नहीं हुआ। कृपया दोबारा कोशिश करें।"
+            : "दुकान बंद है। अभी ऑर्डर नहीं किया जा सकता।";
+        }
+      }, true);
+    })();
+  </script>
+
+  <script src="/js/store.js" defer></script>
+</body>
+</html>

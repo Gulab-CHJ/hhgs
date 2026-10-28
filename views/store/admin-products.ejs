@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GS Market - Manage Products</title>
+  <link rel="stylesheet" href="/css/store.css">
+  <style>
+    body { padding: 20px; }
+    .admin-wrap { max-width: 1150px; margin: auto; }
+    .admin-card {
+      background: white; border: 1px solid #e1e8e4;
+      border-radius: 16px; padding: 20px; margin-bottom: 22px;
+    }
+    .admin-grid {
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .admin-card input, .admin-card textarea, .admin-card select {
+      width: 100%; min-width: 0; padding: 11px;
+      margin: 5px 0 12px; border: 1px solid #d9e2dc;
+      border-radius: 9px;
+    }
+    .admin-card label { font-size: 13px; font-weight: bold; }
+    .admin-button {
+      border: 0; border-radius: 9px; padding: 10px 14px;
+      background: #176b50; color: white; font-weight: bold;
+    }
+    .delete-button { background: #b42318; }
+    .admin-product {
+      background: white; padding: 16px; border: 1px solid #e1e8e4;
+      border-radius: 14px; margin-bottom: 14px;
+    }
+    .admin-top {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .admin-top a { color: #176b50; }
+    .admin-note { color: #52615a; font-size: 13px; }
+    @media(max-width:600px) {
+      body { padding: 10px; }
+      .admin-grid { grid-template-columns: 1fr; }
+      .admin-card { padding: 13px; }
+    }
+  </style>
+</head>
+<body>
+<div class="admin-wrap">
+
+  <div class="admin-top">
+    <h1>GS Market — Products</h1>
+    <a href="/admin/market/orders">Customer Orders →</a>
+  </div>
+
+  <% if (message) { %>
+    <p class="admin-note"><%= message %></p>
+  <% } %>
+
+  <section class="admin-card">
+    <h2>＋ नया Product जोड़ें</h2>
+
+    <form action="/admin/market/products/add" method="POST">
+      <div class="admin-grid">
+        <div>
+          <label>Product Name *</label>
+          <input name="name" required maxlength="150">
+        </div>
+
+        <div>
+          <label>Category *</label>
+          <input name="category" required placeholder="mobiles, fashion, grocery...">
+        </div>
+
+        <div>
+          <label>Brand</label>
+          <input name="brand">
+        </div>
+
+        <div>
+          <label>Selling Price (₹) *</label>
+          <input name="price" type="number" min="0" step="0.01" required>
+        </div>
+
+        <div>
+          <label>MRP (₹)</label>
+          <input name="mrp" type="number" min="0" step="0.01" value="0">
+        </div>
+
+        <div>
+          <label>Stock</label>
+          <input name="stock" type="number" min="0" step="1" value="0">
+        </div>
+      </div>
+
+      <label>Image URL</label>
+      <input name="image" type="url" placeholder="https://...">
+
+      <label>Description</label>
+      <textarea name="description" maxlength="3000" rows="3"></textarea>
+
+      <button class="admin-button" type="submit">Add Product</button>
+    </form>
+  </section>
+
+  <h2>सभी Products (<%= products.length %>)</h2>
+
+  <% products.forEach(product => { %>
+    <section class="admin-product">
+      <div class="admin-top">
+        <h3><%= product.name %></h3>
+        <span><%= product.active ? "Active" : "Inactive" %></span>
+      </div>
+
+      <form action="/admin/market/products/edit/<%= product._id %>"
+            method="POST">
+        <div class="admin-grid">
+          <div>
+            <label>Product Name</label>
+            <input name="name" required maxlength="150"
+              value="<%= product.name %>">
+          </div>
+
+          <div>
+            <label>Category</label>
+            <input name="category" required
+              value="<%= product.category %>">
+          </div>
+
+          <div>
+            <label>Brand</label>
+            <input name="brand" value="<%= product.brand || '' %>">
+          </div>
+
+          <div>
+            <label>Selling Price (₹)</label>
+            <input name="price" type="number" min="0" step="0.01"
+              required value="<%= product.price %>">
+          </div>
+
+          <div>
+            <label>MRP (₹)</label>
+            <input name="mrp" type="number" min="0" step="0.01"
+              value="<%= product.mrp || 0 %>">
+          </div>
+
+          <div>
+            <label>Stock</label>
+            <input name="stock" type="number" min="0" step="1"
+              value="<%= product.stock || 0 %>">
+          </div>
+        </div>
+
+        <label>Image URL</label>
+        <input name="image" type="url"
+          value="<%= product.image || '' %>">
+
+        <label>Description</label>
+        <textarea name="description" rows="2"
+          maxlength="3000"><%= product.description || '' %></textarea>
+
+        <label>
+          <input type="checkbox" name="active"
+            <%= product.active ? "checked" : "" %>
+            style="width:auto;margin:0 6px 0 0">
+          Store में दिखाएँ
+        </label>
+
+        <p>
+          <button class="admin-button" type="submit">Save Changes</button>
+        </p>
+      </form>
+
+      <form action="/admin/market/products/delete/<%= product._id %>"
+            method="POST"
+            onsubmit="return confirm('क्या आप यह product delete करना चाहते हैं?')">
+        <button class="admin-button delete-button" type="submit">
+          Delete Product
+        </button>
+      </form>
+    </section>
+  <% }) %>
+
+  <% if (!products.length) { %>
+    <p>अभी कोई product नहीं है। ऊपर दिए form से पहला product जोड़ें।</p>
+  <% } %>
+
+</div>
+</body>
+</html>
