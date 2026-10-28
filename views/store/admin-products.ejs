@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="hi">
 <head>
   <meta charset="UTF-8">
@@ -185,5 +185,645 @@
   <% } %>
 
 </div>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GS Market - Manage Products</title>
+  <link rel="stylesheet" href="/css/store.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      padding: 20px;
+      margin: 0;
+      background: #f4f7f5;
+      color: #172b22;
+      font-family: Arial, sans-serif;
+    }
+
+    .admin-wrap {
+      max-width: 1150px;
+      margin: auto;
+    }
+
+    .admin-card,
+    .admin-product {
+      background: #fff;
+      border: 1px solid #e1e8e4;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 15px rgba(0,0,0,.035);
+    }
+
+    .admin-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .admin-top h1 {
+      font-size: 25px;
+      margin: 10px 0 18px;
+    }
+
+    .admin-top a {
+      color: #176b50;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .admin-card label,
+    .admin-product label {
+      display: block;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .admin-card input:not([type="checkbox"]):not([type="file"]),
+    .admin-card textarea,
+    .admin-card select,
+    .admin-product input:not([type="checkbox"]):not([type="file"]),
+    .admin-product textarea,
+    .admin-product select {
+      width: 100%;
+      min-width: 0;
+      padding: 11px;
+      margin: 5px 0 14px;
+      border: 1px solid #d9e2dc;
+      border-radius: 9px;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      display: block;
+      padding: 10px;
+      margin: 5px 0 12px;
+      border: 1px dashed #9bb9aa;
+      border-radius: 9px;
+      background: #f8fbf9;
+      font-size: 13px;
+    }
+
+    .admin-button {
+      display: inline-block;
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 16px;
+      background: #176b50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .admin-button:hover {
+      background: #10543e;
+    }
+
+    .delete-button {
+      background: #b42318;
+    }
+
+    .delete-button:hover {
+      background: #8f1c13;
+    }
+
+    .admin-note {
+      color: #52615a;
+      font-size: 13px;
+    }
+
+    .message {
+      padding: 12px 15px;
+      border-radius: 9px;
+      background: #e8f5ed;
+      border: 1px solid #c8e6d2;
+      margin: 12px 0 20px;
+      overflow-wrap: anywhere;
+    }
+
+    .product-heading {
+      margin-top: 28px;
+    }
+
+    .product-status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #e8f5ed;
+      color: #176b50;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .product-status.inactive {
+      background: #fce8e6;
+      color: #b42318;
+    }
+
+    .preview-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 8px 0 15px;
+    }
+
+    .preview-item {
+      width: 100px;
+      position: relative;
+    }
+
+    .preview-item img {
+      display: block;
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      border: 1px solid #d9e2dc;
+      border-radius: 10px;
+      background: #f8faf9;
+    }
+
+    .preview-item small {
+      display: block;
+      font-size: 11px;
+      margin-top: 4px;
+      overflow-wrap: anywhere;
+    }
+
+    .current-image {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+      display: block;
+      margin: 6px 0 12px;
+      border: 1px solid #d9e2dc;
+      border-radius: 10px;
+      background: #f8faf9;
+    }
+
+    .form-section-title {
+      margin: 18px 0 10px;
+      font-size: 15px;
+    }
+
+    .checkbox-line {
+      display: flex !important;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .checkbox-line input {
+      width: auto;
+      margin: 0;
+    }
+
+    .product-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .admin-card,
+      .admin-product {
+        padding: 13px;
+        border-radius: 12px;
+      }
+
+      .admin-top h1 {
+        font-size: 21px;
+      }
+
+      .admin-button {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="admin-wrap">
+
+  <div class="admin-top">
+    <h1>GS Market — Products</h1>
+    <a href="/admin/market/orders">Customer Orders →</a>
+  </div>
+
+  <% if (typeof message !== "undefined" && message) { %>
+    <div class="message"><%= message %></div>
+  <% } %>
+
+  <!-- ADD PRODUCT -->
+  <section class="admin-card">
+    <h2>＋ नया Product जोड़ें</h2>
+    <p class="admin-note">
+      Product की जानकारी भरें और अपने मोबाइल या कंप्यूटर से फोटो चुनें।
+    </p>
+
+    <form
+      action="/admin/market/products/add"
+      method="POST"
+      enctype="multipart/form-data"
+      class="product-form"
+    >
+      <div class="admin-grid">
+        <div>
+          <label for="add-name">Product Name *</label>
+          <input id="add-name" name="name" required maxlength="150">
+        </div>
+
+        <div>
+          <label for="add-category">Category *</label>
+          <input
+            id="add-category"
+            name="category"
+            required
+            maxlength="100"
+            placeholder="Mobiles, Fashion, Grocery..."
+          >
+        </div>
+
+        <div>
+          <label for="add-brand">Brand</label>
+          <input id="add-brand" name="brand" maxlength="100">
+        </div>
+
+        <div>
+          <label for="add-price">Selling Price (₹) *</label>
+          <input
+            id="add-price"
+            name="price"
+            type="number"
+            min="0"
+            step="0.01"
+            required
+          >
+        </div>
+
+        <div>
+          <label for="add-mrp">MRP (₹)</label>
+          <input
+            id="add-mrp"
+            name="mrp"
+            type="number"
+            min="0"
+            step="0.01"
+            value="0"
+          >
+        </div>
+
+        <div>
+          <label for="add-stock">Stock</label>
+          <input
+            id="add-stock"
+            name="stock"
+            type="number"
+            min="0"
+            step="1"
+            value="0"
+          >
+        </div>
+      </div>
+
+      <h3 class="form-section-title">📷 Product Photos</h3>
+
+      <label for="add-image">मुख्य Product Photo</label>
+      <input
+        id="add-image"
+        type="file"
+        name="image"
+        accept="image/jpeg,image/png,image/webp"
+        required
+      >
+
+      <div id="add-main-preview" class="preview-area"></div>
+
+      <label for="add-images">अतिरिक्त Photos (अधिकतम 5)</label>
+      <input
+        id="add-images"
+        type="file"
+        name="images"
+        accept="image/jpeg,image/png,image/webp"
+        multiple
+      >
+
+      <div id="add-extra-preview" class="preview-area"></div>
+
+      <p class="admin-note">
+        JPG, PNG या WebP फोटो चुनें। हर फोटो अधिकतम 5 MB रखें।
+      </p>
+
+      <label for="add-description">Description</label>
+      <textarea
+        id="add-description"
+        name="description"
+        maxlength="3000"
+        rows="3"
+        placeholder="Product के बारे में जानकारी..."
+      ></textarea>
+
+      <button class="admin-button" type="submit">
+        ＋ Add Product
+      </button>
+    </form>
+  </section>
+
+  <h2 class="product-heading">
+    सभी Products (<%= products.length %>)
+  </h2>
+
+  <% products.forEach(function(product) { %>
+    <section class="admin-product">
+
+      <div class="admin-top">
+        <h3><%= product.name %></h3>
+
+        <span class="product-status <%= product.active ? '' : 'inactive' %>">
+          <%= product.active ? "Active" : "Inactive" %>
+        </span>
+      </div>
+
+      <% if (product.image) { %>
+        <p class="admin-note">वर्तमान मुख्य फोटो:</p>
+        <img
+          class="current-image"
+          src="<%= product.image %>"
+          alt="Product photo"
+          loading="lazy"
+          onerror="this.style.display='none'"
+        >
+      <% } %>
+
+      <% if (product.images && product.images.length) { %>
+        <p class="admin-note">अतिरिक्त फोटो:</p>
+        <div class="preview-area">
+          <% product.images.forEach(function(photo) { %>
+            <div class="preview-item">
+              <img
+                src="<%= photo %>"
+                alt="Product photo"
+                loading="lazy"
+                onerror="this.style.display='none'"
+              >
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+
+      <!-- EDIT PRODUCT -->
+      <form
+        action="/admin/market/products/edit/<%= product._id %>"
+        method="POST"
+        enctype="multipart/form-data"
+        class="product-form"
+      >
+        <div class="admin-grid">
+          <div>
+            <label>Product Name *</label>
+            <input
+              name="name"
+              required
+              maxlength="150"
+              value="<%= product.name %>"
+            >
+          </div>
+
+          <div>
+            <label>Category *</label>
+            <input
+              name="category"
+              required
+              maxlength="100"
+              value="<%= product.category || '' %>"
+            >
+          </div>
+
+          <div>
+            <label>Brand</label>
+            <input
+              name="brand"
+              maxlength="100"
+              value="<%= product.brand || '' %>"
+            >
+          </div>
+
+          <div>
+            <label>Selling Price (₹) *</label>
+            <input
+              name="price"
+              type="number"
+              min="0"
+              step="0.01"
+              required
+              value="<%= product.price %>"
+            >
+          </div>
+
+          <div>
+            <label>MRP (₹)</label>
+            <input
+              name="mrp"
+              type="number"
+              min="0"
+              step="0.01"
+              value="<%= product.mrp || 0 %>"
+            >
+          </div>
+
+          <div>
+            <label>Stock</label>
+            <input
+              name="stock"
+              type="number"
+              min="0"
+              step="1"
+              value="<%= product.stock || 0 %>"
+            >
+          </div>
+        </div>
+
+        <h4 class="form-section-title">📷 फोटो बदलें</h4>
+
+        <label>नई मुख्य फोटो (वैकल्पिक)</label>
+        <input
+          type="file"
+          name="image"
+          accept="image/jpeg,image/png,image/webp"
+        >
+
+        <p class="admin-note">
+          नई मुख्य फोटो नहीं चुनेंगे तो वर्तमान फोटो बनी रहेगी।
+        </p>
+
+        <label>नई अतिरिक्त Photos (अधिकतम 5)</label>
+        <input
+          type="file"
+          name="images"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+        >
+
+        <p class="admin-note">
+          नई अतिरिक्त फोटो जोड़ने पर वे मौजूदा अतिरिक्त फोटो के साथ जुड़ेंगी।
+        </p>
+
+        <label>Description</label>
+        <textarea
+          name="description"
+          rows="3"
+          maxlength="3000"
+        ><%= product.description || '' %></textarea>
+
+        <label class="checkbox-line">
+          <input
+            type="checkbox"
+            name="active"
+            value="on"
+            <%= product.active ? "checked" : "" %>
+          >
+          Store में दिखाएँ
+        </label>
+
+        <div class="product-actions">
+          <button class="admin-button" type="submit">
+            Save Changes
+          </button>
+        </div>
+      </form>
+
+      <!-- DELETE PRODUCT -->
+      <form
+        action="/admin/market/products/delete/<%= product._id %>"
+        method="POST"
+        onsubmit="return confirm('क्या आप यह product delete करना चाहते हैं?')"
+      >
+        <div class="product-actions">
+          <button class="admin-button delete-button" type="submit">
+            Delete Product
+          </button>
+        </div>
+      </form>
+
+    </section>
+  <% }) %>
+
+  <% if (!products.length) { %>
+    <section class="admin-card">
+      <p>अभी कोई Product नहीं है। ऊपर दिए form से पहला Product जोड़ें।</p>
+    </section>
+  <% } %>
+
+</div>
+
+<script>
+  // Selected image preview
+  function showImagePreview(input, targetId, maxFiles) {
+    const target = document.getElementById(targetId);
+    if (!target) return;
+
+    target.innerHTML = "";
+
+    const files = Array.from(input.files || []);
+
+    if (files.length > maxFiles) {
+      alert("अधिकतम " + maxFiles + " फोटो ही चुनें।");
+      input.value = "";
+      return;
+    }
+
+    for (const file of files) {
+      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        alert("केवल JPG, PNG या WebP फोटो चुनें।");
+        input.value = "";
+        target.innerHTML = "";
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("हर फोटो का आकार 5 MB से कम होना चाहिए।");
+        input.value = "";
+        target.innerHTML = "";
+        return;
+      }
+    }
+
+    files.forEach(function(file) {
+      const item = document.createElement("div");
+      item.className = "preview-item";
+
+      const img = document.createElement("img");
+      img.alt = "Selected product photo";
+      img.src = URL.createObjectURL(file);
+
+      img.onload = function() {
+        URL.revokeObjectURL(img.src);
+      };
+
+      const label = document.createElement("small");
+      label.textContent = file.name;
+
+      item.appendChild(img);
+      item.appendChild(label);
+      target.appendChild(item);
+    });
+  }
+
+  document.getElementById("add-image").addEventListener("change", function() {
+    showImagePreview(this, "add-main-preview", 1);
+  });
+
+  document.getElementById("add-images").addEventListener("change", function() {
+    showImagePreview(this, "add-extra-preview", 5);
+  });
+
+  // Validate edit forms before submitting
+  document.querySelectorAll(".product-form").forEach(function(form) {
+    form.addEventListener("submit", function(event) {
+      const mainImage = form.querySelector('input[name="image"]');
+      const extraImages = form.querySelector('input[name="images"]');
+
+      if (mainImage && mainImage.files.length > 1) {
+        event.preventDefault();
+        alert("केवल एक मुख्य फोटो चुनें।");
+        return;
+      }
+
+      if (extraImages && extraImages.files.length > 5) {
+        event.preventDefault();
+        alert("अधिकतम 5 अतिरिक्त फोटो चुनें।");
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
