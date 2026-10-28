@@ -775,7 +775,7 @@
           : "block";
       }
 
-    if (newOrders.length) {
+   if (newOrders.length) {
   newOrders.forEach(order => {
     seenIds.add(String(order._id));
   });
@@ -783,22 +783,20 @@
   saveSeenIds();
 
   notice.textContent =
-    `🔔 ${newOrders.length} नया Market order आया है!`;
+    `🔔 ${newOrders.length} नया Paid Market order आया है!`;
 
   notice.style.display = "block";
 
-  // New order aane par ek baar alarm bajao
-  if (
-    soundEnabled &&
-    audioContext &&
-    audioContext.state === "running"
-  ) {
-    playAlarmTone();
+  if (soundEnabled && audioContext) {
+    enableAudio().then(enabled => {
+      if (enabled) {
+        playAlarmTone();
+      }
+    });
   }
-
 } else if (manual) {
   notice.textContent =
-    "Orders refresh हो गए। कोई नया order नहीं है।";
+    "Orders refresh हो गए। कोई नया Paid order नहीं है।";
 
   notice.style.display = "block";
 }
