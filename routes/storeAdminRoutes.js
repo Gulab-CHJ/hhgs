@@ -1570,11 +1570,13 @@ router.get("/orders", async (req, res) => {
   }
 });
 
-
 // Market orders auto-refresh API
+// Show only payment-confirmed orders
 router.get("/orders/data", async (req, res) => {
   try {
-    const orders = await Order.find()
+    const orders = await Order.find({
+      paymentStatus: "Paid"
+    })
       .sort({ createdAt: -1 })
       .lean();
 
@@ -1593,8 +1595,6 @@ router.get("/orders/data", async (req, res) => {
     });
   }
 });
-
-
 // ========================================
 // MARKET ORDER - DOWNLOAD PDF BILL
 // ========================================

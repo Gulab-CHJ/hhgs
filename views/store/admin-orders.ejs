@@ -207,19 +207,73 @@
       font-size: 11px;
     }
 
+    /* PDF and Print Bill buttons */
+    .bill-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .bill-btn {
+      display: inline-block;
+      padding: 8px 10px;
+      border-radius: 7px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .pdf-btn {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .print-btn {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .bill-btn:hover {
+      opacity: .88;
+    }
+
     @media (max-width: 600px) {
       body { padding: 7px; }
-      .orders-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+
+      .orders-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+
       .order-card { padding: 9px; }
       .order-top h2 { font-size: 13px; }
       .order-meta { font-size: 11px; }
-      .status-form { flex-direction: column; }
-      .status-form button { width: 100%; }
+
+      .status-form {
+        flex-direction: column;
+      }
+
+      .status-form button {
+        width: 100%;
+      }
+
       h1 { font-size: 18px; }
+
+      .bill-actions {
+        flex-direction: column;
+      }
+
+      .bill-btn {
+        width: 100%;
+      }
     }
 
     @media (max-width: 360px) {
-      .orders-grid { grid-template-columns: 1fr; }
+      .orders-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -287,6 +341,7 @@
         </div>
 
         <strong style="font-size:12px">Products</strong>
+
         <ul class="order-items">
           <% (order.items || []).forEach(item => { %>
             <li>
@@ -302,6 +357,30 @@
           <div class="total">Total: ₹<%= Number(order.totalAmount || 0).toFixed(2) %></div>
         </div>
 
+        <!-- BILL BUTTONS -->
+        <div class="bill-actions">
+
+          <a
+            href="/admin/market/orders/<%= order._id %>/bill.pdf"
+            class="bill-btn pdf-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            📄 Download PDF Bill
+          </a>
+
+          <a
+            href="/admin/market/orders/<%= order._id %>/bill/print"
+            class="bill-btn print-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            🖨️ Print Bill
+          </a>
+
+        </div>
+
+        <!-- ORDER STATUS -->
         <form class="status-form"
               action="/admin/market/orders/status/<%= order._id %>"
               method="POST">
@@ -340,6 +419,7 @@
   let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
   let audioContext = null;
   let refreshing = false;
+
   let knownIds = new Set(
     Array.from(grid.querySelectorAll("[data-order-id]"))
       .map(card => card.dataset.orderId)
@@ -355,18 +435,24 @@
 
   let seenIds = getSeenIds();
 
-  // Initial page orders are existing orders, not new notifications.
+  // Initial orders are existing orders, not new notifications.
   knownIds.forEach(id => seenIds.add(id));
   saveSeenIds();
 
   function saveSeenIds() {
     try {
-      sessionStorage.setItem(SEEN_KEY, JSON.stringify([...seenIds].slice(-1000)));
+      sessionStorage.setItem(
+        SEEN_KEY,
+        JSON.stringify([...seenIds].slice(-1000))
+      );
     } catch {}
   }
 
   function updateSoundButton() {
-    soundButton.textContent = soundEnabled ? "🔔 Sound: ON" : "🔕 Sound: OFF";
+    soundButton.textContent = soundEnabled
+      ? "🔔 Sound: ON"
+      : "🔕 Sound: OFF";
+
     soundButton.setAttribute("aria-pressed", String(soundEnabled));
   }
 
@@ -376,7 +462,11 @@
 
     try {
       if (!audioContext) audioContext = new AudioCtx();
-      if (audioContext.state === "suspended") await audioContext.resume();
+
+      if (audioContext.state === "suspended") {
+        await audioContext.resume();
+      }
+
       return audioContext.state === "running";
     } catch {
       return false;
@@ -387,9 +477,11 @@
     if (!soundEnabled) return;
 
     const ready = await enableAudio();
+
     if (!ready) {
       notice.textContent =
         "नया order आया है। Sound के लिए इस पेज पर एक बार click करें।";
+
       notice.style.display = "block";
       return;
     }
@@ -399,17 +491,38 @@
       const gain = audioContext.createGain();
 
       oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
-      oscillator.frequency.setValueAtTime(660, audioContext.currentTime + 0.18);
 
-      gain.gain.setValueAtTime(0.0001, audioContext.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.18, audioContext.currentTime + 0.03);
-      gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.45);
+      oscillator.frequency.setValueAtTime(
+        880,
+        audioContext.currentTime
+      );
+
+      oscillator.frequency.setValueAtTime(
+        660,
+        audioContext.currentTime + 0.18
+      );
+
+      gain.gain.setValueAtTime(
+        0.0001,
+        audioContext.currentTime
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.18,
+        audioContext.currentTime + 0.03
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        audioContext.currentTime + 0.45
+      );
 
       oscillator.connect(gain);
       gain.connect(audioContext.destination);
+
       oscillator.start();
       oscillator.stop(audioContext.currentTime + 0.46);
+
     } catch (error) {
       console.warn("Order notification sound unavailable:", error);
     }
@@ -417,7 +530,12 @@
 
   soundButton.addEventListener("click", async () => {
     soundEnabled = !soundEnabled;
-    localStorage.setItem(SOUND_KEY, String(soundEnabled));
+
+    localStorage.setItem(
+      SOUND_KEY,
+      String(soundEnabled)
+    );
+
     updateSoundButton();
 
     if (soundEnabled) {
@@ -426,12 +544,16 @@
     }
   });
 
-  // A user click can unlock browser audio after refresh.
+  // Browser may require a user click to enable sound after refresh.
   document.addEventListener("click", () => {
-    if (soundEnabled && !audioContext) enableAudio();
+    if (soundEnabled && !audioContext) {
+      enableAudio();
+    }
   }, { once: true });
 
-  refreshButton.addEventListener("click", () => refreshOrders(true));
+  refreshButton.addEventListener("click", () => {
+    refreshOrders(true);
+  });
 
   function escapeHtml(value) {
     return String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -445,117 +567,233 @@
 
   function money(value) {
     const number = Number(value || 0);
-    return Number.isFinite(number) ? number.toFixed(2) : "0.00";
+
+    return Number.isFinite(number)
+      ? number.toFixed(2)
+      : "0.00";
   }
 
   function dateText(value) {
     const date = new Date(value);
+
     return Number.isNaN(date.getTime())
       ? "N/A"
-      : date.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+      : date.toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata"
+        });
   }
 
   function renderOrder(order, isNew) {
     const id = escapeHtml(order._id);
     const orderNumber = escapeHtml(order.orderNumber || order._id);
     const customer = order.customer || {};
-    const statuses = ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"];
-    const items = Array.isArray(order.items) ? order.items : [];
+
+    const statuses = [
+      "Pending",
+      "Confirmed",
+      "Shipped",
+      "Delivered",
+      "Cancelled"
+    ];
+
+    const items = Array.isArray(order.items)
+      ? order.items
+      : [];
 
     const itemHtml = items.map(item =>
-      `<li>${escapeHtml(item.name)} × ${escapeHtml(item.quantity)} — ₹${money(item.subtotal)}</li>`
+      `<li>
+        ${escapeHtml(item.name)}
+        × ${escapeHtml(item.quantity)}
+        — ₹${money(item.subtotal)}
+      </li>`
     ).join("");
 
     const options = statuses.map(status =>
-      `<option value="${status}" ${order.orderStatus === status ? "selected" : ""}>${status}</option>`
+      `<option value="${status}"
+        ${order.orderStatus === status ? "selected" : ""}>
+        ${status}
+      </option>`
     ).join("");
 
     return `
-      <section class="order-card ${isNew ? "new-order" : ""}" data-order-id="${id}">
+      <section class="order-card ${isNew ? "new-order" : ""}"
+               data-order-id="${id}">
+
         <div class="order-top">
           <h2>Order #${orderNumber}</h2>
-          <span class="order-status">${escapeHtml(order.orderStatus || "Pending")}</span>
+          <span class="order-status">
+            ${escapeHtml(order.orderStatus || "Pending")}
+          </span>
         </div>
+
         <div class="order-meta">
           <div>Date: ${escapeHtml(dateText(order.createdAt))}</div>
-          <div>Customer: <strong>${escapeHtml(customer.name || "N/A")}</strong></div>
+          <div>
+            Customer:
+            <strong>${escapeHtml(customer.name || "N/A")}</strong>
+          </div>
           <div>Mobile: ${escapeHtml(customer.phone || "N/A")}</div>
           <div>Address: ${escapeHtml(customer.address || "N/A")}</div>
-          <div>Payment: <strong>${escapeHtml(order.paymentStatus || "Unknown")}</strong></div>
+          <div>
+            Payment:
+            <strong>${escapeHtml(order.paymentStatus || "Unknown")}</strong>
+          </div>
           <div>Method: ${escapeHtml(order.paymentMethod || "N/A")}</div>
-          <div>Payment ID: ${escapeHtml(order.razorpayPaymentId || "Not paid yet")}</div>
+          <div>
+            Payment ID:
+            ${escapeHtml(order.razorpayPaymentId || "Not paid yet")}
+          </div>
         </div>
+
         <strong style="font-size:12px">Products</strong>
-        <ul class="order-items">${itemHtml}</ul>
+
+        <ul class="order-items">
+          ${itemHtml}
+        </ul>
+
         <div class="amounts">
           <div>Subtotal: ₹${money(order.subtotal)}</div>
           <div>Delivery: ₹${money(order.deliveryCharge)}</div>
           <div class="total">Total: ₹${money(order.totalAmount)}</div>
         </div>
-        <form class="status-form" action="/admin/market/orders/status/${id}" method="POST">
-          <select name="orderStatus" aria-label="Order status">${options}</select>
+
+        <div class="bill-actions">
+          <a href="/admin/market/orders/${id}/bill.pdf"
+             class="bill-btn pdf-btn"
+             target="_blank"
+             rel="noopener">
+             📄 Download PDF Bill
+          </a>
+
+          <a href="/admin/market/orders/${id}/bill/print"
+             class="bill-btn print-btn"
+             target="_blank"
+             rel="noopener">
+             🖨️ Print Bill
+          </a>
+        </div>
+
+        <form class="status-form"
+              action="/admin/market/orders/status/${id}"
+              method="POST">
+
+          <select name="orderStatus" aria-label="Order status">
+            ${options}
+          </select>
+
           <button type="submit">Update Status</button>
         </form>
-      </section>`;
+
+      </section>
+    `;
   }
 
   async function refreshOrders(manual = false) {
     if (refreshing) return;
+
     refreshing = true;
 
     try {
-      const response = await fetch("/admin/market/orders/data", {
-        method: "GET",
-        cache: "no-store",
-        headers: { "Accept": "application/json" }
-      });
+      const response = await fetch(
+        "/admin/market/orders/data",
+        {
+          method: "GET",
+          cache: "no-store",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
 
-      if (!response.ok) throw new Error("Orders API returned " + response.status);
+      if (!response.ok) {
+        throw new Error(
+          "Orders API returned " + response.status
+        );
+      }
 
       const data = await response.json();
+
       if (!data.success || !Array.isArray(data.orders)) {
         throw new Error("Invalid orders response");
       }
 
       const orders = data.orders;
-      const currentIds = new Set(orders.map(order => String(order._id)));
+
+      const currentIds = new Set(
+        orders.map(order => String(order._id))
+      );
+
       const newOrders = orders.filter(order => {
         const id = String(order._id);
+
         return !knownIds.has(id) && !seenIds.has(id);
       });
 
-      // Re-render cards, preserving existing status forms and URLs.
+      // Re-render order cards.
       grid.innerHTML = orders.map(order => {
         const id = String(order._id);
-        return renderOrder(order, newOrders.some(item => String(item._id) === id));
+
+        const isNew = newOrders.some(
+          item => String(item._id) === id
+        );
+
+        return renderOrder(order, isNew);
       }).join("");
 
-      document.getElementById("totalOrders").textContent = String(orders.length);
+      document.getElementById("totalOrders").textContent =
+        String(orders.length);
+
       document.getElementById("pendingOrders").textContent =
-        String(orders.filter(order => order.orderStatus === "Pending").length);
+        String(
+          orders.filter(
+            order => order.orderStatus === "Pending"
+          ).length
+        );
 
       const empty = document.getElementById("emptyOrders");
-      if (empty) empty.style.display = orders.length ? "none" : "block";
+
+      if (empty) {
+        empty.style.display = orders.length
+          ? "none"
+          : "block";
+      }
 
       if (newOrders.length) {
-        newOrders.forEach(order => seenIds.add(String(order._id)));
+        newOrders.forEach(order => {
+          seenIds.add(String(order._id));
+        });
+
         saveSeenIds();
 
-        notice.textContent = `🔔 ${newOrders.length} नया Market order आया है!`;
+        notice.textContent =
+          `🔔 ${newOrders.length} नया Market order आया है!`;
+
         notice.style.display = "block";
+
         await ringOnce();
+
       } else if (manual) {
-        notice.textContent = "Orders refresh हो गए। कोई नया order नहीं है।";
+        notice.textContent =
+          "Orders refresh हो गए। कोई नया order नहीं है।";
+
         notice.style.display = "block";
       }
 
       knownIds = currentIds;
-      lastUpdated.textContent = "Last checked: " +
+
+      lastUpdated.textContent =
+        "Last checked: " +
         new Date().toLocaleTimeString("en-IN");
 
     } catch (error) {
-      console.error("Market order auto-refresh error:", error);
-      lastUpdated.textContent = "Refresh failed — retrying";
+      console.error(
+        "Market order auto-refresh error:",
+        error
+      );
+
+      lastUpdated.textContent =
+        "Refresh failed — retrying";
+
     } finally {
       refreshing = false;
     }
@@ -563,10 +801,17 @@
 
   updateSoundButton();
 
-  // Poll every five seconds. Existing orders are not rung on page load.
-  setInterval(() => refreshOrders(false), REFRESH_MS);
-  lastUpdated.textContent = "Auto-refresh: हर 5 सेकंड";
+  // Auto refresh every 5 seconds.
+  // Existing orders will not ring on page load.
+  setInterval(() => {
+    refreshOrders(false);
+  }, REFRESH_MS);
+
+  lastUpdated.textContent =
+    "Auto-refresh: हर 5 सेकंड";
+
 })();
 </script>
+
 </body>
 </html>
