@@ -1274,75 +1274,98 @@ ${QuickServiceSection()}
 .gs-market-banner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 16px;
   margin: 16px 0;
   background: linear-gradient(135deg, #ecfdf5, #eff6ff);
   border: 1px solid #bbf7d0;
   border-radius: 16px;
-  box-sizing: border-box;
-  flex-wrap: wrap;
+}
+
+.gs-market-icon {
+  display: flex !important;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  background: #d1fae5;
+  border-radius: 12px;
+  font-size: 30px;
+  visibility: visible !important;
+}
+
+.gs-market-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .gs-market-content h2 {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   color: #15803d;
-  font-size: 24px;
+  font-size: 21px;
+  line-height: 1.3;
 }
 
 .gs-market-content p {
   margin: 0;
   color: #374151;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .gs-market-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 12px 18px;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  border-radius: 9px;
   background: #16a34a;
   color: #fff !important;
   text-decoration: none !important;
-  border-radius: 10px;
+  font-size: 14px;
   font-weight: 700;
-  white-space: nowrap;
-}
-
-.gs-market-btn:hover {
-  background: #15803d;
 }
 
 @media (max-width: 480px) {
   .gs-market-banner {
-    padding: 15px;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .gs-market-icon {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+    font-size: 26px;
   }
 
   .gs-market-content h2 {
-    font-size: 21px;
+    font-size: 18px;
   }
 
-  .gs-market-btn {
-    width: 100%;
-    box-sizing: border-box;
+  .gs-market-content p {
+    font-size: 12px;
   }
 }
 </style>
 
 <div class="gs-market-banner">
-  <div class="gs-market-content">
-    <h2>🛍️ GS MARKET</h2>
-    <p>Shop Your Daily Needs at the Best Price</p>
-  </div>
+  <div class="gs-market-icon">🛍️</div>
 
-  <a href="/market" class="gs-market-btn">
-    Explore GS Market <span aria-hidden="true">→</span>
-  </a>
+  <div class="gs-market-content">
+    <h2>GS MARKET</h2>
+    <p>Shop Your Daily Needs at the Best Price</p>
+
+    <a href="/market" class="gs-market-btn">
+      Explore GS Market <span>→</span>
+    </a>
+  </div>
 </div>
-    
 
 
      
