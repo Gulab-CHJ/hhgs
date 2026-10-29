@@ -1142,6 +1142,11 @@ app.use("/admin/market", storeAdminRoutes);
 
 
 
+// GS Market Shopkeeper Routes
+const shopkeeperRoutes = require("./routes/shopkeeperRoutes");
+
+app.use("/shopkeeper", shopkeeperRoutes);
+
 // ===============================
 // SERVER START
 // ===============================
