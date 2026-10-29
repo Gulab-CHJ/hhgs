@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -207,7 +206,6 @@
       font-size: 11px;
     }
 
-    /* PDF and Print Bill buttons */
     .bill-actions {
       display: flex;
       flex-wrap: wrap;
@@ -308,8 +306,21 @@
 
   <div class="summary">
     <span>Total orders: <strong id="totalOrders"><%= orders.length %></strong></span>
-    <span>Pending: <strong id="pendingOrders"><%= orders.filter(o => o.orderStatus === "Pending").length %></strong></span>
-    <span>Paid: <strong><%= orders.filter(o => o.paymentStatus === "Paid").length %></strong></span>
+
+    <span>
+      Pending:
+      <strong id="pendingOrders">
+        <%= orders.filter(o => String(o.orderStatus || "").toLowerCase() === "pending").length %>
+      </strong>
+    </span>
+
+    <span>
+      Paid:
+      <strong id="paidOrders">
+        <%= orders.filter(o => String(o.paymentStatus || "").toLowerCase() === "paid").length %>
+      </strong>
+    </span>
+
     <span id="lastUpdated">Page loaded</span>
   </div>
 
@@ -322,22 +333,45 @@
   <% } %>
 
   <main class="orders-grid" id="ordersGrid">
+
     <% orders.forEach(order => { %>
+
       <section class="order-card" data-order-id="<%= order._id %>">
 
         <div class="order-top">
           <h2>Order #<%= order.orderNumber || order._id %></h2>
-          <span class="order-status"><%= order.orderStatus %></span>
+          <span class="order-status"><%= order.orderStatus || "Pending" %></span>
         </div>
 
         <div class="order-meta">
-          <div>Date: <%= new Date(order.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) %></div>
-          <div>Customer: <strong><%= order.customer?.name || "N/A" %></strong></div>
+
+          <div>
+            Date:
+            <%= order.createdAt
+              ? new Date(order.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+              : "N/A" %>
+          </div>
+
+          <div>
+            Customer:
+            <strong><%= order.customer?.name || "N/A" %></strong>
+          </div>
+
           <div>Mobile: <%= order.customer?.phone || "N/A" %></div>
           <div>Address: <%= order.customer?.address || "N/A" %></div>
-          <div>Payment: <strong><%= order.paymentStatus || "Unknown" %></strong></div>
+
+          <div>
+            Payment:
+            <strong><%= order.paymentStatus || "Unknown" %></strong>
+          </div>
+
           <div>Method: <%= order.paymentMethod || "N/A" %></div>
-          <div>Payment ID: <%= order.razorpayPaymentId || "Not paid yet" %></div>
+
+          <div>
+            Payment ID:
+            <%= order.razorpayPaymentId || "Not paid yet" %>
+          </div>
+
         </div>
 
         <strong style="font-size:12px">Products</strong>
@@ -357,7 +391,6 @@
           <div class="total">Total: ₹<%= Number(order.totalAmount || 0).toFixed(2) %></div>
         </div>
 
-        <!-- BILL BUTTONS -->
         <div class="bill-actions">
 
           <a
@@ -380,25 +413,35 @@
 
         </div>
 
-        <!-- ORDER STATUS -->
-        <form class="status-form"
-              action="/admin/market/orders/status/<%= order._id %>"
-              method="POST">
+        <form
+          class="status-form"
+          action="/admin/market/orders/status/<%= order._id %>"
+          method="POST"
+        >
 
           <select name="orderStatus" aria-label="Order status">
+
             <% ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"].forEach(status => { %>
-              <option value="<%= status %>"
-                <%= order.orderStatus === status ? "selected" : "" %>>
+
+              <option
+                value="<%= status %>"
+                <%= order.orderStatus === status ? "selected" : "" %>
+              >
                 <%= status %>
               </option>
+
             <% }) %>
+
           </select>
 
           <button type="submit">Update Status</button>
+
         </form>
 
       </section>
+
     <% }) %>
+
   </main>
 </div>
 
@@ -406,9 +449,19 @@
 (() => {
   "use strict";
 
+  // =========================
+  // CONFIGURATION
+  // =========================
+
   const REFRESH_MS = 5000;
+  const ALARM_REPEAT_MS = 1500;
+
   const SOUND_KEY = "hhgs_market_order_sound_enabled_v1";
   const SEEN_KEY = "hhgs_market_seen_order_ids_v1";
+
+  // =========================
+  // ELEMENTS
+  // =========================
 
   const soundButton = document.getElementById("soundToggle");
   const refreshButton = document.getElementById("refreshNow");
@@ -416,18 +469,44 @@
   const notice = document.getElementById("newOrderNotice");
   const lastUpdated = document.getElementById("lastUpdated");
 
-  let soundEnabled = localStorage.getItem(SOUND_KEY) !== "false";
+  const totalOrdersElement = document.getElementById("totalOrders");
+  const pendingOrdersElement = document.getElementById("pendingOrders");
+  const paidOrdersElement = document.getElementById("paidOrders");
+
+  // =========================
+  // STATE
+  // =========================
+
+  let soundEnabled =
+    localStorage.getItem(SOUND_KEY) !== "false";
+
   let audioContext = null;
   let refreshing = false;
+  let alarmTimer = null;
 
+  let latestOrders = [];
+
+  // New Paid Orders that arrived during this session
+  const alarmOrderIds = new Set();
+
+  // Orders present when the page first loaded
   let knownIds = new Set(
-    Array.from(grid.querySelectorAll("[data-order-id]"))
-      .map(card => card.dataset.orderId)
+    Array.from(
+      grid.querySelectorAll("[data-order-id]")
+    ).map(card => String(card.dataset.orderId))
   );
+
+  // =========================
+  // SEEN ORDER IDS
+  // =========================
 
   function getSeenIds() {
     try {
-      return new Set(JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]"));
+      return new Set(
+        JSON.parse(
+          sessionStorage.getItem(SEEN_KEY) || "[]"
+        ).map(String)
+      );
     } catch {
       return new Set();
     }
@@ -435,8 +514,9 @@
 
   let seenIds = getSeenIds();
 
-  // Initial orders are existing orders, not new notifications.
+  // Current page's existing orders are not new orders.
   knownIds.forEach(id => seenIds.add(id));
+
   saveSeenIds();
 
   function saveSeenIds() {
@@ -445,70 +525,140 @@
         SEEN_KEY,
         JSON.stringify([...seenIds].slice(-1000))
       );
-    } catch {}
+    } catch (error) {
+      console.warn("Could not save seen order IDs:", error);
+    }
   }
+
+  // =========================
+  // SOUND BUTTON
+  // =========================
 
   function updateSoundButton() {
     soundButton.textContent = soundEnabled
       ? "🔔 Sound: ON"
       : "🔕 Sound: OFF";
 
-    soundButton.setAttribute("aria-pressed", String(soundEnabled));
+    soundButton.setAttribute(
+      "aria-pressed",
+      String(soundEnabled)
+    );
   }
 
+  // =========================
+  // AUDIO
+  // =========================
+
   async function enableAudio() {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return false;
+    const AudioCtx =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioCtx) {
+      console.warn("This browser does not support Web Audio.");
+      return false;
+    }
 
     try {
-      if (!audioContext) audioContext = new AudioCtx();
+      if (!audioContext) {
+        audioContext = new AudioCtx();
+      }
 
       if (audioContext.state === "suspended") {
         await audioContext.resume();
       }
 
       return audioContext.state === "running";
-    } catch {
+
+    } catch (error) {
+      console.warn("Could not enable audio:", error);
       return false;
     }
   }
 
-  // Loud repeating alarm. It continues while any PAID order is Pending.
-  // When Admin changes the order to Confirmed, the alarm stops.
-  let alarmTimer = null;
-  let latestOrders = [];
+  // =========================
+  // ALARM SOUND
+  // =========================
 
   function playAlarmTone() {
-    if (!soundEnabled || !audioContext || audioContext.state !== "running") return;
+    if (
+      !soundEnabled ||
+      !audioContext ||
+      audioContext.state !== "running"
+    ) {
+      return;
+    }
 
     try {
       const now = audioContext.currentTime;
+
       const oscillator = audioContext.createOscillator();
       const gain = audioContext.createGain();
 
       oscillator.type = "square";
-      oscillator.frequency.setValueAtTime(1250, now);
-      oscillator.frequency.setValueAtTime(1650, now + 0.16);
-      oscillator.frequency.setValueAtTime(1250, now + 0.32);
 
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.75, now + 0.025);
-      gain.gain.setValueAtTime(0.75, now + 0.42);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.48);
+      oscillator.frequency.setValueAtTime(
+        1250,
+        now
+      );
+
+      oscillator.frequency.setValueAtTime(
+        1650,
+        now + 0.16
+      );
+
+      oscillator.frequency.setValueAtTime(
+        1250,
+        now + 0.32
+      );
+
+      gain.gain.setValueAtTime(
+        0.0001,
+        now
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.35,
+        now + 0.025
+      );
+
+      gain.gain.setValueAtTime(
+        0.35,
+        now + 0.42
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        now + 0.48
+      );
 
       oscillator.connect(gain);
       gain.connect(audioContext.destination);
+
       oscillator.start(now);
       oscillator.stop(now + 0.49);
+
     } catch (error) {
-      console.warn("Market order alarm error:", error);
+      console.warn("Market alarm error:", error);
     }
   }
 
+  // =========================
+  // START / STOP ALARM
+  // =========================
+
   function startMarketAlarm() {
-    if (!soundEnabled || alarmTimer) return;
+    if (!soundEnabled || alarmTimer) {
+      return;
+    }
+
+    // First alarm immediately
     playAlarmTone();
-    alarmTimer = setInterval(playAlarmTone, 650);
+
+    // Repeat alarm
+    alarmTimer = setInterval(() => {
+      playAlarmTone();
+    }, ALARM_REPEAT_MS);
   }
 
   function stopMarketAlarm() {
@@ -518,24 +668,32 @@
     }
   }
 
- function syncMarketAlarm(orders) {
-  latestOrders = Array.isArray(orders) ? orders : [];
+  // =========================
+  // SYNC ALARM
+  // =========================
 
-  // Ring only while a newly arrived order is awaiting attention.
-  // Confirmed orders should not keep the alarm running.
-  const waitingForAcceptance = latestOrders.some(order =>
-    String(order.paymentStatus || "").toLowerCase() === "paid" &&
-    String(order.orderStatus || "").toLowerCase() === "pending"
-  );
+  function syncMarketAlarm() {
+    /*
+      Alarm Queue में केवल नए Paid Orders आते हैं।
+      Confirmed Order होने पर भी Alarm बजेगा।
+    */
 
-  if (waitingForAcceptance && soundEnabled) {
-    startMarketAlarm();
-  } else {
-    stopMarketAlarm();
+    if (
+      alarmOrderIds.size > 0 &&
+      soundEnabled
+    ) {
+      startMarketAlarm();
+    } else {
+      stopMarketAlarm();
+    }
   }
-}
+
+  // =========================
+  // SOUND ON / OFF
+  // =========================
 
   soundButton.addEventListener("click", async () => {
+
     soundEnabled = !soundEnabled;
 
     localStorage.setItem(
@@ -546,40 +704,85 @@
     updateSoundButton();
 
     if (soundEnabled) {
-      await enableAudio();
-      syncMarketAlarm(latestOrders);
-      if (!latestOrders.some(order =>
-        String(order.paymentStatus || "").toLowerCase() === "paid" &&
-        String(order.orderStatus || "").toLowerCase() === "pending"
-      )) {
-        playAlarmTone(); // short test tone when enabling sound
+
+      // User interaction enables browser audio
+      const enabled = await enableAudio();
+
+      if (enabled) {
+
+        syncMarketAlarm();
+
+        // If there is no queued order, play test sound
+        if (alarmOrderIds.size === 0) {
+          playAlarmTone();
+        }
+
+      } else {
+
+        notice.textContent =
+          "Browser में Sound अनुमति नहीं मिली। Sound ON बटन फिर दबाएँ।";
+
+        notice.style.display = "block";
       }
+
     } else {
+
+      // Sound OFF: stop alarm and clear queue
       stopMarketAlarm();
+
+      alarmOrderIds.clear();
+
+      notice.textContent =
+        "🔕 Alarm बंद कर दिया गया है।";
+
+      notice.style.display = "block";
     }
+
   });
 
-  // Browser may require a user click to enable sound after refresh.
-  document.addEventListener("click", async () => {
-    if (soundEnabled) {
-      await enableAudio();
-      syncMarketAlarm(latestOrders);
-    }
-  }, { once: true });
+  // =========================
+  // FIRST USER CLICK
+  // =========================
+
+  document.addEventListener(
+    "click",
+    async () => {
+      if (soundEnabled) {
+        await enableAudio();
+        syncMarketAlarm();
+      }
+    },
+    { once: true }
+  );
+
+  // =========================
+  // MANUAL REFRESH
+  // =========================
 
   refreshButton.addEventListener("click", () => {
     refreshOrders(true);
   });
 
+  // =========================
+  // HTML ESCAPING
+  // =========================
+
   function escapeHtml(value) {
-    return String(value ?? "").replace(/[&<>"']/g, char => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#39;"
-    })[char]);
+    return String(value ?? "").replace(
+      /[&<>"']/g,
+      char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]
+    );
   }
+
+  // =========================
+  // MONEY
+  // =========================
 
   function money(value) {
     const number = Number(value || 0);
@@ -588,6 +791,10 @@
       ? number.toFixed(2)
       : "0.00";
   }
+
+  // =========================
+  // DATE
+  // =========================
 
   function dateText(value) {
     const date = new Date(value);
@@ -599,9 +806,18 @@
         });
   }
 
+  // =========================
+  // RENDER ORDER
+  // =========================
+
   function renderOrder(order, isNew) {
+
     const id = escapeHtml(order._id);
-    const orderNumber = escapeHtml(order.orderNumber || order._id);
+
+    const orderNumber = escapeHtml(
+      order.orderNumber || order._id
+    );
+
     const customer = order.customer || {};
 
     const statuses = [
@@ -616,49 +832,80 @@
       ? order.items
       : [];
 
-    const itemHtml = items.map(item =>
-      `<li>
+    const itemHtml = items.map(item => `
+      <li>
         ${escapeHtml(item.name)}
         × ${escapeHtml(item.quantity)}
         — ₹${money(item.subtotal)}
-      </li>`
-    ).join("");
+      </li>
+    `).join("");
 
-    const options = statuses.map(status =>
-      `<option value="${status}"
-        ${order.orderStatus === status ? "selected" : ""}>
+    const options = statuses.map(status => `
+      <option
+        value="${status}"
+        ${String(order.orderStatus || "") === status ? "selected" : ""}
+      >
         ${status}
-      </option>`
-    ).join("");
+      </option>
+    `).join("");
 
     return `
-      <section class="order-card ${isNew ? "new-order" : ""}"
-               data-order-id="${id}">
+      <section
+        class="order-card ${isNew ? "new-order" : ""}"
+        data-order-id="${id}"
+      >
 
         <div class="order-top">
+
           <h2>Order #${orderNumber}</h2>
+
           <span class="order-status">
             ${escapeHtml(order.orderStatus || "Pending")}
           </span>
+
         </div>
 
         <div class="order-meta">
-          <div>Date: ${escapeHtml(dateText(order.createdAt))}</div>
+
+          <div>
+            Date:
+            ${escapeHtml(dateText(order.createdAt))}
+          </div>
+
           <div>
             Customer:
-            <strong>${escapeHtml(customer.name || "N/A")}</strong>
+            <strong>
+              ${escapeHtml(customer.name || "N/A")}
+            </strong>
           </div>
-          <div>Mobile: ${escapeHtml(customer.phone || "N/A")}</div>
-          <div>Address: ${escapeHtml(customer.address || "N/A")}</div>
+
+          <div>
+            Mobile:
+            ${escapeHtml(customer.phone || "N/A")}
+          </div>
+
+          <div>
+            Address:
+            ${escapeHtml(customer.address || "N/A")}
+          </div>
+
           <div>
             Payment:
-            <strong>${escapeHtml(order.paymentStatus || "Unknown")}</strong>
+            <strong>
+              ${escapeHtml(order.paymentStatus || "Unknown")}
+            </strong>
           </div>
-          <div>Method: ${escapeHtml(order.paymentMethod || "N/A")}</div>
+
+          <div>
+            Method:
+            ${escapeHtml(order.paymentMethod || "N/A")}
+          </div>
+
           <div>
             Payment ID:
             ${escapeHtml(order.razorpayPaymentId || "Not paid yet")}
           </div>
+
         </div>
 
         <strong style="font-size:12px">Products</strong>
@@ -668,53 +915,86 @@
         </ul>
 
         <div class="amounts">
-          <div>Subtotal: ₹${money(order.subtotal)}</div>
-          <div>Delivery: ₹${money(order.deliveryCharge)}</div>
-          <div class="total">Total: ₹${money(order.totalAmount)}</div>
+
+          <div>
+            Subtotal: ₹${money(order.subtotal)}
+          </div>
+
+          <div>
+            Delivery: ₹${money(order.deliveryCharge)}
+          </div>
+
+          <div class="total">
+            Total: ₹${money(order.totalAmount)}
+          </div>
+
         </div>
 
         <div class="bill-actions">
-          <a href="/admin/market/orders/${id}/bill.pdf"
-             class="bill-btn pdf-btn"
-             target="_blank"
-             rel="noopener">
-             📄 Download PDF Bill
+
+          <a
+            href="/admin/market/orders/${id}/bill.pdf"
+            class="bill-btn pdf-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            📄 Download PDF Bill
           </a>
 
-          <a href="/admin/market/orders/${id}/bill/print"
-             class="bill-btn print-btn"
-             target="_blank"
-             rel="noopener">
-             🖨️ Print Bill
+          <a
+            href="/admin/market/orders/${id}/bill/print"
+            class="bill-btn print-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            🖨️ Print Bill
           </a>
+
         </div>
 
-        <form class="status-form"
-              action="/admin/market/orders/status/${id}"
-              method="POST">
+        <form
+          class="status-form"
+          action="/admin/market/orders/status/${id}"
+          method="POST"
+        >
 
-          <select name="orderStatus" aria-label="Order status">
+          <select
+            name="orderStatus"
+            aria-label="Order status"
+          >
             ${options}
           </select>
 
-          <button type="submit">Update Status</button>
+          <button type="submit">
+            Update Status
+          </button>
+
         </form>
 
       </section>
     `;
   }
 
+  // =========================
+  // REFRESH ORDERS
+  // =========================
+
   async function refreshOrders(manual = false) {
-    if (refreshing) return;
+
+    if (refreshing) {
+      return;
+    }
 
     refreshing = true;
 
     try {
+
       const response = await fetch(
         "/admin/market/orders/data",
         {
           method: "GET",
           cache: "no-store",
+          credentials: "same-origin",
           headers: {
             "Accept": "application/json"
           }
@@ -723,18 +1003,36 @@
 
       if (!response.ok) {
         throw new Error(
-          "Orders API returned " + response.status
+          "Orders API returned HTTP " +
+          response.status
+        );
+      }
+
+      const contentType =
+        response.headers.get("content-type") || "";
+
+      if (!contentType.includes("application/json")) {
+        throw new Error(
+          "Orders API did not return JSON. Check admin login or API route."
         );
       }
 
       const data = await response.json();
 
-      if (!data.success || !Array.isArray(data.orders)) {
-        throw new Error("Invalid orders response");
+      if (
+        !data.success ||
+        !Array.isArray(data.orders)
+      ) {
+        throw new Error(
+          "Invalid orders API response"
+        );
       }
 
       const orders = data.orders;
-      syncMarketAlarm(orders);
+
+      // =========================
+      // FIND NEW ORDERS
+      // =========================
 
       const currentIds = new Set(
         orders.map(order => String(order._id))
@@ -743,11 +1041,32 @@
       const newOrders = orders.filter(order => {
         const id = String(order._id);
 
-        return !knownIds.has(id) && !seenIds.has(id);
+        return (
+          !knownIds.has(id) &&
+          !seenIds.has(id)
+        );
       });
 
-      // Re-render order cards.
+      // =========================
+      // ADD NEW PAID ORDERS
+      // =========================
+
+      const newPaidOrders = newOrders.filter(order => {
+        return String(
+          order.paymentStatus || ""
+        ).trim().toLowerCase() === "paid";
+      });
+
+      newPaidOrders.forEach(order => {
+        alarmOrderIds.add(String(order._id));
+      });
+
+      // =========================
+      // RENDER ORDER CARDS
+      // =========================
+
       grid.innerHTML = orders.map(order => {
+
         const id = String(order._id);
 
         const isNew = newOrders.some(
@@ -755,19 +1074,39 @@
         );
 
         return renderOrder(order, isNew);
+
       }).join("");
 
-      document.getElementById("totalOrders").textContent =
+      // =========================
+      // UPDATE SUMMARY
+      // =========================
+
+      totalOrdersElement.textContent =
         String(orders.length);
 
-      document.getElementById("pendingOrders").textContent =
+      pendingOrdersElement.textContent =
         String(
-          orders.filter(
-            order => order.orderStatus === "Pending"
+          orders.filter(order =>
+            String(order.orderStatus || "")
+              .toLowerCase() === "pending"
           ).length
         );
 
-      const empty = document.getElementById("emptyOrders");
+      paidOrdersElement.textContent =
+        String(
+          orders.filter(order =>
+            String(order.paymentStatus || "")
+              .toLowerCase() === "paid"
+          ).length
+        );
+
+      // =========================
+      // EMPTY MESSAGE
+      // =========================
+
+      const empty = document.getElementById(
+        "emptyOrders"
+      );
 
       if (empty) {
         empty.style.display = orders.length
@@ -775,39 +1114,60 @@
           : "block";
       }
 
-   if (newOrders.length) {
-  newOrders.forEach(order => {
-    seenIds.add(String(order._id));
-  });
+      // =========================
+      // NOTIFICATION
+      // =========================
 
-  saveSeenIds();
+      if (newPaidOrders.length > 0) {
 
-  notice.textContent =
-    `🔔 ${newOrders.length} नया Paid Market order आया है!`;
+        notice.textContent =
+          `🔔 ${newPaidOrders.length} नया Paid Market Order आया है!`;
 
-  notice.style.display = "block";
+        notice.style.display = "block";
 
-  if (soundEnabled && audioContext) {
-    enableAudio().then(enabled => {
-      if (enabled) {
-        playAlarmTone();
+      } else if (manual) {
+
+        notice.textContent =
+          "Orders refresh हो गए। कोई नया Paid Order नहीं है।";
+
+        notice.style.display = "block";
+
       }
-    });
-  }
-} else if (manual) {
-  notice.textContent =
-    "Orders refresh हो गए। कोई नया Paid order नहीं है।";
 
-  notice.style.display = "block";
-}
+      // =========================
+      // SAVE SEEN ORDER IDS
+      // =========================
 
-knownIds = currentIds;
+      newOrders.forEach(order => {
+        seenIds.add(String(order._id));
+      });
 
-lastUpdated.textContent =
-  "Last checked: " +
-  new Date().toLocaleTimeString("en-IN");
+      saveSeenIds();
+
+      // =========================
+      // UPDATE KNOWN IDS
+      // =========================
+
+      knownIds = currentIds;
+
+      // =========================
+      // UPDATE ALARM
+      // =========================
+
+      latestOrders = orders;
+
+      syncMarketAlarm();
+
+      // =========================
+      // UPDATE LAST CHECK TIME
+      // =========================
+
+      lastUpdated.textContent =
+        "Last checked: " +
+        new Date().toLocaleTimeString("en-IN");
 
     } catch (error) {
+
       console.error(
         "Market order auto-refresh error:",
         error
@@ -817,17 +1177,25 @@ lastUpdated.textContent =
         "Refresh failed — retrying";
 
     } finally {
+
       refreshing = false;
+
     }
   }
 
+  // =========================
+  // INITIALIZE
+  // =========================
+
   updateSoundButton();
 
-  // Auto refresh every 5 seconds.
-  // Existing orders will not ring on page load.
+  // Auto-refresh every 5 seconds
   setInterval(() => {
     refreshOrders(false);
   }, REFRESH_MS);
+
+  // First refresh immediately
+  refreshOrders(false);
 
   lastUpdated.textContent =
     "Auto-refresh: हर 5 सेकंड";
