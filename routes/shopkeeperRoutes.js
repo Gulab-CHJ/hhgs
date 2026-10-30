@@ -1377,6 +1377,10 @@ header h2{font-size:17px}
 
 <p id="shopStatus">Loading...</p>
 
+<p id="shopLocationInfo" class="muted">
+    दुकान की GPS location लोड हो रही है...
+</p>
+
 <div class="controls">
 <button class="open" onclick="setShop(true)">दुकान खोलें</button>
 <button class="closed" onclick="setShop(false)">दुकान बंद करें</button>
@@ -1884,54 +1888,162 @@ async function updateStatus(id,status){
 // =====================================
 // SHOP STATUS
 // =====================================
+// =====================================
+// SHOP STATUS — GPS LOCATION
+// =====================================
 
-async function loadShopStatus(){
+// GPS location प्राप्त करना
+function getShopGPS() {
+    return new Promise((resolve, reject) => {
 
-    const response = await fetch("/shopkeeper/api/shop-status",{
-        credentials:"same-origin"
+        if (!navigator.geolocation) {
+            reject(new Error("इस browser में GPS उपलब्ध नहीं है।"));
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                resolve({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                });
+            },
+
+            error => {
+                let message = "GPS location प्राप्त नहीं हुई।";
+
+                if (error.code === error.PERMISSION_DENIED) {
+                    message = "Location permission allow करें।";
+                } else if (error.code === error.POSITION_UNAVAILABLE) {
+                    message = "GPS location उपलब्ध नहीं है।";
+                } else if (error.code === error.TIMEOUT) {
+                    message = "GPS timeout हुआ। दोबारा कोशिश करें।";
+                }
+
+                reject(new Error(message));
+            },
+
+            {
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 0
+            }
+        );
     });
-
-    const data = await response.json();
-
-    if(data.success){
-
-        document.getElementById("shopStatus").innerHTML =
-            data.shopOpen
-            ? '<b style="color:green">🟢 दुकान खुली है</b>'
-            : '<b style="color:red">🔴 दुकान बंद है</b>';
-    }
 }
 
-async function setShop(open){
 
-    if(!confirm(open ? "दुकान खोलें?" : "दुकान बंद करें?")){
-        return;
-    }
+// दुकान का Status और GPS Location दिखाना
+async function loadShopStatus() {
 
-    try{
+    try {
 
-        const response = await fetch("/shopkeeper/api/shop-status",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            credentials:"same-origin",
-            body:JSON.stringify({shopOpen:open})
+        const response = await fetch("/shopkeeper/api/shop-status", {
+            credentials: "same-origin"
         });
 
         const data = await response.json();
 
-        if(!response.ok || !data.success){
-            throw new Error(data.message || "Update failed");
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Shop status load नहीं हुआ");
         }
 
-        await loadShopStatus();
+        const statusElement = document.getElementById("shopStatus");
 
-        alert(open ? "दुकान खोल दी गई" : "दुकान बंद कर दी गई");
+        if (data.shopOpen) {
 
-    }catch(error){
-        alert(error.message);
+            statusElement.innerHTML =
+                '<b style="color:green">🟢 दुकान खुली है</b>' +
+                '<br><span style="color:#64748b;font-size:13px">' +
+                '📍 GPS Location Active | Delivery Radius: ' +
+                Number(data.radiusKm || 2) +
+                ' KM</span>';
+
+        } else {
+
+            statusElement.innerHTML =
+                '<b style="color:red">🔴 दुकान बंद है</b>' +
+                '<br><span style="color:#64748b;font-size:13px">' +
+                'दुकान खोलने पर GPS Location update होगी।</span>';
+        }
+
+    } catch (error) {
+
+        console.error("Load Shop Status:", error);
+
+        document.getElementById("shopStatus").textContent =
+            error.message || "Shop status load नहीं हुआ";
     }
 }
 
+
+// दुकान खोलना या बंद करना
+async function setShop(open) {
+
+    if (!confirm(
+        open
+            ? "दुकान खोलें? GPS location प्राप्त की जाएगी।"
+            : "दुकान बंद करें?"
+    )) {
+        return;
+    }
+
+    try {
+
+        let requestBody = {
+            shopOpen: open
+        };
+
+        // दुकान खोलने पर GPS location प्राप्त करें
+        if (open) {
+
+            document.getElementById("shopStatus").innerHTML =
+                '<b style="color:#2563eb">📍 GPS Location प्राप्त हो रही है...</b>';
+
+            const gps = await getShopGPS();
+
+            requestBody.latitude = gps.latitude;
+            requestBody.longitude = gps.longitude;
+        }
+
+        // Backend को shop status भेजें
+        const response = await fetch("/shopkeeper/api/shop-status", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            credentials: "same-origin",
+
+            body: JSON.stringify(requestBody)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            throw new Error(data.message || "Update failed");
+        }
+
+        // Updated status load करें
+        await loadShopStatus();
+
+        alert(
+            data.message ||
+            (open
+                ? "दुकान GPS location के साथ खोल दी गई"
+                : "दुकान बंद कर दी गई")
+        );
+
+    } catch (error) {
+
+        console.error("Set Shop:", error);
+
+        alert(error.message || "Shop status update नहीं हुआ");
+
+        await loadShopStatus();
+    }
+}
 // =====================================
 // LOAD SALES FOR A DATE
 // =====================================
@@ -2249,22 +2361,39 @@ router.get("/api/sales-summary", requireShopkeeper, async (req, res) => {
 // SHOP STATUS GET
 // =====================================
 
+// =====================================
+// SHOP STATUS GET — GPS
+// =====================================
+
 router.get("/api/shop-status", requireShopkeeper, async (req, res) => {
-
-    try{
-
+    try {
         const config = await GSMarketConfig.findOne().lean();
 
-        res.json({
-            success:true,
-            shopOpen:config ? config.shopOpen !== false : true
+        const hasValidLocation =
+            config &&
+            Number.isFinite(config.shopLatitude) &&
+            Number.isFinite(config.shopLongitude);
+
+        const shopOpen =
+            Boolean(config && config.shopOpen === true && hasValidLocation);
+
+        return res.json({
+            success: true,
+            shopOpen,
+            latitude: shopOpen ? config.shopLatitude : null,
+            longitude: shopOpen ? config.shopLongitude : null,
+            radiusKm: config?.serviceRadiusKm || 2,
+            locationUpdatedAt: shopOpen
+                ? config.locationUpdatedAt
+                : null
         });
 
-    }catch(error){
+    } catch (error) {
+        console.error("Shop Status GET:", error);
 
-        res.status(500).json({
-            success:false,
-            message:"Shop status load नहीं हुआ"
+        return res.status(500).json({
+            success: false,
+            message: "Shop status load नहीं हुआ"
         });
     }
 });
@@ -2272,43 +2401,98 @@ router.get("/api/shop-status", requireShopkeeper, async (req, res) => {
 // =====================================
 // SHOP STATUS UPDATE
 // =====================================
+// =====================================
+// SHOP STATUS UPDATE — SAVE GPS
+// =====================================
 
 router.post("/api/shop-status", requireShopkeeper, async (req, res) => {
+    try {
+        const { shopOpen, latitude, longitude } = req.body;
 
-    try{
-
-        const shopOpen = req.body.shopOpen;
-
-        if(typeof shopOpen !== "boolean"){
+        if (typeof shopOpen !== "boolean") {
             return res.status(400).json({
-                success:false,
-                message:"Invalid shop status"
+                success: false,
+                message: "Invalid shop status"
             });
+        }
+
+        let updateData = {};
+
+        // दुकान खोलते समय GPS जरूरी है
+        if (shopOpen === true) {
+            const lat = Number(latitude);
+            const lng = Number(longitude);
+
+            const validLatitude =
+                latitude !== undefined &&
+                latitude !== null &&
+                latitude !== "" &&
+                Number.isFinite(lat) &&
+                lat >= -90 &&
+                lat <= 90;
+
+            const validLongitude =
+                longitude !== undefined &&
+                longitude !== null &&
+                longitude !== "" &&
+                Number.isFinite(lng) &&
+                lng >= -180 &&
+                lng <= 180;
+
+            if (!validLatitude || !validLongitude) {
+                return res.status(400).json({
+                    success: false,
+                    message: "दुकान खोलने के लिए सही GPS location जरूरी है।"
+                });
+            }
+
+            updateData = {
+                shopOpen: true,
+                shopLatitude: lat,
+                shopLongitude: lng,
+                locationUpdatedAt: new Date()
+            };
+
+        } else {
+            // दुकान बंद होने पर GPS location clear होगी
+            updateData = {
+                shopOpen: false,
+                shopLatitude: null,
+                shopLongitude: null,
+                locationUpdatedAt: null
+            };
         }
 
         const config = await GSMarketConfig.findOneAndUpdate(
             {},
-            {$set:{shopOpen}},
             {
-                new:true,
-                upsert:true,
-                setDefaultsOnInsert:true,
-                runValidators:true
+                $set: updateData
+            },
+            {
+                new: true,
+                upsert: true,
+                setDefaultsOnInsert: true,
+                runValidators: true
             }
         );
 
-        res.json({
-            success:true,
-            shopOpen:config.shopOpen
+        return res.json({
+            success: true,
+            shopOpen: config.shopOpen,
+            latitude: config.shopLatitude,
+            longitude: config.shopLongitude,
+            radiusKm: config.serviceRadiusKm || 2,
+            message: config.shopOpen
+                ? "दुकान GPS location के साथ खोल दी गई"
+                : "दुकान बंद कर दी गई"
         });
 
-    }catch(error){
+    } catch (error) {
+        console.error("Shop Status Update:", error);
 
-        console.error("Shop Status Update:",error);
-
-        res.status(500).json({
-            success:false,
-            message:"Shop status update नहीं हुआ"
+        return res.status(500).json({
+            success: false,
+            message: "Shop status update नहीं हुआ"
         });
     }
 });
