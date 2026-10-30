@@ -92,6 +92,20 @@ router.get("/api/products", async (req, res) => {
 // Create order and Razorpay payment order
 router.post("/api/checkout/create", async (req, res) => {
   try {
+
+
+        // Shopkeeper ने दुकान बंद की है तो नया order न बनाएं
+    const shopConfig = await GSMarketConfig.findOne().lean();
+
+    if (shopConfig && shopConfig.shopOpen === false) {
+      return res.status(403).json({
+        success: false,
+        message: "GS Market अभी बंद है। कृपया दुकान खुलने के बाद order करें।"
+      });
+    }
+
+
+
     const { customer, items } = req.body;
 
     if (
