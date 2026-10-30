@@ -1147,6 +1147,13 @@ const shopkeeperRoutes = require("./routes/shopkeeperRoutes");
 
 app.use("/shopkeeper", shopkeeperRoutes);
 
+
+
+
+const shopkeeperRoutes = require("./routes/shopkeeperRoutes");
+
+app.use("/shopkeeper", shopkeeperRoutes);
+
 // ===============================
 // SERVER START
 // ===============================
