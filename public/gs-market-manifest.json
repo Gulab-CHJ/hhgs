@@ -1,0 +1,28 @@
+
+{
+  "id": "/shopkeeper/",
+  "name": "GS Market Shopkeeper",
+  "short_name": "GS Market",
+  "description": "GS Market Shopkeeper Order Management",
+  "start_url": "/shopkeeper/login",
+  "scope": "/shopkeeper/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f1f5f9",
+  "theme_color": "#0f172a",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "/images/gs-market-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/gs-market-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

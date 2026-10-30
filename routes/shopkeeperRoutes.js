@@ -848,6 +848,11 @@ router.get("/login", (req, res) => {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GS Market Login</title>
+
+<link rel="manifest" href="/gs-market-manifest.json">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/images/gs-market-192.png">
+
 <style>
 *{box-sizing:border-box}
 body{
@@ -881,9 +886,71 @@ border:0;border-radius:9px;font-size:16px;font-weight:bold
 <input name="username" placeholder="Shopkeeper ID" required>
 <input name="password" type="password" placeholder="Password" required>
 <button type="submit">Login</button>
+
+<button type="button" id="installApp"
+style="margin-top:12px;background:#16a34a;display:none">
+📲 Install GS Market App
+</button>
+
+<p id="installMessage" style="font-size:12px"></p>
+
 </form>
 ${req.query.error ? '<p class="error">गलत ID या Password</p>' : ""}
 </div>
+
+
+
+
+
+
+<script>
+let deferredInstallPrompt = null;
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/gs-market-sw.js", {
+        scope: "/shopkeeper/"
+    }).catch(console.error);
+}
+
+window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+
+    deferredInstallPrompt = event;
+
+    const button = document.getElementById("installApp");
+    if (button) button.style.display = "block";
+});
+
+document.getElementById("installApp").addEventListener("click", async () => {
+
+    if (!deferredInstallPrompt) {
+        document.getElementById("installMessage").textContent =
+            "Chrome Menu से Install App चुनें।";
+        return;
+    }
+
+    deferredInstallPrompt.prompt();
+
+    const result = await deferredInstallPrompt.userChoice;
+
+    if (result.outcome === "accepted") {
+        document.getElementById("installMessage").textContent =
+            "GS Market App Install हो रहा है।";
+    }
+
+    deferredInstallPrompt = null;
+    document.getElementById("installApp").style.display = "none";
+});
+
+window.addEventListener("appinstalled", () => {
+    document.getElementById("installMessage").textContent =
+        "GS Market App सफलतापूर्वक Install हो गया।";
+});
+</script>  
+
+
+
+
 </body>
 </html>
 `);
@@ -982,6 +1049,11 @@ router.get("/dashboard", requireShopkeeper, (req, res) => {
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>GS Market Shopkeeper Dashboard</title>
+
+
+<link rel="manifest" href="/gs-market-manifest.json">
+<meta name="theme-color" content="#0f172a">
+<link rel="apple-touch-icon" href="/images/gs-market-192.png">
 
 <style>
 *{box-sizing:border-box}
@@ -1342,6 +1414,15 @@ header h2{font-size:17px}
 </div>
 
 <script>
+
+
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/gs-market-sw.js", {
+        scope: "/shopkeeper/"
+    }).catch(console.error);
+}
+
 
 // =====================================
 // GLOBAL VARIABLES
