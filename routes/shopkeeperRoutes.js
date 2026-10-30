@@ -14,6 +14,11 @@ router.get("/login", (req, res) => {
     `);
 });
 
+console.log("Shopkeeper config check:", {
+    idExists: Boolean(process.env.SHOPKEEPER_ID),
+    passwordExists: Boolean(process.env.SHOPKEEPER_PASSWORD)
+});
+
 // Login Submit
 router.post("/login", (req, res) => {
     const username = String(req.body.username || "").trim();
