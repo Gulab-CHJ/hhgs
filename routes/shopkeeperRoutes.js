@@ -521,6 +521,12 @@ async function updateStatus(id,status){
         }
 
         alert("Order status updated");
+
+        // Order Shipped होते ही Alarm बंद
+if (status === "Shipped") {
+    stopAlarm();
+}
+
         loadData();
 
     }catch(error){
