@@ -773,6 +773,51 @@
     if (event.key === "Escape") closeCart();
   });
 
+
+
+
+
+// =====================================
+// CUSTOMER GPS LOCATION
+// =====================================
+
+function getCustomerGPS() {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error("आपके browser में GPS उपलब्ध नहीं है।"));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        resolve({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+      },
+      error => {
+        let message = "आपकी GPS location नहीं मिल सकी।";
+
+        if (error.code === 1) {
+          message = "Order करने के लिए Location Permission Allow करें।";
+        } else if (error.code === 2) {
+          message = "GPS location उपलब्ध नहीं है। GPS चालू करके दोबारा कोशिश करें।";
+        } else if (error.code === 3) {
+          message = "GPS timeout हुआ। कृपया दोबारा कोशिश करें।";
+        }
+
+        reject(new Error(message));
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 0
+      }
+    );
+  });
+}
+
+
   // -------------------------------
   // CHECKOUT SAFETY
   // -------------------------------

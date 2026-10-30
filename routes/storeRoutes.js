@@ -1,3 +1,4 @@
+
 const express = require("express");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
@@ -10,9 +11,16 @@ const router = express.Router();
 
 let razorpay = null;
 
+
+// =====================================
+// RAZORPAY
+// =====================================
+
 function getRazorpay() {
-  if (!process.env.RAZORPAY_KEY_ID ||
-      !process.env.RAZORPAY_KEY_SECRET) {
+  if (
+    !process.env.RAZORPAY_KEY_ID ||
+    !process.env.RAZORPAY_KEY_SECRET
+  ) {
     throw new Error("Razorpay keys are missing in .env");
   }
 
@@ -26,49 +34,120 @@ function getRazorpay() {
   return razorpay;
 }
 
+
+// =====================================
+// ORDER NUMBER
+// =====================================
+
 function makeOrderNumber() {
   return "GS" + Date.now().toString() +
     crypto.randomBytes(2).toString("hex").toUpperCase();
 }
 
 
+// =====================================
+// GPS COORDINATE VALIDATION
+// =====================================
+
+function validCoordinates(latitude, longitude) {
+  const lat = Number(latitude);
+  const lon = Number(longitude);
+
+  return (
+    latitude !== undefined &&
+    longitude !== undefined &&
+    latitude !== null &&
+    longitude !== null &&
+    Number.isFinite(lat) &&
+    Number.isFinite(lon) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lon >= -180 &&
+    lon <= 180
+  );
+}
+
 
 // =====================================
-// GS MARKET SHOP STATUS API
+// HAVERSINE DISTANCE
 // =====================================
-router.get("/api/shop-status", async (req, res) => {
-    try {
-        const config = await GSMarketConfig.findOne().lean();
 
-        // पहली बार configuration न बनी हो तो default Open
-        const shopOpen = config ? config.shopOpen : true;
+function distanceInKm(lat1, lon1, lat2, lon2) {
+  const toRadians = value => value * Math.PI / 180;
 
-        return res.json({
-            success: true,
-            shopOpen,
-            status: shopOpen ? "OPEN" : "CLOSED",
-            message: shopOpen
-                ? "GS Market अभी खुला है।"
-                : "GS Market अभी बंद है।"
-        });
-    } catch (error) {
-        console.error("GS Market status API error:", error);
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
 
-        return res.status(500).json({
-            success: false,
-            message: "Shop status database से नहीं मिल सका।"
-        });
-    }
-});
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRadians(lat1)) *
+    Math.cos(toRadians(lat2)) *
+    Math.sin(dLon / 2) ** 2;
 
-// Customer Store
+  const c = 2 * Math.atan2(
+    Math.sqrt(a),
+    Math.sqrt(1 - a)
+  );
+
+  return 6371 * c;
+}
+
+
+// =====================================
+// CUSTOMER STORE
+// =====================================
+
 router.get("/", (req, res) => {
   res.render("store/index", {
     razorpayKeyId: process.env.RAZORPAY_KEY_ID || ""
   });
 });
 
-// Products API
+
+// =====================================
+// CUSTOMER SHOP STATUS
+// =====================================
+
+router.get("/api/shop-status", async (req, res) => {
+  try {
+    const config = await GSMarketConfig.findOne().lean();
+
+    const shopOpen = Boolean(
+      config &&
+      config.shopOpen === true &&
+      Number.isFinite(config.shopLatitude) &&
+      Number.isFinite(config.shopLongitude)
+    );
+
+    const configuredRadius = Number(config?.serviceRadiusKm);
+    const radiusKm = configuredRadius > 0 ? configuredRadius : 2;
+
+    return res.json({
+      success: true,
+      shopOpen,
+      status: shopOpen ? "OPEN" : "CLOSED",
+      radiusKm,
+
+      message: shopOpen
+        ? "GS Market अभी खुला है।"
+        : "GS Market अभी बंद है।"
+    });
+
+  } catch (error) {
+    console.error("GS Market status API error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Shop status database से नहीं मिल सका।"
+    });
+  }
+});
+
+
+// =====================================
+// PRODUCTS API
+// =====================================
+
 router.get("/api/products", async (req, res) => {
   try {
     const products = await Product.find({
@@ -79,25 +158,41 @@ router.get("/api/products", async (req, res) => {
       .sort({ createdAt: -1 })
       .lean();
 
-    res.json({ success: true, products });
+    return res.json({
+      success: true,
+      products
+    });
+
   } catch (error) {
     console.error("Store products error:", error);
-    res.status(500).json({
+
+    return res.status(500).json({
       success: false,
       message: "Products load नहीं हो सके।"
     });
   }
 });
 
-// Create order and Razorpay payment order
+
+// =====================================
+// CREATE ORDER + RAZORPAY PAYMENT ORDER
+// =====================================
+
 router.post("/api/checkout/create", async (req, res) => {
   try {
 
+    // ---------------------------------
+    // CHECK SHOP STATUS AND GPS
+    // ---------------------------------
 
-        // Shopkeeper ने दुकान बंद की है तो नया order न बनाएं
     const shopConfig = await GSMarketConfig.findOne().lean();
 
-    if (shopConfig && shopConfig.shopOpen === false) {
+    if (
+      !shopConfig ||
+      shopConfig.shopOpen !== true ||
+      !Number.isFinite(shopConfig.shopLatitude) ||
+      !Number.isFinite(shopConfig.shopLongitude)
+    ) {
       return res.status(403).json({
         success: false,
         message: "GS Market अभी बंद है। कृपया दुकान खुलने के बाद order करें।"
@@ -105,8 +200,54 @@ router.post("/api/checkout/create", async (req, res) => {
     }
 
 
+    // ---------------------------------
+    // CUSTOMER GPS
+    // ---------------------------------
 
-    const { customer, items } = req.body;
+    const {
+      customer,
+      items,
+      latitude,
+      longitude
+    } = req.body;
+
+    if (!validCoordinates(latitude, longitude)) {
+      return res.status(400).json({
+        success: false,
+        message: "Order करने के लिए अपनी GPS location Allow करें।"
+      });
+    }
+
+    const customerLatitude = Number(latitude);
+    const customerLongitude = Number(longitude);
+
+    const configuredRadius = Number(shopConfig.serviceRadiusKm);
+    const serviceRadiusKm =
+      configuredRadius > 0 ? configuredRadius : 2;
+
+    const customerDistance = distanceInKm(
+      shopConfig.shopLatitude,
+      shopConfig.shopLongitude,
+      customerLatitude,
+      customerLongitude
+    );
+
+    if (customerDistance > serviceRadiusKm) {
+      return res.status(403).json({
+        success: false,
+        code: "OUTSIDE_DELIVERY_RADIUS",
+        distanceKm: Number(customerDistance.toFixed(2)),
+        radiusKm: serviceRadiusKm,
+        message:
+          `आपकी location दुकान से ${customerDistance.toFixed(2)} KM दूर है। ` +
+          `अभी केवल ${serviceRadiusKm} KM के अंदर ही delivery उपलब्ध है।`
+      });
+    }
+
+
+    // ---------------------------------
+    // CUSTOMER VALIDATION
+    // ---------------------------------
 
     if (
       !customer ||
@@ -129,6 +270,11 @@ router.post("/api/checkout/create", async (req, res) => {
       });
     }
 
+
+    // ---------------------------------
+    // CART VALIDATION
+    // ---------------------------------
+
     if (
       !Array.isArray(items) ||
       items.length === 0 ||
@@ -140,7 +286,11 @@ router.post("/api/checkout/create", async (req, res) => {
       });
     }
 
-    // Duplicate product IDs को एक quantity में जोड़ें।
+
+    // ---------------------------------
+    // MERGE DUPLICATE PRODUCT QUANTITY
+    // ---------------------------------
+
     const quantities = new Map();
 
     for (const item of items) {
@@ -159,13 +309,26 @@ router.post("/api/checkout/create", async (req, res) => {
         });
       }
 
-      quantities.set(
-        id,
-        (quantities.get(id) || 0) + quantity
-      );
+      const newQuantity =
+        (quantities.get(id) || 0) + quantity;
+
+      if (newQuantity > 20) {
+        return res.status(400).json({
+          success: false,
+          message: "एक product की अधिकतम quantity 20 हो सकती है।"
+        });
+      }
+
+      quantities.set(id, newQuantity);
     }
 
+
+    // ---------------------------------
+    // FETCH PRODUCTS
+    // ---------------------------------
+
     const ids = [...quantities.keys()];
+
     const products = await Product.find({
       _id: { $in: ids },
       active: true
@@ -177,6 +340,11 @@ router.post("/api/checkout/create", async (req, res) => {
         message: "कुछ products अब उपलब्ध नहीं हैं।"
       });
     }
+
+
+    // ---------------------------------
+    // CHECK STOCK AND CALCULATE TOTAL
+    // ---------------------------------
 
     const orderItems = [];
     let subtotal = 0;
@@ -192,7 +360,16 @@ router.post("/api/checkout/create", async (req, res) => {
       }
 
       const price = Number(product.price);
-      const lineTotal = Math.round(price * quantity * 100) / 100;
+
+      if (!Number.isFinite(price) || price < 0) {
+        return res.status(400).json({
+          success: false,
+          message: `${product.name} की कीमत सही नहीं है।`
+        });
+      }
+
+      const lineTotal =
+        Math.round(price * quantity * 100) / 100;
 
       subtotal += lineTotal;
 
@@ -210,7 +387,9 @@ router.post("/api/checkout/create", async (req, res) => {
 
     // अभी delivery charge शून्य है।
     const deliveryCharge = 0;
-    const totalAmount = subtotal + deliveryCharge;
+
+    const totalAmount =
+      Math.round((subtotal + deliveryCharge) * 100) / 100;
 
     if (totalAmount <= 0) {
       return res.status(400).json({
@@ -219,29 +398,91 @@ router.post("/api/checkout/create", async (req, res) => {
       });
     }
 
+
+    // ---------------------------------
+    // RECHECK LATEST SHOP LOCATION
+    // BEFORE CREATING ORDER
+    // ---------------------------------
+
+    const latestShopConfig =
+      await GSMarketConfig.findOne().lean();
+
+    if (
+      !latestShopConfig ||
+      latestShopConfig.shopOpen !== true ||
+      !Number.isFinite(latestShopConfig.shopLatitude) ||
+      !Number.isFinite(latestShopConfig.shopLongitude)
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "दुकान अभी बंद हो गई है। कृपया बाद में कोशिश करें।"
+      });
+    }
+
+    const latestConfiguredRadius =
+      Number(latestShopConfig.serviceRadiusKm);
+
+    const latestRadius =
+      latestConfiguredRadius > 0
+        ? latestConfiguredRadius
+        : 2;
+
+    const latestDistance = distanceInKm(
+      latestShopConfig.shopLatitude,
+      latestShopConfig.shopLongitude,
+      customerLatitude,
+      customerLongitude
+    );
+
+    if (latestDistance > latestRadius) {
+      return res.status(403).json({
+        success: false,
+        code: "OUTSIDE_DELIVERY_RADIUS",
+        distanceKm: Number(latestDistance.toFixed(2)),
+        radiusKm: latestRadius,
+        message:
+          "दुकान की delivery location बदल गई है। आपकी location अब delivery radius से बाहर है।"
+      });
+    }
+
+
+    // ---------------------------------
+    // CREATE DATABASE ORDER
+    // ---------------------------------
+
     const orderNumber = makeOrderNumber();
 
     const dbOrder = await Order.create({
       orderNumber,
+
       customer: {
         name: String(customer.name).trim().slice(0, 100),
         phone,
         address: String(customer.address).trim().slice(0, 1000)
       },
+
       items: orderItems,
+
       subtotal,
       deliveryCharge,
       totalAmount,
+
       paymentMethod: "Razorpay",
       paymentStatus: "Pending",
       orderStatus: "Pending"
     });
+
+
+    // ---------------------------------
+    // CREATE RAZORPAY ORDER
+    // ---------------------------------
 
     try {
       const paymentOrder = await getRazorpay().orders.create({
         amount: Math.round(totalAmount * 100),
         currency: "INR",
         receipt: orderNumber,
+
         notes: {
           databaseOrderId: String(dbOrder._id),
           orderNumber
@@ -249,6 +490,7 @@ router.post("/api/checkout/create", async (req, res) => {
       });
 
       dbOrder.razorpayOrderId = paymentOrder.id;
+
       await dbOrder.save();
 
       return res.json({
@@ -261,27 +503,35 @@ router.post("/api/checkout/create", async (req, res) => {
         customerName: dbOrder.customer.name,
         customerPhone: dbOrder.customer.phone
       });
+
     } catch (paymentError) {
       console.error("Razorpay create order error:", paymentError);
 
-      await Order.deleteOne({ _id: dbOrder._id });
+      await Order.deleteOne({
+        _id: dbOrder._id
+      });
 
       return res.status(502).json({
         success: false,
         message: "Payment शुरू नहीं हो पाया। कुछ देर बाद दोबारा कोशिश करें।"
       });
     }
+
   } catch (error) {
     console.error("Checkout create error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Order बनाने में समस्या हुई।"
     });
   }
 });
 
-// Verify Razorpay payment signature
+
+// =====================================
+// VERIFY RAZORPAY PAYMENT
+// =====================================
+
 router.post("/api/checkout/verify", async (req, res) => {
   try {
     const {
@@ -326,7 +576,11 @@ router.post("/api/checkout/verify", async (req, res) => {
       .update(`${razorpay_order_id}|${razorpay_payment_id}`)
       .digest("hex");
 
-    const signatureBuffer = Buffer.from(expectedSignature, "utf8");
+    const signatureBuffer = Buffer.from(
+      expectedSignature,
+      "utf8"
+    );
+
     const receivedBuffer = Buffer.from(
       String(razorpay_signature),
       "utf8"
@@ -334,7 +588,10 @@ router.post("/api/checkout/verify", async (req, res) => {
 
     const validSignature =
       signatureBuffer.length === receivedBuffer.length &&
-      crypto.timingSafeEqual(signatureBuffer, receivedBuffer);
+      crypto.timingSafeEqual(
+        signatureBuffer,
+        receivedBuffer
+      );
 
     if (!validSignature) {
       order.paymentStatus = "Failed";
@@ -346,7 +603,11 @@ router.post("/api/checkout/verify", async (req, res) => {
       });
     }
 
-    // Check payment with Razorpay server before confirming.
+
+    // ---------------------------------
+    // VERIFY PAYMENT WITH RAZORPAY
+    // ---------------------------------
+
     const payment = await getRazorpay().payments.fetch(
       razorpay_payment_id
     );
@@ -363,9 +624,11 @@ router.post("/api/checkout/verify", async (req, res) => {
       });
     }
 
-    // Decrease inventory only after verified captured payment.
-    // A stock conflict is flagged for admin review; payment is not
-    // falsely reported as unpaid after money has been captured.
+
+    // ---------------------------------
+    // DECREASE INVENTORY AFTER PAYMENT
+    // ---------------------------------
+
     let inventoryIssue = false;
 
     for (const item of order.items) {
@@ -376,7 +639,9 @@ router.post("/api/checkout/verify", async (req, res) => {
           stock: { $gte: item.quantity }
         },
         {
-          $inc: { stock: -item.quantity }
+          $inc: {
+            stock: -item.quantity
+          }
         }
       );
 
@@ -388,21 +653,27 @@ router.post("/api/checkout/verify", async (req, res) => {
     order.paymentStatus = "Paid";
     order.razorpayPaymentId = razorpay_payment_id;
     order.razorpaySignature = razorpay_signature;
-    order.orderStatus = inventoryIssue ? "Pending" : "Confirmed";
+
+    order.orderStatus = inventoryIssue
+      ? "Pending"
+      : "Confirmed";
 
     await order.save();
 
-    res.json({
+    return res.json({
       success: true,
+
       message: inventoryIssue
         ? "Payment सफल है। Stock की पुष्टि के लिए support से संपर्क करें।"
         : "Payment सफल! आपका order confirm हो गया है।",
+
       orderNumber: order.orderNumber
     });
+
   } catch (error) {
     console.error("Payment verify error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Payment verification में समस्या हुई। यदि पैसे कटे हैं तो दोबारा भुगतान न करें; order status जाँचें।"
     });
