@@ -16,21 +16,28 @@ router.get("/login", (req, res) => {
 
 // Login Submit
 router.post("/login", (req, res) => {
-    const { username, password } = req.body;
+    const username = String(req.body.username || "").trim();
+    const password = String(req.body.password || "");
 
-    if (
-        username === process.env.SHOPKEEPER_ID &&
-        password === process.env.SHOPKEEPER_PASSWORD
-    ) {
-        if (req.session) {
-            req.session.shopkeeperLoggedIn = true;
-            return res.redirect("/shopkeeper/dashboard");
-        }
+    const correctUsername = process.env.SHOPKEEPER_ID;
+    const correctPassword = process.env.SHOPKEEPER_PASSWORD;
 
-        return res.status(500).send("Session configuration missing.");
+    if (!correctUsername || !correctPassword) {
+        console.error("Shopkeeper credentials missing in .env");
+        return res.status(500).send("Shopkeeper Login configuration missing.");
     }
 
-    res.status(401).send(
+    if (
+        username === correctUsername &&
+        password === correctPassword
+    ) {
+        req.session.shopkeeperLoggedIn = true;
+        return res.redirect("/shopkeeper/dashboard");
+    }
+
+    console.log("Shopkeeper login failed");
+
+    return res.status(401).send(
         'Invalid Login ID or Password. <a href="/shopkeeper/login">Try again</a>'
     );
 });
