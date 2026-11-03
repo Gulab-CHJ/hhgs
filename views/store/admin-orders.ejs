@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GS Market - Customer Orders</title>
+  <link rel="stylesheet" href="/css/store.css">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 12px;
+      background: #f3f6f4;
+      color: #1d3027;
+      font-family: Arial, sans-serif;
+    }
+
+    .orders-wrap {
+      max-width: 1800px;
+      margin: auto;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid #dfe8e2;
+      border-radius: 12px;
+      padding: 12px 15px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 21px;
+      margin: 0;
+    }
+
+    .toolbar-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    a { color: #176b50; }
+
+    .sound-btn, .refresh-btn {
+      border: 0;
+      border-radius: 7px;
+      padding: 8px 11px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .sound-btn { background: #176b50; color: white; }
+    .refresh-btn { background: #e6eee9; color: #234a38; }
+
+    .summary {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+
+    .summary span {
+      background: white;
+      border: 1px solid #e0e8e3;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    #newOrderNotice {
+      display: none;
+      padding: 10px 13px;
+      margin: 10px 0;
+      border-radius: 9px;
+      background: #fff3cd;
+      color: #654d00;
+      font-weight: bold;
+    }
+
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+      gap: 10px;
+      align-items: start;
+    }
+
+    .order-card {
+      min-width: 0;
+      background: white;
+      border: 1px solid #dce6df;
+      border-radius: 11px;
+      padding: 12px;
+      box-shadow: 0 2px 6px #142b1b0a;
+      overflow-wrap: anywhere;
+    }
+
+    .order-card.new-order {
+      border: 2px solid #e29b13;
+      animation: newOrderPulse 1s ease-in-out 3;
+    }
+
+    @keyframes newOrderPulse {
+      0%, 100% { box-shadow: 0 0 0 0 #f5b82e00; }
+      50% { box-shadow: 0 0 0 5px #f5b82e55; }
+    }
+
+    .order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .order-top h2 {
+      margin: 0;
+      font-size: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .order-status {
+      display: inline-block;
+      padding: 4px 7px;
+      border-radius: 6px;
+      background: #e9f3ed;
+      color: #176b50;
+      font-size: 11px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .order-meta {
+      color: #52645a;
+      font-size: 12px;
+      line-height: 1.55;
+      margin: 9px 0;
+    }
+
+    .order-meta strong { color: #203c2d; }
+
+    .order-items {
+      margin: 5px 0;
+      padding-left: 18px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .amounts {
+      border-top: 1px solid #edf0ed;
+      margin-top: 8px;
+      padding-top: 7px;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .total {
+      color: #176b50;
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .status-form {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .status-form select {
+      flex: 1;
+      min-width: 0;
+      padding: 8px 5px;
+      border: 1px solid #d5e0d8;
+      border-radius: 7px;
+      background: white;
+      font-size: 12px;
+    }
+
+    .status-form button {
+      border: 0;
+      border-radius: 7px;
+      padding: 8px 10px;
+      background: #176b50;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .empty {
+      padding: 25px;
+      background: white;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    #lastUpdated {
+      color: #66776c;
+      font-size: 11px;
+    }
+
+    .bill-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .bill-btn {
+      display: inline-block;
+      padding: 8px 10px;
+      border-radius: 7px;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .pdf-btn {
+      background: #dc2626;
+      color: #fff;
+    }
+
+    .print-btn {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .bill-btn:hover {
+      opacity: .88;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 7px; }
+
+      .orders-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+      }
+
+      .order-card { padding: 9px; }
+      .order-top h2 { font-size: 13px; }
+      .order-meta { font-size: 11px; }
+
+      .status-form {
+        flex-direction: column;
+      }
+
+      .status-form button {
+        width: 100%;
+      }
+
+      h1 { font-size: 18px; }
+
+      .bill-actions {
+        flex-direction: column;
+      }
+
+      .bill-btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .orders-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .new-order { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="orders-wrap">
+
+  <header class="toolbar">
+    <h1>GS Market — Customer Orders</h1>
+
+    <div class="toolbar-links">
+      <a href="/admin/market/products">Manage Products</a>
+      <a href="/market">Open Store</a>
+
+      <button type="button" class="sound-btn" id="soundToggle">
+        🔔 Sound: ON
+      </button>
+
+      <button type="button" class="refresh-btn" id="refreshNow">
+        ↻ Refresh
+      </button>
+    </div>
+  </header>
+
+  <% if (message) { %>
+    <p role="status"><%= message %></p>
+  <% } %>
+
+  <div class="summary">
+    <span>Total orders: <strong id="totalOrders"><%= orders.length %></strong></span>
+
+    <span>
+      Pending:
+      <strong id="pendingOrders">
+        <%= orders.filter(o => String(o.orderStatus || "").toLowerCase() === "pending").length %>
+      </strong>
+    </span>
+
+    <span>
+      Paid:
+      <strong id="paidOrders">
+        <%= orders.filter(o => String(o.paymentStatus || "").toLowerCase() === "paid").length %>
+      </strong>
+    </span>
+
+    <span id="lastUpdated">Page loaded</span>
+  </div>
+
+  <div id="newOrderNotice" role="status" aria-live="polite"></div>
+
+  <% if (!orders.length) { %>
+    <div class="empty" id="emptyOrders">
+      अभी कोई customer order नहीं आया है।
+    </div>
+  <% } %>
+
+  <main class="orders-grid" id="ordersGrid">
+
+    <% orders.forEach(order => { %>
+
+      <section class="order-card" data-order-id="<%= order._id %>">
+
+        <div class="order-top">
+          <h2>Order #<%= order.orderNumber || order._id %></h2>
+          <span class="order-status"><%= order.orderStatus || "Pending" %></span>
+        </div>
+
+        <div class="order-meta">
+
+          <div>
+            Date:
+            <%= order.createdAt
+              ? new Date(order.createdAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+              : "N/A" %>
+          </div>
+
+          <div>
+            Customer:
+            <strong><%= order.customer?.name || "N/A" %></strong>
+          </div>
+
+          <div>Mobile: <%= order.customer?.phone || "N/A" %></div>
+          <div>Address: <%= order.customer?.address || "N/A" %></div>
+
+          <div>
+            Payment:
+            <strong><%= order.paymentStatus || "Unknown" %></strong>
+          </div>
+
+          <div>Method: <%= order.paymentMethod || "N/A" %></div>
+
+          <div>
+            Payment ID:
+            <%= order.razorpayPaymentId || "Not paid yet" %>
+          </div>
+
+        </div>
+
+        <strong style="font-size:12px">Products</strong>
+
+        <ul class="order-items">
+          <% (order.items || []).forEach(item => { %>
+            <li>
+              <%= item.name %> × <%= item.quantity %>
+              — ₹<%= Number(item.subtotal || 0).toFixed(2) %>
+            </li>
+          <% }) %>
+        </ul>
+
+        <div class="amounts">
+          <div>Subtotal: ₹<%= Number(order.subtotal || 0).toFixed(2) %></div>
+          <div>Delivery: ₹<%= Number(order.deliveryCharge || 0).toFixed(2) %></div>
+          <div class="total">Total: ₹<%= Number(order.totalAmount || 0).toFixed(2) %></div>
+        </div>
+
+        <div class="bill-actions">
+
+          <a
+            href="/admin/market/orders/<%= order._id %>/bill.pdf"
+            class="bill-btn pdf-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            📄 Download PDF Bill
+          </a>
+
+          <a
+            href="/admin/market/orders/<%= order._id %>/bill/print"
+            class="bill-btn print-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            🖨️ Print Bill
+          </a>
+
+        </div>
+
+        <form
+          class="status-form"
+          action="/admin/market/orders/status/<%= order._id %>"
+          method="POST"
+        >
+
+          <select name="orderStatus" aria-label="Order status">
+
+            <% ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"].forEach(status => { %>
+
+              <option
+                value="<%= status %>"
+                <%= order.orderStatus === status ? "selected" : "" %>
+              >
+                <%= status %>
+              </option>
+
+            <% }) %>
+
+          </select>
+
+          <button type="submit">Update Status</button>
+
+        </form>
+
+      </section>
+
+    <% }) %>
+
+  </main>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // =========================
+  // CONFIGURATION
+  // =========================
+
+  const REFRESH_MS = 5000;
+  const ALARM_REPEAT_MS = 1500;
+
+  const SOUND_KEY = "hhgs_market_order_sound_enabled_v1";
+  const SEEN_KEY = "hhgs_market_seen_order_ids_v1";
+
+  // =========================
+  // ELEMENTS
+  // =========================
+
+  const soundButton = document.getElementById("soundToggle");
+  const refreshButton = document.getElementById("refreshNow");
+  const grid = document.getElementById("ordersGrid");
+  const notice = document.getElementById("newOrderNotice");
+  const lastUpdated = document.getElementById("lastUpdated");
+
+  const totalOrdersElement = document.getElementById("totalOrders");
+  const pendingOrdersElement = document.getElementById("pendingOrders");
+  const paidOrdersElement = document.getElementById("paidOrders");
+
+  // =========================
+  // STATE
+  // =========================
+
+  let soundEnabled =
+    localStorage.getItem(SOUND_KEY) !== "false";
+
+  let audioContext = null;
+  let refreshing = false;
+  let alarmTimer = null;
+
+  let latestOrders = [];
+
+  // New Paid Orders that arrived during this session
+  const alarmOrderIds = new Set();
+
+  // Orders present when the page first loaded
+  let knownIds = new Set(
+    Array.from(
+      grid.querySelectorAll("[data-order-id]")
+    ).map(card => String(card.dataset.orderId))
+  );
+
+  // =========================
+  // SEEN ORDER IDS
+  // =========================
+
+  function getSeenIds() {
+    try {
+      return new Set(
+        JSON.parse(
+          sessionStorage.getItem(SEEN_KEY) || "[]"
+        ).map(String)
+      );
+    } catch {
+      return new Set();
+    }
+  }
+
+  let seenIds = getSeenIds();
+
+  // Current page's existing orders are not new orders.
+  knownIds.forEach(id => seenIds.add(id));
+
+  saveSeenIds();
+
+  function saveSeenIds() {
+    try {
+      sessionStorage.setItem(
+        SEEN_KEY,
+        JSON.stringify([...seenIds].slice(-1000))
+      );
+    } catch (error) {
+      console.warn("Could not save seen order IDs:", error);
+    }
+  }
+
+  // =========================
+  // SOUND BUTTON
+  // =========================
+
+  function updateSoundButton() {
+    soundButton.textContent = soundEnabled
+      ? "🔔 Sound: ON"
+      : "🔕 Sound: OFF";
+
+    soundButton.setAttribute(
+      "aria-pressed",
+      String(soundEnabled)
+    );
+  }
+
+  // =========================
+  // AUDIO
+  // =========================
+
+  async function enableAudio() {
+    const AudioCtx =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioCtx) {
+      console.warn("This browser does not support Web Audio.");
+      return false;
+    }
+
+    try {
+      if (!audioContext) {
+        audioContext = new AudioCtx();
+      }
+
+      if (audioContext.state === "suspended") {
+        await audioContext.resume();
+      }
+
+      return audioContext.state === "running";
+
+    } catch (error) {
+      console.warn("Could not enable audio:", error);
+      return false;
+    }
+  }
+
+  // =========================
+  // ALARM SOUND
+  // =========================
+
+  function playAlarmTone() {
+    if (
+      !soundEnabled ||
+      !audioContext ||
+      audioContext.state !== "running"
+    ) {
+      return;
+    }
+
+    try {
+      const now = audioContext.currentTime;
+
+      const oscillator = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+
+      oscillator.type = "square";
+
+      oscillator.frequency.setValueAtTime(
+        1250,
+        now
+      );
+
+      oscillator.frequency.setValueAtTime(
+        1650,
+        now + 0.16
+      );
+
+      oscillator.frequency.setValueAtTime(
+        1250,
+        now + 0.32
+      );
+
+      gain.gain.setValueAtTime(
+        0.0001,
+        now
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.35,
+        now + 0.025
+      );
+
+      gain.gain.setValueAtTime(
+        0.35,
+        now + 0.42
+      );
+
+      gain.gain.exponentialRampToValueAtTime(
+        0.0001,
+        now + 0.48
+      );
+
+      oscillator.connect(gain);
+      gain.connect(audioContext.destination);
+
+      oscillator.start(now);
+      oscillator.stop(now + 0.49);
+
+    } catch (error) {
+      console.warn("Market alarm error:", error);
+    }
+  }
+
+  // =========================
+  // START / STOP ALARM
+  // =========================
+
+  function startMarketAlarm() {
+    if (!soundEnabled || alarmTimer) {
+      return;
+    }
+
+    // First alarm immediately
+    playAlarmTone();
+
+    // Repeat alarm
+    alarmTimer = setInterval(() => {
+      playAlarmTone();
+    }, ALARM_REPEAT_MS);
+  }
+
+  function stopMarketAlarm() {
+    if (alarmTimer) {
+      clearInterval(alarmTimer);
+      alarmTimer = null;
+    }
+  }
+
+  // =========================
+  // SYNC ALARM
+  // =========================
+
+  function syncMarketAlarm() {
+    /*
+      Alarm Queue में केवल नए Paid Orders आते हैं।
+      Confirmed Order होने पर भी Alarm बजेगा।
+    */
+
+    if (
+      alarmOrderIds.size > 0 &&
+      soundEnabled
+    ) {
+      startMarketAlarm();
+    } else {
+      stopMarketAlarm();
+    }
+  }
+
+  // =========================
+  // SOUND ON / OFF
+  // =========================
+
+  soundButton.addEventListener("click", async () => {
+
+    soundEnabled = !soundEnabled;
+
+    localStorage.setItem(
+      SOUND_KEY,
+      String(soundEnabled)
+    );
+
+    updateSoundButton();
+
+    if (soundEnabled) {
+
+      // User interaction enables browser audio
+      const enabled = await enableAudio();
+
+      if (enabled) {
+
+        syncMarketAlarm();
+
+        // If there is no queued order, play test sound
+        if (alarmOrderIds.size === 0) {
+          playAlarmTone();
+        }
+
+      } else {
+
+        notice.textContent =
+          "Browser में Sound अनुमति नहीं मिली। Sound ON बटन फिर दबाएँ।";
+
+        notice.style.display = "block";
+      }
+
+    } else {
+
+      // Sound OFF: stop alarm and clear queue
+      stopMarketAlarm();
+
+      alarmOrderIds.clear();
+
+      notice.textContent =
+        "🔕 Alarm बंद कर दिया गया है।";
+
+      notice.style.display = "block";
+    }
+
+  });
+
+  // =========================
+  // FIRST USER CLICK
+  // =========================
+
+  document.addEventListener(
+    "click",
+    async () => {
+      if (soundEnabled) {
+        await enableAudio();
+        syncMarketAlarm();
+      }
+    },
+    { once: true }
+  );
+
+  // =========================
+  // MANUAL REFRESH
+  // =========================
+
+  refreshButton.addEventListener("click", () => {
+    refreshOrders(true);
+  });
+
+  // =========================
+  // HTML ESCAPING
+  // =========================
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(
+      /[&<>"']/g,
+      char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]
+    );
+  }
+
+  // =========================
+  // MONEY
+  // =========================
+
+  function money(value) {
+    const number = Number(value || 0);
+
+    return Number.isFinite(number)
+      ? number.toFixed(2)
+      : "0.00";
+  }
+
+  // =========================
+  // DATE
+  // =========================
+
+  function dateText(value) {
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime())
+      ? "N/A"
+      : date.toLocaleString("en-IN", {
+          timeZone: "Asia/Kolkata"
+        });
+  }
+
+  // =========================
+  // RENDER ORDER
+  // =========================
+
+  function renderOrder(order, isNew) {
+
+    const id = escapeHtml(order._id);
+
+    const orderNumber = escapeHtml(
+      order.orderNumber || order._id
+    );
+
+    const customer = order.customer || {};
+
+    const statuses = [
+      "Pending",
+      "Confirmed",
+      "Shipped",
+      "Delivered",
+      "Cancelled"
+    ];
+
+    const items = Array.isArray(order.items)
+      ? order.items
+      : [];
+
+    const itemHtml = items.map(item => `
+      <li>
+        ${escapeHtml(item.name)}
+        × ${escapeHtml(item.quantity)}
+        — ₹${money(item.subtotal)}
+      </li>
+    `).join("");
+
+    const options = statuses.map(status => `
+      <option
+        value="${status}"
+        ${String(order.orderStatus || "") === status ? "selected" : ""}
+      >
+        ${status}
+      </option>
+    `).join("");
+
+    return `
+      <section
+        class="order-card ${isNew ? "new-order" : ""}"
+        data-order-id="${id}"
+      >
+
+        <div class="order-top">
+
+          <h2>Order #${orderNumber}</h2>
+
+          <span class="order-status">
+            ${escapeHtml(order.orderStatus || "Pending")}
+          </span>
+
+        </div>
+
+        <div class="order-meta">
+
+          <div>
+            Date:
+            ${escapeHtml(dateText(order.createdAt))}
+          </div>
+
+          <div>
+            Customer:
+            <strong>
+              ${escapeHtml(customer.name || "N/A")}
+            </strong>
+          </div>
+
+          <div>
+            Mobile:
+            ${escapeHtml(customer.phone || "N/A")}
+          </div>
+
+          <div>
+            Address:
+            ${escapeHtml(customer.address || "N/A")}
+          </div>
+
+          <div>
+            Payment:
+            <strong>
+              ${escapeHtml(order.paymentStatus || "Unknown")}
+            </strong>
+          </div>
+
+          <div>
+            Method:
+            ${escapeHtml(order.paymentMethod || "N/A")}
+          </div>
+
+          <div>
+            Payment ID:
+            ${escapeHtml(order.razorpayPaymentId || "Not paid yet")}
+          </div>
+
+        </div>
+
+        <strong style="font-size:12px">Products</strong>
+
+        <ul class="order-items">
+          ${itemHtml}
+        </ul>
+
+        <div class="amounts">
+
+          <div>
+            Subtotal: ₹${money(order.subtotal)}
+          </div>
+
+          <div>
+            Delivery: ₹${money(order.deliveryCharge)}
+          </div>
+
+          <div class="total">
+            Total: ₹${money(order.totalAmount)}
+          </div>
+
+        </div>
+
+        <div class="bill-actions">
+
+          <a
+            href="/admin/market/orders/${id}/bill.pdf"
+            class="bill-btn pdf-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            📄 Download PDF Bill
+          </a>
+
+          <a
+            href="/admin/market/orders/${id}/bill/print"
+            class="bill-btn print-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            🖨️ Print Bill
+          </a>
+
+        </div>
+
+        <form
+          class="status-form"
+          action="/admin/market/orders/status/${id}"
+          method="POST"
+        >
+
+          <select
+            name="orderStatus"
+            aria-label="Order status"
+          >
+            ${options}
+          </select>
+
+          <button type="submit">
+            Update Status
+          </button>
+
+        </form>
+
+      </section>
+    `;
+  }
+
+  // =========================
+  // REFRESH ORDERS
+  // =========================
+
+  async function refreshOrders(manual = false) {
+
+    if (refreshing) {
+      return;
+    }
+
+    refreshing = true;
+
+    try {
+
+      const response = await fetch(
+        "/admin/market/orders/data",
+        {
+          method: "GET",
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: {
+            "Accept": "application/json"
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Orders API returned HTTP " +
+          response.status
+        );
+      }
+
+      const contentType =
+        response.headers.get("content-type") || "";
+
+      if (!contentType.includes("application/json")) {
+        throw new Error(
+          "Orders API did not return JSON. Check admin login or API route."
+        );
+      }
+
+      const data = await response.json();
+
+      if (
+        !data.success ||
+        !Array.isArray(data.orders)
+      ) {
+        throw new Error(
+          "Invalid orders API response"
+        );
+      }
+
+      const orders = data.orders;
+
+      // =========================
+      // FIND NEW ORDERS
+      // =========================
+
+      const currentIds = new Set(
+        orders.map(order => String(order._id))
+      );
+
+      const newOrders = orders.filter(order => {
+        const id = String(order._id);
+
+        return (
+          !knownIds.has(id) &&
+          !seenIds.has(id)
+        );
+      });
+
+      // =========================
+      // ADD NEW PAID ORDERS
+      // =========================
+
+      const newPaidOrders = newOrders.filter(order => {
+        return String(
+          order.paymentStatus || ""
+        ).trim().toLowerCase() === "paid";
+      });
+
+      newPaidOrders.forEach(order => {
+        alarmOrderIds.add(String(order._id));
+      });
+
+      // =========================
+      // RENDER ORDER CARDS
+      // =========================
+
+      grid.innerHTML = orders.map(order => {
+
+        const id = String(order._id);
+
+        const isNew = newOrders.some(
+          item => String(item._id) === id
+        );
+
+        return renderOrder(order, isNew);
+
+      }).join("");
+
+      // =========================
+      // UPDATE SUMMARY
+      // =========================
+
+      totalOrdersElement.textContent =
+        String(orders.length);
+
+      pendingOrdersElement.textContent =
+        String(
+          orders.filter(order =>
+            String(order.orderStatus || "")
+              .toLowerCase() === "pending"
+          ).length
+        );
+
+      paidOrdersElement.textContent =
+        String(
+          orders.filter(order =>
+            String(order.paymentStatus || "")
+              .toLowerCase() === "paid"
+          ).length
+        );
+
+      // =========================
+      // EMPTY MESSAGE
+      // =========================
+
+      const empty = document.getElementById(
+        "emptyOrders"
+      );
+
+      if (empty) {
+        empty.style.display = orders.length
+          ? "none"
+          : "block";
+      }
+
+      // =========================
+      // NOTIFICATION
+      // =========================
+
+      if (newPaidOrders.length > 0) {
+
+        notice.textContent =
+          `🔔 ${newPaidOrders.length} नया Paid Market Order आया है!`;
+
+        notice.style.display = "block";
+
+      } else if (manual) {
+
+        notice.textContent =
+          "Orders refresh हो गए। कोई नया Paid Order नहीं है।";
+
+        notice.style.display = "block";
+
+      }
+
+      // =========================
+      // SAVE SEEN ORDER IDS
+      // =========================
+
+      newOrders.forEach(order => {
+        seenIds.add(String(order._id));
+      });
+
+      saveSeenIds();
+
+      // =========================
+      // UPDATE KNOWN IDS
+      // =========================
+
+      knownIds = currentIds;
+
+      // =========================
+      // UPDATE ALARM
+      // =========================
+
+      latestOrders = orders;
+
+      syncMarketAlarm();
+
+      // =========================
+      // UPDATE LAST CHECK TIME
+      // =========================
+
+      lastUpdated.textContent =
+        "Last checked: " +
+        new Date().toLocaleTimeString("en-IN");
+
+    } catch (error) {
+
+      console.error(
+        "Market order auto-refresh error:",
+        error
+      );
+
+      lastUpdated.textContent =
+        "Refresh failed — retrying";
+
+    } finally {
+
+      refreshing = false;
+
+    }
+  }
+
+  // =========================
+  // INITIALIZE
+  // =========================
+
+  updateSoundButton();
+
+  // Auto-refresh every 5 seconds
+  setInterval(() => {
+    refreshOrders(false);
+  }, REFRESH_MS);
+
+  // First refresh immediately
+  refreshOrders(false);
+
+  lastUpdated.textContent =
+    "Auto-refresh: हर 5 सेकंड";
+
+})();
+</script>
+
+</body>
+</html>

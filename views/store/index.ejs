@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5146ee">
+  <meta name="description" content="GS Market by HHGS23 — shop your favourite products.">
+
+  <title>GS Market | HHGS23</title>
+
+  <!-- External CSS only -->
+  <link rel="stylesheet" href="/css/store.css">
+
+  <!-- Razorpay checkout -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="market-sidebar">
+    <a href="/market" class="market-logo">
+      <span class="market-logo-icon">🏪</span>
+      <strong>GS Market</strong>
+    </a>
+
+    <nav id="sideCategories"
+         class="market-categories"
+         aria-label="Product categories">
+
+      <button type="button"
+              class="category-item active"
+              data-category="all">
+        <span class="category-icon">▦</span>
+        <span>All Items</span>
+      </button>
+
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="market-main">
+
+    <!-- HEADER -->
+    <header class="store-header">
+
+      <a href="/market" class="store-brand">
+        <strong>GS Market</strong>
+        <small>Quick Shop · HHGS23</small>
+      </a>
+
+      <label class="search-box">
+        <span aria-hidden="true">⌕</span>
+
+        <input
+          id="productSearch"
+          type="search"
+          placeholder="Search products..."
+          autocomplete="off"
+          aria-label="Search products"
+        >
+      </label>
+
+      <button type="button" id="openCart" class="cart-open">
+        🛒 Cart
+        <span id="cartCount">0</span>
+      </button>
+
+    </header>
+
+    <!-- STORE CONTENT -->
+    <main class="store-container">
+
+      <!-- SHOP STATUS -->
+      <div
+        id="shopStatusBar"
+        class="shop-status-bar shop-closed"
+        role="status"
+        aria-live="polite"
+      >
+        <span class="shop-status-dot"></span>
+
+        <div>
+          <strong id="shopStatusTitle">SHOP CLOSED</strong>
+
+          <p id="shopStatusText">
+            दुकान का status चेक किया जा रहा है...
+          </p>
+        </div>
+      </div>
+
+      <!-- HERO -->
+      <section class="store-hero">
+
+        <div>
+          <span class="eyebrow">WELCOME TO GS MARKET</span>
+
+          <h1>Discover Products You'll Love</h1>
+
+          <p>Great finds, great prices, easy shopping.</p>
+        </div>
+
+        <div class="hero-symbol" aria-hidden="true">🛍️</div>
+
+      </section>
+
+      <!-- PRODUCT HEADING -->
+      <div class="section-heading">
+
+        <div>
+          <h2>Explore Products</h2>
+          <p>आपके लिए चुने गए products</p>
+        </div>
+
+        <select id="categoryFilter" aria-label="Filter category">
+          <option value="all">All Categories</option>
+        </select>
+
+      </div>
+
+      <!-- MESSAGES -->
+      <p
+        id="storeMessage"
+        class="store-message"
+        role="status"
+        aria-live="polite"
+      >
+        Products लोड हो रहे हैं...
+      </p>
+
+      <!-- PRODUCTS -->
+      <section
+        id="productGrid"
+        class="product-grid"
+        aria-label="Products"
+      ></section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="store-footer">
+      © <span id="currentYear"></span>
+      GS Market · Powered by HHGS23
+    </footer>
+
+  </div>
+
+  <!-- BOTTOM CART -->
+  <div class="market-cart-bar" id="bottomCartBar">
+
+    <div class="market-cart-icon" aria-hidden="true">🛒</div>
+
+    <div class="market-cart-info">
+      <strong id="bottomCartStatus">CART IS EMPTY</strong>
+      <span id="bottomCartTotal">₹0</span>
+    </div>
+
+    <button type="button" id="bottomViewCart">
+      VIEW CART →
+    </button>
+
+  </div>
+
+  <!-- CART OVERLAY -->
+  <div id="cartOverlay" class="cart-overlay"></div>
+
+  <!-- CART DRAWER -->
+  <aside
+    id="cartDrawer"
+    class="cart-drawer"
+    aria-label="Shopping cart"
+    aria-hidden="true"
+  >
+
+    <div class="cart-heading">
+
+      <div>
+        <h2>Your Cart</h2>
+        <p>Review your items before checkout</p>
+      </div>
+
+      <button
+        type="button"
+        id="closeCart"
+        class="icon-button"
+        aria-label="Close cart"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <!-- CART ITEMS -->
+    <div id="cartItems" class="cart-items"></div>
+
+    <!-- TOTALS -->
+    <div class="cart-summary">
+
+      <div>
+        <span>Subtotal</span>
+        <strong id="cartSubtotal">₹0</strong>
+      </div>
+
+      <div>
+        <span>Delivery</span>
+        <strong id="cartDelivery">₹0</strong>
+      </div>
+
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">₹0</strong>
+      </div>
+
+    </div>
+
+    <!-- CHECKOUT -->
+    <form id="checkoutForm" class="checkout-form">
+
+      <h3>Delivery Details</h3>
+
+      <label for="customerName">पूरा नाम</label>
+
+      <input
+        id="customerName"
+        name="name"
+        type="text"
+        required
+        maxlength="100"
+        autocomplete="name"
+        placeholder="अपना नाम लिखें"
+      >
+
+      <label for="customerPhone">मोबाइल नंबर</label>
+
+      <input
+        id="customerPhone"
+        name="phone"
+        type="tel"
+        inputmode="numeric"
+        pattern="[0-9]{10}"
+        minlength="10"
+        maxlength="10"
+        required
+        autocomplete="tel"
+        placeholder="10 अंकों का नंबर"
+      >
+
+      <label for="customerAddress">पूरा पता</label>
+
+      <textarea
+        id="customerAddress"
+        name="address"
+        required
+        maxlength="1000"
+        autocomplete="street-address"
+        placeholder="घर, मोहल्ला, शहर, राज्य और PIN Code"
+      ></textarea>
+
+      <button
+        type="submit"
+        id="payButton"
+        class="primary-button"
+        disabled
+      >
+        Shop status checking...
+      </button>
+
+      <p class="secure-note">
+        🔒 Secure payment powered by Razorpay
+      </p>
+
+      <p
+        id="checkoutMessage"
+        class="checkout-message"
+        role="status"
+        aria-live="polite"
+      ></p>
+
+    </form>
+
+  </aside>
+
+  <!-- CONFIGURATION -->
+  <script>
+    window.GS_MARKET_CONFIG = {
+      razorpayKeyId: ""
+    };
+
+    document.getElementById("currentYear").textContent =
+      new Date().getFullYear();
+  </script>
+
+  <!-- CART DRAWER CONTROLS -->
+  <script>
+    (() => {
+      const drawer = document.getElementById("cartDrawer");
+      const overlay = document.getElementById("cartOverlay");
+
+      function openCartDrawer() {
+        drawer.classList.add("is-open");
+        overlay.classList.add("is-visible");
+
+        drawer.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeCartDrawer() {
+        drawer.classList.remove("is-open");
+        overlay.classList.remove("is-visible");
+
+        drawer.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      document.getElementById("openCart")
+        .addEventListener("click", openCartDrawer);
+
+      document.getElementById("bottomViewCart")
+        .addEventListener("click", openCartDrawer);
+
+      document.getElementById("closeCart")
+        .addEventListener("click", closeCartDrawer);
+
+      overlay.addEventListener("click", closeCartDrawer);
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") {
+          closeCartDrawer();
+        }
+      });
+    })();
+  </script>
+
+  <!-- LIVE SHOP STATUS -->
+  <script>
+    (() => {
+      const statusBar = document.getElementById("shopStatusBar");
+      const statusTitle = document.getElementById("shopStatusTitle");
+      const statusText = document.getElementById("shopStatusText");
+      const productGrid = document.getElementById("productGrid");
+      const payButton = document.getElementById("payButton");
+      const checkoutMessage = document.getElementById("checkoutMessage");
+
+      let shopIsOpen = false;
+      let statusConfirmed = false;
+
+      function applyShopStatus(isOpen) {
+        shopIsOpen = isOpen;
+        statusConfirmed = true;
+
+        statusBar.classList.toggle("shop-open", isOpen);
+        statusBar.classList.toggle("shop-closed", !isOpen);
+
+        statusTitle.textContent = isOpen
+          ? "SHOP OPEN"
+          : "SHOP CLOSED";
+
+        statusText.textContent = isOpen
+          ? "दुकान खुली है। आप products ऑर्डर कर सकते हैं।"
+          : "दुकान बंद है। अभी नए ऑर्डर स्वीकार नहीं किए जा रहे हैं।";
+
+        productGrid.classList.toggle("shop-is-closed", !isOpen);
+
+        productGrid.querySelectorAll("button, input, select")
+          .forEach(element => {
+            if (!element.dataset.shopStatusTracked) {
+              element.dataset.shopStatusTracked = "true";
+
+              element.dataset.shopOriginalDisabled =
+                element.disabled ? "true" : "false";
+            }
+
+            element.disabled = !isOpen ||
+              element.dataset.shopOriginalDisabled === "true";
+          });
+
+        payButton.disabled = !isOpen;
+
+        payButton.textContent = isOpen
+          ? "Continue to Payment"
+          : "Shop Closed";
+
+        checkoutMessage.textContent = isOpen
+          ? ""
+          : "दुकान बंद है। अभी payment/order नहीं किया जा सकता।";
+      }
+
+      async function refreshShopStatus() {
+        try {
+          const response = await fetch("/market/api/shop-status", {
+            cache: "no-store",
+            headers: {
+              "Accept": "application/json"
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(
+              "Shop status API returned " + response.status
+            );
+          }
+
+          const data = await response.json();
+
+          if (
+            data.success !== true ||
+            typeof data.shopOpen !== "boolean"
+          ) {
+            throw new Error("Invalid shop status response");
+          }
+
+          applyShopStatus(data.shopOpen);
+
+        } catch (error) {
+          console.error("GS Market status check failed:", error);
+
+          shopIsOpen = false;
+          statusConfirmed = false;
+
+          statusBar.classList.remove("shop-open");
+          statusBar.classList.add("shop-closed");
+
+          statusTitle.textContent = "SHOP STATUS UNAVAILABLE";
+
+          statusText.textContent =
+            "Status चेक नहीं हो सका। सुरक्षा के लिए ऑर्डर रोक दिए गए हैं।";
+
+          productGrid.classList.add("shop-is-closed");
+
+          payButton.disabled = true;
+          payButton.textContent = "Shop Status Unavailable";
+        }
+      }
+
+      window.GS_MARKET_SHOP = {
+        isOpen: () => shopIsOpen && statusConfirmed,
+        refresh: refreshShopStatus
+      };
+
+      refreshShopStatus();
+      setInterval(refreshShopStatus, 5000);
+
+      document.getElementById("checkoutForm")
+        .addEventListener("submit", event => {
+          if (!shopIsOpen || !statusConfirmed) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+
+            checkoutMessage.textContent = !statusConfirmed
+              ? "Shop status confirm नहीं हुआ। कृपया दोबारा कोशिश करें।"
+              : "दुकान बंद है। अभी ऑर्डर नहीं किया जा सकता।";
+          }
+        }, true);
+    })();
+  </script>
+
+  <!-- Store functionality -->
+  <script src="/js/store.js" defer></script>
+
+</body>
+</html>
+

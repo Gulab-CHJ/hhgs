@@ -1,0 +1,159 @@
+
+<style>
+.gs-market-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 16px 0;
+  background: linear-gradient(135deg, #ecfdf5, #eff6ff);
+  border: 1px solid #bbf7d0;
+  border-radius: 16px;
+}
+
+.gs-market-icon {
+  display: flex !important;
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  background: #d1fae5;
+  border-radius: 12px;
+  font-size: 28px;
+}
+
+.gs-market-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.gs-market-content .welcome {
+  margin: 0 0 8px;
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.gs-market-content h2 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 25px;
+  line-height: 1.3;
+}
+
+.gs-market-content .tagline {
+  margin: 0 0 14px;
+  color: #4b5563;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.gs-market-content .delivery {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  color: #15803d;
+  font-size: 17px;
+  line-height: 1.4;
+  font-weight: 800;
+}
+
+.gs-market-content .description {
+  margin: 0;
+  color: #374151;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.gs-market-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px 20px;
+  background: #16a34a;
+  color: #fff !important;
+  border-radius: 10px;
+  text-decoration: none !important;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.gs-market-btn:hover {
+  background: #15803d;
+}
+
+@media (max-width: 480px) {
+  .gs-market-banner {
+    padding: 13px;
+    gap: 10px;
+  }
+
+  .gs-market-icon {
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    font-size: 23px;
+  }
+
+  .gs-market-content .welcome {
+    font-size: 10px;
+  }
+
+  .gs-market-content h2 {
+    font-size: 21px;
+  }
+
+  .gs-market-content .tagline {
+    font-size: 12px;
+  }
+
+  .gs-market-content .delivery {
+    font-size: 15px;
+  }
+
+  .gs-market-content .description {
+    font-size: 12px;
+  }
+
+  .gs-market-btn {
+    padding: 11px 15px;
+    font-size: 13px;
+  }
+}
+</style>
+
+<div class="gs-market-banner">
+  <div class="gs-market-icon" aria-hidden="true">🛍️</div>
+
+  <div class="gs-market-content">
+    <p class="welcome">WELCOME TO GS MARKET</p>
+
+    <h2>Discover Products You'll Love</h2>
+
+    <p class="tagline">
+      Great finds, great prices, easy shopping.
+    </p>
+
+    <h3 class="delivery">
+      <span aria-hidden="true">⚡</span>
+      Delivery in Just 5 Minutes!
+    </h3>
+
+    <p class="description">
+      Order from the comfort of your home and get your daily
+      essentials delivered to your doorstep.
+    </p>
+
+    <a href="/market" class="gs-market-btn">
+      Shop Now <span aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
+
