@@ -41,6 +41,17 @@ button,.button{border:0;border-radius:10px;padding:12px 16px;font-size:14px;font
 .config{margin-top:18px;color:#526078;font-size:13px;line-height:1.7}
 .message{margin-top:14px;padding:12px;border-radius:10px;background:#eff6ff;color:#1d4ed8}
 @media(max-width:700px){main{padding:12px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.actions{grid-template-columns:1fr}header{padding:20px}.stat{padding:15px}.stat strong{font-size:24px}}
+
+
+
+.gps-status{
+  margin-top:10px;
+  font-size:12px;
+  color:#64748b;
+}
+.gps-status.success{color:#15803d}
+.gps-status.error{color:#dc2626}
+.open-btn:disabled{opacity:.6;cursor:wait}
 </style>
 </head>
 <body>
@@ -55,12 +66,42 @@ ${message ? `<div class="message">${message.replace(/[<>&"]/g, c => ({"<":"&lt;"
 <section class="status-panel">
   <div>
     <div style="font-weight:bold;margin-bottom:9px">Shop Status</div>
-    <div class="status"><span class="status-dot"></span>${shopOpen ? "Shop Open" : "Shop Closed"}</div>
-    <div style="font-size:12px;color:#64748b;margin-top:7px">${shopOpen ? "Customer checkout enabled, subject to checkout validation." : "New customer orders must be blocked at checkout."}</div>
+
+    <div class="status">
+      <span class="status-dot"></span>
+      ${shopOpen ? "Shop Open" : "Shop Closed"}
+    </div>
+
+    <div style="font-size:12px;color:#64748b;margin-top:7px">
+      ${shopOpen
+        ? "Customer checkout enabled, subject to checkout validation."
+        : "Shop is closed for new customer orders."}
+    </div>
+
+    <div id="gpsStatus" class="gps-status">
+      ${shopOpen ? "Shop location status: saved in settings." : "Shop location will be captured when opening."}
+    </div>
   </div>
-  <form method="POST" action="/admin/market/shop-status">
-    <input type="hidden" name="shopOpen" value="${shopOpen ? "false" : "true"}">
-    <button class="${shopOpen ? "close-btn" : "open-btn"}" type="submit">
+
+  <form
+    id="shopStatusForm"
+    method="POST"
+    action="/admin/market/shop-status"
+  >
+    <input
+      type="hidden"
+      name="shopOpen"
+      value="${shopOpen ? "false" : "true"}"
+    >
+
+    <input type="hidden" name="shopLatitude" id="shopLatitude">
+    <input type="hidden" name="shopLongitude" id="shopLongitude">
+
+    <button
+      id="shopStatusButton"
+      class="${shopOpen ? "close-btn" : "open-btn"}"
+      type="submit"
+    >
       ${shopOpen ? "Close Shop" : "Open Shop"}
     </button>
   </form>
@@ -102,6 +143,83 @@ ${message ? `<div class="message">${message.replace(/[<>&"]/g, c => ({"<":"&lt;"
   Radius validation requires the checkout to collect customer coordinates and compare them with the configured shop location.
 </div>
 </main>
+
+
+<script>
+(function () {
+  const form = document.getElementById("shopStatusForm");
+  const button = document.getElementById("shopStatusButton");
+  const status = document.getElementById("gpsStatus");
+
+  if (!form || !button) return;
+
+  form.addEventListener("submit", function (event) {
+    const shopOpen = form.querySelector(
+      'input[name="shopOpen"]'
+    ).value;
+
+    // Shop Close करने के लिए GPS की जरूरत नहीं
+    if (shopOpen === "false") {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (!navigator.geolocation) {
+      status.textContent = "इस browser में GPS उपलब्ध नहीं है।";
+      status.className = "gps-status error";
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Getting Location...";
+    status.textContent = "आपकी दुकान की GPS location प्राप्त की जा रही है...";
+    status.className = "gps-status";
+
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        document.getElementById("shopLatitude").value =
+          position.coords.latitude;
+
+        document.getElementById("shopLongitude").value =
+          position.coords.longitude;
+
+        status.textContent = "GPS location मिल गई। Shop Open हो रही है...";
+        status.className = "gps-status success";
+
+        form.submit();
+      },
+
+      function (error) {
+        button.disabled = false;
+        button.textContent = "Open Shop";
+
+        let message = "GPS location नहीं मिल सकी।";
+
+        if (error.code === 1) {
+          message = "Location Permission Allow करें।";
+        } else if (error.code === 2) {
+          message = "GPS location उपलब्ध नहीं है।";
+        } else if (error.code === 3) {
+          message = "GPS request का समय समाप्त हो गया। दोबारा प्रयास करें।";
+        }
+
+        status.textContent = message;
+        status.className = "gps-status error";
+      },
+
+      {
+        enableHighAccuracy: true,
+        timeout: 20000,
+        maximumAge: 0
+      }
+    );
+  });
+})();
+</script>
+
+
+
 </body>
 </html>`;
 }

@@ -1248,9 +1248,8 @@ router.get("/dashboard", async (req, res) => {
     );
   }
 });
-
 // =====================================
-// SHOP OPEN / CLOSE
+// SHOP OPEN / CLOSE WITH GPS LOCATION
 // =====================================
 router.post("/shop-status", async (req, res) => {
   try {
@@ -1260,27 +1259,62 @@ router.post("/shop-status", async (req, res) => {
       return res.status(400).send("Invalid shop status.");
     }
 
-    await GSMarketConfig.findOneAndUpdate(
+    const updateData = {
+      shopOpen: requested === "true",
+      deliveryCharge: 20,
+      serviceRadiusKm: 2
+    };
+
+    // Shop Open होने पर GPS location सेव करें
+    if (requested === "true") {
+      const latitude = Number(req.body.shopLatitude);
+      const longitude = Number(req.body.shopLongitude);
+
+      if (
+        req.body.shopLatitude === undefined ||
+        req.body.shopLatitude === "" ||
+        req.body.shopLongitude === undefined ||
+        req.body.shopLongitude === "" ||
+        !Number.isFinite(latitude) ||
+        !Number.isFinite(longitude) ||
+        latitude < -90 ||
+        latitude > 90 ||
+        longitude < -180 ||
+        longitude > 180
+      ) {
+        return res.status(400).send(
+          "GPS location नहीं मिली। Browser में Location Permission Allow करें।"
+        );
+      }
+
+      updateData.shopLatitude = latitude;
+      updateData.shopLongitude = longitude;
+      updateData.locationUpdatedAt = new Date();
+    }
+
+    const config = await GSMarketConfig.findOneAndUpdate(
       {},
-      {
-        $set: {
-          shopOpen: requested === "true",
-          deliveryCharge: 20,
-          serviceRadiusKm: 2
-        }
-      },
+      { $set: updateData },
       {
         upsert: true,
-        returnDocument: "after",
+        new: true,
         setDefaultsOnInsert: true,
         runValidators: true
       }
     );
 
+    console.log("GS Market Location Saved:", {
+      shopOpen: config.shopOpen,
+      latitude: config.shopLatitude,
+      longitude: config.shopLongitude,
+      updatedAt: config.locationUpdatedAt
+    });
+
     return res.redirect(
       "/admin/market/dashboard?message=" +
-      encodeURIComponent("Shop status updated")
+      encodeURIComponent("Shop status and location updated")
     );
+
   } catch (error) {
     console.error("GS Market status error:", error);
 
