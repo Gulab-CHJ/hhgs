@@ -79,7 +79,9 @@ ${message ? `<div class="message">${message.replace(/[<>&"]/g, c => ({"<":"&lt;"
     </div>
 
     <div id="gpsStatus" class="gps-status">
-      ${shopOpen ? "Shop location status: saved in settings." : "Shop location will be captured when opening."}
+      ${shopOpen
+  ? "Shop Open है। नई GPS location अगली बार Open करने पर अपडेट होगी।"
+  : "Shop Open करते समय Current GPS location ली जाएगी।"}
     </div>
   </div>
 
@@ -147,16 +149,29 @@ ${message ? `<div class="message">${message.replace(/[<>&"]/g, c => ({"<":"&lt;"
 
 <script>
 (function () {
+  "use strict";
+
   const form = document.getElementById("shopStatusForm");
   const button = document.getElementById("shopStatusButton");
   const status = document.getElementById("gpsStatus");
 
-  if (!form || !button) return;
+  const latitudeInput = document.getElementById("shopLatitude");
+  const longitudeInput = document.getElementById("shopLongitude");
+
+  if (!form || !button || !status || !latitudeInput || !longitudeInput) {
+    console.error("GS Market GPS form elements not found.");
+    return;
+  }
 
   form.addEventListener("submit", function (event) {
-    const shopOpen = form.querySelector(
-      'input[name="shopOpen"]'
-    ).value;
+    const shopOpenInput = form.querySelector('input[name="shopOpen"]');
+
+    if (!shopOpenInput) {
+      event.preventDefault();
+      return;
+    }
+
+    const shopOpen = shopOpenInput.value;
 
     // Shop Close करने के लिए GPS की जरूरत नहीं
     if (shopOpen === "false") {
@@ -165,28 +180,81 @@ ${message ? `<div class="message">${message.replace(/[<>&"]/g, c => ({"<":"&lt;"
 
     event.preventDefault();
 
+    // HTTPS और browser GPS support चेक
+    if (!window.isSecureContext) {
+      status.textContent = "GPS के लिए HTTPS वेबसाइट खोलें।";
+      status.className = "gps-status error";
+      return;
+    }
+
     if (!navigator.geolocation) {
       status.textContent = "इस browser में GPS उपलब्ध नहीं है।";
       status.className = "gps-status error";
       return;
     }
 
+    // पुरानी लोकेशन हटाएँ
+    latitudeInput.value = "";
+    longitudeInput.value = "";
+
     button.disabled = true;
-    button.textContent = "Getting Location...";
-    status.textContent = "आपकी दुकान की GPS location प्राप्त की जा रही है...";
+    button.textContent = "Getting Current GPS...";
+
+    status.textContent =
+      "आपकी दुकान की नई Current GPS Location प्राप्त की जा रही है...";
+
     status.className = "gps-status";
 
     navigator.geolocation.getCurrentPosition(
+
       function (position) {
-        document.getElementById("shopLatitude").value =
-          position.coords.latitude;
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        const accuracy = position.coords.accuracy;
 
-        document.getElementById("shopLongitude").value =
-          position.coords.longitude;
+        // GPS coordinates की validation
+        if (
+          !Number.isFinite(latitude) ||
+          !Number.isFinite(longitude) ||
+          latitude < -90 ||
+          latitude > 90 ||
+          longitude < -180 ||
+          longitude > 180
+        ) {
+          button.disabled = false;
+          button.textContent = "Open Shop";
 
-        status.textContent = "GPS location मिल गई। Shop Open हो रही है...";
+          status.textContent = "GPS coordinates गलत हैं। दोबारा प्रयास करें।";
+          status.className = "gps-status error";
+          return;
+        }
+
+        // बहुत कमजोर GPS accuracy पर लोकेशन स्वीकार न करें
+        if (accuracy > 100) {
+          button.disabled = false;
+          button.textContent = "Open Shop";
+
+          status.textContent =
+            "GPS accuracy कमजोर है (" +
+            Math.round(accuracy) +
+            " मीटर)। खुले स्थान पर जाकर दोबारा प्रयास करें।";
+
+          status.className = "gps-status error";
+          return;
+        }
+
+        // नई GPS location form में भरें
+        latitudeInput.value = latitude;
+        longitudeInput.value = longitude;
+
+        status.textContent =
+          "Current GPS मिल गया! Accuracy: लगभग " +
+          Math.round(accuracy) +
+          " मीटर। Shop Open हो रही है...";
+
         status.className = "gps-status success";
 
+        // Form submit
         form.submit();
       },
 
@@ -197,20 +265,22 @@ ${message ? `<div class="message">${message.replace(/[<>&"]/g, c => ({"<":"&lt;"
         let message = "GPS location नहीं मिल सकी।";
 
         if (error.code === 1) {
-          message = "Location Permission Allow करें।";
+          message = "Browser में Location Permission Allow करें।";
         } else if (error.code === 2) {
-          message = "GPS location उपलब्ध नहीं है।";
+          message = "GPS उपलब्ध नहीं है। Device की Location चालू करें।";
         } else if (error.code === 3) {
-          message = "GPS request का समय समाप्त हो गया। दोबारा प्रयास करें।";
+          message = "GPS request timeout हो गई। दोबारा प्रयास करें।";
         }
 
         status.textContent = message;
         status.className = "gps-status error";
+
+        console.error("GPS Error:", error);
       },
 
       {
         enableHighAccuracy: true,
-        timeout: 20000,
+        timeout: 60000,
         maximumAge: 0
       }
     );
