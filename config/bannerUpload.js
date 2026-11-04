@@ -1,4 +1,3 @@
-// config/bannerUpload.js
 
 const multer = require("multer");
 
@@ -28,8 +27,10 @@ function findImageUrl(obj) {
     ];
 
     for (const key of urlKeys) {
-        if (typeof obj[key] === "string" &&
-            /^https?:\/\//i.test(obj[key])) {
+        if (
+            typeof obj[key] === "string" &&
+            /^https?:\/\//i.test(obj[key])
+        ) {
             return obj[key];
         }
     }
@@ -51,7 +52,8 @@ async function uploadToPixelVault(req, res, next) {
         }
 
         const apiKey = process.env.PIXELVAULT_API_KEY;
-        const apiUrl = process.env.PIXELVAULT_API_URL ||
+        const apiUrl =
+            process.env.PIXELVAULT_API_URL ||
             "https://api.pixelvault.dev/v1/images";
 
         if (!apiKey) {
@@ -85,7 +87,12 @@ async function uploadToPixelVault(req, res, next) {
         }
 
         if (!response.ok) {
-            console.error("PIXELVAULT ERROR:", response.status, result);
+            console.error(
+                "PIXELVAULT ERROR:",
+                response.status,
+                result
+            );
+
             return res.status(502).send(
                 "PixelVault upload failed. Please check server logs."
             );
@@ -94,18 +101,28 @@ async function uploadToPixelVault(req, res, next) {
         const imageUrl = findImageUrl(result);
 
         if (!imageUrl) {
-            console.error("PIXELVAULT RESPONSE - URL NOT FOUND:", result);
+            console.error(
+                "PIXELVAULT RESPONSE - URL NOT FOUND:",
+                result
+            );
+
             return res.status(502).send(
-                "PixelVault upload response did not contain a recognized image URL. Check server logs."
+                "PixelVault response did not contain a recognized image URL. Check server logs."
             );
         }
 
         req.pixelVaultImageUrl = imageUrl;
+
+        console.log("PIXELVAULT IMAGE URL RECEIVED");
+
         next();
 
     } catch (error) {
         console.error("PIXELVAULT UPLOAD ERROR:", error);
-        res.status(500).send("Banner upload failed: " + error.message);
+
+        res.status(500).send(
+            "Banner upload failed: " + error.message
+        );
     }
 }
 
