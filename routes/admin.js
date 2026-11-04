@@ -9321,6 +9321,9 @@ const EditService =
     require("../pages/editpages/editService");
 
 
+const bannerUpload = require("../config/bannerUpload");
+
+
 // ======================================================
 // CONTROLLERS
 // ======================================================
@@ -9484,9 +9487,16 @@ router.get(
 );
 
 
+// router.post(
+//     "/add-banner",
+//     upload.single("image"),
+//     AdminController.saveBanner
+// );
+
+
 router.post(
     "/add-banner",
-    upload.single("image"),
+    ...bannerUpload.single("image"),
     AdminController.saveBanner
 );
 

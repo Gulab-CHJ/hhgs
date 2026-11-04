@@ -119,54 +119,90 @@ exports.addBannerPage = (req, res) => {
 // };
 
 
-exports.saveBanner = async (req,res)=>{
+// exports.saveBanner = async (req,res)=>{
 
-    try{
+//     try{
 
-        console.log("BODY => ", req.body);
-        console.log("FILE => ", req.file);
+//         console.log("BODY => ", req.body);
+//         console.log("FILE => ", req.file);
 
 
-        if(!req.file){
+//         if(!req.file){
 
-            return res.status(400).send(
-                "Image file not received"
-            );
+//             return res.status(400).send(
+//                 "Image file not received"
+//             );
 
+//         }
+
+
+//         const banner = new Banner({
+
+//             title:req.body.title,
+
+//             image:req.file.path,
+
+//             link:req.body.link,
+
+//             active:true
+
+//         });
+
+
+//         await banner.save();
+
+
+//         res.redirect("/admin/manage-banner");
+
+
+//     }
+//     catch(err){
+
+//         console.log("SAVE ERROR => ",err);
+
+//         res.status(500).send(`
+//             <h2>Server Error</h2>
+//             <pre>${err.stack}</pre>
+//         `);
+
+//     }
+
+// };
+
+
+
+
+// Save Banner - PixelVault
+exports.saveBanner = async (req, res) => {
+    try {
+        console.log("BANNER BODY:", req.body);
+        console.log("PIXELVAULT IMAGE:", req.pixelVaultImageUrl);
+
+        if (!req.pixelVaultImageUrl) {
+            return res.status(400).send("Banner image not received from PixelVault");
         }
 
-
         const banner = new Banner({
-
-            title:req.body.title,
-
-            image:req.file.path,
-
-            link:req.body.link,
-
-            active:true
-
+            title: req.body.title,
+            image: req.pixelVaultImageUrl,
+            link: req.body.link,
+            active: true
         });
-
 
         await banner.save();
 
+        console.log("BANNER SAVED SUCCESSFULLY");
 
         res.redirect("/admin/manage-banner");
 
-
-    }
-    catch(err){
-
-        console.log("SAVE ERROR => ",err);
+    } catch (err) {
+        console.error("BANNER SAVE ERROR:", err);
 
         res.status(500).send(`
-            <h2>Server Error</h2>
-            <pre>${err.stack}</pre>
+            <h2>Banner Server Error</h2>
+            <pre>${err.message}</pre>
         `);
-
     }
-
 };
 
 // Manage Banner Page
