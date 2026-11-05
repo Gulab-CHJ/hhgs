@@ -13,7 +13,13 @@ const analyticsMiddleware = require("./middleware/analytics");
 const app = express();
 
 
-app.use(analyticsMiddleware);
+// ======================================
+// HHGS ANALYTICS ROUTES
+// ======================================
+
+app.use("/analytics", analyticsRoutes);
+
+console.log("HHGS Analytics Routes Loaded");
 
 // Trust Hostinger reverse proxy
 app.set("trust proxy", 1);
