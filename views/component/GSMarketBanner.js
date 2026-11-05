@@ -605,13 +605,23 @@ function GSMarketBanner() {
                     daily essentials delivered to your doorstep.
                 </p>
 
-                <a href="/market" class="gs-market-btn"
+  <a href="/market"
+   class="gs-market-btn"
    onclick="
-      this.innerHTML = '✓ Click हो गया! Please wait...';
-      this.style.pointerEvents = 'none';
-      this.style.opacity = '0.8';
+      const btn = this;
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.7';
+
+      const oldText = btn.innerHTML;
+      btn.innerHTML = '✓ Click हो गया! Please wait...';
+
+      setTimeout(() => {
+          btn.innerHTML = oldText;
+          btn.style.pointerEvents = 'auto';
+          btn.style.opacity = '1';
+      }, 1500);
    ">
-    Shop Now →
+    Shop Now <span>→</span>
 </a>
 
             </div>
