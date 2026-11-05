@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GS Market - Customer Support</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f5fb;
+    color:#222;
+}
+.header{
+    background:#5146ee;
+    color:white;
+    padding:18px;
+    font-size:21px;
+    font-weight:bold;
+}
+.container{
+    max-width:650px;
+    margin:22px auto;
+    padding:0 14px;
+}
+.card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:18px;
+    box-shadow:0 3px 15px #0000000b;
+}
+h2{margin-top:0;font-size:20px}
+label{
+    display:block;
+    font-weight:bold;
+    margin:14px 0 6px;
+}
+input,select,textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:9px;
+    font-size:15px;
+}
+textarea{min-height:100px;resize:vertical}
+button{
+    width:100%;
+    padding:14px;
+    background:#5146ee;
+    color:white;
+    border:0;
+    border-radius:9px;
+    font-size:16px;
+    font-weight:bold;
+    margin-top:16px;
+    cursor:pointer;
+}
+.result{
+    margin-top:15px;
+    line-height:1.6;
+}
+.item{
+    border:1px solid #e5e5e5;
+    border-radius:10px;
+    padding:13px;
+    margin-top:12px;
+}
+.status{
+    display:inline-block;
+    padding:5px 10px;
+    background:#eee;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+}
+.note{
+    color:#666;
+    font-size:13px;
+    line-height:1.5;
+}
+.back{
+    display:inline-block;
+    color:#5146ee;
+    text-decoration:none;
+    margin-bottom:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">GS Market · Customer Support</div>
+
+<div class="container">
+
+<a href="/market" class="back">← वापस GS Market</a>
+
+<div class="card">
+    <h2>शिकायत दर्ज करें</h2>
+    <p class="note">अपनी समस्या की जानकारी भरें। हमारी टीम आपकी शिकायत की जांच करेगी।</p>
+
+    <form id="complaintForm">
+
+        <label>आपका नाम *</label>
+        <input name="name" required maxlength="80" placeholder="अपना नाम">
+
+        <label>मोबाइल नंबर *</label>
+        <input name="phone" required inputmode="numeric"
+               pattern="[0-9]{10}" maxlength="10"
+               placeholder="10 अंकों का मोबाइल नंबर">
+
+        <label>Order Number (वैकल्पिक)</label>
+        <input name="orderNumber" maxlength="50"
+               placeholder="जैसे GS123456">
+
+        <label>शिकायत का प्रकार *</label>
+        <select name="complaintType" required>
+            <option value="">समस्या चुनें</option>
+            <option value="पैसा कट गया, ऑर्डर नहीं बना">पैसा कट गया, ऑर्डर नहीं बना</option>
+            <option value="Payment Pending">Payment Pending</option>
+            <option value="Payment Failed">Payment Failed</option>
+            <option value="ऑर्डर नहीं मिला">ऑर्डर नहीं मिला</option>
+            <option value="Refund नहीं मिला">Refund नहीं मिला</option>
+            <option value="अन्य समस्या">अन्य समस्या</option>
+        </select>
+
+        <label>समस्या की पूरी जानकारी *</label>
+        <textarea name="message" required minlength="5"
+                  maxlength="1500"
+                  placeholder="अपनी समस्या विस्तार से लिखें..."></textarea>
+
+        <label>Payment ID / UTR (वैकल्पिक)</label>
+        <input name="paymentRef" maxlength="100"
+               placeholder="Payment Reference Number">
+
+        <button type="submit" id="submitBtn">शिकायत भेजें</button>
+    </form>
+
+    <div id="submitResult" class="result"></div>
+</div>
+
+
+<div class="card">
+    <h2>अपनी शिकायत का Status देखें</h2>
+    <p class="note">शिकायत दर्ज करते समय दिया गया मोबाइल नंबर डालें।</p>
+
+    <form id="checkForm">
+        <label>मोबाइल नंबर</label>
+        <input name="phone" required inputmode="numeric"
+               pattern="[0-9]{10}" maxlength="10"
+               placeholder="10 अंकों का मोबाइल नंबर">
+
+        <button type="submit">शिकायत देखें</button>
+    </form>
+
+    <div id="checkResult" class="result"></div>
+</div>
+
+<p class="note">
+    सुरक्षा सूचना: इस पेज पर OTP नहीं है। केवल मोबाइल नंबर जानने वाला व्यक्ति
+    उस नंबर की शिकायतों का सीमित विवरण देख सकता है। इसलिए निजी जानकारी यहां न लिखें।
+</p>
+
+</div>
+
+<script>
+const complaintForm = document.getElementById("complaintForm");
+const submitResult = document.getElementById("submitResult");
+const submitBtn = document.getElementById("submitBtn");
+
+complaintForm.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "भेजा जा रहा है...";
+    submitResult.textContent = "";
+
+    try{
+        const data = Object.fromEntries(new FormData(this).entries());
+
+        const response = await fetch("/market/api/complaints", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if(!response.ok || !result.success){
+            throw new Error(result.message || "शिकायत दर्ज नहीं हुई।");
+        }
+
+        submitResult.textContent =
+            "शिकायत दर्ज हो गई। आपका Complaint ID: " +
+            result.complaintId;
+
+        this.reset();
+
+    }catch(error){
+        submitResult.textContent = error.message;
+    }finally{
+        submitBtn.disabled = false;
+        submitBtn.textContent = "शिकायत भेजें";
+    }
+});
+
+
+const checkForm = document.getElementById("checkForm");
+const checkResult = document.getElementById("checkResult");
+
+checkForm.addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    checkResult.textContent = "शिकायत खोजी जा रही है...";
+
+    try{
+        const data = Object.fromEntries(new FormData(this).entries());
+
+        const response = await fetch("/market/api/complaints/check", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if(!response.ok || !result.success){
+            throw new Error(result.message || "शिकायत नहीं मिली।");
+        }
+
+        checkResult.replaceChildren();
+
+        if(result.complaints.length === 0){
+            checkResult.textContent = "इस नंबर से कोई शिकायत नहीं मिली।";
+            return;
+        }
+
+        result.complaints.forEach(c => {
+            const item = document.createElement("div");
+            item.className = "item";
+
+            const title = document.createElement("strong");
+            title.textContent = c.complaintId;
+
+            const type = document.createElement("p");
+            type.textContent = "समस्या: " + c.complaintType;
+
+            const status = document.createElement("span");
+            status.className = "status";
+            status.textContent = "Status: " + c.status;
+
+            const reply = document.createElement("p");
+            reply.textContent = c.adminReply
+                ? "Admin Reply: " + c.adminReply
+                : "Admin Reply: अभी कोई जवाब नहीं आया है।";
+
+            const date = document.createElement("p");
+            date.className = "note";
+            date.textContent = "तारीख: " +
+                new Date(c.createdAt).toLocaleString("en-IN");
+
+            item.append(title, type, status, reply, date);
+            checkResult.appendChild(item);
+        });
+
+    }catch(error){
+        checkResult.textContent = error.message;
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#5146ee">
+    <title>Track Order | GS Market</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f6fc;
+            font-family: Arial, sans-serif;
+            color: #222;
+        }
+
+        .track-container {
+            max-width: 650px;
+            margin: 35px auto;
+        }
+
+        .track-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .track-header h1 {
+            color: #5146ee;
+            margin-bottom: 8px;
+        }
+
+        .track-box, .order-card {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 5px 22px #0000000c;
+            margin-bottom: 18px;
+        }
+
+        .track-box label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .track-box input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 17px;
+            margin-bottom: 12px;
+        }
+
+        .track-box button {
+            width: 100%;
+            padding: 14px;
+            background: #5146ee;
+            color: white;
+            border: 0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .track-box button:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        .order-card h3 {
+            margin: 0 0 12px;
+            color: #5146ee;
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 9px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-products {
+            margin: 12px 0;
+            padding-left: 20px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #eee;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .status-delivered {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        #trackMessage {
+            text-align: center;
+            margin: 15px 0;
+            color: #555;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 22px;
+            color: #5146ee;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .track-warning {
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            margin-top: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="track-container">
+
+    <div class="track-header">
+        <h1>📦 Track Your Order</h1>
+        <p>GS Market · HHGS23</p>
+        <p>अपने मोबाइल नंबर से ऑर्डर की स्थिति देखें।</p>
+    </div>
+
+    <form class="track-box" id="trackForm">
+
+        <label for="trackPhone">मोबाइल नंबर</label>
+
+        <input
+            type="tel"
+            id="trackPhone"
+            inputmode="numeric"
+            maxlength="10"
+            minlength="10"
+            pattern="[0-9]{10}"
+            placeholder="10 अंकों का मोबाइल नंबर"
+            required
+        >
+
+        <button type="submit" id="trackButton">
+            🔍 Track My Orders
+        </button>
+
+        <p class="track-warning">
+            बिना OTP के मोबाइल नंबर से ऑर्डर देखे जा सकते हैं।
+            अपना नंबर दूसरों के साथ साझा न करें।
+        </p>
+
+    </form>
+
+    <div id="trackMessage" role="status" aria-live="polite"></div>
+
+    <div id="trackResults"></div>
+
+    <a href="/market" class="back-link">
+        ← Back to GS Market
+    </a>
+
+</div>
+
+<script>
+(() => {
+    const form = document.getElementById("trackForm");
+    const phoneInput = document.getElementById("trackPhone");
+    const button = document.getElementById("trackButton");
+    const message = document.getElementById("trackMessage");
+    const results = document.getElementById("trackResults");
+
+    function addText(parent, tag, text, className) {
+        const element = document.createElement(tag);
+        element.textContent = text;
+
+        if (className) element.className = className;
+
+        parent.appendChild(element);
+        return element;
+    }
+
+    function formatDate(date) {
+        return new Date(date).toLocaleString("en-IN", {
+            dateStyle: "medium",
+            timeStyle: "short"
+        });
+    }
+
+    function renderOrders(orders) {
+        results.replaceChildren();
+
+        orders.forEach(order => {
+            const card = document.createElement("div");
+            card.className = "order-card";
+
+            addText(card, "h3", "Order: " + order.orderNumber);
+
+            const date = addText(
+                card, "p", "📅 " + formatDate(order.orderDate)
+            );
+            date.style.color = "#777";
+            date.style.fontSize = "13px";
+
+            const status = addText(
+                card,
+                "span",
+                order.orderStatus,
+                "status"
+            );
+
+            if (order.orderStatus === "Delivered") {
+                status.classList.add("status-delivered");
+            }
+
+            if (order.orderStatus === "Cancelled") {
+                status.classList.add("status-cancelled");
+            }
+
+            const payment = document.createElement("div");
+            payment.className = "order-row";
+            addText(payment, "span", "Payment");
+            addText(payment, "strong", order.paymentStatus);
+            card.appendChild(payment);
+
+            addText(card, "strong", "Products:");
+
+            const list = document.createElement("ul");
+            list.className = "order-products";
+
+            order.items.forEach(item => {
+                addText(
+                    list,
+                    "li",
+                    `${item.name} × ${item.quantity} = ₹${item.subtotal}`
+                );
+            });
+
+            card.appendChild(list);
+
+            const total = document.createElement("div");
+            total.className = "order-row";
+            addText(total, "span", "Total Amount");
+            addText(total, "strong", "₹" + order.totalAmount);
+            card.appendChild(total);
+
+            results.appendChild(card);
+        });
+    }
+
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        const phone = phoneInput.value.replace(/\D/g, "");
+
+        if (!/^\d{10}$/.test(phone)) {
+            message.textContent = "कृपया सही 10 अंकों का नंबर डालें।";
+            results.replaceChildren();
+            return;
+        }
+
+        button.disabled = true;
+        button.textContent = "Searching...";
+        message.textContent = "आपके ऑर्डर खोजे जा रहे हैं...";
+        results.replaceChildren();
+
+        try {
+            const response = await fetch("/market/api/track-order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({ phone })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || "ऑर्डर नहीं मिल सके।");
+            }
+
+            if (!data.orders.length) {
+                message.textContent =
+                    "इस मोबाइल नंबर से कोई ऑर्डर नहीं मिला।";
+                return;
+            }
+
+            message.textContent =
+                `${data.count} ऑर्डर मिले।`;
+
+            renderOrders(data.orders);
+
+        } catch (error) {
+            message.textContent =
+                error.message || "Tracking में समस्या हुई।";
+        } finally {
+            button.disabled = false;
+            button.textContent = "🔍 Track My Orders";
+        }
+    });
+})();
+</script>
+
+</body>
+</html>

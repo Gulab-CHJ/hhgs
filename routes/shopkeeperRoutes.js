@@ -763,6 +763,8 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const GSMarketConfig = require("../models/GSMarketConfig");
 
+const Complaint = require("../models/Complaint");
+
 const router = express.Router();
 
 // =====================================
@@ -1391,6 +1393,32 @@ header h2{font-size:17px}
 
 <!-- NOTIFICATIONS -->
 
+
+<!-- CUSTOMER COMPLAINTS -->
+
+<div class="panel">
+
+    <h3>📩 Customer Complaints</h3>
+
+    <p class="muted">
+        ग्राहकों की Payment, Order और Refund संबंधी शिकायतें देखें।
+    </p>
+
+    <a href="/shopkeeper/complaints"
+       style="
+       display:inline-block;
+       background:#5146ee;
+       color:white;
+       padding:12px 18px;
+       border-radius:9px;
+       text-decoration:none;
+       font-weight:bold;
+       ">
+       📩 शिकायतें देखें
+    </a>
+
+</div>
+
 <div class="panel">
 
 <h3>🔔 Order Notifications</h3>
@@ -1399,6 +1427,10 @@ header h2{font-size:17px}
 <button class="gray" onclick="enableSound()">🔊 Sound Enable</button>
 <button class="gray" onclick="enableBrowserNotification()">Browser Notification</button>
 </div>
+
+
+
+
 
 <p class="muted">
 नए ऑर्डर की तेज आवाज सुनने के लिए Sound Enable पर एक बार क्लिक करें।
@@ -2577,6 +2609,115 @@ router.post("/api/orders/:id/status", requireShopkeeper, async (req, res) => {
         });
     }
 });
+
+
+
+
+
+// =====================================
+// CUSTOMER COMPLAINT ADMIN SYSTEM
+// =====================================
+
+// Complaint Dashboard
+router.get("/complaints", requireShopkeeper, async (req, res) => {
+    try {
+        const complaints = await Complaint.find()
+            .sort({ createdAt: -1 })
+            .limit(200)
+            .lean();
+
+        const counts = {
+            total: await Complaint.countDocuments(),
+            new: await Complaint.countDocuments({ status: "New" }),
+            review: await Complaint.countDocuments({ status: "In Review" }),
+            resolved: await Complaint.countDocuments({ status: "Resolved" }),
+            rejected: await Complaint.countDocuments({ status: "Rejected" })
+        };
+
+        res.render("store/complaints-admin", {
+            complaints,
+            counts
+        });
+
+    } catch (error) {
+        console.error("Complaint Dashboard Error:", error);
+        res.status(500).send("Complaint Dashboard Error");
+    }
+});
+
+
+// Update Complaint Status and Reply
+router.post(
+    "/api/complaints/:id/update",
+    requireShopkeeper,
+    async (req, res) => {
+        try {
+            if (!mongoose.isValidObjectId(req.params.id)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid Complaint ID"
+                });
+            }
+
+            const status = String(req.body.status || "");
+            const adminReply = String(req.body.adminReply || "").trim();
+
+            const allowed = [
+                "New",
+                "In Review",
+                "Resolved",
+                "Rejected"
+            ];
+
+            if (!allowed.includes(status)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid Complaint Status"
+                });
+            }
+
+            const complaint = await Complaint.findByIdAndUpdate(
+                req.params.id,
+                {
+                    $set: {
+                        status,
+                        adminReply,
+                        updatedAt: new Date()
+                    }
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
+
+            if (!complaint) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Complaint नहीं मिली।"
+                });
+            }
+
+            res.json({
+                success: true,
+                message: "Complaint Successfully Updated"
+            });
+
+        } catch (error) {
+            console.error("Complaint Update Error:", error);
+
+            res.status(500).json({
+                success: false,
+                message: "Complaint Update नहीं हुई।"
+            });
+        }
+    }
+);
+
+
+
+
+
 
 module.exports = router;
 

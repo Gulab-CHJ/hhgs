@@ -7,6 +7,9 @@ const GSMarketConfig = require("../models/GSMarketConfig");
 const Product = require("../models/Product");
 const Order = require("../models/Order");
 
+
+const Complaint = require("../models/Complaint");
+
 const router = express.Router();
 
 let razorpay = null;
@@ -683,5 +686,278 @@ router.post("/api/checkout/verify", async (req, res) => {
     });
   }
 });
+
+
+
+
+
+
+
+
+// =====================================
+// CUSTOMER ORDER TRACKING
+// PHONE NUMBER ONLY - NO OTP
+// =====================================
+
+router.get("/track-order", (req, res) => {
+    res.render("store/track-order");
+});
+
+router.post("/api/track-order", async (req, res) => {
+    try {
+        const phone = String(req.body.phone || "")
+            .replace(/\D/g, "");
+
+        if (!/^\d{10}$/.test(phone)) {
+            return res.status(400).json({
+                success: false,
+                message: "कृपया 10 अंकों का मोबाइल नंबर डालें।"
+            });
+        }
+
+        const orders = await Order.find({
+            "customer.phone": phone
+        })
+        .select(
+            "orderNumber items subtotal deliveryCharge totalAmount paymentStatus orderStatus createdAt"
+        )
+        .sort({ createdAt: -1 })
+        .limit(20)
+        .lean();
+
+        return res.json({
+            success: true,
+            count: orders.length,
+            orders: orders.map(order => ({
+                orderNumber: order.orderNumber,
+                items: order.items.map(item => ({
+                    name: item.name,
+                    image: item.image,
+                    price: item.price,
+                    quantity: item.quantity,
+                    subtotal: item.subtotal
+                })),
+                subtotal: order.subtotal,
+                deliveryCharge: order.deliveryCharge,
+                totalAmount: order.totalAmount,
+                paymentStatus: order.paymentStatus,
+                orderStatus: order.orderStatus,
+                orderDate: order.createdAt
+            }))
+        });
+
+    } catch (error) {
+        console.error("Order tracking error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Order tracking में समस्या हुई।"
+        });
+    }
+});
+
+
+
+
+
+
+
+
+// ==========================================
+// GS MARKET CUSTOMER COMPLAINT SYSTEM
+// ==========================================
+
+// Customer complaint page
+router.get("/complaints", (req, res) => {
+    res.render("store/complaints");
+});
+
+
+// Submit complaint
+router.post("/api/complaints", async (req, res) => {
+    try {
+        const name = String(req.body.name || "").trim();
+        const phone = String(req.body.phone || "").replace(/\D/g, "");
+        const orderNumber = String(req.body.orderNumber || "").trim();
+        const complaintType = String(req.body.complaintType || "").trim();
+        const message = String(req.body.message || "").trim();
+        const paymentRef = String(req.body.paymentRef || "").trim();
+
+        if (!name || !/^\d{10}$/.test(phone) ||
+            !complaintType || message.length < 5) {
+            return res.status(400).json({
+                success: false,
+                message: "सभी जरूरी जानकारी सही भरें।"
+            });
+        }
+
+        const complaintId =
+            "GS-CMP-" + Date.now().toString().slice(-8);
+
+        const complaint = await Complaint.create({
+            complaintId,
+            name,
+            phone,
+            orderNumber,
+            complaintType,
+            message,
+            paymentRef
+        });
+
+        res.json({
+            success: true,
+            complaintId: complaint.complaintId,
+            message: "आपकी शिकायत सफलतापूर्वक दर्ज हो गई।"
+        });
+
+    } catch (error) {
+        console.error("Complaint Submit Error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "शिकायत दर्ज नहीं हो सकी। दोबारा प्रयास करें।"
+        });
+    }
+});
+
+
+// Customer checks complaint using phone number
+router.post("/api/complaints/check", async (req, res) => {
+    try {
+        const phone = String(req.body.phone || "").replace(/\D/g, "");
+
+        if (!/^\d{10}$/.test(phone)) {
+            return res.status(400).json({
+                success: false,
+                message: "10 अंकों का मोबाइल नंबर डालें।"
+            });
+        }
+
+        const complaints = await Complaint.find({ phone })
+            .select("complaintId complaintType status adminReply createdAt updatedAt")
+            .sort({ createdAt: -1 })
+            .limit(20)
+            .lean();
+
+        res.json({
+            success: true,
+            complaints
+        });
+
+    } catch (error) {
+        console.error("Complaint Check Error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "शिकायत Status नहीं मिल सका।"
+        });
+    }
+});
+
+
+// ==========================================
+// SHOPKEEPER COMPLAINT DASHBOARD
+// ==========================================
+
+function complaintAdminAuth(req, res, next) {
+    if (!req.session || !req.session.shopkeeperLoggedIn) {
+        return res.redirect("/shopkeeper/login");
+    }
+
+    next();
+}
+
+
+// Dashboard page
+router.get(
+    "/complaints/admin",
+    complaintAdminAuth,
+    async (req, res) => {
+        try {
+            const complaints = await Complaint.find()
+                .sort({ createdAt: -1 })
+                .limit(200)
+                .lean();
+
+            const counts = {
+                total: await Complaint.countDocuments(),
+                new: await Complaint.countDocuments({ status: "New" }),
+                review: await Complaint.countDocuments({ status: "In Review" }),
+                resolved: await Complaint.countDocuments({ status: "Resolved" }),
+                rejected: await Complaint.countDocuments({ status: "Rejected" })
+            };
+
+            res.render("store/complaints-admin", {
+                complaints,
+                counts
+            });
+
+        } catch (error) {
+            console.error("Complaint Dashboard Error:", error);
+            res.status(500).send("Complaint Dashboard Error");
+        }
+    }
+);
+
+
+// Admin updates complaint
+router.post(
+    "/api/complaints/:id/update",
+    complaintAdminAuth,
+    async (req, res) => {
+        try {
+            const status = String(req.body.status || "");
+            const adminReply = String(req.body.adminReply || "").trim();
+
+            const allowed = [
+                "New",
+                "In Review",
+                "Resolved",
+                "Rejected"
+            ];
+
+            if (!allowed.includes(status)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid complaint status"
+                });
+            }
+
+            const complaint = await Complaint.findByIdAndUpdate(
+                req.params.id,
+                {
+                    status,
+                    adminReply,
+                    updatedAt: new Date()
+                },
+                { new: true }
+            );
+
+            if (!complaint) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Complaint नहीं मिली।"
+                });
+            }
+
+            res.json({
+                success: true,
+                message: "Complaint अपडेट हो गई।"
+            });
+
+        } catch (error) {
+            console.error("Complaint Update Error:", error);
+
+            res.status(500).json({
+                success: false,
+                message: "Update नहीं हो सका।"
+            });
+        }
+    }
+);
+
+
+
+
 
 module.exports = router;

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GS Market Complaints</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f5fb;font-family:Arial,sans-serif;color:#222}
+header{background:#5146ee;color:white;padding:18px;font-size:21px;font-weight:bold}
+.container{max-width:1100px;margin:22px auto;padding:0 14px}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.stat,.complaint{background:white;border-radius:12px;padding:15px;box-shadow:0 2px 10px #00000009}
+.stat strong{display:block;font-size:24px;margin-top:7px}
+.complaint{margin-top:15px}
+.row{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:8px;margin-top:8px}
+textarea{min-height:70px}
+button{background:#5146ee;color:white;border:0;padding:11px 16px;border-radius:8px;margin-top:10px;cursor:pointer}
+.small{color:#666;font-size:13px;line-height:1.6}
+@media(max-width:650px){.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+
+<body>
+
+<header>GS Market · Complaint Dashboard</header>
+
+<div class="container">
+
+<div class="stats">
+    <div class="stat">Total<strong><%= counts.total %></strong></div>
+    <div class="stat">New<strong><%= counts.new %></strong></div>
+    <div class="stat">In Review<strong><%= counts.review %></strong></div>
+    <div class="stat">Resolved<strong><%= counts.resolved %></strong></div>
+    <div class="stat">Rejected<strong><%= counts.rejected %></strong></div>
+</div>
+
+<h2>Customer Complaints</h2>
+
+<% if (!complaints.length) { %>
+    <div class="complaint">अभी कोई शिकायत नहीं है।</div>
+<% } %>
+
+<% complaints.forEach(c => { %>
+
+<div class="complaint">
+
+    <div class="row">
+        <strong><%= c.complaintId %></strong>
+        <strong><%= c.status %></strong>
+    </div>
+
+    <p><strong>नाम:</strong> <%= c.name %></p>
+    <p><strong>मोबाइल:</strong> <%= c.phone %></p>
+    <p><strong>Order:</strong> <%= c.orderNumber || "नहीं दिया" %></p>
+    <p><strong>समस्या:</strong> <%= c.complaintType %></p>
+    <p><strong>विवरण:</strong> <%= c.message %></p>
+    <p><strong>Payment Ref:</strong> <%= c.paymentRef || "नहीं दिया" %></p>
+
+    <p class="small">
+        शिकायत तारीख:
+        <%= new Date(c.createdAt).toLocaleString("en-IN") %>
+    </p>
+
+    <form class="updateForm" data-id="<%= c._id %>">
+
+        <label>Status बदलें</label>
+        <select name="status">
+            <option value="New" <%= c.status === "New" ? "selected" : "" %>>New</option>
+            <option value="In Review" <%= c.status === "In Review" ? "selected" : "" %>>In Review</option>
+            <option value="Resolved" <%= c.status === "Resolved" ? "selected" : "" %>>Resolved</option>
+            <option value="Rejected" <%= c.status === "Rejected" ? "selected" : "" %>>Rejected</option>
+        </select>
+
+        <label>Customer को Reply</label>
+        <textarea name="adminReply"
+            placeholder="ग्राहक को जवाब लिखें..."><%= c.adminReply %></textarea>
+
+        <button type="submit">Update Complaint</button>
+        <span class="message small"></span>
+
+    </form>
+
+</div>
+
+<% }) %>
+
+</div>
+
+<script>
+document.querySelectorAll(".updateForm").forEach(form => {
+
+    form.addEventListener("submit", async function(e){
+        e.preventDefault();
+
+        const id = this.dataset.id;
+        const message = this.querySelector(".message");
+        const data = Object.fromEntries(new FormData(this).entries());
+
+        message.textContent = "Updating...";
+
+        try{
+            const response = await fetch(
+                "/market/api/complaints/" + encodeURIComponent(id) + "/update",
+                {
+                    method:"POST",
+                    headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify(data)
+                }
+            );
+
+            const result = await response.json();
+
+            if(!response.ok || !result.success){
+                throw new Error(result.message || "Update failed");
+            }
+
+            message.textContent = "Updated successfully";
+            setTimeout(() => location.reload(), 700);
+
+        }catch(error){
+            message.textContent = error.message;
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
