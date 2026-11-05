@@ -12,6 +12,9 @@ const analyticsMiddleware = require("./middleware/analytics");
 
 const app = express();
 
+
+app.use(analyticsMiddleware);
+
 // Trust Hostinger reverse proxy
 app.set("trust proxy", 1);
 
