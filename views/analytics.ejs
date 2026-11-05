@@ -1,0 +1,468 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HHGS Website Analytics</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:#f4f6fb;
+    font-family:Arial,sans-serif;
+    color:#172033;
+}
+
+.header{
+    background:#171c36;
+    color:white;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.header h2{margin:0;font-size:21px}
+
+.header a{
+    color:white;
+    text-decoration:none;
+    background:#5146ee;
+    padding:10px 16px;
+    border-radius:8px;
+}
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:22px;
+}
+
+.status{
+    margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    color:#68738a;
+    font-size:13px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    box-shadow:0 3px 15px #1720330c;
+}
+
+.card p{
+    margin:0;
+    color:#778198;
+    font-size:13px;
+}
+
+.card h2{
+    font-size:29px;
+    margin:12px 0 0;
+}
+
+.card .emoji{
+    font-size:22px;
+    margin-bottom:12px;
+}
+
+.green{color:#079b69}
+.purple{color:#5146ee}
+.orange{color:#ed8b22}
+.blue{color:#1885db}
+
+.section-title{
+    margin:28px 0 14px;
+    font-size:18px;
+}
+
+.panels{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:16px;
+}
+
+.panel{
+    background:white;
+    padding:20px;
+    border-radius:14px;
+    min-width:0;
+    box-shadow:0 3px 15px #1720330c;
+}
+
+.panel h3{
+    font-size:16px;
+    margin:0 0 20px;
+}
+
+.chart-wrap{
+    position:relative;
+    height:280px;
+}
+
+.device-row{
+    display:flex;
+    justify-content:space-between;
+    padding:15px 0;
+    border-bottom:1px solid #edf0f5;
+    font-size:14px;
+}
+
+.device-row:last-child{border:0}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:350px;
+}
+
+td,th{
+    text-align:left;
+    padding:14px 10px;
+    border-bottom:1px solid #edf0f5;
+    font-size:13px;
+}
+
+th{color:#778198}
+
+.live-dot{
+    display:inline-block;
+    height:9px;
+    width:9px;
+    background:#0ab77a;
+    border-radius:50%;
+    margin-right:6px;
+}
+
+.footer{
+    text-align:center;
+    color:#8790a2;
+    font-size:12px;
+    padding:25px;
+}
+
+@media(max-width:850px){
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .panels{grid-template-columns:1fr}
+}
+
+@media(max-width:450px){
+    .container{padding:12px}
+    .card{padding:14px}
+    .card h2{font-size:23px}
+    .header{padding:15px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h2>📊 HHGS Analytics</h2>
+    <a href="/admin">← Admin Panel</a>
+</div>
+
+<div class="container">
+
+<div class="status">
+    <span><span class="live-dot"></span>Live Analytics</span>
+    <span id="lastUpdated">Loading...</span>
+</div>
+
+<div class="cards">
+
+    <div class="card">
+        <div class="emoji">🌐</div>
+        <p>Total Website Visits</p>
+        <h2 id="totalVisits">0</h2>
+    </div>
+
+    <div class="card">
+        <div class="emoji">👥</div>
+        <p>Unique Visitors</p>
+        <h2 id="totalUnique">0</h2>
+    </div>
+
+    <div class="card">
+        <div class="emoji">📅</div>
+        <p>Today's Visits</p>
+        <h2 id="todayVisits" class="purple">0</h2>
+    </div>
+
+    <div class="card">
+        <div class="emoji">🟢</div>
+        <p>Live Visitors (2 min)</p>
+        <h2 id="liveVisitors" class="green">0</h2>
+    </div>
+
+    <div class="card">
+        <div class="emoji">📆</div>
+        <p>Last 7 Days</p>
+        <h2 id="weekVisits">0</h2>
+    </div>
+
+    <div class="card">
+        <div class="emoji">🗓️</div>
+        <p>This Month</p>
+        <h2 id="monthVisits">0</h2>
+    </div>
+
+    <div class="card">
+        <div class="emoji">📱</div>
+        <p>Today's Unique Visitors</p>
+        <h2 id="todayUnique">0</h2>
+    </div>
+
+    <div class="card">
+        <div class="emoji">📲</div>
+        <p>PWA Install Events</p>
+        <h2 id="installs">0</h2>
+    </div>
+
+</div>
+
+<h3 class="section-title">📈 Website Traffic – Last 7 Days</h3>
+
+<div class="panels">
+
+    <div class="panel">
+        <h3>Daily Page Visits</h3>
+        <div class="chart-wrap">
+            <canvas id="trafficChart"></canvas>
+        </div>
+    </div>
+
+    <div class="panel">
+        <h3>Device Statistics (This Month)</h3>
+
+        <div id="devices">
+            Loading...
+        </div>
+    </div>
+
+</div>
+
+<h3 class="section-title">🔥 Most Visited Pages (This Month)</h3>
+
+<div class="panel table-wrap">
+    <table>
+        <thead>
+            <tr>
+                <th>Page URL</th>
+                <th>Total Visits</th>
+            </tr>
+        </thead>
+
+        <tbody id="topPages">
+            <tr><td colspan="2">Loading...</td></tr>
+        </tbody>
+    </table>
+</div>
+
+</div>
+
+<div class="footer">
+    HHGS23 · Human Healthy Global Services · Analytics Dashboard
+</div>
+
+<script>
+let trafficChart;
+
+async function loadAnalytics(){
+
+    try{
+
+        const response = await fetch("/analytics/api", {
+            credentials:"same-origin",
+            cache:"no-store"
+        });
+
+        if(response.status === 401 || response.redirected){
+            location.href = "/admin";
+            return;
+        }
+
+        if(!response.ok){
+            throw new Error("Server response error");
+        }
+
+        const result = await response.json();
+
+        if(!result.success) throw new Error("Analytics unavailable");
+
+        const s = result.stats;
+
+        const set = (id,value) => {
+            document.getElementById(id).textContent =
+                Number(value || 0).toLocaleString("en-IN");
+        };
+
+        set("totalVisits",s.totalVisits);
+        set("totalUnique",s.totalUnique);
+        set("todayVisits",s.todayVisits);
+        set("liveVisitors",s.liveVisitors);
+        set("weekVisits",s.weekVisits);
+        set("monthVisits",s.monthVisits);
+        set("todayUnique",s.todayUnique);
+        set("installs",s.installs);
+
+        document.getElementById("lastUpdated").textContent =
+            "Last updated: " + new Date().toLocaleTimeString();
+
+        // Device statistics
+        const deviceBox = document.getElementById("devices");
+
+        deviceBox.replaceChildren();
+
+        const deviceNames = ["Mobile","Desktop","Tablet"];
+
+        deviceNames.forEach(name => {
+
+            const item = result.devices.find(
+                d => d._id === name
+            );
+
+            const row = document.createElement("div");
+            row.className = "device-row";
+
+            const left = document.createElement("span");
+            left.textContent = name;
+
+            const right = document.createElement("strong");
+            right.textContent =
+                Number(item?.count || 0).toLocaleString("en-IN");
+
+            row.append(left,right);
+            deviceBox.appendChild(row);
+        });
+
+        // Most visited pages
+        const pageBody = document.getElementById("topPages");
+        pageBody.replaceChildren();
+
+        if(!result.topPages.length){
+
+            const tr = document.createElement("tr");
+            const td = document.createElement("td");
+
+            td.colSpan = 2;
+            td.textContent = "No visits recorded yet.";
+
+            tr.appendChild(td);
+            pageBody.appendChild(tr);
+
+        }else{
+
+            result.topPages.forEach(page => {
+
+                const tr = document.createElement("tr");
+
+                const url = document.createElement("td");
+                url.textContent = page._id;
+
+                const count = document.createElement("td");
+                count.textContent =
+                    Number(page.visits).toLocaleString("en-IN");
+
+                tr.append(url,count);
+                pageBody.appendChild(tr);
+            });
+        }
+
+        // Traffic graph
+        const labels = result.daily.map(d => d.date);
+        const visits = result.daily.map(d => d.visits);
+        const visitors = result.daily.map(d => d.visitors);
+
+        if(trafficChart){
+            trafficChart.data.labels = labels;
+            trafficChart.data.datasets[0].data = visits;
+            trafficChart.data.datasets[1].data = visitors;
+            trafficChart.update("none");
+        }else{
+
+            trafficChart = new Chart(
+                document.getElementById("trafficChart"),
+                {
+                    type:"line",
+
+                    data:{
+                        labels,
+
+                        datasets:[
+                            {
+                                label:"Page Visits",
+                                data:visits,
+                                borderColor:"#5146ee",
+                                backgroundColor:"#5146ee22",
+                                fill:true,
+                                tension:0.4
+                            },
+                            {
+                                label:"Unique Visitors",
+                                data:visitors,
+                                borderColor:"#079b69",
+                                backgroundColor:"transparent",
+                                tension:0.4
+                            }
+                        ]
+                    },
+
+                    options:{
+                        responsive:true,
+                        maintainAspectRatio:false,
+
+                        plugins:{
+                            legend:{position:"bottom"}
+                        },
+
+                        scales:{
+                            y:{
+                                beginAtZero:true,
+                                ticks:{precision:0}
+                            }
+                        }
+                    }
+                }
+            );
+        }
+
+    }catch(error){
+
+        console.error("Analytics:",error);
+
+        document.getElementById("lastUpdated").textContent =
+            "Unable to load analytics. Retrying...";
+    }
+}
+
+loadAnalytics();
+
+// Auto refresh every 15 seconds
+setInterval(loadAnalytics,15000);
+</script>
+
+</body>
+</html>

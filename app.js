@@ -6,6 +6,10 @@ const express = require("express");
 const path = require("path");
 const session = require("express-session");
 
+
+const analyticsRoutes = require("./routes/analyticsRoutes");
+const analyticsMiddleware = require("./middleware/analytics");
+
 const app = express();
 
 // Trust Hostinger reverse proxy
