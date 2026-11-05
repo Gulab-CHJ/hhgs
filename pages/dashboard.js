@@ -3446,6 +3446,31 @@ a {
 
     </a>
 
+
+<!-- HHGS ANALYTICS DASHBOARD -->
+
+<a
+    href="/analytics"
+    class="sabji-admin-btn"
+    style="
+        background:linear-gradient(135deg,#7c3aed,#4f46e5);
+    "
+>
+    <i class="fa-solid fa-chart-line"></i>
+
+    <span class="action-copy">
+        <strong>
+            Analytics Dashboard
+        </strong>
+
+        <small>
+            Visitors, Page Views, Installs & Reports
+        </small>
+    </span>
+</a>
+
+
+
 </nav>
 
 
