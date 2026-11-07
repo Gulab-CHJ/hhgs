@@ -1271,7 +1271,7 @@ function Home(
 
     ${Banner(banners)}
 
-${QuickServiceSection()}
+
 
 ${GSMarketBanner()}
 
