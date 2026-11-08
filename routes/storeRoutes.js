@@ -393,7 +393,8 @@ router.post("/api/checkout/create", async (req, res) => {
     subtotal = Math.round(subtotal * 100) / 100;
 
     // अभी delivery charge शून्य है।
-    const deliveryCharge = 0;
+    // HHGS23 DELIVERY CHARGE
+const deliveryCharge = subtotal >= 99 ? 0 : 20;
 
     const totalAmount =
       Math.round((subtotal + deliveryCharge) * 100) / 100;

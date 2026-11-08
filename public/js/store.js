@@ -3023,10 +3023,17 @@
   // =====================================
   // RENDER CART
   // =====================================
-
-  function renderCart() {
+function renderCart() {
     const count = cartQuantity();
     const subtotal = cartSubtotal();
+
+    // HHGS23 DELIVERY CHARGE
+    // ₹1–₹98 = ₹20
+    // ₹99 या अधिक = FREE
+    const deliveryCharge =
+      subtotal > 0 && subtotal < 99 ? 20 : 0;
+
+    const total = subtotal + deliveryCharge;
 
     if ($("cartCount")) {
       $("cartCount").textContent = String(count);
@@ -3037,11 +3044,14 @@
     }
 
     if ($("cartDelivery")) {
-      $("cartDelivery").textContent = money(0);
+      $("cartDelivery").textContent =
+        deliveryCharge > 0
+          ? money(deliveryCharge)
+          : "FREE";
     }
 
     if ($("cartTotal")) {
-      $("cartTotal").textContent = money(subtotal);
+      $("cartTotal").textContent = money(total);
     }
 
     const bottomBar = $("bottomCartBar");
@@ -3061,7 +3071,7 @@
     }
 
     if ($("bottomCartTotal")) {
-      $("bottomCartTotal").textContent = money(subtotal);
+      $("bottomCartTotal").textContent = money(total);
     }
 
     const container = $("cartItems");
@@ -3111,7 +3121,7 @@
     }
 
     saveCart();
-  }
+}
 
   // =====================================
   // ADD PRODUCT
