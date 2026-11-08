@@ -103,15 +103,21 @@ app.use(express.static(
 // GS MARKET - MAIN HOMEPAGE
 // ======================================
 
+// ======================================
+// GS MARKET - MAIN WEBSITE REDIRECT
+// ======================================
+
 const storeRoutes = require("./routes/storeRoutes");
 
-// Main Homepage: https://hhgs23.com/
-// Market: https://hhgs23.com/market
-
-
+// GS Market page
 app.use("/market", storeRoutes);
 
-console.log("GS MARKET HOMEPAGE LOADED");
+// Main domain automatically opens GS Market
+app.get("/", (req, res) => {
+    return res.redirect(301, "/market");
+});
+
+console.log("GS MARKET MAIN HOMEPAGE REDIRECT LOADED");
 
 // ======================================
 // OLD HHGS HOME ROUTES
