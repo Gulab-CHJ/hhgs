@@ -32,5 +32,11 @@
     "pdfkit": "^0.20.2",
     "razorpay": "^2.9.8",
     "sharp": "^0.35.5"
+  },
+  "allowScripts": {
+    "sharp@0.32.6": true,
+    "sharp@0.35.5": true,
+    "bcrypt@6.0.0": true,
+    "core-js@3.50.0": true
   }
 }
