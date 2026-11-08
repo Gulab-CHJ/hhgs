@@ -80,9 +80,22 @@ console.log("HHGS Analytics Loaded");
 // STATIC FILES
 // ======================================
 
+// ======================================
+// STATIC FILES
+// ======================================
+
 app.use("/storage", express.static(path.join(__dirname, "storage")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(express.static(path.join(__dirname, "public")));
+
+// index:false जरूरी है ताकि public/index.html
+// Homepage Route को रोक न सके।
+app.use(express.static(path.join(__dirname, "public"), {
+    index: false
+}));
+
+// ======================================
+// GS MARKET - MAIN HOMEPAGE
+// ======================================
 
 // ======================================
 // GS MARKET - MAIN HOMEPAGE
@@ -90,6 +103,16 @@ app.use(express.static(path.join(__dirname, "public")));
 
 const storeRoutes = require("./routes/storeRoutes");
 
+// Main Homepage
+app.get("/", (req, res) => {
+    console.log("GS MARKET ROOT HOMEPAGE OPENED");
+
+    return res.render("store/index", {
+        razorpayKeyId: process.env.RAZORPAY_KEY_ID || ""
+    });
+});
+
+// GS Market APIs and other routes
 app.use("/", storeRoutes);
 app.use("/market", storeRoutes);
 
