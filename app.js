@@ -108,7 +108,7 @@ const storeRoutes = require("./routes/storeRoutes");
 // Main Homepage: https://hhgs23.com/
 // Market: https://hhgs23.com/market
 
-app.use("/", storeRoutes);
+
 app.use("/market", storeRoutes);
 
 console.log("GS MARKET HOMEPAGE LOADED");

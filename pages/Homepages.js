@@ -1272,7 +1272,7 @@ function Home(
 
 
 
-${GSMarketHomePage()}
+${GSMarketBanner()}
 
      
 
