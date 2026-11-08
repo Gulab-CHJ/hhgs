@@ -16,7 +16,7 @@ const { EdgeTTS } = require("node-edge-tts");
 const app = express();
 
 // ======================================
-// TRUST PROXY
+// TRUST PROXY - HOSTINGER
 // ======================================
 
 app.set("trust proxy", 1);
@@ -32,7 +32,6 @@ require("./config/database");
 // ======================================
 
 app.set("view engine", "ejs");
-
 app.set("views", path.join(__dirname, "views"));
 
 // ======================================
@@ -74,28 +73,31 @@ const analyticsMiddleware = require("./middleware/analytics");
 app.use(analyticsMiddleware);
 app.use("/analytics", analyticsRoutes);
 
-console.log("HHGS Analytics Loaded");
+console.log("HHGS ANALYTICS LOADED");
 
 // ======================================
 // STATIC FILES
 // ======================================
 
-// ======================================
-// STATIC FILES
-// ======================================
+app.use("/storage", express.static(
+    path.join(__dirname, "storage")
+));
 
-app.use("/storage", express.static(path.join(__dirname, "storage")));
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(
+    path.join(__dirname, "uploads")
+));
 
-// index:false जरूरी है ताकि public/index.html
-// Homepage Route को रोक न सके।
-app.use(express.static(path.join(__dirname, "public"), {
-    index: false
-}));
+app.use("/doctor/public", express.static(
+    path.join(__dirname, "doctor", "public")
+));
 
-// ======================================
-// GS MARKET - MAIN HOMEPAGE
-// ======================================
+// index:false prevents public/index.html
+// from taking over the homepage.
+
+app.use(express.static(
+    path.join(__dirname, "public"),
+    { index: false }
+));
 
 // ======================================
 // GS MARKET - MAIN HOMEPAGE
@@ -103,16 +105,9 @@ app.use(express.static(path.join(__dirname, "public"), {
 
 const storeRoutes = require("./routes/storeRoutes");
 
-// Main Homepage
-app.get("/", (req, res) => {
-    console.log("GS MARKET ROOT HOMEPAGE OPENED");
+// Main Homepage: https://hhgs23.com/
+// Market: https://hhgs23.com/market
 
-    return res.render("store/index", {
-        razorpayKeyId: process.env.RAZORPAY_KEY_ID || ""
-    });
-});
-
-// GS Market APIs and other routes
 app.use("/", storeRoutes);
 app.use("/market", storeRoutes);
 
@@ -132,12 +127,16 @@ app.use("/", indexRoutes);
 const adminRoutes = require("./routes/admin");
 app.use("/admin", adminRoutes);
 
+console.log("ADMIN ROUTES LOADED");
+
 // ======================================
 // DOCTOR
 // ======================================
 
 const doctorRoutes = require("./routes/doctor");
 app.use("/doctor", doctorRoutes);
+
+console.log("DOCTOR ROUTES LOADED");
 
 // ======================================
 // APPOINTMENT
@@ -146,7 +145,7 @@ app.use("/doctor", doctorRoutes);
 const appointmentRoute = require("./routes/appointment");
 app.use("/appointment", appointmentRoute);
 
-console.log("Appointment Route Loaded");
+console.log("APPOINTMENT ROUTES LOADED");
 
 // ======================================
 // SERVICES
@@ -155,6 +154,8 @@ console.log("Appointment Route Loaded");
 const serviceRoutes = require("./routes/service");
 app.use("/", serviceRoutes);
 
+console.log("SERVICE ROUTES LOADED");
+
 // ======================================
 // AUTH
 // ======================================
@@ -162,18 +163,16 @@ app.use("/", serviceRoutes);
 const authRoutes = require("./routes/auth");
 app.use("/", authRoutes);
 
+console.log("AUTH ROUTES LOADED");
+
 // ======================================
 // DOCTOR PUBLIC STORE
 // ======================================
 
 const storeRouter = require("./doctor/dhhpb/store");
-
-app.use(
-    "/doctor/public",
-    express.static(path.join(__dirname, "doctor", "public"))
-);
-
 app.use("/doctor", storeRouter);
+
+console.log("DOCTOR PUBLIC STORE LOADED");
 
 // ======================================
 // CART
@@ -264,7 +263,8 @@ app.post("/api/free-presenter-voice", async (req, res) => {
                     {
                         method: "POST",
                         headers: {
-                            Authorization: "Bearer " + process.env.OPENAI_API_KEY,
+                            Authorization:
+                                "Bearer " + process.env.OPENAI_API_KEY,
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
@@ -296,7 +296,7 @@ app.post("/api/free-presenter-voice", async (req, res) => {
             }
         }
 
-        // FREE EDGE TTS FALLBACK
+        // EDGE TTS FALLBACK
 
         audioPath = path.join(
             os.tmpdir(),
@@ -422,10 +422,10 @@ app.use("/", quickServiceRoutes);
 // ======================================
 
 const customerBakayaRoutes = require("./routes/customerBakaya");
-app.use(customerBakayaRoutes);
+app.use("/", customerBakayaRoutes);
 
 // ======================================
-// PASSPORT PHOTO MAKER
+// PASSPORT PHOTO UPLOAD
 // ======================================
 
 const passportUpload = multer({
@@ -439,7 +439,9 @@ const passportUpload = multer({
     fileFilter: (req, file, cb) => {
 
         if (!["image/jpeg", "image/png", "image/webp"].includes(file.mimetype)) {
-            return cb(new Error("Sirf JPG, PNG ya WEBP photo upload karein."));
+            return cb(
+                new Error("Sirf JPG, PNG ya WEBP photo upload karein.")
+            );
         }
 
         cb(null, true);
@@ -448,7 +450,9 @@ const passportUpload = multer({
 
 });
 
+// ======================================
 // PASSPORT PHOTO PAGE
+// ======================================
 
 app.get("/passport-photo", (req, res) => {
 
@@ -534,16 +538,22 @@ btn.disabled=false;
 
 });
 
-// PASSPORT TEST
+// ======================================
+// PASSPORT PHOTO TEST
+// ======================================
 
 app.get("/passport-photo-test", (req, res) => {
+
     res.json({
         success: true,
         message: "Passport Photo backend connected"
     });
+
 });
 
-// PROCESS PASSPORT PHOTO
+// ======================================
+// PROCESS PASSPORT PHOTOS
+// ======================================
 
 app.post(
     "/process-passport-photos",
@@ -584,7 +594,11 @@ app.post(
                     position: "centre"
                 })
                 .flatten({
-                    background: { r: 255, g: 255, b: 255 }
+                    background: {
+                        r: 255,
+                        g: 255,
+                        b: 255
+                    }
                 })
                 .jpeg({ quality: 95 })
                 .toBuffer();
@@ -597,8 +611,11 @@ app.post(
             const gapX = 20;
             const gapY = 80;
 
-            const totalWidth = cols * photoWidth + (cols - 1) * gapX;
-            const totalHeight = rows * photoHeight + (rows - 1) * gapY;
+            const totalWidth =
+                cols * photoWidth + (cols - 1) * gapX;
+
+            const totalHeight =
+                rows * photoHeight + (rows - 1) * gapY;
 
             const startX = Math.round((a4Width - totalWidth) / 2);
             const startY = Math.round((a4Height - totalHeight) / 2);
@@ -606,6 +623,7 @@ app.post(
             const composites = [];
 
             for (let r = 0; r < rows; r++) {
+
                 for (let c = 0; c < cols; c++) {
 
                     const left = startX + c * (photoWidth + gapX);
@@ -633,6 +651,7 @@ app.post(
                     });
 
                 }
+
             }
 
             const jpgBuffer = await sharp({
@@ -643,9 +662,9 @@ app.post(
                     background: "#ffffff"
                 }
             })
-            .composite(composites)
-            .jpeg({ quality: 95 })
-            .toBuffer();
+                .composite(composites)
+                .jpeg({ quality: 95 })
+                .toBuffer();
 
             const pdfBuffer = await new Promise((resolve, reject) => {
 
@@ -700,6 +719,8 @@ const storeAdminRoutes = require("./routes/storeAdminRoutes");
 
 app.use("/admin/market", storeAdminRoutes);
 
+console.log("GS MARKET ADMIN LOADED");
+
 // ======================================
 // SHOPKEEPER
 // ======================================
@@ -708,6 +729,8 @@ const shopkeeperRoutes = require("./routes/shopkeeperRoutes");
 
 app.use("/shopkeeper", shopkeeperRoutes);
 
+console.log("SHOPKEEPER ROUTES LOADED");
+
 // ======================================
 // MULTER ERROR HANDLER
 // ======================================
@@ -715,19 +738,23 @@ app.use("/shopkeeper", shopkeeperRoutes);
 app.use((err, req, res, next) => {
 
     if (err instanceof multer.MulterError) {
+
         return res.status(400).json({
             success: false,
             error: err.code === "LIMIT_FILE_SIZE"
                 ? "Photo 10 MB se chhoti honi chahiye."
                 : err.message
         });
+
     }
 
     if (req.path === "/process-passport-photos") {
+
         return res.status(400).json({
             success: false,
             error: err.message || "Photo upload mein samasya aayi."
         });
+
     }
 
     next(err);
@@ -753,7 +780,7 @@ app.use((err, req, res, next) => {
 });
 
 // ======================================
-// 404
+// 404 HANDLER
 // ======================================
 
 app.use((req, res) => {
