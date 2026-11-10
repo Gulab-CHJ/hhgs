@@ -3031,7 +3031,7 @@ function renderCart() {
     // ₹1–₹98 = ₹20
     // ₹99 या अधिक = FREE
     const deliveryCharge =
-      subtotal > 0 && subtotal < 99 ? 20 : 0;
+  subtotal > 0 && subtotal < 100 ? 20 : 0;
 
     const total = subtotal + deliveryCharge;
 
@@ -3071,8 +3071,8 @@ function renderCart() {
     }
 
     if ($("bottomCartTotal")) {
-      $("bottomCartTotal").textContent = money(total);
-    }
+  $("bottomCartTotal").textContent = money(subtotal);
+}
 
     const container = $("cartItems");
 
