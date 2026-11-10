@@ -3735,3 +3735,129 @@ function renderCart() {
   loadProducts();
 
 })();
+
+
+
+
+
+(() => {
+  let deferredPrompt = null;
+
+  const STORAGE_KEY = "hhgs_market_install_later";
+
+  function showInstallPopup() {
+    if (document.getElementById("hhgsMarketInstall")) return;
+
+    if (
+      window.matchMedia("(display-mode: standalone)").matches ||
+      window.navigator.standalone === true
+    ) return;
+
+    const dismissed = Number(localStorage.getItem(STORAGE_KEY) || 0);
+
+    if (dismissed && Date.now() - dismissed < 7 * 86400000) return;
+
+    const style = document.createElement("style");
+
+    style.textContent = `
+      #hhgsMarketInstall {
+        position:fixed;
+        inset:0;
+        z-index:999999;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+        background:rgba(0,0,0,.6);
+      }
+      .hhgs-install-card {
+        width:100%;
+        max-width:330px;
+        background:white;
+        padding:25px;
+        border-radius:20px;
+        text-align:center;
+        box-shadow:0 10px 40px #0003;
+      }
+      .hhgs-install-card img {
+        width:85px;
+        height:85px;
+        object-fit:contain;
+        margin-bottom:20px;
+      }
+      .hhgs-install-card button {
+        width:100%;
+        padding:14px;
+        border:0;
+        border-radius:10px;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+      }
+      #hhgsInstallNow {
+        background:#5146ee;
+        color:white;
+      }
+      #hhgsInstallLater {
+        margin-top:10px;
+        background:#eee;
+        color:#333;
+      }
+    `;
+
+    document.head.appendChild(style);
+
+    const popup = document.createElement("div");
+    popup.id = "hhgsMarketInstall";
+
+    popup.innerHTML = `
+      <div class="hhgs-install-card">
+        <img src="/images/GS%20LOGO.png" alt="HHGS Logo">
+        <button id="hhgsInstallNow">Install Now</button>
+        <button id="hhgsInstallLater">Maybe Later</button>
+      </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    document.getElementById("hhgsInstallNow").onclick = async () => {
+      if (!deferredPrompt) return;
+
+      const prompt = deferredPrompt;
+      deferredPrompt = null;
+
+      await prompt.prompt();
+
+      const result = await prompt.userChoice;
+
+      if (result.outcome === "accepted") {
+        popup.remove();
+      }
+    };
+
+    document.getElementById("hhgsInstallLater").onclick = () => {
+      localStorage.setItem(STORAGE_KEY, Date.now());
+      popup.remove();
+    };
+  }
+
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredPrompt = event;
+    showInstallPopup();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    document.getElementById("hhgsMarketInstall")?.remove();
+    localStorage.removeItem(STORAGE_KEY);
+  });
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/service-worker.js")
+        .then(reg => console.log("Market PWA Ready:", reg.scope))
+        .catch(err => console.error("PWA Error:", err));
+    });
+  }
+})();
