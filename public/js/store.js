@@ -3071,8 +3071,8 @@ function renderCart() {
     }
 
     if ($("bottomCartTotal")) {
-  $("bottomCartTotal").textContent = money(subtotal);
-}
+        $("bottomCartTotal").textContent = money(subtotal);
+      }
 
     const container = $("cartItems");
 
