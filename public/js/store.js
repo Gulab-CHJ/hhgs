@@ -3519,10 +3519,22 @@ function confirmManualMapLocation() {
   );
 }
 
-$("openManualMap")?.addEventListener(
-  "click",
-  openManualMap
-);
+const manualMapButton = $("openManualMap");
+
+if (manualMapButton) {
+  manualMapButton.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    console.log("Manual Map Button Clicked");
+
+    try {
+      openManualMap();
+    } catch (error) {
+      console.error("Manual Map Error:", error);
+      showCheckoutMessage(error.message);
+    }
+  });
+}
 
 $("closeManualMap")?.addEventListener("click", () => {
   $("manualMapModal").style.display = "none";
