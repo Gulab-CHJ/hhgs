@@ -28,6 +28,16 @@
 
   <!-- Razorpay checkout -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+
+
 </head>
 
 <body>
@@ -303,6 +313,100 @@
         autocomplete="street-address"
         placeholder="घर, मोहल्ला, शहर, राज्य और PIN Code"
       ></textarea>
+
+
+
+
+
+
+
+
+      <button type="button" id="openManualMap"
+ style="
+ width:100%;
+ padding:14px;
+ margin:12px 0;
+ border:1px solid #5146ee;
+ border-radius:12px;
+ background:#f3f2ff;
+ color:#5146ee;
+ font-size:15px;
+ font-weight:700;
+ cursor:pointer;">
+ 📍 Map से Delivery Location चुनें
+</button>
+
+<p id="selectedMapLocation"
+ style="font-size:13px;color:#15803d;margin:5px 0 12px;">
+ अभी Map Location नहीं चुनी गई
+</p>
+
+<div id="manualMapModal" style="
+ display:none;
+ position:fixed;
+ inset:0;
+ z-index:999999;
+ background:white;
+ padding:12px;
+ overflow:auto;">
+
+ <div style="display:flex;justify-content:space-between;align-items:center;">
+   <strong>📍 अपनी Delivery Location चुनें</strong>
+   <button type="button" id="closeManualMap"
+    style="border:0;background:#eee;border-radius:8px;padding:9px 14px;">
+    ✕
+   </button>
+ </div>
+
+ <p style="font-size:13px;color:#555;">
+   मैप को खिसकाकर बीच वाले निशान पर अपना घर सेट करें।
+ </p>
+
+ <div id="customerMap" style="
+ height:55vh;
+ min-height:300px;
+ width:100%;
+ border-radius:14px;
+ overflow:hidden;
+ position:relative;">
+
+   <div style="
+    position:absolute;
+    z-index:1000;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-100%);
+    font-size:35px;
+    pointer-events:none;">
+    📍
+   </div>
+ </div>
+
+ <p id="mapDistanceInfo"
+ style="font-weight:700;text-align:center;padding:10px;">
+ दुकान से दूरी जाँची जा रही है...
+ </p>
+
+ <button type="button" id="confirmMapLocation"
+ style="
+ width:100%;
+ padding:15px;
+ border:0;
+ border-radius:12px;
+ background:#5146ee;
+ color:white;
+ font-weight:800;
+ font-size:16px;">
+ इस लोकेशन को चुनें
+ </button>
+</div>
+
+
+
+
+
+
+
 
       <button
         type="submit"

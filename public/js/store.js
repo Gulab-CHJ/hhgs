@@ -2230,13 +2230,19 @@
     category: "all",
     search: "",
     checkoutBusy: false,
+
     shop: {
       shopOpen: false,
       radiusKm: 2,
       latitude: null,
       longitude: null
-    }
-  };
+    },
+
+    // Manual Map Location
+    manualLocation: null,
+    map: null,
+    mapCircle: null
+};
 
   // =====================================
   // CART STORAGE
@@ -2389,55 +2395,59 @@
   // =====================================
   // SHOP STATUS + SHOP LOCATION
   // =====================================
+async function loadShopStatus() {
+  try {
+    const response = await fetch(SHOP_STATUS_API, {
+      headers: { Accept: "application/json" },
+      cache: "no-store"
+    });
 
-  async function loadShopStatus() {
-    try {
-      const response = await fetch(SHOP_STATUS_API, {
-        headers: { Accept: "application/json" },
-        cache: "no-store"
-      });
+    const data = await response.json();
 
-      const data = await response.json();
-
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || "Shop status नहीं मिला।");
-      }
-
-      state.shop = {
-        shopOpen: data.shopOpen === true,
-        radiusKm: Number(data.radiusKm) > 0
-          ? Number(data.radiusKm)
-          : 2,
-        latitude: Number.isFinite(Number(data.shopLatitude))
-          ? Number(data.shopLatitude)
-          : null,
-        longitude: Number.isFinite(Number(data.shopLongitude))
-          ? Number(data.shopLongitude)
-          : null
-      };
-
-      const statusElement = $("shopStatus");
-
-      if (statusElement) {
-        statusElement.textContent = state.shop.shopOpen
-          ? "● Shop Open"
-          : "● Shop Closed";
-
-        statusElement.classList.toggle(
-          "shop-open",
-          state.shop.shopOpen
-        );
-
-        statusElement.classList.toggle(
-          "shop-closed",
-          !state.shop.shopOpen
-        );
-      }
-
-    } catch (error) {
-      console.error("Shop status error:", error);
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || "Shop status नहीं मिला।");
     }
+
+    state.shop = {
+      shopOpen: data.shopOpen === true,
+
+      radiusKm: Number(data.radiusKm) > 0
+        ? Number(data.radiusKm)
+        : 2,
+
+      latitude: data.shopLatitude != null &&
+  data.shopLatitude !== ""
+  ? Number(data.shopLatitude)
+  : null,
+
+longitude: data.shopLongitude != null &&
+  data.shopLongitude !== ""
+  ? Number(data.shopLongitude)
+  : null
+    };
+
+    const statusElement = $("shopStatus");
+
+    if (statusElement) {
+      statusElement.textContent = state.shop.shopOpen
+        ? "● Shop Open"
+        : "● Shop Closed";
+
+      statusElement.classList.toggle(
+        "shop-open",
+        state.shop.shopOpen
+      );
+
+      statusElement.classList.toggle(
+        "shop-closed",
+        !state.shop.shopOpen
+      );
+    }
+
+  } catch (error) {
+    console.error("Shop status error:", error);
   }
+}
 
   // =====================================
   // GOOGLE MAPS DIRECTIONS
@@ -3340,6 +3350,196 @@ function renderCart() {
     });
   }
 
+
+
+
+
+
+// =====================================
+// MANUAL MAP LOCATION PICKER
+// =====================================
+
+function addManualMapStyles() {
+  if ($("manualMapStyles")) return;
+
+  const style = document.createElement("style");
+  style.id = "manualMapStyles";
+
+  style.textContent = `
+    #manualMapModal {
+      box-sizing:border-box;
+    }
+
+    #manualMapModal * {
+      box-sizing:border-box;
+    }
+
+    #customerMap {
+      z-index:1;
+    }
+
+    .leaflet-container {
+      font-family:inherit;
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+function openManualMap() {
+  if (!window.L) {
+    showCheckoutMessage("Map load नहीं हुआ। दोबारा कोशिश करें।");
+    return;
+  }
+
+  if (
+    !Number.isFinite(state.shop.latitude) ||
+    !Number.isFinite(state.shop.longitude)
+  ) {
+    showCheckoutMessage("दुकान की Map Location उपलब्ध नहीं है।");
+    return;
+  }
+
+  const modal = $("manualMapModal");
+  modal.style.display = "block";
+  document.body.style.overflow = "hidden";
+
+  if (!state.map) {
+    const shopLat = state.shop.latitude;
+    const shopLon = state.shop.longitude;
+    const radius = state.shop.radiusKm * 1000;
+
+    const initialLocation = state.manualLocation || {
+      latitude: shopLat,
+      longitude: shopLon
+    };
+
+    state.map = L.map("customerMap", {
+      zoomControl: true
+    }).setView(
+      [initialLocation.latitude, initialLocation.longitude],
+      15
+    );
+
+    L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap"
+      }
+    ).addTo(state.map);
+
+    // SHOP MARKER
+    L.marker([shopLat, shopLon])
+      .addTo(state.map)
+      .bindPopup("🏪 GS Market Shop");
+
+    // GREEN DELIVERY RADIUS
+    state.mapCircle = L.circle(
+      [shopLat, shopLon],
+      {
+        radius,
+        color: "#16a34a",
+        weight: 2,
+        fillColor: "#22c55e",
+        fillOpacity: 0.18
+      }
+    ).addTo(state.map);
+
+    state.map.on("moveend", updateMapDistance);
+  }
+
+  setTimeout(() => {
+    state.map.invalidateSize();
+    updateMapDistance();
+  }, 250);
+}
+
+function updateMapDistance() {
+  if (!state.map) return;
+
+  const center = state.map.getCenter();
+
+  const shopPoint = L.latLng(
+    state.shop.latitude,
+    state.shop.longitude
+  );
+
+  const distanceKm =
+    shopPoint.distanceTo(center) / 1000;
+
+  const inside =
+    distanceKm <= state.shop.radiusKm;
+
+  const info = $("mapDistanceInfo");
+
+  info.style.color = inside ? "#15803d" : "#dc2626";
+
+  info.textContent = inside
+    ? `✓ Delivery उपलब्ध है · ${distanceKm.toFixed(2)} KM`
+    : `✕ ${distanceKm.toFixed(2)} KM · Delivery Area से बाहर`;
+
+  $("confirmMapLocation").disabled = !inside;
+
+  $("confirmMapLocation").style.opacity =
+    inside ? "1" : ".5";
+}
+
+function confirmManualMapLocation() {
+  if (!state.map) return;
+
+  const center = state.map.getCenter();
+
+  const distanceKm =
+    L.latLng(
+      state.shop.latitude,
+      state.shop.longitude
+    ).distanceTo(center) / 1000;
+
+  if (distanceKm > state.shop.radiusKm) {
+    showCheckoutMessage(
+      "कृपया दुकान के 2 KM के अंदर की लोकेशन चुनें।"
+    );
+    return;
+  }
+
+  state.manualLocation = {
+    latitude: center.lat,
+    longitude: center.lng
+  };
+
+  $("selectedMapLocation").textContent =
+    `✓ Map Location चुनी गई · ${distanceKm.toFixed(2)} KM`;
+
+  $("manualMapModal").style.display = "none";
+  document.body.style.overflow = "";
+
+  showCheckoutMessage(
+    "आपकी Delivery Location सफलतापूर्वक चुन ली गई है।"
+  );
+}
+
+$("openManualMap")?.addEventListener(
+  "click",
+  openManualMap
+);
+
+$("closeManualMap")?.addEventListener("click", () => {
+  $("manualMapModal").style.display = "none";
+  document.body.style.overflow = "";
+});
+
+$("confirmMapLocation")?.addEventListener(
+  "click",
+  confirmManualMapLocation
+);
+
+addManualMapStyles();
+
+
+
+
+
   // =====================================
   // CHECKOUT MESSAGE
   // =====================================
@@ -3422,7 +3622,16 @@ function renderCart() {
 
       try {
         // STEP 1: CUSTOMER GPS
-        const gps = await getCustomerGPS();
+        let gps;
+
+if (state.manualLocation) {
+  gps = {
+    latitude: state.manualLocation.latitude,
+    longitude: state.manualLocation.longitude
+  };
+} else {
+  gps = await getCustomerGPS();
+}
 
         console.log("GS Market GPS:", {
           latitude: gps.latitude,
