@@ -1,89 +1,89 @@
-function AddGovernment(){
+// function AddGovernment(){
 
-return `
+// return `
 
-<!DOCTYPE html>
-<html>
-<head>
-<title>Add Government Person</title>
+// <!DOCTYPE html>
+// <html>
+// <head>
+// <title>Add Government Person</title>
 
-<link rel="stylesheet" href="/css/admin.css">
+// <link rel="stylesheet" href="/css/admin.css">
 
-</head>
+// </head>
 
-<body>
+// <body>
 
-<div class="login-container">
+// <div class="login-container">
 
-<div class="login-card">
+// <div class="login-card">
 
-<h2>Add Government Person</h2>
-
-
-<form action="/admin/add-government" 
-method="POST"
-enctype="multipart/form-data">
+// <h2>Add Government Person</h2>
 
 
-<input 
-type="text"
-name="name"
-placeholder="Name"
-required>
+// <form action="/admin/add-government" 
+// method="POST"
+// enctype="multipart/form-data">
 
 
-<input 
-type="text"
-name="position"
-placeholder="Position">
+// <input 
+// type="text"
+// name="name"
+// placeholder="Name"
+// required>
 
 
-<input 
-type="text"
-name="department"
-placeholder="Department">
+// <input 
+// type="text"
+// name="position"
+// placeholder="Position">
 
 
-<input 
-type="text"
-name="phone"
-placeholder="Phone">
+// <input 
+// type="text"
+// name="department"
+// placeholder="Department">
 
 
-<textarea 
-name="address"
-placeholder="Address"></textarea>
+// <input 
+// type="text"
+// name="phone"
+// placeholder="Phone">
 
 
-<textarea 
-name="description"
-placeholder="Description"></textarea>
+// <textarea 
+// name="address"
+// placeholder="Address"></textarea>
 
 
-<input 
-type="file"
-name="image">
+// <textarea 
+// name="description"
+// placeholder="Description"></textarea>
 
 
-<button type="submit">
-Save
-</button>
+// <input 
+// type="file"
+// name="image">
 
 
-</form>
+// <button type="submit">
+// Save
+// </button>
 
 
-</div>
-
-</div>
+// </form>
 
 
-</body>
-</html>
+// </div>
 
-`;
-
-}
+// </div>
 
 
-module.exports = AddGovernment;
+// </body>
+// </html>
+
+// `;
+
+// }
+
+
+// module.exports = AddGovernment;

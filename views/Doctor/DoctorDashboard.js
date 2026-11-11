@@ -1,539 +1,539 @@
-function DoctorDashboard(doctor){
+// function DoctorDashboard(doctor){
 
-return `
+// return `
 
-<style>
+// <style>
 
-:root{
+// :root{
 
---primary:#2563eb;
---green:#10b981;
---bg:#f8fafc;
---text:#0f172a;
+// --primary:#2563eb;
+// --green:#10b981;
+// --bg:#f8fafc;
+// --text:#0f172a;
 
-}
+// }
 
 
-.doctor-dashboard{
+// .doctor-dashboard{
 
-background:#f8fafc;
+// background:#f8fafc;
 
-min-height:100vh;
+// min-height:100vh;
 
-padding:25px;
+// padding:25px;
 
-font-family:Arial,sans-serif;
+// font-family:Arial,sans-serif;
 
-}
+// }
 
 
-/* HEADER */
+// /* HEADER */
 
 
-.dashboard-header{
+// .dashboard-header{
 
-background:
-linear-gradient(
-135deg,
-#1e3a8a,
-#2563eb
-);
+// background:
+// linear-gradient(
+// 135deg,
+// #1e3a8a,
+// #2563eb
+// );
 
-color:white;
+// color:white;
 
-padding:25px;
+// padding:25px;
 
-border-radius:22px;
+// border-radius:22px;
 
-display:flex;
+// display:flex;
 
-justify-content:space-between;
+// justify-content:space-between;
 
-align-items:center;
+// align-items:center;
 
-box-shadow:
-0 15px 35px rgba(0,0,0,.15);
+// box-shadow:
+// 0 15px 35px rgba(0,0,0,.15);
 
-}
+// }
 
 
-.dashboard-header h1{
+// .dashboard-header h1{
 
-margin:0;
+// margin:0;
 
-font-size:28px;
+// font-size:28px;
 
-}
+// }
 
 
-.profile-btn{
+// .profile-btn{
 
-background:white;
+// background:white;
 
-color:#2563eb;
+// color:#2563eb;
 
-padding:12px 20px;
+// padding:12px 20px;
 
-border-radius:12px;
+// border-radius:12px;
 
-text-decoration:none;
+// text-decoration:none;
 
-font-weight:bold;
+// font-weight:bold;
 
-}
+// }
 
 
 
-/* STATS */
+// /* STATS */
 
 
-.stats-grid{
+// .stats-grid{
 
-margin-top:25px;
+// margin-top:25px;
 
-display:grid;
+// display:grid;
 
-grid-template-columns:
-repeat(4,1fr);
+// grid-template-columns:
+// repeat(4,1fr);
 
-gap:18px;
+// gap:18px;
 
-}
+// }
 
 
-.stat-card{
+// .stat-card{
 
 
-background:white;
+// background:white;
 
-padding:25px;
+// padding:25px;
 
-border-radius:20px;
+// border-radius:20px;
 
-border:1px solid #e5e7eb;
+// border:1px solid #e5e7eb;
 
-box-shadow:
-0 10px 25px rgba(0,0,0,.08);
+// box-shadow:
+// 0 10px 25px rgba(0,0,0,.08);
 
-}
+// }
 
 
 
-.stat-card h2{
+// .stat-card h2{
 
-margin:0;
+// margin:0;
 
-color:#2563eb;
+// color:#2563eb;
 
-font-size:32px;
+// font-size:32px;
 
-}
+// }
 
 
 
-.stat-card p{
+// .stat-card p{
 
-color:#64748b;
+// color:#64748b;
 
-font-weight:bold;
+// font-weight:bold;
 
-}
+// }
 
 
 
-/* APPOINTMENT */
+// /* APPOINTMENT */
 
 
-.appointment-section{
+// .appointment-section{
 
-margin-top:35px;
+// margin-top:35px;
 
-background:white;
+// background:white;
 
-padding:25px;
+// padding:25px;
 
-border-radius:22px;
+// border-radius:22px;
 
-box-shadow:
-0 10px 30px rgba(0,0,0,.08);
+// box-shadow:
+// 0 10px 30px rgba(0,0,0,.08);
 
-}
+// }
 
 
 
-.appointment-card{
+// .appointment-card{
 
 
-margin-top:18px;
+// margin-top:18px;
 
-padding:22px;
+// padding:22px;
 
-border-radius:18px;
+// border-radius:18px;
 
-background:#f8fafc;
+// background:#f8fafc;
 
-border:1px solid #e2e8f0;
+// border:1px solid #e2e8f0;
 
-display:flex;
+// display:flex;
 
-justify-content:space-between;
+// justify-content:space-between;
 
-align-items:center;
+// align-items:center;
 
-}
+// }
 
 
 
-.patient h3{
+// .patient h3{
 
-margin:0;
+// margin:0;
 
-color:#0f172a;
+// color:#0f172a;
 
-}
+// }
 
 
 
-.patient p{
+// .patient p{
 
-margin:8px 0;
+// margin:8px 0;
 
-color:#64748b;
+// color:#64748b;
 
-}
+// }
 
 
 
-.right-side{
+// .right-side{
 
-text-align:right;
+// text-align:right;
 
-}
+// }
 
 
 
-.payment{
+// .payment{
 
-background:#dcfce7;
+// background:#dcfce7;
 
-color:#15803d;
+// color:#15803d;
 
-padding:8px 15px;
+// padding:8px 15px;
 
-border-radius:20px;
+// border-radius:20px;
 
-font-weight:bold;
+// font-weight:bold;
 
-display:inline-block;
+// display:inline-block;
 
-}
+// }
 
 
 
-.status{
+// .status{
 
-margin-top:12px;
+// margin-top:12px;
 
-}
+// }
 
 
 
-.status select{
+// .status select{
 
 
-padding:10px;
+// padding:10px;
 
-border-radius:10px;
+// border-radius:10px;
 
-border:1px solid #ddd;
+// border:1px solid #ddd;
 
-font-weight:bold;
+// font-weight:bold;
 
-}
+// }
 
 
 
-/* MOBILE */
+// /* MOBILE */
 
 
-@media(max-width:800px){
+// @media(max-width:800px){
 
 
-.stats-grid{
+// .stats-grid{
 
-grid-template-columns:
-repeat(2,1fr);
+// grid-template-columns:
+// repeat(2,1fr);
 
-}
+// }
 
 
-.appointment-card{
+// .appointment-card{
 
-flex-direction:column;
+// flex-direction:column;
 
-align-items:flex-start;
+// align-items:flex-start;
 
-gap:20px;
+// gap:20px;
 
-}
+// }
 
 
-.right-side{
+// .right-side{
 
-text-align:left;
+// text-align:left;
 
-}
+// }
 
 
-}
+// }
 
 
 
-@media(max-width:500px){
+// @media(max-width:500px){
 
 
-.doctor-dashboard{
+// .doctor-dashboard{
 
-padding:12px;
+// padding:12px;
 
-}
+// }
 
 
-.stats-grid{
+// .stats-grid{
 
-grid-template-columns:1fr;
+// grid-template-columns:1fr;
 
-}
+// }
 
 
-.dashboard-header{
+// .dashboard-header{
 
-flex-direction:column;
+// flex-direction:column;
 
-gap:15px;
+// gap:15px;
 
-}
+// }
 
 
-}
+// }
 
 
-</style>
+// </style>
 
 
 
 
-<div class="doctor-dashboard">
+// <div class="doctor-dashboard">
 
 
 
-<div class="dashboard-header">
+// <div class="dashboard-header">
 
 
-<div>
+// <div>
 
-<h1>
-🩺 HHGS Doctor
-</h1>
+// <h1>
+// 🩺 HHGS Doctor
+// </h1>
 
-<p>
-Welcome Dr. ${doctor.name || ""}
-</p>
+// <p>
+// Welcome Dr. ${doctor.name || ""}
+// </p>
 
-</div>
+// </div>
 
 
 
-<a class="profile-btn"
-href="/admin/doctor/profile">
+// <a class="profile-btn"
+// href="/admin/doctor/profile">
 
-👤 Profile
+// 👤 Profile
 
-</a>
+// </a>
 
 
-</div>
+// </div>
 
 
 
 
 
-<div class="stats-grid">
+// <div class="stats-grid">
 
 
-<div class="stat-card">
+// <div class="stat-card">
 
-<h2>
-25
-</h2>
+// <h2>
+// 25
+// </h2>
 
-<p>
-📅 Total Appointment
-</p>
+// <p>
+// 📅 Total Appointment
+// </p>
 
-</div>
+// </div>
 
 
 
-<div class="stat-card">
+// <div class="stat-card">
 
-<h2>
-5
-</h2>
+// <h2>
+// 5
+// </h2>
 
-<p>
-🕒 Today
-</p>
+// <p>
+// 🕒 Today
+// </p>
 
-</div>
+// </div>
 
 
 
 
-<div class="stat-card">
+// <div class="stat-card">
 
-<h2>
-18
-</h2>
+// <h2>
+// 18
+// </h2>
 
-<p>
-✅ Completed
-</p>
+// <p>
+// ✅ Completed
+// </p>
 
-</div>
+// </div>
 
 
 
 
-<div class="stat-card">
+// <div class="stat-card">
 
-<h2>
-₹5000
-</h2>
+// <h2>
+// ₹5000
+// </h2>
 
-<p>
-💰 Earning
-</p>
+// <p>
+// 💰 Earning
+// </p>
 
-</div>
+// </div>
 
 
-</div>
+// </div>
 
 
 
 
 
 
-<div class="appointment-section">
+// <div class="appointment-section">
 
 
-<h2>
-📅 Today's Appointments
-</h2>
+// <h2>
+// 📅 Today's Appointments
+// </h2>
 
 
 
-<div class="appointment-card">
+// <div class="appointment-card">
 
 
-<div class="patient">
+// <div class="patient">
 
 
-<h3>
-👤 Md Gulab
-</h3>
+// <h3>
+// 👤 Md Gulab
+// </h3>
 
 
-<p>
-📞 9142264714
-</p>
+// <p>
+// 📞 9142264714
+// </p>
 
 
-<p>
-📅 28-07-2026</p>
+// <p>
+// 📅 28-07-2026</p>
 
 
-<p>
-⏰ 09:10
-</p>
+// <p>
+// ⏰ 09:10
+// </p>
 
 
-<p>
-📝 Problem: Good
-</p>
+// <p>
+// 📝 Problem: Good
+// </p>
 
 
-</div>
+// </div>
 
 
 
 
 
-<div class="right-side">
+// <div class="right-side">
 
 
-<div class="payment">
+// <div class="payment">
 
-💳 Payment Success
+// 💳 Payment Success
 
-</div>
+// </div>
 
 
-<div class="status">
+// <div class="status">
 
 
-<select>
+// <select>
 
 
-<option>
-Pending
-</option>
+// <option>
+// Pending
+// </option>
 
 
-<option>
-Confirmed
-</option>
+// <option>
+// Confirmed
+// </option>
 
 
-<option>
-Completed
-</option>
+// <option>
+// Completed
+// </option>
 
 
-<option>
-Cancelled
-</option>
+// <option>
+// Cancelled
+// </option>
 
 
-</select>
+// </select>
 
 
-</div>
+// </div>
 
 
 
-</div>
+// </div>
 
 
 
-</div>
+// </div>
 
 
 
 
-</div>
+// </div>
 
 
 
 
-</div>
+// </div>
 
 
 
-`;
+// `;
 
-}
+// }
 
 
-module.exports = DoctorDashboard;
+// module.exports = DoctorDashboard;

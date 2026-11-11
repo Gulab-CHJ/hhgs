@@ -1,498 +1,498 @@
-function GovernmentSection(persons = []) {
+// function GovernmentSection(persons = []) {
 
-let cards = "";
+// let cards = "";
 
 
-if(persons.length === 0){
+// if(persons.length === 0){
 
-cards = `
-<div class="no-person">
-<h3>No Government Person Available</h3>
-</div>
-`;
+// cards = `
+// <div class="no-person">
+// <h3>No Government Person Available</h3>
+// </div>
+// `;
 
-}
-else{
+// }
+// else{
 
 
-persons.forEach((person)=>{
+// persons.forEach((person)=>{
 
 
-cards += `
+// cards += `
 
-<div 
-class="person-card"
+// <div 
+// class="person-card"
 
-onclick="window.location.href='/government/person/${person._id}'"
+// onclick="window.location.href='/government/person/${person._id}'"
 
-data-search="
-${person.name || ""}
-${person.position || ""}
-${person.address || ""}
-">
+// data-search="
+// ${person.name || ""}
+// ${person.position || ""}
+// ${person.address || ""}
+// ">
 
 
-<div class="person-img">
+// <div class="person-img">
 
-<img 
-src="${person.image || "/images/default-person.png"}"
-alt="${person.name || "Person"}">
+// <img 
+// src="${person.image || "/images/default-person.png"}"
+// alt="${person.name || "Person"}">
 
-</div>
+// </div>
 
 
 
-<div class="person-body">
+// <div class="person-body">
 
 
-<h3>
-NAME : ${person.name || ""}
-</h3>
+// <h3>
+// NAME : ${person.name || ""}
+// </h3>
 
 
-<p class="position">
-POST : ${person.position || ""}
-</p>
+// <p class="position">
+// POST : ${person.position || ""}
+// </p>
 
 
-<p class="department">
-DEPARTMENT : ${person.department || ""}
-</p>
+// <p class="department">
+// DEPARTMENT : ${person.department || ""}
+// </p>
 
 
-<p class="address">
-ADDRESS : ${person.address || ""}
-</p>
+// <p class="address">
+// ADDRESS : ${person.address || ""}
+// </p>
 
 
-</div>
+// </div>
 
 
-</div>
+// </div>
 
-`;
+// `;
 
-});
+// });
 
 
-}
+// }
 
 
 
-return `
+// return `
 
 
-<style>
+// <style>
 
 
-.government-section{
+// .government-section{
 
-width:100%;
-max-width:1400px;
-margin:60px auto;
-padding:30px 20px;
+// width:100%;
+// max-width:1400px;
+// margin:60px auto;
+// padding:30px 20px;
 
-}
+// }
 
 
 
-.government-title{
+// .government-title{
 
-text-align:center;
-font-size:38px;
-font-weight:800;
-color:#0f3d91;
+// text-align:center;
+// font-size:38px;
+// font-weight:800;
+// color:#0f3d91;
 
-}
+// }
 
 
-.government-title::after{
+// .government-title::after{
 
-content:"";
-width:90px;
-height:4px;
-background:#16a34a;
-display:block;
-margin:12px auto;
-border-radius:20px;
+// content:"";
+// width:90px;
+// height:4px;
+// background:#16a34a;
+// display:block;
+// margin:12px auto;
+// border-radius:20px;
 
-}
+// }
 
 
 
 
-.person-search{
+// .person-search{
 
-max-width:520px;
-margin:30px auto;
+// max-width:520px;
+// margin:30px auto;
 
-}
+// }
 
 
 
-.person-search input{
+// .person-search input{
 
-width:100%;
-padding:16px 25px;
+// width:100%;
+// padding:16px 25px;
 
-border-radius:50px;
+// border-radius:50px;
 
-border:2px solid #dbeafe;
+// border:2px solid #dbeafe;
 
-font-size:16px;
+// font-size:16px;
 
-outline:none;
+// outline:none;
 
-box-shadow:
-0 10px 30px rgba(0,0,0,.10);
+// box-shadow:
+// 0 10px 30px rgba(0,0,0,.10);
 
-}
+// }
 
 
 
 
 
-.person-grid{
+// .person-grid{
 
 
-display:grid;
+// display:grid;
 
-grid-template-columns:
-repeat(auto-fill,minmax(280px,320px));
+// grid-template-columns:
+// repeat(auto-fill,minmax(280px,320px));
 
-gap:30px;
+// gap:30px;
 
-justify-content:start;
+// justify-content:start;
 
-}
+// }
 
 
 
 
 
-.person-card{
+// .person-card{
 
 
-background:
-linear-gradient(
-145deg,
-#ffffff,
-#f1f7ff
-);
+// background:
+// linear-gradient(
+// 145deg,
+// #ffffff,
+// #f1f7ff
+// );
 
 
-border-radius:25px;
+// border-radius:25px;
 
-overflow:hidden;
+// overflow:hidden;
 
-cursor:pointer;
+// cursor:pointer;
 
 
-box-shadow:
+// box-shadow:
 
-0 15px 35px rgba(0,0,0,.12);
+// 0 15px 35px rgba(0,0,0,.12);
 
 
-transition:.4s;
+// transition:.4s;
 
 
-border:1px solid rgba(37,99,235,.15);
+// border:1px solid rgba(37,99,235,.15);
 
 
-}
+// }
 
 
 
 
-.person-card:hover{
+// .person-card:hover{
 
 
-transform:
-translateY(-12px)
-scale(1.03);
+// transform:
+// translateY(-12px)
+// scale(1.03);
 
 
-box-shadow:
-0 25px 50px rgba(37,99,235,.25);
+// box-shadow:
+// 0 25px 50px rgba(37,99,235,.25);
 
 
-}
+// }
 
 
 
 
 
-.person-img{
+// .person-img{
 
-height:270px;
-width:100%;
-overflow:hidden;
+// height:270px;
+// width:100%;
+// overflow:hidden;
 
-}
+// }
 
 
 
-.person-img img{
+// .person-img img{
 
-height:100%;
-width:100%;
+// height:100%;
+// width:100%;
 
-object-fit:cover;
+// object-fit:cover;
 
-transition:.5s;
+// transition:.5s;
 
-}
+// }
 
 
 
-.person-card:hover img{
+// .person-card:hover img{
 
-transform:scale(1.08);
+// transform:scale(1.08);
 
-}
+// }
 
 
 
 
 
-.person-body{
+// .person-body{
 
-padding:25px;
-text-align:center;
+// padding:25px;
+// text-align:center;
 
-}
+// }
 
 
 
-.person-body h3{
+// .person-body h3{
 
-font-size:22px;
+// font-size:22px;
 
-font-weight:800;
+// font-weight:800;
 
-color:#0f172a;
+// color:#0f172a;
 
-}
+// }
 
 
 
 
-.position{
+// .position{
 
-color:#2563eb;
+// color:#2563eb;
 
-font-weight:700;
+// font-weight:700;
 
-}
+// }
 
 
 
-.department{
+// .department{
 
-color:#475569;
+// color:#475569;
 
-}
+// }
 
 
 
-.address{
+// .address{
 
-font-size:14px;
+// font-size:14px;
 
-color:#64748b;
+// color:#64748b;
 
-}
+// }
 
 
 
 
 
-.no-person{
+// .no-person{
 
 
-padding:50px;
+// padding:50px;
 
-text-align:center;
+// text-align:center;
 
-background:white;
+// background:white;
 
-border-radius:20px;
+// border-radius:20px;
 
-box-shadow:
-0 10px 30px rgba(0,0,0,.1);
+// box-shadow:
+// 0 10px 30px rgba(0,0,0,.1);
 
 
-}
+// }
 
 
 
 
 
 
-@media(max-width:768px){
+// @media(max-width:768px){
 
 
-.government-title{
+// .government-title{
 
-font-size:30px;
+// font-size:30px;
 
-}
+// }
 
 
 
-.person-grid{
+// .person-grid{
 
-grid-template-columns:repeat(2,1fr);
+// grid-template-columns:repeat(2,1fr);
 
-gap:15px;
+// gap:15px;
 
-}
+// }
 
 
-.person-img{
+// .person-img{
 
-height:190px;
+// height:190px;
 
-}
+// }
 
 
-.person-body{
+// .person-body{
 
-padding:15px;
+// padding:15px;
 
-}
+// }
 
 
 
-}
+// }
 
 
 
-@media(max-width:480px){
+// @media(max-width:480px){
 
 
-.person-grid{
+// .person-grid{
 
-grid-template-columns:1fr;
+// grid-template-columns:1fr;
 
-}
+// }
 
 
-}
+// }
 
 
 
-</style>
+// </style>
 
 
 
 
-<section class="government-section">
+// <section class="government-section">
 
 
-<h2 class="government-title">
+// <h2 class="government-title">
 
-Government & Public Representatives
+// Government & Public Representatives
 
-</h2>
+// </h2>
 
 
 
-<div class="person-search">
+// <div class="person-search">
 
-<input 
+// <input 
 
-type="text"
+// type="text"
 
-id="personSearch"
+// id="personSearch"
 
-placeholder="Search Government Person"
+// placeholder="Search Government Person"
 
-onkeyup="searchPerson()"
+// onkeyup="searchPerson()"
 
-/>
+// />
 
-</div>
+// </div>
 
 
 
 
-<div class="person-grid">
+// <div class="person-grid">
 
 
-${cards}
+// ${cards}
 
 
-</div>
+// </div>
 
 
-</section>
+// </section>
 
 
 
 
-<script>
+// <script>
 
 
-function searchPerson(){
+// function searchPerson(){
 
 
-let value =
+// let value =
 
-document
-.getElementById("personSearch")
-.value
-.toLowerCase();
+// document
+// .getElementById("personSearch")
+// .value
+// .toLowerCase();
 
 
 
-let cards =
+// let cards =
 
-document.querySelectorAll(".person-card");
+// document.querySelectorAll(".person-card");
 
 
 
-cards.forEach(card=>{
+// cards.forEach(card=>{
 
 
-let data =
+// let data =
 
-card
-.getAttribute("data-search")
-.toLowerCase();
+// card
+// .getAttribute("data-search")
+// .toLowerCase();
 
 
 
-if(data.includes(value)){
+// if(data.includes(value)){
 
 
-card.style.display="block";
+// card.style.display="block";
 
 
-}
+// }
 
-else{
+// else{
 
 
-card.style.display="none";
+// card.style.display="none";
 
 
-}
+// }
 
 
-});
+// });
 
 
-}
+// }
 
 
 
-</script>
+// </script>
 
 
-`;
+// `;
 
-}
+// }
 
 
-module.exports = GovernmentSection;
+// module.exports = GovernmentSection;
