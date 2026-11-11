@@ -607,7 +607,166 @@
   </script>
 
   <!-- Store functionality -->
-  <script src="/js/store.js" defer></script>
+
+
+
+<!-- Store functionality -->
+<script src="/js/store.js" defer></script>
+
+<!-- =====================================
+     GS MARKET CUSTOMER AUTO-FILL
+===================================== -->
+<script>
+(() => {
+    "use strict";
+
+    const STORAGE_KEY = "gs_market_customer_v1";
+
+    const nameInput = document.getElementById("customerName");
+    const phoneInput = document.getElementById("customerPhone");
+    const addressInput = document.getElementById("customerAddress");
+    const form = document.getElementById("checkoutForm");
+
+    if (!nameInput || !phoneInput || !addressInput || !form) {
+        return;
+    }
+
+    // Add saved information controls
+    addressInput.insertAdjacentHTML("afterend", `
+        <div style="
+            margin:10px 0 16px;
+            padding:12px;
+            background:#f0fdf4;
+            border:1px solid #bbf7d0;
+            border-radius:10px;
+        ">
+            <div style="
+                color:#15803d;
+                font-size:13px;
+                font-weight:700;
+                margin-bottom:8px;
+            ">
+                ✓ आपकी जानकारी इस डिवाइस में सेव रहेगी।
+            </div>
+
+            <button
+                type="button"
+                id="clearSavedCustomer"
+                style="
+                    border:0;
+                    background:transparent;
+                    color:#dc2626;
+                    font-size:12px;
+                    font-weight:700;
+                    cursor:pointer;
+                    padding:4px 0;
+                "
+            >
+                🗑 सेव की हुई जानकारी हटाएं
+            </button>
+        </div>
+    `);
+
+    const clearButton =
+        document.getElementById("clearSavedCustomer");
+
+    // Load saved customer
+    function loadCustomer() {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+
+            if (!saved) return;
+
+            const customer = JSON.parse(saved);
+
+            if (!customer || typeof customer !== "object") {
+                return;
+            }
+
+            if (!nameInput.value) {
+                nameInput.value = customer.name || "";
+            }
+
+            if (!phoneInput.value) {
+                phoneInput.value = customer.phone || "";
+            }
+
+            if (!addressInput.value) {
+                addressInput.value = customer.address || "";
+            }
+
+            console.log("GS Market customer details loaded.");
+
+        } catch (error) {
+            console.warn("Customer autofill load error:", error);
+        }
+    }
+
+    // Save customer details
+    function saveCustomer() {
+        const customer = {
+            name: nameInput.value.trim(),
+            phone: phoneInput.value.replace(/\D/g, "").slice(0, 10),
+            address: addressInput.value.trim()
+        };
+
+        if (
+            !customer.name &&
+            !customer.phone &&
+            !customer.address
+        ) {
+            return;
+        }
+
+        try {
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(customer)
+            );
+        } catch (error) {
+            console.warn("Customer details save error:", error);
+        }
+    }
+
+    // Automatically save while customer types
+    [nameInput, phoneInput, addressInput].forEach(input => {
+        input.addEventListener("input", saveCustomer);
+        input.addEventListener("change", saveCustomer);
+    });
+
+    // Save before order submission
+    form.addEventListener("submit", saveCustomer, true);
+
+    // Clear saved information
+    clearButton.addEventListener("click", function() {
+        const confirmed = confirm(
+            "क्या आप सेव की हुई Customer Details हटाना चाहते हैं?"
+        );
+
+        if (!confirmed) return;
+
+        localStorage.removeItem(STORAGE_KEY);
+
+        nameInput.value = "";
+        phoneInput.value = "";
+        addressInput.value = "";
+
+        alert("Customer Details हटा दी गई हैं।");
+    });
+
+    // Restore details on page load
+    loadCustomer();
+
+    console.log("GS Market Customer Auto-Fill Ready.");
+
+})();
+</script>
+
+</body>
+</html>
+
+
+
 
 </body>
 </html>
