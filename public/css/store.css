@@ -1402,3 +1402,63 @@ img {
     object-fit: contain !important;
   }
 }
+
+
+/* =====================================
+   GS MARKET - MOBILE HEADER FINAL FIX
+===================================== */
+
+@media (max-width: 600px) {
+
+    .store-header {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 9px !important;
+        padding: 10px !important;
+        align-items: center;
+    }
+
+    .store-header .store-brand {
+        grid-column: 1 / -1;
+    }
+
+    .store-header .search-box {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .store-header #openCart {
+        grid-column: 1 !important;
+        grid-row: auto !important;
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 12px 4px;
+        text-align: center;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    .store-header a[href="/market/track-order"] {
+        grid-column: 2 !important;
+        grid-row: auto !important;
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        padding: 12px 3px;
+        text-align: center;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+
+    .store-header a[href="/market/complaints"] {
+        grid-column: 1 / -1 !important;
+        width: 100%;
+        margin: 0;
+        padding: 12px;
+        text-align: center;
+        font-size: 13px;
+    }
+}
